@@ -1,5 +1,9 @@
 @extends('template')
 
+@section('title')
+    Authentification
+@endsection
+
 @section('content')
     <div>
         <h1>Nouveau ? Rejoignez-nous dès maintenant !</h1>
