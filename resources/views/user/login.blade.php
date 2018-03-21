@@ -19,7 +19,7 @@
                                                         'class' => 'form-control form-control-sm', 
                                                         'required' => 'required',
                                                         'placeholder' => 'Email']) !!}
-                            {!! $errors->first('email', '<small class="help-block">:message</small>') !!}
+                            {!! $errors->first('email', '<small class="form-text alert-danger">:message</small>') !!}
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -27,15 +27,14 @@
                                 {!! Form::password('password', ['id' => 'pwdRegister',
                                                                 'class' => 'form-control form-control-sm', 
                                                                 'required' => 'required']) !!}
-                                {!! $errors->first('password', '<small class="help-block">:message</small>') !!}
                             </div>
                             <div class="form-group col-md-6">
                                 {!! Form::label('pwdConfirmRegister','Confirmez le mot de passe') !!}
-                                {!! Form::password('pwdConfirm', ['id' => 'pwdConfirmRegister',
-                                                                    'class' => 'form-control form-control-sm', 
-                                                                    'required' => 'required']) !!}
-                                {!! $errors->first('pwdConfirm', '<small class="help-block">:message</small>') !!}
+                                {!! Form::password('pwd_confirmation', ['id' => 'pwdConfirmRegister',
+                                                                        'class' => 'form-control form-control-sm', 
+                                                                        'required' => 'required']) !!}
                             </div>
+                            {!! $errors->first('password', "<p class='col-12'><small class='form-text alert-danger'>:message</small></p>") !!}
                         </div>
                         <div class="row">
                             <span class="col-sm-12 text-right">
@@ -65,13 +64,13 @@
                                                         'class' => 'form-control form-control-sm',
                                                         'required' => 'required',
                                                         'placeholder' => 'Email']) !!}
-                            {!! $errors->first('emailLogin', '<small class="help-block">:message</small>') !!}
+                            {!! $errors->first('emailLogin', '<small class="form-text alert-danger">:message</small>') !!}
 
                             {!! Form::label('passwordLogin','Saisissez votre mot de passe') !!}
                             {!! Form::password('password',[ 'id' => 'passwordLogin',
                                                             'class' => 'form-control form-control-sm',
                                                             'required' => 'required']) !!}
-                            {!! $errors->first('passwordLogin', '<small class="help-block">:message</small>') !!}
+                            {!! $errors->first('passwordLogin', '<small class="form-text alert-danger">:message</small>') !!}
                             {{--  <div class="alert alert-dismissible alert-success" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -102,7 +101,7 @@
                                                         'class' => 'form-control form-control-sm',
                                                         'required' => 'required',
                                                         'placeholder' => 'Email']) !!}
-                            {!! $errors->first('emailBackUp', '<small class="help-block">:message</small>') !!}
+                            {!! $errors->first('emailBackUp', '<small class="form-text alert-danger">:message</small>') !!}
                             {{--  <div class="alert alert-dismissible alert-success" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
