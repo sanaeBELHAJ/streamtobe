@@ -11,7 +11,7 @@ class UserController extends Controller
         return view('user.login');
     }
 
-    public function register(){
+    public function register(RegisterRequest $request){
         //
     }
 
@@ -19,11 +19,11 @@ class UserController extends Controller
         //
     }
 
-    public function login(){
+    public function login(LoginRequest $request){
         //
     }
 
-    public function forgot(){
+    public function forgot(ForgotRequest $request){
         //
     }
 

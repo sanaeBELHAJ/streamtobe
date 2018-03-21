@@ -18,3 +18,7 @@
 
 //Login - Sign in
 Route::get('/', ['as' => 'login', 'uses' => 'UserController@index']);
+
+Route::post('/', ['as' => 'register', 'uses' => 'UserController@register']);
+Route::post('/', ['as' => 'login', 'uses' => 'UserController@login']);
+Route::post('/', ['as' => 'forgot', 'uses' => 'UserController@forgot']);
