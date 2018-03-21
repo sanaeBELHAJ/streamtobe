@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Mail;
 use Session;
 
+use App\User;
+
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ForgotRequest;
@@ -20,7 +22,9 @@ class UserController extends Controller
 
     public function register(RegisterRequest $request){
         
-        //TODO : Enregistrement BDD
+        $user = new User;
+        $user->email = $request->input('email');
+        $user->save();
 
         Mail::send('email.confirmation', $request->all(), function($message) use($request) 
         {

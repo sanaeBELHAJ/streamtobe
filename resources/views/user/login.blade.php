@@ -30,7 +30,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 {!! Form::label('pwdConfirmRegister','Confirmez le mot de passe') !!}
-                                {!! Form::password('pwd_confirmation', ['id' => 'pwdConfirmRegister',
+                                {!! Form::password('password_confirmation', ['id' => 'pwdConfirmRegister',
                                                                         'class' => 'form-control form-control-sm', 
                                                                         'required' => 'required']) !!}
                             </div>
