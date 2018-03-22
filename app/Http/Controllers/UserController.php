@@ -38,6 +38,7 @@ class UserController extends Controller
 
     /**
      * Show the form for creating a new resource
+     * Affichage des formulaires d'inscription / authentification
      * 
      * @return \Illuminate\Http\Response
      */
@@ -47,6 +48,7 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage
+     * Enregistrement d'un nouveau compte en BDD
      * 
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -62,6 +64,7 @@ class UserController extends Controller
 
         Session::flash('message', 'Inscription effectuée, un email de confirmation vous a été adressé.');
         Session::flash('alert-class', 'alert-success'); 
+        
         /*
             Un compte existe déjà à cette adresse.
             Impossible d'envoyer l'email de confirmation.
