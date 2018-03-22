@@ -9,21 +9,51 @@ use Session;
 
 use App\User;
 
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ForgotRequest;
-use App\Repositories\UserRepositoryInterface;
+use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\User\ForgotRequest;
+use App\Http\Requests\User\UpdateRequest;
+
+use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
-    //
+    protected $userRepository;
+    protected $nbPerPage = 4;
+
+    public function __construct(UserRepository $userRepository){
+		$this->userRepository = $userRepository;
+    }
+    
+    /**
+     * Display a listing of the resource
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function index(){
+        $users = $this->userRepository->getPaginate($this->nbPerPage);
+		$links = $users->render();
+        return view('user.index', compact('users', 'links'));
+    }
+
+    /**
+     * Show the form for creating a new resource
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function create(){
         return view('user.login');
     }
 
-    public function register(RegisterRequest $request, UserRepositoryInterface $userRepository){
+    /**
+     * Store a newly created resource in storage
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(RegisterRequest $request){
         
-        $userRepository->save($request->input('email'));
+        $user = $this->userRepository->store($request->all());
 
         Mail::send('email.confirmation', $request->all(), function($message) use($request) 
         {
@@ -39,24 +69,71 @@ class UserController extends Controller
         return back()->withInput();
     }
 
+    /**
+     * 
+     */
     public function confirmAccount(){
         //
     }
 
+    /**
+     * 
+     */
     public function login(LoginRequest $request){
         //
     }
 
+    /**
+     * 
+     */
     public function forgot(ForgotRequest $request){
         //
     }
 
-    public function editAccount(){
-        //
+    /**
+     * Display the specified resource
+     * 
+     * @param string $pseudo
+     * @return \Illuminate\Http\Response
+     */
+    public function show($pseudo){
+        //$user = $this->userRepository->getByPseudo($pseudo);
+        //return view('user.show', compact('user'));
+    }
+    
+    /**
+     * Show the form for editing the specified resource
+     * 
+     * @param string pseudo
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($pseudo){
+        
     }
 
-    public function deleteAccount(){
-        //
+    /**
+     * Update the specified resource in storage
+     * 
+     * @param \Illuminate\http\Request $request
+     * @param string $pseudo
+     * @return \Illuminate\http\Response
+     */
+    public function update(UpdateRequest $request, $pseudo){
+        $this->userRepository->update($pseudo, $request->all());
+        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
+        Session::flash('alert-class', 'alert-success'); 
+        return redirect('user');
+    }
+
+    /**
+     * Remove the specified resource from storage
+     * 
+     * @param string $pseudo
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($pseudo){
+        $this->userRepository->destroy($id);
+		return back();
     }
 
 }

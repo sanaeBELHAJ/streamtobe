@@ -11,14 +11,15 @@
 |
 */
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('welcome');
 });
+
+
+//Routes instanciées automatiquement avec leur controlleurs
+Route::resource('user', 'UserController');
+
+/*
+    Route::post('/login', ['as' => 'login', 'uses' => 'UserController@login']);
+    Route::post('/forgot', ['as' => 'forgot', 'uses' => 'UserController@forgot']);
 */
-
-//Login - Sign in
-Route::get('/', ['as' => 'login', 'uses' => 'UserController@index']);
-
-Route::post('/register', ['as' => 'register', 'uses' => 'UserController@register']);
-Route::post('/login', ['as' => 'login', 'uses' => 'UserController@login']);
-Route::post('/forgot', ['as' => 'forgot', 'uses' => 'UserController@forgot']);

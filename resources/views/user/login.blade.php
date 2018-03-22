@@ -7,29 +7,39 @@
 @section('content')
     <h1 class="text-center">Nouveau ? Rejoignez-nous dès maintenant !</h1>
     <div class="d-flex justify-content-center row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-8">
             <!-- Inscription -->
             <div class="card bg-light">
                 <div class="card-header">INSCRIPTION</div>
                 <div class="card-body">
-                    {!! Form::open(['url' => 'register', 'id' => 'formRegister']) !!}
-                        <div class="form-group">
-                            {!! Form::label('emailRegister','Saisissez votre adresse e-mail') !!}
-                            {!! Form::email('email',null, ['id' => 'emailRegister',
-                                                        'class' => 'form-control form-control-sm', 
-                                                        'required' => 'required',
-                                                        'placeholder' => 'Email']) !!}
-                            {!! $errors->first('email', '<small class="form-text alert-danger">:message</small>') !!}
+                    {!! Form::open(['url' => 'user', 'id' => 'formRegister']) !!}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {!! Form::label('emailRegister','Adresse email :') !!}
+                                {!! Form::email('email',null, ['id' => 'emailRegister',
+                                                            'class' => 'form-control form-control-sm', 
+                                                            'required' => 'required',
+                                                            'placeholder' => 'Email']) !!}
+                                {!! $errors->first('email', '<small class="form-text alert-danger">:message</small>') !!}
+                            </div>
+                            <div class="form-group col-md-6">
+                                {!! Form::label('pseudoRegister','Pseudo :') !!}
+                                {!! Form::text('pseudo',null, ['id' => 'pseudoRegister',
+                                                                'class' => 'form-control form-control-sm', 
+                                                                'required' => 'required',
+                                                                'placeholder' => 'Pseudo']) !!}
+                                {!! $errors->first('pseudo', '<small class="form-text alert-danger">:message</small>') !!}
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                {!! Form::label('pwdRegister','Saisissez un mot de passe') !!}
+                                {!! Form::label('pwdRegister','Enregistrez un mot de passe :') !!}
                                 {!! Form::password('password', ['id' => 'pwdRegister',
                                                                 'class' => 'form-control form-control-sm', 
                                                                 'required' => 'required']) !!}
                             </div>
                             <div class="form-group col-md-6">
-                                {!! Form::label('pwdConfirmRegister','Confirmez le mot de passe') !!}
+                                {!! Form::label('pwdConfirmRegister','Confirmation du mot de passe :') !!}
                                 {!! Form::password('password_confirmation', ['id' => 'pwdConfirmRegister',
                                                                         'class' => 'form-control form-control-sm', 
                                                                         'required' => 'required']) !!}
@@ -58,28 +68,30 @@
                 <div class="card-header">CONNEXION</div>
                 <div class="card-body">
                     {!! Form::open(['url' => 'login', 'class' => 'notRedirect', 'id' => 'formLogin']) !!}
-                        <div class="form-group">
-                            {!! Form::label('emailLogin','Saisissez votre adresse e-mail') !!}
-                            {!! Form::email('email','',['id'=>'emailLogin',
-                                                        'class' => 'form-control form-control-sm',
-                                                        'required' => 'required',
-                                                        'placeholder' => 'Email']) !!}
-                            {!! $errors->first('emailLogin', '<small class="form-text alert-danger">:message</small>') !!}
-
-                            {!! Form::label('passwordLogin','Saisissez votre mot de passe') !!}
-                            {!! Form::password('password',[ 'id' => 'passwordLogin',
+                        <div class="form-row">
+                            <div class="form-group col">
+                                {!! Form::label('emailLogin','Saisissez votre adresse e-mail') !!}
+                                {!! Form::email('email','',['id'=>'emailLogin',
                                                             'class' => 'form-control form-control-sm',
-                                                            'required' => 'required']) !!}
-                            {!! $errors->first('passwordLogin', '<small class="form-text alert-danger">:message</small>') !!}
-                            {{--  <div class="alert alert-dismissible alert-success" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                Vous êtes déjà connectés, merci de rafraichir la page.
-                                Les identifiants sont incorrects.
-                                Authentification impossible.
-                                Votre compte n'est pas accessible : vous devez avoir reçu un lien de confirmation par mail, ou vous avez été banni.
-                            </div>  --}}
+                                                            'required' => 'required',
+                                                            'placeholder' => 'Email']) !!}
+                                {!! $errors->first('emailLogin', '<small class="form-text alert-danger">:message</small>') !!}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                {!! Form::label('passwordLogin','Saisissez votre mot de passe') !!}
+                                {!! Form::password('password',[ 'id' => 'passwordLogin',
+                                                                'class' => 'form-control form-control-sm',
+                                                                'required' => 'required']) !!}
+                                {!! $errors->first('passwordLogin', '<small class="form-text alert-danger">:message</small>') !!}
+                                {{--  
+                                    Vous êtes déjà connectés, merci de rafraichir la page.
+                                    Les identifiants sont incorrects.
+                                    Authentification impossible.
+                                    Votre compte n'est pas accessible : vous devez avoir reçu un lien de confirmation par mail, ou vous avez été banni.
+                                --}}
+                            </div>
                         </div>
                         <div class="row">
                             <span class="col-sm-12 text-right">
@@ -95,21 +107,20 @@
                 <div class="card-header">Mot de passe oublié ?</div>
                 <div class="card-body">
                     {!! Form::open(['url' => 'forgot', 'class' => 'notRedirect', 'id' => 'formBackUp']) !!}
-                        <div class="form-group">
-                            {!! Form::label('emailBackUp','Un email vous sera envoyé.') !!}
-                            {!! Form::email('email','',['id' => 'emailBackUp',
-                                                        'class' => 'form-control form-control-sm',
-                                                        'required' => 'required',
-                                                        'placeholder' => 'Email']) !!}
-                            {!! $errors->first('emailBackUp', '<small class="form-text alert-danger">:message</small>') !!}
-                            {{--  <div class="alert alert-dismissible alert-success" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                L'email de récupération vient de vous être adressé.
-                                Aucun compte n'est associé à cette adresse email.
-                                Impossible d'envoyer l'email de récupération de compte.
-                            </div>  --}}
+                        <div class="form-row">
+                            <div class="form-group col">
+                                {!! Form::label('emailBackUp','Un email vous sera envoyé.') !!}
+                                {!! Form::email('email','',['id' => 'emailBackUp',
+                                                            'class' => 'form-control form-control-sm',
+                                                            'required' => 'required',
+                                                            'placeholder' => 'Email']) !!}
+                                {!! $errors->first('emailBackUp', '<small class="form-text alert-danger">:message</small>') !!}
+                                {{--  
+                                    L'email de récupération vient de vous être adressé.
+                                    Aucun compte n'est associé à cette adresse email.
+                                    Impossible d'envoyer l'email de récupération de compte.
+                                --}}
+                            </div>
                         </div>
                         <div class="text-right">
                             {!! Form::submit("Récupérer mon compte", ['class' => 'btn btn-success']) !!}
