@@ -12,6 +12,7 @@ use App\User;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ForgotRequest;
+use App\Repositories\UserRepositoryInterface;
 
 class UserController extends Controller
 {
@@ -20,11 +21,9 @@ class UserController extends Controller
         return view('user.login');
     }
 
-    public function register(RegisterRequest $request){
+    public function register(RegisterRequest $request, UserRepositoryInterface $userRepository){
         
-        $user = new User;
-        $user->email = $request->input('email');
-        $user->save();
+        $userRepository->save($request->input('email'));
 
         Mail::send('email.confirmation', $request->all(), function($message) use($request) 
         {
