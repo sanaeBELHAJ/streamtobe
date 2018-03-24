@@ -37,27 +37,6 @@ class UserController extends Controller
     }
 
     /**
-     * 
-     */
-    public function confirmAccount($confirmation_code){
-
-        $user = User::whereConfirmationCode($confirmation_code)->first();
-
-        if (!$user){
-            return redirect('login');
-        }
-
-        $user->activated = 1;
-        $user->confirmation_code = null;
-        $user->save();
-
-        Session::flash('messageVerify', 'Vous avez correctement vérifié votre compte, vous pouvez dès à présent vous logger.');
-        Session::flash('alert-class', 'alert-success'); 
-
-        return redirect('login');
-    }
-
-    /**
      * Display the specified resource
      * 
      * @param string $pseudo
@@ -65,8 +44,9 @@ class UserController extends Controller
      */
     public function show($pseudo){
         $user = User::wherePseudo($pseudo)->first();
-        dd($user);
-        //return view('user.show', compact('user'));
+        if(!$user)
+            abort(404);
+        return view('user.show', compact('user'));
     }
     
 }

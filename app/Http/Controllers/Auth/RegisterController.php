@@ -99,6 +99,30 @@ class RegisterController extends Controller
         Session::flash('messageRegister', 'Inscription effectuée, un email de confirmation vous a été adressé.');
         Session::flash('alert-class', 'alert-success'); 
 
-        return redirect($this->redirectPath())->with('message', 'Your message');
+        return redirect($this->redirectPath())->with('messageRegister', 'Your message');
+    }
+
+    /**
+     * Activate the account user
+     * 
+     * @param $confirmation_code
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmAccount($confirmation_code){
+
+        $user = User::whereConfirmationCode($confirmation_code)->first();
+
+        if (!$user){
+            return redirect('login');
+        }
+
+        $user->activated = 1;
+        $user->confirmation_code = null;
+        $user->save();
+
+        Session::flash('message', 'Vous avez correctement vérifié votre compte, vous pouvez dès à présent vous logger.');
+        Session::flash('alert-class', 'alert-success'); 
+
+        return redirect('login');
     }
 }

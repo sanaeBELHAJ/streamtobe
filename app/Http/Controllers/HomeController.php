@@ -13,31 +13,22 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['show',]]);
+        $this->middleware('auth');
     }
 
     /**
-     * Show the application dashboard.
+     * Show the account form.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+
         return view('home');
     }
 
     /**
-     * Show the form for editing the specified resource
-     * 
-     * @param string pseudo
-     * @return \Illuminate\Http\Response
-     */
-    public function showEditForm($pseudo){
-        
-    }
-
-    /**
-     * Update the specified resource in storage
+     * Update the specified account in storage
      * 
      * @param \Illuminate\http\Request $request
      * @param string $pseudo
@@ -51,7 +42,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage
+     * Remove the specified account from storage
      * 
      * @param string $pseudo
      * @return \Illuminate\Http\Response

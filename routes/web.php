@@ -15,19 +15,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Routes basiques d'inscription/connexion/déconnexion
+Auth::routes();
+
 //Informations de(s) utilisateur(s)
 Route::resource('user', 'UserController', ['only' => ['index', 'show']]);
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
-    Auth::routes();
     //Confirmation de l'email d'inscription
-    Route::get('/user/verify/{confirmation_code}', ['as' => 'verify', 'uses' => 'UserController@confirmAccount']);
+    Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
-    Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+    Route::resource('home', 'HomeController', ['only' => ['index', 'update', 'destroy']]);
 });
 
 Route::namespace('Admin')->group(function () {
