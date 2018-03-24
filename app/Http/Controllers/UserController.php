@@ -37,40 +37,6 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource
-     * Affichage des formulaires d'inscription / authentification
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-        return view('user.login');
-    }
-
-    /**
-     * Store a newly created resource in storage
-     * Enregistrement d'un nouveau compte en BDD
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(RegisterRequest $request){
-        
-        $request->request->add(['confirmation_code' => str_random(30)]);
-        $user = $this->userRepository->store($request->all());
-
-        Mail::send('email.confirmation', $request->all(), function($message) use($request) 
-        {
-            $message->to($request->input('email'))->subject("Confirmation d'inscription");
-        });
-
-        Session::flash('messageRegister', 'Inscription effectuée, un email de confirmation vous a été adressé.');
-        Session::flash('alert-class', 'alert-success'); 
-        
-        /* Impossible d'envoyer l'email de confirmation. */
-        return back()->withInput();
-    }
-
-    /**
      * 
      */
     public function confirmAccount($confirmation_code){
@@ -78,7 +44,7 @@ class UserController extends Controller
         $user = User::whereConfirmationCode($confirmation_code)->first();
 
         if (!$user){
-            return redirect('/');
+            return redirect('login');
         }
 
         $user->activated = 1;
@@ -88,21 +54,7 @@ class UserController extends Controller
         Session::flash('messageVerify', 'Vous avez correctement vérifié votre compte, vous pouvez dès à présent vous logger.');
         Session::flash('alert-class', 'alert-success'); 
 
-        return redirect('user/create');
-    }
-
-    /**
-     * 
-     */
-    public function login(LoginRequest $request){
-        //
-    }
-
-    /**
-     * 
-     */
-    public function forgot(ForgotRequest $request){
-        //
+        return redirect('login');
     }
 
     /**
