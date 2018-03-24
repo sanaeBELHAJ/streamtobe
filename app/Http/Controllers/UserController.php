@@ -55,6 +55,7 @@ class UserController extends Controller
      */
     public function store(RegisterRequest $request){
         
+        $request->request->add(['confirmation_code' => str_random(30)]);
         $user = $this->userRepository->store($request->all());
 
         Mail::send('email.confirmation', $request->all(), function($message) use($request) 
@@ -62,21 +63,32 @@ class UserController extends Controller
             $message->to($request->input('email'))->subject("Confirmation d'inscription");
         });
 
-        Session::flash('message', 'Inscription effectuée, un email de confirmation vous a été adressé.');
+        Session::flash('messageRegister', 'Inscription effectuée, un email de confirmation vous a été adressé.');
         Session::flash('alert-class', 'alert-success'); 
         
-        /*
-            Un compte existe déjà à cette adresse.
-            Impossible d'envoyer l'email de confirmation.
-        */
+        /* Impossible d'envoyer l'email de confirmation. */
         return back()->withInput();
     }
 
     /**
      * 
      */
-    public function confirmAccount(){
-        //
+    public function confirmAccount($confirmation_code){
+
+        $user = User::whereConfirmationCode($confirmation_code)->first();
+
+        if (!$user){
+            return redirect('/');
+        }
+
+        $user->activated = 1;
+        $user->confirmation_code = null;
+        $user->save();
+
+        Session::flash('messageVerify', 'Vous avez correctement vérifié votre compte, vous pouvez dès à présent vous logger.');
+        Session::flash('alert-class', 'alert-success'); 
+
+        return redirect('user/create');
     }
 
     /**
@@ -100,6 +112,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($pseudo){
+        dd($pseudo);
         //$user = $this->userRepository->getByPseudo($pseudo);
         //return view('user.show', compact('user'));
     }

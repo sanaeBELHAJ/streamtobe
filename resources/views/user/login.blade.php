@@ -51,7 +51,7 @@
                             {!! Form::submit("S'inscrire", ['class' => 'btn btn-success pull-right']) !!}
                             </span>
                         </div>
-                        @if(Session::has('message'))
+                        @if(Session::has('messageRegister'))
                             <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
