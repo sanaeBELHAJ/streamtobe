@@ -1,0 +1,9 @@
+
+header #navbarDropdown.nav-link{
+    padding: 0 1rem;
+}
+
+header .dropdown-menu{
+    left: auto;
+    right: 0;
+}
