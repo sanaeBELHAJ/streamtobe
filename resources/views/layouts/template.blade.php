@@ -28,8 +28,8 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
-                            <li><input type="text" placeholder="Rechercher"></li>
-                            <li><a href="#" class="nav-link">Liste des streams</a></li>
+                            <li class="mx-3"><input type="text" placeholder="Rechercher"></li>
+                            <li class="mx-3"><a href="#" class="nav-link">Liste des streams</a></li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
@@ -42,7 +42,7 @@
                                 <li class="mx-3 d-none d-lg-block"><a href="#" class="nav-link">Mes chaines suivies</a></li>
                                 <li class="mx-3">
                                     <a href="#" class="d-flex align-start nav-link p-0">
-                                        <i class="far fa-envelope fa-2x text-dark"></i>
+                                        <i class="d-none far fa-envelope fa-2x text-dark"></i>
                                         <i class="fas fa-envelope fa-2x text-dark"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span>
                                     </a>
