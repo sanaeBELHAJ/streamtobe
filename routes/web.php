@@ -11,6 +11,13 @@
 |
 */
 
+/**
+ * 
+ * Pour consulter l'ensemble des routes mises en place : php artisan route:list
+ * 
+ */
+
+
 Route::get('/', function () {
     return view('welcome');
 });

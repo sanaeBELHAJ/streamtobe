@@ -27,24 +27,23 @@
     
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
-                        <ul class="d-flex justify-content-around col navbar-nav mr-auto">
+                        <ul class="d-flex justify-content-around  navbar-nav mr-auto">
                             <li><input type="text" placeholder="Rechercher"></li>
-                            <li><a href="#">Liste</a></li>
-                            <li><a href="#">Chaines actives</a></li>
+                            <li><a href="#" class="nav-link">Liste des streams</a></li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
-                        <ul class="d-flex justify-content-around col navbar-nav ml-auto">
+                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
-                                <li><a href="#">Mes chaines suivies</a></li>
-                                <li>
-                                    <a href="#" class="d-flex align-start">
-                                        <i class="far fa-envelope fa-2x"></i>
-                                        <i class="fas fa-envelope fa-2x"></i>
+                                <li class="mx-3 d-none d-lg-block"><a href="#" class="nav-link">Mes chaines suivies</a></li>
+                                <li class="mx-3">
+                                    <a href="#" class="d-flex align-start nav-link p-0">
+                                        <i class="far fa-envelope fa-2x text-dark"></i>
+                                        <i class="fas fa-envelope fa-2x text-dark"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span>
                                     </a>
                                 </li>
@@ -54,7 +53,7 @@
                                     </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="#" class="dropdown-item">Mon compte</a>
+                                        <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
                                         <a href="#" class="dropdown-item">Mes abonnements</a>
                                         <a href="#" class="dropdown-item">Mon stream</a>
                                         <hr>
