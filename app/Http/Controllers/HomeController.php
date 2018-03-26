@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,8 +24,22 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        return view('account.index', compact('user'));
+    }
 
-        return view('home');
+    /**
+     * Show the specified account in storage
+     * 
+     * @param \Illuminate\http\Request $request
+     * @param string $pseudo
+     * @return \Illuminate\http\Response
+     */
+    public function edit(UpdateRequest $request){
+        $this->userRepository->update($pseudo, $request->all());
+        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
+        Session::flash('alert-class', 'alert-success'); 
+        return redirect('user');
     }
 
     /**
@@ -34,7 +49,7 @@ class HomeController extends Controller
      * @param string $pseudo
      * @return \Illuminate\http\Response
      */
-    public function update(UpdateRequest $request, $pseudo){
+    public function update(UpdateRequest $request){
         $this->userRepository->update($pseudo, $request->all());
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success'); 

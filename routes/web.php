@@ -36,7 +36,8 @@ Route::middleware(['guest'])->group(function(){
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
-    Route::resource('home', 'HomeController', ['only' => ['index', 'update', 'destroy']]);
+    Route::resource('home', 'HomeController', ['except' => ['store', 'create', 'show']]);
+    Route::resource('message', 'MessageController');
 });
 
 Route::namespace('Admin')->group(function () {
