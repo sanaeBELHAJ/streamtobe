@@ -9,11 +9,6 @@ use Session;
 
 use App\User;
 
-use App\Http\Requests\User\RegisterRequest;
-use App\Http\Requests\User\LoginRequest;
-use App\Http\Requests\User\ForgotRequest;
-use App\Http\Requests\User\UpdateRequest;
-
 class UserController extends Controller
 {
     protected $nbPerPage = 4;

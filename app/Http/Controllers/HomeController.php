@@ -7,6 +7,8 @@ use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Requests\Account\UserInfosRequest;
+
 class HomeController extends Controller
 {
     public $user;
@@ -35,17 +37,17 @@ class HomeController extends Controller
     /**
      * Update the specified account in storage
      * 
-     * @param \Illuminate\http\Request $request
+     * @param \App\Http\Requests\Account\UserInfosRequest $request
      * @return \Illuminate\http\Response
      */
-    public function updateInfos(Request $request){
+    public function updateInfos(UserInfosRequest $request){
         $user = Auth::user();    
         
         if(!$request->filled(['password', 'password_confirmation'])){
             $request->offsetUnset('password');
             $request->offsetUnset('password_confirmation');
         }
-
+        $request->replace(['password' => bcrypt($request->input('password'))]);
         $user->update($request->all());
         $user->save();
 
