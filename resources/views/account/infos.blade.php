@@ -1,5 +1,5 @@
 Modification de mon compte
-{!! Form::open(['url' => 'user', 'id' => 'formRegister']) !!}
+{!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '']) !!}
     <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('emailRegister','Adresse email :') !!}
@@ -23,13 +23,13 @@ Modification de mon compte
             {!! Form::label('pwdRegister','Enregistrez un mot de passe :') !!}
             {!! Form::password('password', ['id' => 'pwdRegister',
                                             'class' => 'form-control form-control-sm', 
-                                            'required' => 'required']) !!}
+                                            'required' => false]) !!}
         </div>
         <div class="form-group col-md-6">
             {!! Form::label('pwdConfirmRegister','Confirmation du mot de passe :') !!}
             {!! Form::password('password_confirmation', ['id' => 'pwdConfirmRegister',
                                                     'class' => 'form-control form-control-sm', 
-                                                    'required' => 'required']) !!}
+                                                    'required' => false]) !!}
         </div>
         {!! $errors->first('password', "<p class='col-12'><small class='form-text alert-danger'>:message</small></p>") !!}
     </div>
@@ -38,7 +38,7 @@ Modification de mon compte
         {!! Form::submit("S'inscrire", ['class' => 'btn btn-success pull-right']) !!}
         </span>
     </div>
-    @if(Session::has('messageRegister'))
+    @if(Session::has('message'))
         <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
