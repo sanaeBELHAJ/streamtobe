@@ -1,6 +1,6 @@
 Configuration de mon prochain stream
-{!! Form::open(['url' => 'user', 'id' => 'formRegister']) !!}
-    <div class="form-row">
+{!! Form::model($user, ['route' => ['home.updateStream'], 'method' => 'put', 'class' => '']) !!}
+    {{--  <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('emailRegister','Adresse email :') !!}
             {!! Form::email('email',null, ['id' => 'emailRegister',
@@ -45,5 +45,5 @@ Configuration de mon prochain stream
             </button>
             {{ Session::get('message') }}
         </p>
-    @endif
+    @endif  --}}
 {!! Form::close() !!}

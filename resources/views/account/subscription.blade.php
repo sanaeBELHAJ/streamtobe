@@ -1,6 +1,6 @@
 Liste de tous mes abonnements
-{!! Form::open(['url' => 'user', 'id' => 'formRegister']) !!}
-    <div class="form-row">
+{!! Form::model($user, ['route' => ['home.updateSubscription'], 'method' => 'put', 'class' => '']) !!}
+    {{--  <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('emailRegister','Adresse email :') !!}
             {!! Form::email('email',null, ['id' => 'emailRegister',
@@ -45,5 +45,5 @@ Liste de tous mes abonnements
             </button>
             {{ Session::get('message') }}
         </p>
-    @endif
+    @endif  --}}
 {!! Form::close() !!}

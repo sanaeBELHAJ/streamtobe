@@ -1,6 +1,6 @@
 Dernières données récupérées de mon stream
-{!! Form::open(['url' => 'user', 'id' => 'formRegister']) !!}
-    <div class="form-row">
+{!! Form::model($user, ['route' => ['home.updateStats'], 'method' => 'put', 'class' => '']) !!}
+    {{--  <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('emailRegister','Adresse email :') !!}
             {!! Form::email('email',null, ['id' => 'emailRegister',
@@ -37,13 +37,5 @@ Dernières données récupérées de mon stream
         <span class="col-sm-12 text-right">
         {!! Form::submit("S'inscrire", ['class' => 'btn btn-success pull-right']) !!}
         </span>
-    </div>
-    @if(Session::has('messageRegister'))
-        <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{ Session::get('message') }}
-        </p>
-    @endif
+    </div>  --}}
 {!! Form::close() !!}
