@@ -14,15 +14,12 @@ use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\ForgotRequest;
 use App\Http\Requests\User\UpdateRequest;
 
-use App\Repositories\UserRepository;
-
 class UserController extends Controller
 {
-    protected $userRepository;
     protected $nbPerPage = 4;
 
-    public function __construct(UserRepository $userRepository){
-		$this->userRepository = $userRepository;
+    public function __construct(){
+
     }
     
     /**
@@ -31,7 +28,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $users = $this->userRepository->getPaginate($this->nbPerPage);
 		$links = $users->render();
         return view('user.index', compact('users', 'links'));
     }
