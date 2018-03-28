@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Account;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserInfosRequest extends FormRequest
@@ -13,7 +14,7 @@ class UserInfosRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,8 +25,7 @@ class UserInfosRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
-            'password' => 'confirmed',
+            'password' => 'confirmed'
         ];
     }
 }

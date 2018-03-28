@@ -47,10 +47,12 @@ class HomeController extends Controller
             $request->offsetUnset('password');
             $request->offsetUnset('password_confirmation');
         }
-        $request->replace(['password' => bcrypt($request->input('password'))]);
+        else
+            $request->replace(['password' => bcrypt($request->input('password'))]);
+
         $user->update($request->all());
         $user->save();
-
+        dd($user);
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success');
         return redirect('home');
@@ -99,6 +101,11 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request){
-		return back();
+        $user = Auth::user();
+        $user->activated = 0;
+        $user->status = -1;
+        $user->save();
+		Auth::logout();
+        return redirect('/login');
     }
 }
