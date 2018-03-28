@@ -25,7 +25,8 @@ class UserInfosRequest extends FormRequest
     public function rules()
     {
         return [
-            'password' => 'confirmed'
+            'password' => 'confirmed',
+            'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000'
         ];
     }
 }

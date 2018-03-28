@@ -1,5 +1,16 @@
 Modification de mon compte
-{!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '']) !!}
+{!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
+    <div class="form-group">
+        <label for="pictureAccountInput">
+            <img id="pictureAccount" src="{{$user->profilePicture}}" alt="" title="Image de profil">
+            <small class="text-muted">(Max: 2 Mo, Types : PNG, JPG, GIF)</small>
+        </label>
+        {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 
+                                            'class' => 'd-none',
+                                            'accept' => '.jpg, .jpeg, .png, .gif'
+                                        ]) !!}
+        {!! $errors->first('pictureAccount', '<small class="form-text alert-danger">:message</small>') !!}
+    </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('pseudoAccount','Pseudo :') !!}
@@ -74,7 +85,7 @@ Modification de mon compte
 {!! Form::close() !!}
 
 
-<!-- Modal -->
+<!-- Modal de suppression de compte-->
 <div class="modal fade" id="removeAccount" tabindex="-1" role="dialog" aria-labelledby="removeAccountLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
