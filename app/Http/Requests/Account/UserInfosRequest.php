@@ -25,6 +25,10 @@ class UserInfosRequest extends FormRequest
     public function rules()
     {
         return [
+            'pseudo' => 'required',
+            'email' => 'required|email',
+            'name' => 'string',
+            'firstname' => 'string',
             'password' => 'confirmed',
             'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000'
         ];

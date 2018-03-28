@@ -9,7 +9,11 @@ Modification de mon compte
                                             'class' => 'd-none',
                                             'accept' => '.jpg, .jpeg, .png, .gif'
                                         ]) !!}
-        {!! $errors->first('pictureAccount', '<small class="form-text alert-danger">:message</small>') !!}
+        {!! $errors->first('pictureAccount', 
+                            '<small class="form-text alert alert-danger">:message
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button></small>') !!}
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -18,16 +22,24 @@ Modification de mon compte
                                             'class' => 'form-control form-control-sm', 
                                             'required' => 'required',
                                             'placeholder' => 'Pseudo']) !!}
-            {!! $errors->first('pseudo', '<small class="form-text alert-danger">:message</small>') !!}
+            {!! $errors->first('pseudo', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
         </div>
         <div class="form-group col-md-6">
             {!! Form::label('emailAccount','Adresse email :') !!}
-            {!! Form::email(null, $user->email, ['id' => 'emailAccount',
-                                        'class' => 'form-control form-control-sm', 
+            {!! Form::email('email', $user->email, ['id' => 'emailAccount',
+                                        'class' => 'form-control form-control-plaintext', 
                                         'readonly' => 'readonly',
                                         'disabled' => 'disabled',
                                         'placeholder' => 'Email']) !!}
-            {!! $errors->first('email', '<small class="form-text alert-danger">:message</small>') !!}
+            {!! $errors->first('email', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
         </div>
     </div>
     <div class="form-row">
@@ -37,7 +49,11 @@ Modification de mon compte
                                             'class' => 'form-control form-control-sm', 
                                             'required' => 'required',
                                             'placeholder' => 'Nom']) !!}
-            {!! $errors->first('name', '<small class="form-text alert-danger">:message</small>') !!}
+            {!! $errors->first('name', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
         </div>
         <div class="form-group col-md-6">
             {!! Form::label('firstNameAccount','Prénom :') !!}
@@ -45,7 +61,11 @@ Modification de mon compte
                                             'class' => 'form-control form-control-sm', 
                                             'required' => 'required',
                                             'placeholder' => 'Prénom']) !!}
-            {!! $errors->first('firstname', '<small class="form-text alert-danger">:message</small>') !!}
+            {!! $errors->first('firstname', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
         </div>
     </div>
     <hr>
@@ -62,7 +82,11 @@ Modification de mon compte
                                                     'class' => 'form-control form-control-sm', 
                                                     'required' => false]) !!}
         </div>
-        {!! $errors->first('password', "<p class='col-12'><small class='form-text alert-danger'>:message</small></p>") !!}
+        {!! $errors->first('password', 
+                            '<small class="form-text alert alert-danger">:message
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button></small>') !!}
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
