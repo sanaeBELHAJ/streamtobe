@@ -2,7 +2,7 @@ Modification de mon compte
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
     <div class="form-group">
         <label for="pictureAccountInput">
-            <img id="pictureAccount" src="{{$user->profilePicture}}" alt="" title="Image de profil">
+            <img id="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil">
             <small class="text-muted">(Max: 2 Mo, Types : PNG, JPG, GIF)</small>
         </label>
         {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 
@@ -33,7 +33,7 @@ Modification de mon compte
             {!! Form::email('email', $user->email, ['id' => 'emailAccount',
                                         'class' => 'form-control form-control-plaintext', 
                                         'readonly' => 'readonly',
-                                        'disabled' => 'disabled',
+                                        
                                         'placeholder' => 'Email']) !!}
             {!! $errors->first('email', 
                                 '<small class="form-text alert alert-danger">:message

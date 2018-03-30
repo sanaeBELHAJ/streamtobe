@@ -6,6 +6,7 @@ use Session;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests\Account\UserInfosRequest;
 
@@ -43,12 +44,20 @@ class HomeController extends Controller
     public function updateInfos(UserInfosRequest $request){
         $user = Auth::user();    
         
+        //Change password
         if(!$request->filled(['password', 'password_confirmation'])){
             $request->offsetUnset('password');
             $request->offsetUnset('password_confirmation');
         }
         else
             $request->replace(['password' => bcrypt($request->input('password'))]);
+
+        //Change image
+        if($request->hasFile('pictureAccount')){ 
+            //Storage::disk('s3')->delete('folder_path/file_name.jpg');
+            $path = $request->file('pictureAccount')->store('public/avatars');
+            $user->picture = $user->setPathPicture($path);
+        }
 
         $user->update($request->all());
         $user->save();
@@ -107,5 +116,5 @@ class HomeController extends Controller
         $user->save();
 		Auth::logout();
         return redirect('/login');
-    }
+    }    
 }
