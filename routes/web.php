@@ -36,7 +36,11 @@ Route::middleware(['guest'])->group(function(){
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
-    Route::resource('home', 'HomeController', ['only' => ['index', 'update', 'destroy']]);
+    Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
+    Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
+    Route::patch('/home/stats/', 'HomeController@updateStats')->name('home.updateStats');
+    Route::patch('/home/subscription/', 'HomeController@updateSubscription')->name('home.updateSubscription');
+    Route::resource('home', 'HomeController', ['only' => ['index','destroy']]);
 });
 
 Route::namespace('Admin')->group(function () {

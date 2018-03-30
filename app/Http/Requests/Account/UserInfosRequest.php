@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Account;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ForgotRequest extends FormRequest
+class UserInfosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class ForgotRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,7 +25,12 @@ class ForgotRequest extends FormRequest
     public function rules()
     {
         return [
-			'email' => 'required|email',
+            'pseudo' => 'required',
+            'email' => 'required|email',
+            'name' => 'string',
+            'firstname' => 'string',
+            'password' => 'confirmed',
+            'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000'
         ];
     }
 }
