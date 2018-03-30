@@ -31,9 +31,7 @@ Modification de mon compte
         <div class="form-group col-md-6">
             {!! Form::label('emailAccount','Adresse email :') !!}
             {!! Form::email('email', $user->email, ['id' => 'emailAccount',
-                                        'class' => 'form-control form-control-plaintext', 
-                                        'readonly' => 'readonly',
-                                        
+                                        'class' => 'form-control form-control-sm', 
                                         'placeholder' => 'Email']) !!}
             {!! $errors->first('email', 
                                 '<small class="form-text alert alert-danger">:message

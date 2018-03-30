@@ -52,16 +52,14 @@ class HomeController extends Controller
         else
             $request->replace(['password' => bcrypt($request->input('password'))]);
 
-        //Change image
+        //Change image and store path in database
         if($request->hasFile('pictureAccount')){ 
-            //Storage::disk('s3')->delete('folder_path/file_name.jpg');
             $path = $request->file('pictureAccount')->store('public/avatars/'.$user->id);
             $user->picture = $user->setPathPicture($path);
         }
 
         $user->update($request->all());
         $user->save();
-        dd($user);
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success');
         return redirect('home');
