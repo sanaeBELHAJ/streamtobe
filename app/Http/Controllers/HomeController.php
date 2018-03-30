@@ -55,7 +55,7 @@ class HomeController extends Controller
         //Change image
         if($request->hasFile('pictureAccount')){ 
             //Storage::disk('s3')->delete('folder_path/file_name.jpg');
-            $path = $request->file('pictureAccount')->store('public/avatars');
+            $path = $request->file('pictureAccount')->store('public/avatars/'.$user->id);
             $user->picture = $user->setPathPicture($path);
         }
 
