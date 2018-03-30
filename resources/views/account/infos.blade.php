@@ -2,7 +2,7 @@ Modification de mon compte
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
     <div class="form-group">
         <label for="pictureAccountInput">
-            <img id="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil">
+            <img class="pictureAccount" id="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil">
             <small class="text-muted">(Max: 2 Mo, Types : PNG, JPG, GIF)</small>
         </label>
         {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 
@@ -41,25 +41,14 @@ Modification de mon compte
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
-            {!! Form::label('nameAccount','Nom :') !!}
-            {!! Form::text('name',null, ['id' => 'nameAccount',
-                                            'class' => 'form-control form-control-sm', 
-                                            'required' => 'required',
-                                            'placeholder' => 'Nom']) !!}
-            {!! $errors->first('name', 
-                                '<small class="form-text alert alert-danger">:message
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button></small>') !!}
-        </div>
-        <div class="form-group col-md-6">
-            {!! Form::label('firstNameAccount','Prénom :') !!}
-            {!! Form::text('firstname',null, ['id' => 'firstNameAccount',
-                                            'class' => 'form-control form-control-sm', 
-                                            'required' => 'required',
-                                            'placeholder' => 'Prénom']) !!}
-            {!! $errors->first('firstname', 
+        <div class="form-group col-12">
+            {!! Form::label('descriptionAccount','Description :') !!}
+            {!! Form::textarea('description',null, ['id' => 'descriptionAccount',
+                                                    'class' => 'form-control form-control-sm', 
+                                                    'required' => 'required',
+                                                    'size' => '30x5',
+                                                    'placeholder' => 'Descrivez-vous en quelques lignes.']) !!}
+            {!! $errors->first('description', 
                                 '<small class="form-text alert alert-danger">:message
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>

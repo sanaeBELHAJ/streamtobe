@@ -1,19 +1,5 @@
 @extends('layouts.template')
 
-@section('css')
-    <style>
-        #pictureAccount{
-            width: 100px;
-            display: inline-block;
-            height: 100px;
-            border: 1px solid;
-            border-radius: 50%;
-            vertical-align: bottom;
-            cursor: pointer;
-        }
-    </style>
-@endsection
-
 @section('content')
 <div class="container">
     <div class="row">
