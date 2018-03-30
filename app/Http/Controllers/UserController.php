@@ -23,8 +23,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-		$links = $users->render();
-        return view('user.index', compact('users', 'links'));
+		$users = User::all();
+        return view('user.index', compact('users'));
     }
 
     /**
