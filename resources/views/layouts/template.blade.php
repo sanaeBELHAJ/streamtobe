@@ -29,7 +29,7 @@
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
                             <li class="mx-3"><input type="text" placeholder="Rechercher"></li>
-                            <li class="mx-3"><a href="#" class="nav-link">Liste des streams</a></li>
+                            <li class="mx-3"><a href="#" class="nav-link">Streams en cours</a></li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->

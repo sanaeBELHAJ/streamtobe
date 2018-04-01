@@ -39,7 +39,7 @@ return [
     'exists' => 'Le champ :attribute sélectionné est invalide.',
     'file' => 'Le champ :attribute doit être un fichier.',
     'filled' => 'Le champ :attribute doit avoir une valeur.',
-    'image' => 'Le champ :attribute doit être une image.',
+    'image' => 'Le fichier doit être une image correspondant aux types indiqués.',
     'in' => 'Le champ :attribute est invalide.',
     'in_array' => "Le champ :attribute n'existe pas dans :other.",
     'integer' => 'Le champ :attribute doit être un entier.',
@@ -49,7 +49,7 @@ return [
     'json' => 'Le champ :attribute doit être un document JSON valide.',
     'max' => [
         'numeric' => 'La valeur de :attribute ne peut être supérieure à :max.',
-        'file' => 'La taille du fichier de :attribute ne peut pas dépasser :max kilo-octets.',
+        'file' => 'La taille du fichier ne peut pas dépasser :max Ko.',
         'string' => 'Le texte de :attribute ne peut contenir plus de :max caractères.',
         'array' => 'Le tableau :attribute ne peut contenir plus de :max éléments.',
     ],

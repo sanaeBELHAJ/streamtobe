@@ -6,11 +6,9 @@
 		<div class="panel panel-primary">	
 			<div class="panel-heading">Fiche d'utilisateur</div>
 			<div class="panel-body"> 
-				<p>Nom : {{ $user->name }}</p>
+				<img class="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil">
+				<p>Pseudo : {{ $user->pseudo }}</p>
 				<p>Email : {{ $user->email }}</p>
-				@if($user->admin == 1)
-					Administrateur
-				@endif
 			</div>
 		</div>				
 		<a href="javascript:history.back()" class="btn btn-primary">

@@ -14,9 +14,8 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Nom</th>
-						<th></th>
-						<th></th>
+						<th>Pseudo</th>
+						<th>Image</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -24,19 +23,13 @@
 					@foreach ($users as $user)
 						<tr>
 							<td>{!! $user->id !!}</td>
-							<td class="text-primary"><strong>{!! $user->name !!}</strong></td>
+							<td class="text-primary"><strong>{!! $user->pseudo !!}</strong></td>
+							<td><img class="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil"></td>
 							<td>{!! link_to_route('user.show', 'Voir', [$user->pseudo], ['class' => 'btn btn-success btn-block']) !!}</td>
-							<td>
-								{{--  {!! Form::open(['method' => 'DELETE', 'route' => ['user.destroy', $user->id]]) !!}
-									{!! Form::submit('Supprimer', ['class' => 'btn btn-danger btn-block', 'onclick' => 'return confirm(\'Vraiment supprimer cet utilisateur ?\')']) !!}
-								{!! Form::close() !!}  --}}
-							</td>
 						</tr>
 					@endforeach
 	  			</tbody>
 			</table>
 		</div>
-		{{--  {!! link_to_route('user.create', 'Ajouter un utilisateur', [], ['class' => 'btn btn-info pull-right']) !!}
-		{!! $links !!}  --}}
 	</div>
 @endsection

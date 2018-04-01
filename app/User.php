@@ -20,8 +20,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'firstname',
         'pseudo', 
         'email', 
         'password',
@@ -39,4 +37,12 @@ class User extends Authenticatable
         'password', 
         'remember_token',
     ];
+
+    /**
+     * Remove the path 'public/' from the data table User
+     * 
+     */
+    public function setPathPicture($path){
+        return str_replace('public/','',$path);
+    }
 }
