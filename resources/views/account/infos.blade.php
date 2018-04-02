@@ -45,7 +45,6 @@ Modification de mon compte
             {!! Form::label('descriptionAccount','Description :') !!}
             {!! Form::textarea('description',null, ['id' => 'descriptionAccount',
                                                     'class' => 'form-control form-control-sm', 
-                                                    'required' => 'required',
                                                     'size' => '30x5',
                                                     'placeholder' => 'Descrivez-vous en quelques lignes.']) !!}
             {!! $errors->first('description', 
