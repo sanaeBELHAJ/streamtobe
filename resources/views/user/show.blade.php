@@ -6,15 +6,17 @@
 
 			{{-- Lecteur vidéo --}}
 			<div id="player" class="col-12 col-md-8 mt-4">
-				<video></video>
+				<video id="videoPlayer" controls>
+					<source/>
+				</video>
 			</div>
 
 			{{-- Chatbox --}}
 			<div id="messages" class="col-12 col-md-4 mt-4">
 				<figure class="figure" id="chatbox">
-					<div id="chat" class="w-100 h-75"></div>
+					<ul class="w-100 h-75"></ul>
 					<figcaption id="chatform" class="w-100 h-25">
-						<form class="h-100 row m-0">
+						<form action="" class="h-100 row m-0">
 							<p class="col-10 p-0 m-0"> 
 								<textarea class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
 							</p>
@@ -30,10 +32,10 @@
 			<div id="infos" class="col-12 mt-4 d-none d-sm-block">
 				<div class="col-12 col-md-8 d-flex justify-content-between">
 					<p class="col text-center">
-						<button><i class="fas fa-2x fa-exclamation-triangle"></i></button>
+						<i class="fas fa-2x fa-exclamation-triangle"></i>
 					</p>
 					<p class="col text-center">
-						<button><i class="far fa-2x fa-comment"></i></button>
+						<i class="far fa-2x fa-comment"></i>
 					</p>
 					<p class="col text-center">
 						<button>S'abonner</button>
@@ -80,4 +82,9 @@
 			}
 		}
 	</style>
+@endsection
+
+@section('js')
+
+
 @endsection
