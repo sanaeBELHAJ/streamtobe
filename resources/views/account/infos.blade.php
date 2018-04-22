@@ -1,4 +1,5 @@
-Modification de mon compte
+<h3 class="text-center">Modification de mon compte</h3>
+
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
     <div class="form-group">
         <label for="pictureAccountInput">
@@ -45,7 +46,6 @@ Modification de mon compte
             {!! Form::label('descriptionAccount','Description :') !!}
             {!! Form::textarea('description',null, ['id' => 'descriptionAccount',
                                                     'class' => 'form-control form-control-sm', 
-                                                    'required' => 'required',
                                                     'size' => '30x5',
                                                     'placeholder' => 'Descrivez-vous en quelques lignes.']) !!}
             {!! $errors->first('description', 
@@ -76,23 +76,17 @@ Modification de mon compte
                                 </button></small>') !!}
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#removeAccount">
-                Verrouiller mon compte
-            </button>
-        </div>
-        <div class="form-group col-md-6 text-right">
+        <div class="form-group col-12 text-right">
             {!! Form::submit("Enregistrer les modifications", ['class' => 'btn btn-success pull-right']) !!}
         </div>
     </div>
-    @if(Session::has('message'))
-        <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+    <div class="form-row">
+        <div class="form-group col-12">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#removeAccount">
+                Verrouiller mon compte
             </button>
-            {{ Session::get('message') }}
-        </p>
-    @endif
+        </div>
+    </div>
 {!! Form::close() !!}
 
 
@@ -102,7 +96,7 @@ Modification de mon compte
         <div class="modal-content">
             {!! Form::open(['method' => 'DELETE', 'route' => ['home.destroy', $user->pseudo]]) !!}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="removeAccountLabel">Modal title</h5>
+                    <h5 class="modal-title" id="removeAccountLabel">Désactivation de mon compte</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">&times;</span>
                     </button>
