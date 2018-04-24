@@ -54,7 +54,7 @@ class HomeController extends Controller
 
         //Change image and store path in database
         if($request->hasFile('pictureAccount')){ 
-            $path = $request->file('pictureAccount')->store('public/avatars/'.$user->id);
+            $path = $request->file('pictureAccount')->store('public/avatars/'.$user->pseudo);
             $user->picture = $user->setPathPicture($path);
         }
 

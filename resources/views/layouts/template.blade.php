@@ -55,9 +55,9 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
                                         <a href="#" class="dropdown-item">Mes abonnements</a>
-                                        <a href="#" class="dropdown-item">Mon stream</a>
+                                        <a href="{{ route('user.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
                                         <hr>
-                                        <a href="#" class="dropdown-item">Administration</a>
+                                        <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
                                         <hr>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();

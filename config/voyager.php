@@ -15,7 +15,7 @@ return [
         'default_role'                 => 'user',
         'namespace'                    => App\User::class,
         'default_avatar'               => 'users/default.png',
-        'redirect'                     => '/admin',
+        'redirect'                     => '/home',
     ],
 
     /*
@@ -92,7 +92,15 @@ return [
 
     'database' => [
         'tables' => [
-            'hidden' => ['migrations', 'data_rows', 'data_types', 'menu_items', 'password_resets', 'permission_role', 'settings'],
+            'hidden' => [
+                'migrations', 
+                'data_rows', 
+                'data_types', 
+                'menu_items', 
+                'password_resets', 
+                'permission_role', 
+                'settings'
+            ],
         ],
     ],
 
@@ -120,12 +128,13 @@ return [
         /*
          * Select default language
          */
-        'default' => 'en',
+        'default' => 'fr',
 
         /*
          * Select languages that are supported.
          */
         'locales' => [
+            'fr',
             'en',
             //'pt',
         ],
