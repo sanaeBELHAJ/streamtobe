@@ -14,16 +14,20 @@
 			{{-- Chatbox --}}
 			<div id="messages" class="col-12 col-md-4 mt-4">
 				<figure class="figure" id="chatbox">
-					<ul class="w-100 h-75"></ul>
+					<ul class="w-100 h-75 m-0"></ul>
 					<figcaption id="chatform" class="w-100 h-25">
-						<form action="" class="h-100 row m-0">
-							<p class="col-10 p-0 m-0"> 
-								<textarea class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
-							</p>
-							<button class="col-2 border-top text-center">
-								<i class="fas fa-angle-right"></i>
-							</button>
-						</form>
+						@guest
+							<p class="border-top d-flex flex-column justify-content-center text-center h-100">Connectez-vous pour rédiger un message.</p>
+						@else
+							<form action="" class="h-100 row m-0">
+								<p class="col-10 p-0 m-0"> 
+									<textarea class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
+								</p>
+								<button class="col-2 border-top text-center">
+									<i class="fas fa-angle-right"></i>
+								</button>
+							</form>
+						@endguest
 					</figcaption>
 				</figure>
 			</div>
