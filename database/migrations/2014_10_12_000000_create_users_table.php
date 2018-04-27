@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->integer('status')->default(0);
             $table->text('description');
-            $table->boolean('activated')->default(false);
+            $table->integer('activated')->default(0);
             $table->string('password');
             $table->string('avatar')->default('users/default.png');
             $table->string('confirmation_code')->nullable();

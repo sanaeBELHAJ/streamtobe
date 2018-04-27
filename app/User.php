@@ -46,4 +46,13 @@ class User extends \TCG\Voyager\Models\User
     public function setPathAvatar($path){
         return str_replace('public/','',$path);
     }
+
+    /**
+     * Get his stream list
+     * 
+     */
+    public function streams() 
+    {
+        return $this->hasMany('App\Stream');
+    }
 }
