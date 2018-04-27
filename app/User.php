@@ -20,6 +20,7 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $fillable = [
+        'name',
         'pseudo', 
         'email', 
         'password',
@@ -42,7 +43,7 @@ class User extends \TCG\Voyager\Models\User
      * Remove the path 'public/' from the data table User
      * 
      */
-    public function setPathPicture($path){
+    public function setPathAvatar($path){
         return str_replace('public/','',$path);
     }
 }
