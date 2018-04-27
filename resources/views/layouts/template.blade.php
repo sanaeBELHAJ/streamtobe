@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="google-site-verification" content="" />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <title>@yield('title')</title>
+        <title>{{ setting('site.title') }}</title>
     
         <!-- CSS -->
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
@@ -54,10 +54,7 @@
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
-                                        <a href="#" class="dropdown-item">Mes abonnements</a>
-                                        <a href="#" class="dropdown-item">Mon stream</a>
-                                        <hr>
-                                        <a href="#" class="dropdown-item">Administration</a>
+                                        <a href="{{ route('user.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
                                         <hr>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
