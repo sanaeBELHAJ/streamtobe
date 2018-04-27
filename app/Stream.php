@@ -12,7 +12,8 @@ class Stream extends Model
 
     protected $fillable = [
         'titre',
-        'streamer_id'
+        'streamer_id',
+        'status',
     ];
 
     /**
