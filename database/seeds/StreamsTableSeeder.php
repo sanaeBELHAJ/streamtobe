@@ -12,10 +12,10 @@ class StreamsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table('streams')->delete();
+		DB::table('stb_streams')->delete();
 
         $date = $this->randDate();
-        DB::table('streams')->insert([
+        DB::table('stb_streams')->insert([
             'titre' => 'Titre',
             'streamer_id' => rand(1, 2),
             'created_at' => $date,

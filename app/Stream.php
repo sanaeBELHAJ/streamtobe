@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stream extends Model
 {
-    protected $table = 'streams';
+    protected $table = 'stb_streams';
 
     public $timestamps = true;
 

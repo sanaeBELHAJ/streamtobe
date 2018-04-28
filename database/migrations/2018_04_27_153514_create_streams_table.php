@@ -13,7 +13,7 @@ class CreateStreamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('streams', function (Blueprint $table) {
+        Schema::create('stb_streams', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('streamer_id')->unsigned();
             $table->foreign('streamer_id')
@@ -36,9 +36,9 @@ class CreateStreamsTable extends Migration
      */
     public function down()
     {
-        Schema::table('streams', function(Blueprint $table) {
+        Schema::table('stb_streams', function(Blueprint $table) {
 			$table->dropForeign('streams_user_id_foreign');
 		});
-        Schema::dropIfExists('streams');
+        Schema::dropIfExists('stb_streams');
     }
 }
