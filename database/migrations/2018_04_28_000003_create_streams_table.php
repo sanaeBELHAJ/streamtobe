@@ -15,13 +15,21 @@ class CreateStreamsTable extends Migration
     {
         Schema::create('stb_streams', function (Blueprint $table) {
             $table->increments('id');
+
             $table->integer('streamer_id')->unsigned();
             $table->foreign('streamer_id')
                     ->references('id')
                     ->on('users')
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
-            $table->integer('id_categorie');
+
+            $table->integer('type_id')->unsigned();
+            $table->foreign('type_id')
+                    ->references('id')
+                    ->on('stb_types')
+                    ->onDelete('restrict')
+                    ->onUpdate('restrict');
+
             $table->string('titre');
             $table->integer('status')->default(0);
             $table->rememberToken();
@@ -37,7 +45,8 @@ class CreateStreamsTable extends Migration
     public function down()
     {
         Schema::table('stb_streams', function(Blueprint $table) {
-			$table->dropForeign('streams_user_id_foreign');
+			$table->dropForeign('streamer_id');
+			//$table->dropForeign('streams_user_id_foreign');
 		});
         Schema::dropIfExists('stb_streams');
     }
