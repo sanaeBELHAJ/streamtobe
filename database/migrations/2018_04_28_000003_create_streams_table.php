@@ -30,8 +30,8 @@ class CreateStreamsTable extends Migration
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
 
-            $table->string('titre');
-            $table->integer('status')->default(0);
+            $table->string('title');
+            $table->integer('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -46,7 +46,6 @@ class CreateStreamsTable extends Migration
     {
         Schema::table('stb_streams', function(Blueprint $table) {
 			$table->dropForeign('streamer_id');
-			//$table->dropForeign('streams_user_id_foreign');
 		});
         Schema::dropIfExists('stb_streams');
     }

@@ -19,7 +19,7 @@ class StreamsTableSeeder extends Seeder {
 
         $date = $this->randDate();
         DB::table('stb_streams')->insert([
-            'titre' => 'Titre',
+            'title' => 'Titre',
             'streamer_id' => $user->id,
             'type_id' => $type->id,
             'created_at' => $date,
