@@ -23,4 +23,12 @@ class Stream extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * Stream type
+     */
+    public function type() 
+    {
+        return $this->belongsTo('App\Type');
+    }
 }

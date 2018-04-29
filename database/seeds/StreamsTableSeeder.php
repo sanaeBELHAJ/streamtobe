@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use App\User;
+use App\Type;
 
 class StreamsTableSeeder extends Seeder {
 
@@ -12,12 +14,14 @@ class StreamsTableSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table('stb_streams')->delete();
+        $user = User::where('pseudo', 'admin')->firstOrFail();
+        $type = Type::where('name', 'default')->firstOrFail();
 
         $date = $this->randDate();
         DB::table('stb_streams')->insert([
             'titre' => 'Titre',
-            'streamer_id' => rand(1, 2),
+            'streamer_id' => $user->id,
+            'type_id' => $type->id,
             'created_at' => $date,
             'updated_at' => $date
         ]);

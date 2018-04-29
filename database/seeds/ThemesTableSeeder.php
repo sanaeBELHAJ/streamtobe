@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Theme;
 
 class ThemesTableSeeder extends Seeder
 {
@@ -11,6 +12,9 @@ class ThemesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $theme = Theme::firstOrNew(['name' => 'default']);
+        if (!$theme->exists) {
+            $theme->save();
+        }
     }
 }
