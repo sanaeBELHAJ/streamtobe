@@ -56,6 +56,10 @@
                                         <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
                                         <a href="{{ route('user.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
                                         <hr>
+                                        @if(Auth::user()->role_id == 1)
+                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
+                                            <hr>
+                                        @endif
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">

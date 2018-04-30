@@ -43,6 +43,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('home', 'HomeController', ['only' => ['index','destroy']]);
 });
 
-Route::namespace('Admin')->group(function () {
-    // Controllers Within The "App\Http\Controllers\Admin" Namespace
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
 });

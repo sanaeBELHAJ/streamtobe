@@ -28,7 +28,6 @@ class UserInfosRequest extends FormRequest
             'pseudo' => 'required',
             'email' => 'required|email',
             'name' => 'string',
-            'firstname' => 'string',
             'password' => 'confirmed',
             'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000'
         ];

@@ -3,7 +3,7 @@
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
     <div class="form-group">
         <label for="pictureAccountInput">
-            <img class="pictureAccount" id="pictureAccount" src="<?php echo asset('storage/'.$user->picture); ?>" alt="" title="Image de profil">
+            <img class="pictureAccount" id="pictureAccount" src="<?php echo asset('storage/'.$user->avatar); ?>" alt="" title="Image de profil">
             <small class="text-muted">(Max: 2 Mo, Types : PNG, JPG, GIF)</small>
         </label>
         {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 

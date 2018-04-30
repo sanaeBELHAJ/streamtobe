@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends \TCG\Voyager\Models\User
 {
     use Notifiable;
     
@@ -20,6 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'name',
         'pseudo', 
         'email', 
         'password',
@@ -42,7 +43,16 @@ class User extends Authenticatable
      * Remove the path 'public/' from the data table User
      * 
      */
-    public function setPathPicture($path){
+    public function setPathAvatar($path){
         return str_replace('public/','',$path);
+    }
+
+    /**
+     * Get his stream list
+     * 
+     */
+    public function streams() 
+    {
+        return $this->hasMany('App\Stream');
     }
 }

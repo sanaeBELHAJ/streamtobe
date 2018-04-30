@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Mail;
 use Session;
 use App\User;
+use App\Stream;
+use App\Type;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -60,7 +63,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create new user and stream instances after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
@@ -68,13 +71,21 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $data['confirmation_code'] = str_random(30);
-
-        return User::create([
-                'pseudo' => $data['pseudo'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
+        $user = User::create([
+                'pseudo'            => $data['pseudo'],
+                'email'             => $data['email'],
+                'password'          => Hash::make($data['password']),
                 'confirmation_code' => $data['confirmation_code']
+            ]);
+
+        $type = Type::where('name', 'default')->firstOrFail();
+        $stream = Stream::create([
+            'title' => 'Titre',
+            'streamer_id' => $user->id,
+            'type_id' => $type->id
         ]);
+        
+        return $user;
     }
 
 
