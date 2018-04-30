@@ -34,7 +34,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($pseudo){
-        $user = User::wherePseudo($pseudo)->first();
+        $user = User::where('pseudo',$pseudo)
+                    ->where('status',1)
+                    ->first();
         if(!$user)
             abort(404);
         return view('user.show', compact('user'));
