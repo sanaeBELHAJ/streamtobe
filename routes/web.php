@@ -26,7 +26,7 @@ Route::get('/', function () {
 Auth::routes();
 
 //Informations de(s) utilisateur(s)
-Route::resource('user', 'UserController', ['only' => ['index', 'show']]);
+Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){

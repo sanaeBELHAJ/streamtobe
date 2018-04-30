@@ -25,7 +25,7 @@
 								<td>{!! $user->id !!}</td>
 								<td class="text-primary"><strong>{!! $user->pseudo !!}</strong></td>
 								<td><img class="pictureAccount" src="<?php echo asset('storage/'.$user->avatar); ?>" alt="" title="Image de profil"></td>
-								<td>{!! link_to_route('user.show', 'Voir', [$user->pseudo], ['class' => 'btn btn-success btn-block']) !!}</td>
+								<td>{!! link_to_route('stream.show', 'Voir', [$user->pseudo], ['class' => 'btn btn-success btn-block']) !!}</td>
 							</tr>
 						@endforeach
 					</tbody>

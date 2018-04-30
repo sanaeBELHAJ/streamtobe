@@ -19,11 +19,11 @@
 						@guest
 							<p class="border-top d-flex flex-column justify-content-center text-center h-100">Connectez-vous pour rédiger un message.</p>
 						@else
-							<form action="" class="h-100 row m-0">
+							<form action="" id="messageForm" class="h-100 row m-0" method="POST">
 								<p class="col-10 p-0 m-0"> 
-									<textarea class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
+									<textarea name="messageContent" class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
 								</p>
-								<button class="col-2 border-top text-center">
+								<button class="col-2 border-top text-center" type="submit">
 									<i class="fas fa-angle-right"></i>
 								</button>
 							</form>
@@ -89,6 +89,32 @@
 @endsection
 
 @section('js')
+	<script>
+		$(function(){
 
+			/*$(document).on('submit', '#messageForm', function(e) {  
+				e.preventDefault();
+				$('textarea[name="messageContent"]').text('');
+				
+				$.ajax({
+					method: $(this).attr('method'),
+					url: $(this).attr('action'),
+					data: $(this).serialize(),
+					dataType: "json"
+				})
+				.done(function(data) {
+					$('.alert-success').removeClass('hidden');
+					$('#myModal').modal('hide');
+				})
+				.fail(function(data) {
+					$.each(data.responseJSON, function (key, value) {
+						var input = '#formRegister input[name=' + key + ']';
+						$(input + '+small').text(value);
+						$(input).parent().addClass('has-error');
+					});
+				});
+			});*/
 
+		})
+	</script>
 @endsection

@@ -54,7 +54,7 @@
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
-                                        <a href="{{ route('user.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
+                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
                                         <hr>
                                         @if(Auth::user()->role_id == 1)
                                             <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
