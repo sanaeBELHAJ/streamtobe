@@ -67,8 +67,9 @@
                                 <label for="activated">Activated</label>
                                 <select class="form-control select2" id="activated" name="activated">
                                     <option value="1" {{ ($dataTypeContent->activated == "1" ? 'selected' : '') }}>Actif</option>
-                                    <option value="0" {{ ($dataTypeContent->activated == "0" ? 'selected' : '') }}>Inactif</option>                                    
-                                    <option value="-1" {{ ($dataTypeContent->activated == "-1" ? 'selected' : '') }}>Banni</option>                                    
+                                    <option value="0" {{ ($dataTypeContent->activated == "0" ? 'selected' : '') }}>Non confirmé</option>
+                                    <option value="-1" {{ ($dataTypeContent->activated == "-1" ? 'selected' : '') }}>Banni</option>
+                                    <option value="-2" {{ ($dataTypeContent->activated == "-2" ? 'selected' : '') }}>Clôturé (vider champs EMAIL + NOM)</option>
                                 </select>
                             </div>
 
