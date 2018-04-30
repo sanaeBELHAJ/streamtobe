@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use App\User;
 use App\Type;
+use App\Stream;
 
 class StreamsTableSeeder extends Seeder {
 
@@ -14,16 +15,20 @@ class StreamsTableSeeder extends Seeder {
 
 	public function run()
 	{
-        $user = User::where('pseudo', 'admin')->firstOrFail();
+        $users = User::all();
         $type = Type::where('name', 'default')->firstOrFail();
-
         $date = $this->randDate();
-        DB::table('stb_streams')->insert([
-            'title' => 'Titre',
-            'streamer_id' => $user->id,
-            'type_id' => $type->id,
-            'created_at' => $date,
-            'updated_at' => $date
-        ]);
+
+        foreach($users as $user){
+
+            Stream::create([
+                'title' => 'Titre',
+                'streamer_id' => $user->id,
+                'type_id' => $type->id,
+                'created_at' => $date,
+                'updated_at' => $date
+            ]);
+        
+        }
 	}
 }
