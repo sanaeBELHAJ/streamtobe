@@ -13,7 +13,8 @@
 
 			{{-- Chatbox --}}
 			<div id="messages" class="col-12 col-md-4 mt-4">
-				<figure class="figure" id="chatbox">
+				<iframe src="http://localhost:8080/" class="h-100 w-100"></iframe>
+				{{-- <figure class="figure" id="chatbox">
 					<ul class="w-100 h-75 m-0"></ul>
 					<figcaption id="chatform" class="w-100 h-25">
 						@guest
@@ -29,7 +30,7 @@
 							</form>
 						@endguest
 					</figcaption>
-				</figure>
+				</figure> --}}
 			</div>
 
 			{{-- Description du streamer --}}
