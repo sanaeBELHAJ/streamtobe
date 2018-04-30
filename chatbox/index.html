@@ -4,26 +4,63 @@
         <meta charset="utf-8" />
         <title>Super Chat temps réel !</title>
         <style>
+            html, body{
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #chat_header{
+                height: 5%;
+                margin: 0;
+                text-align: center;
+                background-color: palevioletred;
+            }
+
+            #zone_chat{
+                width: 100%;
+                background: green;
+                color: #fff;
+                height: 80%;
+                font-size: 1.2em;
+                overflow-wrap: break-word;
+                overflow-y: scroll;
+            }
+
             #zone_chat strong {
                 color: white;
                 background-color: black;
                 padding: 2px;
             }
+
+            form#formulaire_chat{
+                height: 15%;
+            }
+
+            textarea{
+                min-height:50%;
+                height: 90%;
+                max-height: 90%;
+                padding: 0;
+                min-width:50%;
+                width: 80%;
+                max-width: 80%;
+                vertical-align: middle;
+            }
         </style>
     </head>
  
     <body>
-        <h1>Le super Chat temps réel !</h1>
-
-        <form action="/" method="post" id="formulaire_chat">
-            <input type="text" name="message" id="message" placeholder="Votre message..." size="50" autofocus />
-            <input type="submit" id="envoi_message" value="Envoyer" />
-        </form>
-
+        <p id="chat_header">Chat</p>
+    
         <section id="zone_chat">
             
         </section>
 
+        <form action="/" id="formulaire_chat" class="h-100 row m-0">
+            <textarea name="message" id="message" placeholder="Votre message..." autofocus></textarea>
+            <input type="submit" id="envoi_message" value="Envoyer" />
+        </form>
 
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>

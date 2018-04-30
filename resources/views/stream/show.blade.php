@@ -13,24 +13,11 @@
 
 			{{-- Chatbox --}}
 			<div id="messages" class="col-12 col-md-4 mt-4">
-				<iframe src="http://localhost:8080/" class="h-100 w-100"></iframe>
-				{{-- <figure class="figure" id="chatbox">
-					<ul class="w-100 h-75 m-0"></ul>
-					<figcaption id="chatform" class="w-100 h-25">
-						@guest
-							<p class="border-top d-flex flex-column justify-content-center text-center h-100">Connectez-vous pour rédiger un message.</p>
-						@else
-							<form action="" id="messageForm" class="h-100 row m-0" method="POST">
-								<p class="col-10 p-0 m-0"> 
-									<textarea name="messageContent" class="border-right-0 border-bottom-0 border-left-0 border-top w-100 h-100"></textarea>
-								</p>
-								<button class="col-2 border-top text-center" type="submit">
-									<i class="fas fa-angle-right"></i>
-								</button>
-							</form>
-						@endguest
-					</figcaption>
-				</figure> --}}
+				@guest
+                    <p class="border-top d-flex flex-column justify-content-center text-center h-100">Connectez-vous pour rédiger un message.</p>
+				@else
+					<iframe src="http://localhost:8080/" class="h-100 w-100"></iframe>
+				@endguest
 			</div>
 
 			{{-- Description du streamer --}}
