@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChatTable extends Migration
+class CreateChatsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,17 +16,10 @@ class CreateChatTable extends Migration
         Schema::create('stb_chats', function (Blueprint $table) {
             $table->increments('id');
             
-            $table->integer('stream_id')->unsigned();
-            $table->foreign('stream_id')
+            $table->integer('viewer_id')->unsigned();
+            $table->foreign('viewer_id')
                     ->references('id')
-                    ->on('stb_streams')
-                    ->onDelete('restrict')
-                    ->onUpdate('restrict');
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')
-                    ->references('id')
-                    ->on('users')
+                    ->on('stb_viewers')
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
             
@@ -43,6 +36,6 @@ class CreateChatTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stb_chat');
+        Schema::dropIfExists('stb_chats');
     }
 }

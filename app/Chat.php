@@ -12,24 +12,15 @@ class Chat extends Model
 
     protected $fillable = [
         'message',
-        'stream_id',
-        'user_id',
+        'viewer_id',
         'status',
     ];
 
     /**
-     * Stream owner
+     * Viewer writer
      */
-    public function stream() 
+    public function viewer() 
     {
-        return $this->belongsTo('App\Stream');
-    }
-
-    /**
-     * User writer
-     */
-    public function user() 
-    {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Viewer');
     }
 }

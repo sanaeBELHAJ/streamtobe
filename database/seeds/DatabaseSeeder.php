@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MessagesTableSeeder::class);
 
         $this->call(StreamsTableSeeder::class);
+        $this->call(ViewersTableSeeder::class);
         $this->call(ChatsTableSeeder::class);
     }
 }
