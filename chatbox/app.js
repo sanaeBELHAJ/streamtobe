@@ -7,17 +7,17 @@ var app = require('express')(),
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'streamtobe'
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'streamtobe'
 });
 
 /* Load */
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 //DB Connection
@@ -39,8 +39,15 @@ io.sockets.on('connection', function (socket, pseudo) {
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
     socket.on('message', function (message) {
         message = ent.encode(message);
-        saveDB(message);
-        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
+        viewer = getDB();
+        content = { 
+            viewer_id: 1, 
+            pseudo: pseudo, 
+            message: message, 
+            status: 1
+        };
+        saveDB(content);
+        socket.broadcast.emit('message', {pseudo: content.pseudo, message: content.message, status: content.status});
     }); 
 });
 
@@ -58,9 +65,8 @@ function getDB(){
 }
 
 //DB Insert
-function saveDB(message){
-    const chat = { viewer_id: 1, message: message };
-    console.log(chat);
+function saveDB(content){
+    const chat = { viewer_id: content.viewer_id, message: content.message, status: content.status };
     connection.query(
         'INSERT INTO stb_chats SET ?', 
         chat, 
@@ -88,6 +94,7 @@ function updateDB(){
 }
 
 //Db Destroy
+/*
 function destroyDB(){
     connection.query(
         'DELETE FROM stb_chats WHERE message = ?', 
@@ -100,5 +107,6 @@ function destroyDB(){
         }
     );
 }
+*/
 
 server.listen(8080);
