@@ -8,12 +8,22 @@ header .dropdown-menu{
     right: 0;
 }
 
-.pictureAccount{
-    width: 100px;
+.pictureAccountTemplate{
+    width: 50px;
     display: inline-block;
-    height: 100px;
+    height: 50px;
     border: 1px solid;
     border-radius: 50%;
     vertical-align: bottom;
     cursor: pointer;
+    vertical-align: middle;
+}
+
+.ui-state-active{
+    background-color: transparent !important;
+    border: 0 !important;
+    margin: 0 !important;
+}
+.results_picture{
+    width: 60px;
 }

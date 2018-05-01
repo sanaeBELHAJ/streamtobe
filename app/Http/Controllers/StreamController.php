@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Mail;
 use Session;
+use Response;
+use Illuminate\Support\Facades\Input;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,5 +53,23 @@ class StreamController extends Controller
         if($user){
             
         }
+    }
+
+    /**
+     * 
+     */
+    public function autocomplete(){
+        $term = Input::get('term');
+        $results = array();
+        
+        $queries = User::where('pseudo', 'LIKE', '%'.$term.'%')->take(5)->get();
+        
+        foreach ($queries as $query)
+            $results[] = [ 
+                    'avatar' => asset('storage/'.$query->avatar),
+                    'value' => $query->pseudo
+                ];
+
+        return Response::json($results);
     }
 }

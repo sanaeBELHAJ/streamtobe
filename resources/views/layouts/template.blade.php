@@ -9,6 +9,7 @@
         <title>{{ setting('site.title') }}</title>
     
         <!-- CSS -->
+        {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
@@ -28,7 +29,11 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
-                            <li class="mx-3"><input type="text" placeholder="Rechercher"></li>
+                            <li class="mx-3">
+                                {{ Form::open(['method' => 'GET', 'route' => ['autocomplete'], 'id' => 'search_user']) }}
+                                    {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher une chaine'])}}
+                                {{ Form::close() }}
+                            </li>
                             <li class="mx-3"><a href="#" class="nav-link">Streams en cours</a></li>
                         </ul>
     
@@ -49,6 +54,7 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                            <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
                                         {{ Auth::user()->pseudo }} <span class="caret"></span>
                                     </a>
     
@@ -85,12 +91,33 @@
         </footer>
         <!-- JAVASCRIPT -->
         {!! HTML::script('jquery-3.3.1.min.js') !!}
+        {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
         {!! HTML::script('js/template.js') !!}
         <script>
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip();
+
+                $('#search_user').submit(function(event){
+                    event.preventDefault();
+                    return false;
+                });
+
+                $( "#q" ).autocomplete({
+                    source: "/autocomplete",
+                    minLength: 2,
+                    select: function(event, ui) {
+                        $('#q').val(ui.item.value);
+                        window.location.replace("/stream/"+ui.item.value);
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                        .data( "ui-autocomplete-item", item )
+                        .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
+                        .appendTo( ul );
+                };
             });
         </script>
         @yield('js')

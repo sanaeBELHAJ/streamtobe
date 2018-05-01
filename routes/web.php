@@ -25,6 +25,9 @@ Route::get('/', function () {
 //Routes basiques d'inscription/connexion/déconnexion
 Auth::routes();
 
+//Recherche d'une chaine
+Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
+
 //Informations de(s) utilisateur(s)
 Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 

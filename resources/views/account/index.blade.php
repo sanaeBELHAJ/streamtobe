@@ -67,6 +67,20 @@
 </div>
 @endsection
 
+@section('css')
+<style>
+    .pictureAccount{
+        width: 100px;
+        display: inline-block;
+        height: 100px;
+        border: 1px solid;
+        border-radius: 50%;
+        vertical-align: bottom;
+        cursor: pointer;
+    }
+</style>
+@endsection
+
 @section('js')
     <script>
         $(document).ready(function(){
