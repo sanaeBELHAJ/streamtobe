@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Theme;
 
-class ThemesTableSeeder extends Seeder
+class StbThemesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

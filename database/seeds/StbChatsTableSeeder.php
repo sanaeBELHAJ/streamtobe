@@ -2,11 +2,10 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
-use App\Stream;
-use App\User;
 use App\Viewer;
+use App\Chat;
 
-class ViewersTableSeeder extends Seeder {
+class StbChatsTableSeeder extends Seeder {
 
     private function randDate()
 	{
@@ -15,15 +14,14 @@ class ViewersTableSeeder extends Seeder {
 
 	public function run()
 	{
-        $streams = Stream::all();
+        $viewers = Viewer::all();
         $date = $this->randDate();
 
-        foreach($streams as $stream){
-            $user = User::inRandomOrder()->first();
+        foreach($viewers as $viewer){
 
-            Viewer::create([
-                'stream_id'  => $stream->id,
-                'user_id'    => $user->id,
+            Chat::create([
+                'message'    => 'Coucou',
+                'viewer_id'  => $viewer->id,
                 'created_at' => $date,
                 'updated_at' => $date
             ]);

@@ -6,7 +6,7 @@ use App\User;
 use App\Type;
 use App\Stream;
 
-class StreamsTableSeeder extends Seeder {
+class StbStreamsTableSeeder extends Seeder {
 
     private function randDate()
 	{
