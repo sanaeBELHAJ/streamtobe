@@ -27,7 +27,7 @@
                     href="#v-pills-subscription" role="tab" aria-controls="v-pills-subscription" 
                     aria-selected="false" title="Consulter un récapitulatif de mes abonnements">
                     <span class="d-block d-md-none text-center"><i class="far fa-credit-card"></i></span>
-                    <span class="d-none d-md-block">ABONNEMENTS</span>
+                    <span class="d-none d-md-block">TRANSACTIONS</span>
                 </a>
             </nav>
         </div>

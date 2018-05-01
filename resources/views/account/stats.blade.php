@@ -1,8 +1,8 @@
 <h3 class="text-center">Dernières données récupérées de mon stream</h3>
 
-{!! Form::model($user, ['route' => ['home.updateStats'], 'method' => 'put', 'class' => '']) !!}
+{{-- {!! Form::model($user, ['route' => ['home.updateStats'], 'method' => 'put', 'class' => '']) !!} --}}
     
-    <h5>Liste des followers :</h5>
+    <h5>Mes followers :</h5>
     <table>
         <thead>
             <tr>
@@ -20,7 +20,7 @@
         </tbody>
     </table>
 
-    <h5>Liste des abonnés :</h5>
+    <h5>Mes abonnés :</h5>
     <table>
         <thead>
             <tr>
@@ -37,4 +37,4 @@
             @endforeach
         </tbody>
     </table>
-{!! Form::close() !!}
+{{-- {!! Form::close() !!} --}}

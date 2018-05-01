@@ -37,11 +37,18 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $stream = $user->stream;
+        
         $viewers = $stream->viewers;
+        $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
         
-        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers'));
+        $channels = Viewer::where('user_id', $user->id)->get();
+        $subscriptions = [];
+        foreach($channels as $channel)
+            $subscriptions[] = $channel->subscribes->where('viewer_id', $channel->id)->first();
+
+        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers', 'channels', 'subscriptions'));
     }
 
     /**
