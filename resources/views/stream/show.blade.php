@@ -20,22 +20,28 @@
 				@endguest
 			</div>
 
-			{{-- Description du streamer --}}
+			{{-- Description du streamer --}}			
 			<div id="infos" class="col-12 mt-4 d-none d-sm-block">
-				<div class="col-12 col-md-8 d-flex justify-content-between">
-					<p class="col text-center">
-						<i class="fas fa-2x fa-exclamation-triangle"></i>
-					</p>
-					<p class="col text-center">
-						<i class="far fa-2x fa-comment"></i>
-					</p>
-					<p class="col text-center">
-						<button>S'abonner</button>
-					</p>
-					<p class="col text-center">
-						<button>Suivre cette chaine</button>
-					</p>
-				</div>
+				@auth
+					<div class="col-12 col-md-8 d-flex justify-content-between">
+						<p class="col text-center">
+							<i class="btn fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
+								data-placement="top" title="Signaler cette chaine"></i>
+						</p>
+						<p class="col text-center">
+							<i class="btn far fa-2x fa-comment" data-toggle="tooltip" 
+								data-placement="top" title="Envoyer un message au streamer"></i>
+						</p>
+						<p class="col text-center">
+							<i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
+								data-placement="top" title="Faire un don / S'abonner"></i>
+						</p>
+						<p class="col text-center">
+							<i class="btn far fa-2x fa-star" data-toggle="tooltip" 
+								data-placement="top" title="Suivre cette chaine"></i>
+						</p>
+					</div>
+				@endauth
 
 				<div class="col-12 mt-4">
 					<div id="streamer">
@@ -61,7 +67,7 @@
 			width:100%;
 			height:100%;
 		}
-		
+
 		@media(max-width: 768px){
 			#messages{
 				height: 400px;
@@ -74,29 +80,6 @@
 	<script>
 		$(function(){
 
-			/*$(document).on('submit', '#messageForm', function(e) {  
-				e.preventDefault();
-				$('textarea[name="messageContent"]').text('');
-				
-				$.ajax({
-					method: $(this).attr('method'),
-					url: $(this).attr('action'),
-					data: $(this).serialize(),
-					dataType: "json"
-				})
-				.done(function(data) {
-					$('.alert-success').removeClass('hidden');
-					$('#myModal').modal('hide');
-				})
-				.fail(function(data) {
-					$.each(data.responseJSON, function (key, value) {
-						var input = '#formRegister input[name=' + key + ']';
-						$(input + '+small').text(value);
-						$(input).parent().addClass('has-error');
-					});
-				});
-			});*/
-
-		})
+		});
 	</script>
 @endsection
