@@ -34,6 +34,8 @@
                 <tr>
                     <td>{{$sub->viewer->stream->user->pseudo}}</td>
                     <td>{{$sub->amount}} €</td>
+                    <td>{{$sub->created_at}}</td>
+                    <td>@if($sub->renewable==1) Oui @else Non @endif</td>
                 </tr>
             @endforeach
         </tbody>
