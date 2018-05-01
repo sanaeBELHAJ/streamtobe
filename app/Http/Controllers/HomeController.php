@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\Stream;
+use App\Viewer;
+use App\Chat;
+use App\Subscriber;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +36,12 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('account.index')->with(compact('user'));
+        $stream = $user->stream;
+        $viewers = $stream->viewers;
+        foreach($viewers as $viewer)
+            $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
+        
+        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers'));
     }
 
     /**

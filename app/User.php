@@ -51,8 +51,8 @@ class User extends \TCG\Voyager\Models\User
      * Get his stream list
      * 
      */
-    public function streams() 
+    public function stream() 
     {
-        return $this->hasMany('App\Stream');
+        return $this->hasOne('App\Stream','streamer_id');
     }
 }

@@ -35,8 +35,17 @@ class Viewer extends Model
      * Get his chat message
      * 
      */
-    public function chat() 
+    public function chats() 
     {
         return $this->hasMany('App\Chat');
+    }
+
+    /**
+     * Get his chat message
+     * 
+     */
+    public function subscribes() 
+    {
+        return $this->hasMany('App\Subscriber');
     }
 }

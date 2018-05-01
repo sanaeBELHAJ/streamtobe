@@ -32,4 +32,13 @@ class Stream extends Model
     {
         return $this->belongsTo('App\Type');
     }
+
+    /**
+     * Get his chat message
+     * 
+     */
+    public function viewers() 
+    {
+        return $this->hasMany('App\Viewer');
+    }
 }

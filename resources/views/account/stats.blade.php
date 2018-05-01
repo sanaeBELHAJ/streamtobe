@@ -2,4 +2,39 @@
 
 {!! Form::model($user, ['route' => ['home.updateStats'], 'method' => 'put', 'class' => '']) !!}
     
+    <h5>Liste des followers :</h5>
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Ancienneté</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($viewers as $viewer)
+                <tr>
+                    <td>{{$viewer->user->pseudo}}</td>
+                    <td>{{$viewer->created_at}}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <h5>Liste des abonnés :</h5>
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Montant</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($subscribers as $sub)
+                <tr>
+                    <td>{{$sub->viewer->user->pseudo}}</td>
+                    <td>{{$sub->amount}} €</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 {!! Form::close() !!}
