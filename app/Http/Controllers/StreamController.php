@@ -37,7 +37,9 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function favorites(){
-        $favorites = Viewer::where('user_id', Auth::user()->id)->get();
+        $favorites = Viewer::where('user_id', Auth::user()->id)
+                            ->where('is_follower',1)
+                            ->get();
         $streams = [];
         foreach($favorites as $favorite)
             $streams[] = $favorite->stream;
