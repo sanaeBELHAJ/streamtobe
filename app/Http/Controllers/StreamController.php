@@ -9,6 +9,8 @@ use Session;
 use Response;
 use Illuminate\Support\Facades\Input;
 use App\User;
+use App\Stream;
+use App\Viewer;
 use Illuminate\Support\Facades\Auth;
 
 class StreamController extends Controller
@@ -20,13 +22,27 @@ class StreamController extends Controller
     }
     
     /**
-     * Display a listing of the resource
+     * Display a listing of the actives streams
      * 
      * @return \Illuminate\Http\Response
      */
     public function index(){
-		$users = User::all();
-        return view('stream.index', compact('users'));
+		$streams = Stream::where('status', 1)->get();
+        return view('stream.index', compact('streams'));
+    }
+
+    /**
+     * Display a listing of the favorites streams
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function favorites(){
+        $favorites = Viewer::where('user_id', Auth::user()->id)->get();
+        $streams = [];
+        foreach($favorites as $favorite)
+            $streams[] = $favorite->stream;
+
+        return view('stream.index', compact('streams'));
     }
 
     /**

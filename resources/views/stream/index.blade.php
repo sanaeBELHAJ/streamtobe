@@ -8,24 +8,33 @@
 			@endif
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">Liste des utilisateurs</h3>
+					<h3 class="panel-title">Liste des streams</h3>
 				</div>
 				<table class="table">
 					<thead>
 						<tr>
-							<th>#</th>
 							<th>Pseudo</th>
 							<th>Image</th>
-							<th></th>
+							<th>Statut</th>
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($users as $user)
+						@foreach ($streams as $stream)
 							<tr>
-								<td>{!! $user->id !!}</td>
-								<td class="text-primary"><strong>{!! $user->pseudo !!}</strong></td>
-								<td><img class="pictureAccount" src="<?php echo asset('storage/'.$user->avatar); ?>" alt="" title="Image de profil"></td>
-								<td>{!! link_to_route('stream.show', 'Voir', [$user->pseudo], ['class' => 'btn btn-success btn-block']) !!}</td>
+								<td class="text-primary">
+									<strong>{!! $stream->user->pseudo !!}</strong>
+								</td>
+								<td>
+									<img class="pictureAccount" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" 
+										alt="" title="Image de profil">
+								</td>
+								<td>
+									@if($stream->status==1)
+										{!! link_to_route('stream.show', 'En ligne', [$stream->user->pseudo], ['class' => 'btn btn-success btn-block']) !!}
+									@else
+										{!! link_to_route('stream.show', 'Hors ligne', [$stream->user->pseudo], ['class' => 'btn btn-secondary btn-block']) !!}
+									@endif
+								</td>
 							</tr>
 						@endforeach
 					</tbody>
@@ -33,4 +42,12 @@
 			</div>
 		</div>
     </div>
+@endsection
+
+@section('css')
+<style>
+	.pictureAccount{
+		width: 30%;
+	}
+</style>
 @endsection

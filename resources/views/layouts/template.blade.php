@@ -34,7 +34,7 @@
                                     {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher une chaine'])}}
                                 {{ Form::close() }}
                             </li>
-                            <li class="mx-3"><a href="#" class="nav-link">Streams en cours</a></li>
+                            <li class="mx-3"><a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a></li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
@@ -44,7 +44,7 @@
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
-                                <li class="mx-3 d-none d-lg-block"><a href="#" class="nav-link">Mes chaines suivies</a></li>
+                                <li class="mx-3 d-none d-lg-block"><a href="{{ route('stream.favorites') }}" class="nav-link">Mes streams suivis</a></li>
                                 <li class="mx-3">
                                     <a href="#" class="d-flex align-start nav-link p-0">
                                         <i class="d-none far fa-envelope fa-2x text-dark"></i>

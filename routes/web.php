@@ -17,19 +17,12 @@
  * 
  */
 
-
 Route::get('/', function () {
     return view('welcome');
 });
 
 //Routes basiques d'inscription/connexion/déconnexion
 Auth::routes();
-
-//Recherche d'une chaine
-Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
-
-//Informations de(s) utilisateur(s)
-Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
@@ -39,6 +32,10 @@ Route::middleware(['guest'])->group(function(){
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
+
+    //route "stream.favorites" à placer avant la route de la ressource "stream"
+    Route::get('stream/favorites', 'StreamController@favorites')->name('stream.favorites');
+    
     Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
     Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
     Route::patch('/home/stats/', 'HomeController@updateStats')->name('home.updateStats');
@@ -49,3 +46,11 @@ Route::group(['middleware' => 'auth'], function(){
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+/* Routes accessibles à tous */
+
+//Informations des streams
+Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
+
+//Recherche d'une chaine
+Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');

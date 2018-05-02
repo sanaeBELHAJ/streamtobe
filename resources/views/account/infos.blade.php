@@ -58,13 +58,13 @@
     <hr>
     <div class="form-row">
         <div class="form-group col-md-6">
-            {!! Form::label('pwdAccount','Enregistrez un mot de passe :') !!}
+            {!! Form::label('pwdAccount','Modifier votre mot de passe :') !!}
             {!! Form::password('password', ['id' => 'pwdAccount',
                                             'class' => 'form-control form-control-sm', 
                                             'required' => false]) !!}
         </div>
         <div class="form-group col-md-6">
-            {!! Form::label('pwdConfirmAccount','Confirmation du mot de passe :') !!}
+            {!! Form::label('pwdConfirmAccount','Confirmation du nouveau mot de passe :') !!}
             {!! Form::password('password_confirmation', ['id' => 'pwdConfirmAccount',
                                                     'class' => 'form-control form-control-sm', 
                                                     'required' => false]) !!}
