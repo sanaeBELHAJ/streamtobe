@@ -41,6 +41,8 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/changeTitle', 'StreamController@updateTitle');
         //Edit STATUS
         Route::post('/changeStatus', 'StreamController@updateStatus');
+        //Edit TYPE
+        Route::post('/changeType', 'StreamController@updateType');
     
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');

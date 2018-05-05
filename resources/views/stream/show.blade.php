@@ -30,8 +30,20 @@
 						<div class="col-12 mt-4" id="config_stream">
 							<h3>Configurer mon stream</h3>
 							<p>
+								Titre : 
 								<input id="stream_title" type="text" value="{{$streamer->stream->title}}">
+								Catégorie : 
+								<select id="stream_type">
+									@foreach($themes as $theme)
+										<optgroup label="{{$theme->name}}">
+											@foreach($theme->types as $type)
+												<option value="{{$type->name}}">{{$type->name}}</option>
+											@endforeach
+										</optgroup>
+									@endforeach
+								</select>
 							</p>
+
 							<label>
 								<label class="switch align-middle m-0">
 									<input id="stream_status" type="checkbox" 
@@ -268,6 +280,23 @@
 					type: 'POST',
 					data: {
 						status: $(this).is(":checked")
+					}
+				})
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+			});
+
+			//Theme / Type
+			$("#config_stream #stream_type").change(function(){
+				$.ajax({
+					url: "/changeType",
+					type: 'POST',
+					data: {
+						type: $(this).val()
 					}
 				})
 				.done(function(data){

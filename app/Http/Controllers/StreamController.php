@@ -9,6 +9,8 @@ use Session;
 use Response;
 use Illuminate\Support\Facades\Input;
 use App\User;
+use App\Theme;
+use App\Type;
 use App\Stream;
 use App\Viewer;
 use Illuminate\Support\Facades\Auth;
@@ -60,9 +62,10 @@ class StreamController extends Controller
         if(!$streamer)
             abort(404);
         
+        $themes = Theme::all();
         $user = Auth::user();
         $user->token = $request->session()->get('_token');
-        return view('stream.show', compact('streamer', 'user'));
+        return view('stream.show', compact('themes','streamer', 'user'));
     }
 
     /**
@@ -94,6 +97,25 @@ class StreamController extends Controller
 
         if($stream){
             $stream->status = ($request->get('status') == "true") ? 1 : 0;
+            $stream->save();
+            return ["ok" => "Modification enregistrée"];
+        }
+
+        return ["erreur" => "Stream non trouvé"];
+    }
+
+    /**
+     * Update the stream's status
+     * 
+     * @param \Illuminate\http\Request $request
+     * @return \Illuminate\http\Response
+     */
+    public function updateType(Request $request){
+        $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
+        $type = Type::where('name', '=', $request->get('type'))->first();
+
+        if($stream && $type){
+            $stream->type_id = $type->id;
             $stream->save();
             return ["ok" => "Modification enregistrée"];
         }
