@@ -54,29 +54,55 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $pseudo){
-        $user = User::where('pseudo',$pseudo)
+        $streamer = User::where('pseudo',$pseudo)
                     ->where('status',1)
                     ->first();        
-        if(!$user)
+        if(!$streamer)
             abort(404);
         
-        $user->token = $request->session()->get('_token');
-        return view('stream.show', compact('user'));
-    }
-
-    /**
-     * Store a message
-     * 
-     */
-    public function storeMessage($message){
         $user = Auth::user();
-        if($user){
-            
-        }
+        $user->token = $request->session()->get('_token');
+        return view('stream.show', compact('streamer', 'user'));
     }
 
     /**
+     * Update the stream's title
      * 
+     * @param \Illuminate\http\Request $request
+     * @return \Illuminate\http\Response
+     */
+    public function updateTitle(Request $request){
+        $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
+
+        if($stream){
+            $stream->title = $request->get('title');
+            $stream->save();
+            return ["ok" => "Modification enregistrée"];
+        }
+
+        return ["erreur" => "Stream non trouvé"];
+    }
+
+    /**
+     * Update the stream's status
+     * 
+     * @param \Illuminate\http\Request $request
+     * @return \Illuminate\http\Response
+     */
+    public function updateStatus(Request $request){
+        $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
+
+        if($stream){
+            $stream->status = ($request->get('status') == "true") ? 1 : 0;
+            $stream->save();
+            return ["ok" => "Modification enregistrée"];
+        }
+
+        return ["erreur" => "Stream non trouvé"];
+    }
+
+    /**
+     * Recherche automatique des streams
      */
     public function autocomplete(){
         $term = Input::get('term');

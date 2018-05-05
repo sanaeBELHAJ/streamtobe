@@ -33,14 +33,21 @@ Route::middleware(['guest'])->group(function(){
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
 
-    //route "stream.favorites" à placer avant la route de la ressource "stream"
-    Route::get('stream/favorites', 'StreamController@favorites')->name('stream.favorites');
+    /* Actions sur le stream */
+        //FAVORIS : route "stream.favorites" à placer avant la route de la ressource "stream"
+        Route::get('stream/favorites', 'StreamController@favorites')->name('stream.favorites');
+
+        //Edit TITLE
+        Route::post('/changeTitle', 'StreamController@updateTitle');
+        //Edit STATUS
+        Route::post('/changeStatus', 'StreamController@updateStatus');
     
-    Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
-    Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
-    Route::patch('/home/stats/', 'HomeController@updateStats')->name('home.updateStats');
-    Route::patch('/home/subscription/', 'HomeController@updateSubscription')->name('home.updateSubscription');
-    Route::resource('home', 'HomeController', ['only' => ['index','destroy']]);
+    /* Actions sur le compte */
+        Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
+        Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
+        Route::patch('/home/stats/', 'HomeController@updateStats')->name('home.updateStats');
+        Route::patch('/home/subscription/', 'HomeController@updateSubscription')->name('home.updateSubscription');
+        Route::resource('home', 'HomeController', ['only' => ['index','destroy']]);
 });
 
 Route::group(['prefix' => 'admin'], function () {

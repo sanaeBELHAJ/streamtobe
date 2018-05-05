@@ -97,6 +97,13 @@
         {!! HTML::script('js/template.js') !!}
         <script>
             $(function () {
+                //CSRF Protection
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
                 $('[data-toggle="tooltip"]').tooltip();
 
                 $('#search_user').submit(function(event){

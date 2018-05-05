@@ -22,16 +22,20 @@
 				@endguest
 			</div>
 
-						
+
 			<div id="infos" class="col-12 d-none d-sm-block mt-4">
 				@auth
 					{{-- Configuration du stream par le propriétaire --}}
-					@if($user->id == Auth::user()->id)
+					@if($streamer->id == Auth::user()->id)
 						<div class="col-12 mt-4" id="config_stream">
 							<h3>Configurer mon stream</h3>
+							<p>
+								<input id="stream_title" type="text" value="{{$streamer->stream->title}}">
+							</p>
 							<label>
 								<label class="switch align-middle m-0">
-									<input type="checkbox" @if($user->stream->status == 1) checked @endif>
+									<input id="stream_status" type="checkbox" 
+											@if($streamer->stream->status == 1) checked @endif >
 									<span class="slider round"></span>
 								</label> 
 								Activer / Interrompre la diffusion
@@ -89,7 +93,7 @@
 			</div>
 			
 			{{-- Boutons d'affichage mobile --}}
-			<div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 row">
+			<div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
 				<p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
 				<input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange"> 
 				<p class="sliderText col-3 text-center m-0" data-value="2">Description</p>
@@ -237,6 +241,41 @@
 					$('#messages').addClass('d-none').removeClass('d-12');
 					$('#infos').addClass('d-12').removeClass('d-none');
 				}
+			});
+
+			/* Config stream */
+			//Titre
+			$("#config_stream #stream_title").change(function(){
+				$.ajax({
+					url: "/changeTitle",
+					type: 'POST',
+					data: {
+						title: $(this).val()
+					}
+				})
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+			});
+			
+			//Statut
+			$("#config_stream #stream_status").change(function(){
+				$.ajax({
+					url: "/changeStatus",
+					type: 'POST',
+					data: {
+						status: $(this).is(":checked")
+					}
+				})
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(data){
+					console.log(data);
+				});
 			});
 		});
 	</script>
