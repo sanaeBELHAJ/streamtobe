@@ -29,11 +29,26 @@ connection.connect((err) => {
 /* Ecoute */
 
 io.sockets.on('connection', function (socket, pseudo) {
-    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
-    socket.on('nouveau_client', function(pseudo) {
-        pseudo = ent.encode(pseudo);
-        socket.pseudo = pseudo;
-        socket.broadcast.emit('nouveau_client', pseudo);
+    
+    // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
+    socket.on('nouveau_client', function(token) {
+        connection.query(
+            'SELECT u.pseudo FROM sessions s, users u WHERE u.id = s.user_id AND FROM_BASE64(s.payload) LIKE ?', 
+            '%'+token+'%', 
+            function(err, res){
+                console.log(res);
+                if(err){ 
+                    connection.end();
+                    console.log(err);
+                }
+                
+                if(typeof res !== 'undefined' && res.length > 0){
+                    socket.pseudo = ent.encode(res[0].pseudo);
+                    socket.emit('nouveau_client', socket.pseudo);
+                }
+                connection.end();
+            }
+        );
     });
 
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
@@ -55,7 +70,7 @@ io.sockets.on('connection', function (socket, pseudo) {
 //DB Read
 function getDB(){
     connection.query('SELECT * FROM stb_chats', (err,rows) => {
-        if(err) throw err;
+        //if(err) throw err;
     
         rows.forEach( (row) => {
             console.log(`${row.viewer_id} says ${row.message}`);
@@ -71,7 +86,7 @@ function saveDB(content){
         'INSERT INTO stb_chats SET ?', 
         chat, 
         (err, res) => {
-            if(err) throw err;
+            //if(err) throw err;
 
             console.log('Last insert ID:', res.insertId);
             connection.end((err) => {});
@@ -85,7 +100,7 @@ function updateDB(){
         'UPDATE stb_chats SET message = ? Where ID = ?',
         ['Yo', 1],
         (err, result) => {
-            if (err) throw err;
+            //if (err) throw err;
         
             console.log(`Changed ${result.changedRows} row(s)`);
             connection.end((err) => {});

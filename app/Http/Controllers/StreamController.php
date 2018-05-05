@@ -27,7 +27,7 @@ class StreamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-		$streams = Stream::where('status', 1)->get();
+        $streams = Stream::where('status', 1)->get();
         return view('stream.index', compact('streams'));
     }
 
@@ -53,12 +53,14 @@ class StreamController extends Controller
      * @param string $pseudo
      * @return \Illuminate\Http\Response
      */
-    public function show($pseudo){
+    public function show(Request $request, $pseudo){
         $user = User::where('pseudo',$pseudo)
                     ->where('status',1)
-                    ->first();
+                    ->first();        
         if(!$user)
             abort(404);
+        
+        $user->token = $request->session()->get('_token');
         return view('stream.show', compact('user'));
     }
 
