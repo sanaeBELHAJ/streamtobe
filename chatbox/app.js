@@ -31,119 +31,113 @@ connection.connect((err) => {
 io.sockets.on('connection', function (socket, pseudo) {
     
     // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
-    socket.on('nouveau_client', function(token) {
-        connection.query(
-            `SELECT u.pseudo, v.id 
-                FROM sessions s, users u, stb_viewers v 
-                WHERE u.id = v.user_id 
-                    AND s.user_id = u.id
-                    AND FROM_BASE64(s.payload) LIKE ?`, 
-            '%'+token+'%', 
-            function(err, res){
-                console.log("----NOUVEAU----");
-                console.log(res);
+    socket.on('nouveau_client', async function(token, streamer_name) {
+        //Recherche du stream ciblé
+        await queryDB(
+            `SELECT s.id
+                FROM stb_streams s
+                LEFT OUTER JOIN users u ON s.streamer_id = u.id
+                WHERE s.status > 0 AND u.pseudo = ?`,
+                streamer_name)
+            .then(function(row){
+                socket.stream_id = row.id;
+            });
+        
+        //Recherche de l'utilisateur connecté
+        await queryDB(
+            `SELECT u.pseudo, u.id
+                FROM sessions s
+                LEFT OUTER JOIN users u ON s.user_id = u.id
+                WHERE FROM_BASE64(s.payload) LIKE ?`, 
+                '%'+token+'%')
+            .then(function(row){
+                socket.user_id = row.id;
+                socket.user_pseudo = row.pseudo;
+            });
+
+        //Association du user+stream au viewer correspondant
+        await queryDB(
+            `SELECT id, rank, is_follower
+                FROM stb_viewers
+                WHERE stream_id = ? 
+                    AND user_id = ?`, 
+                [socket.stream_id, socket.user_id])
+            .then(async function(viewer){
+                //Si nouveau viewer pour le stream, on le répertorie
+                if(!viewer){
+                    await queryDB(
+                        `INSERT INTO stb_viewers
+                            SET stream_id = ? ,
+                            user_id = ?`,
+                        [socket.stream_id, socket.user_id])
+                        .then(function(){
+                            socket.new_viewer = true;
+                        });
+                }
+                else{
+                    socket.viewer_id = viewer.id;
+                    socket.viewer_rank = viewer.rank;
+                }
+            });
+        
+        //Si viewer récemment repertorié au stream, on récupère son ID
+        if(socket.new_viewer){
+            await queryDB(
+                `SELECT id, rank, is_follower
+                    FROM stb_viewers
+                    WHERE stream_id = ? 
+                        AND user_id = ?`, 
+                    [socket.stream_id, socket.user_id])
+                .then(async function(viewer){                    
+                    socket.viewer_id = viewer.id;
+                    socket.viewer_rank = viewer.rank;
+                });
+            delete socket.new_viewer;
+        }
+
+        socket.emit("nouveau_client", socket.user_pseudo);
+    });
+
+    //EXECUTION DE REQUETE SQL
+    async function queryDB(sql, value){
+        return new Promise(function(resolve, reject){
+            connection.query( sql, value, function(err, rows, fields){
                 if(err){ 
                     console.log(err);
                 }
                 
-                if(typeof res !== 'undefined' && res.length > 0){
-                    socket.pseudo = ent.encode(res[0].pseudo);
-                    socket.user_id = res[0].id;
-                    socket.emit('nouveau_client', socket.pseudo);
+                console.log("----RESULTATS DE LA REQUETE----");
+                if(typeof rows !== 'undefined' && rows.length > 0){
+                    console.log(rows);
+                    resolve(rows[0]);
                 }
                 else{
-                    console.log("----ERREUR---- : Pas de session");
-                    socket.emit('erreur', "Session introuvable");
+                    resolve();
                 }
-            }
-        );
-    });
+            });
+        });
+    }
 
-    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
-    socket.on('message', function (message) {
+    // RECEPTION D'UN MESSAGE
+    socket.on('message', async function (message) {
         message = ent.encode(message);
         content = { 
-            viewer_id: socket.user_id, 
+            viewer_id: socket.viewer_id, 
             message: message, 
             status: 1
         };
-        saveDB(content);
-        socket.emit('message', {pseudo: socket.pseudo, message: content.message, status: content.status});
+        
+        //Sauvegarde en BDD
+        await queryDB('INSERT INTO stb_chats SET ?', content);
+
+        //Transmission aux autres spectateurs
+        socket.emit('message', { 
+            pseudo: socket.user_pseudo, 
+            message: content.message, 
+            status: content.status,
+            viewer_rank: socket.viewer_rank
+        });
     }); 
 });
-
-//DB Read
-/*
-function getDB(){
-    connection.query('SELECT * FROM stb_chats', (err,rows) => {
-        if(err) 
-            console.log(err);
-    
-        if(typeof res !== 'undefined' && res.length > 0){
-            rows.forEach( (row) => {
-                console.log(`${row.viewer_id} says ${row.message}`);
-            });
-        }
-        else{
-            console.log("----ERREUR---- : Pas de message");
-        }
-        connection.end((err) => {});
-    });
-}*/
-
-//DB Insert
-function saveDB(content){
-    // const chat = { 
-    //     viewer_id: content.viewer_id, 
-    //     message: content.message, 
-    //     status: content.status 
-    // };
-    console.log("----CONTENU----");
-    console.log(content);
-
-    connection.query(
-        'INSERT INTO stb_chats SET ?', 
-        content, 
-        (err, res) => {
-            if(err) 
-                console.log(err);
-                //throw err;
-
-            //console.log('Last insert ID:', res.insertId);
-            //connection.end((err) => {});
-        }
-    );
-}
-
-//Db Update
-/*
-function updateDB(){
-    connection.query(
-        'UPDATE stb_chats SET message = ? Where ID = ?',
-        ['Yo', 1],
-        (err, result) => {
-            //if (err) throw err;
-        
-            console.log(`Changed ${result.changedRows} row(s)`);
-            connection.end((err) => {});
-        }
-    );
-}*/
-
-//Db Destroy
-/*
-function destroyDB(){
-    connection.query(
-        'DELETE FROM stb_chats WHERE message = ?', 
-        ["Salut"], 
-        (err, result) => {
-            if (err) throw err;
-        
-            console.log(`Deleted ${result.affectedRows} row(s)`);
-            connection.end((err) => {});
-        }
-    );
-}
-*/
 
 server.listen(8080);
