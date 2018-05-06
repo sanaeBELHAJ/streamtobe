@@ -33,20 +33,28 @@ io.sockets.on('connection', function (socket, pseudo) {
     // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
     socket.on('nouveau_client', function(token) {
         connection.query(
-            'SELECT u.pseudo FROM sessions s, users u WHERE u.id = s.user_id AND FROM_BASE64(s.payload) LIKE ?', 
+            `SELECT u.pseudo, v.id 
+                FROM sessions s, users u, stb_viewers v 
+                WHERE u.id = v.user_id 
+                    AND s.user_id = u.id
+                    AND FROM_BASE64(s.payload) LIKE ?`, 
             '%'+token+'%', 
             function(err, res){
+                console.log("----NOUVEAU----");
                 console.log(res);
                 if(err){ 
-                    connection.end();
                     console.log(err);
                 }
                 
                 if(typeof res !== 'undefined' && res.length > 0){
                     socket.pseudo = ent.encode(res[0].pseudo);
+                    socket.user_id = res[0].id;
                     socket.emit('nouveau_client', socket.pseudo);
                 }
-                connection.end();
+                else{
+                    console.log("----ERREUR---- : Pas de session");
+                    socket.emit('erreur', "Session introuvable");
+                }
             }
         );
     });
@@ -54,47 +62,61 @@ io.sockets.on('connection', function (socket, pseudo) {
     // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
     socket.on('message', function (message) {
         message = ent.encode(message);
-        viewer = getDB();
         content = { 
-            viewer_id: 1, 
-            pseudo: pseudo, 
+            viewer_id: socket.user_id, 
             message: message, 
             status: 1
         };
         saveDB(content);
-        socket.broadcast.emit('message', {pseudo: content.pseudo, message: content.message, status: content.status});
+        socket.emit('message', {pseudo: socket.pseudo, message: content.message, status: content.status});
     }); 
 });
 
-
 //DB Read
+/*
 function getDB(){
     connection.query('SELECT * FROM stb_chats', (err,rows) => {
-        //if(err) throw err;
+        if(err) 
+            console.log(err);
     
-        rows.forEach( (row) => {
-            console.log(`${row.viewer_id} says ${row.message}`);
-        });
+        if(typeof res !== 'undefined' && res.length > 0){
+            rows.forEach( (row) => {
+                console.log(`${row.viewer_id} says ${row.message}`);
+            });
+        }
+        else{
+            console.log("----ERREUR---- : Pas de message");
+        }
         connection.end((err) => {});
     });
-}
+}*/
 
 //DB Insert
 function saveDB(content){
-    const chat = { viewer_id: content.viewer_id, message: content.message, status: content.status };
+    // const chat = { 
+    //     viewer_id: content.viewer_id, 
+    //     message: content.message, 
+    //     status: content.status 
+    // };
+    console.log("----CONTENU----");
+    console.log(content);
+
     connection.query(
         'INSERT INTO stb_chats SET ?', 
-        chat, 
+        content, 
         (err, res) => {
-            //if(err) throw err;
+            if(err) 
+                console.log(err);
+                //throw err;
 
-            console.log('Last insert ID:', res.insertId);
-            connection.end((err) => {});
+            //console.log('Last insert ID:', res.insertId);
+            //connection.end((err) => {});
         }
     );
 }
 
 //Db Update
+/*
 function updateDB(){
     connection.query(
         'UPDATE stb_chats SET message = ? Where ID = ?',
@@ -106,7 +128,7 @@ function updateDB(){
             connection.end((err) => {});
         }
     );
-}
+}*/
 
 //Db Destroy
 /*

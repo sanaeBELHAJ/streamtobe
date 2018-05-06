@@ -64,7 +64,8 @@ class StreamController extends Controller
         
         $themes = Theme::all();
         $user = Auth::user();
-        $user->token = $request->session()->get('_token');
+        if($user)
+            $user->token = $request->session()->get('_token');
         return view('stream.show', compact('themes','streamer', 'user'));
     }
 
