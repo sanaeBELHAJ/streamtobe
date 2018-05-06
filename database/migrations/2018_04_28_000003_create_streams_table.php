@@ -33,7 +33,8 @@ class CreateStreamsTable extends Migration
             $table->string('title');
             $table->integer('status')->default(1);
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
     

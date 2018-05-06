@@ -16,7 +16,8 @@ class CreateThemesTable extends Migration
         Schema::create('stb_themes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 
