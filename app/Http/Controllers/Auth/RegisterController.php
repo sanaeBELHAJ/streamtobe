@@ -8,6 +8,7 @@ use Mail;
 use Session;
 use App\User;
 use App\Stream;
+use App\Viewer;
 use App\Type;
 
 use App\Http\Controllers\Controller;
@@ -85,6 +86,13 @@ class RegisterController extends Controller
             'type_id' => $type->id
         ]);
         
+        $viewer = Viewer::create([
+            'stream_id' => $stream->id,
+            'user_id'   => $user->id,
+            'rank'      => 2, //Propriétaire du stream,
+            'is_follower' => 1 
+        ]);
+
         return $user;
     }
 

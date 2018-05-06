@@ -19,15 +19,18 @@ class StbViewersTableSeeder extends Seeder {
         $date = $this->randDate();
 
         foreach($streams as $stream){
-            $user = User::inRandomOrder()->first();
+            $users = User::all();
 
-            Viewer::create([
-                'stream_id'  => $stream->id,
-                'user_id'    => $user->id,
-                'created_at' => $date,
-                'updated_at' => $date
-            ]);
-        
+            foreach($users as $user){
+                $rank = ($stream->streamer_id == $user->id) ? 2 : 0;
+                Viewer::create([
+                    'stream_id'  => $stream->id,
+                    'user_id'    => $user->id,
+                    'rank'       => $rank,
+                    'created_at' => $date,
+                    'updated_at' => $date
+                ]);
+            }        
         }
 	}
 }
