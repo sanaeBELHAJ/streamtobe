@@ -31,9 +31,9 @@
 							<h3>Configurer mon stream</h3>
 							<p>
 								Titre : 
-								<input id="stream_title" type="text" value="{{$streamer->stream->title}}">
+								<input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
 								Catégorie : 
-								<select id="stream_type">
+								<select id="stream_type" class="update_stream" data-config="type">
 									@foreach($themes as $theme)
 										<optgroup label="{{$theme->name}}">
 											@foreach($theme->types as $type)
@@ -46,7 +46,7 @@
 
 							<label>
 								<label class="switch align-middle m-0">
-									<input id="stream_status" type="checkbox" 
+									<input id="stream_status" class="update_stream" data-config="status" type="checkbox" 
 											@if($streamer->stream->status == 1) checked @endif >
 									<span class="slider round"></span>
 								</label> 
@@ -254,49 +254,27 @@
 					$('#infos').addClass('d-12').removeClass('d-none');
 				}
 			});
-
-			/* Config stream */
-			//Titre
-			$("#config_stream #stream_title").change(function(){
-				$.ajax({
-					url: "/changeTitle",
-					type: 'POST',
-					data: {
-						title: $(this).val()
-					}
-				})
-				.done(function(data){
-					console.log(data);
-				})
-				.fail(function(data){
-					console.log(data);
-				});
-			});
 			
-			//Statut
-			$("#config_stream #stream_status").change(function(){
-				$.ajax({
-					url: "/changeStatus",
-					type: 'POST',
-					data: {
-						status: $(this).is(":checked")
-					}
-				})
-				.done(function(data){
-					console.log(data);
-				})
-				.fail(function(data){
-					console.log(data);
-				});
-			});
+			/* Config stream */
+			function updateStream(){
+				var key = $(this).data('config');
+				var value = "";
 
-			//Theme / Type
-			$("#config_stream #stream_type").change(function(){
+				switch(key){
+					case "title":
+						value = $("#stream_title").val();break;
+					case "status":
+						value = $("#stream_status").is(":checked");break;
+					case "type":
+						value = $("#stream_type").val();break;
+				}
+				
 				$.ajax({
-					url: "/changeType",
+					url: "/updateStream",
 					type: 'POST',
 					data: {
-						type: $(this).val()
+						config: key,
+						value: value
 					}
 				})
 				.done(function(data){
@@ -305,7 +283,9 @@
 				.fail(function(data){
 					console.log(data);
 				});
-			});
+			}
+			$(".update_stream").change(updateStream);
+			
 		});
 	</script>
 @endsection

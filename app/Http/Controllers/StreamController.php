@@ -74,52 +74,30 @@ class StreamController extends Controller
      * @param \Illuminate\http\Request $request
      * @return \Illuminate\http\Response
      */
-    public function updateTitle(Request $request){
+    public function updateStream(Request $request){
         $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
 
         if($stream){
-            $stream->title = $request->get('title');
+            //Title
+            if($request->get('config') == 'title')
+                $stream->title = $request->get('value');
+            
+            //Status
+            if($request->get('config') == 'status')
+                $stream->status = ($request->get('value') == "true") ? 1 : 0;
+            
+            //Type
+            if($request->get('config') == 'type'){
+                $type = Type::where('name', '=', $request->get('value'))->first();
+                if($type)
+                    $stream->type_id = $type->id;
+                else
+                    return ["erreur" => "Type selectionné introuvable"];
+            }
+
             $stream->save();
             return ["ok" => "Modification enregistrée"];
         }
-
-        return ["erreur" => "Stream non trouvé"];
-    }
-
-    /**
-     * Update the stream's status
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateStatus(Request $request){
-        $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
-
-        if($stream){
-            $stream->status = ($request->get('status') == "true") ? 1 : 0;
-            $stream->save();
-            return ["ok" => "Modification enregistrée"];
-        }
-
-        return ["erreur" => "Stream non trouvé"];
-    }
-
-    /**
-     * Update the stream's status
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateType(Request $request){
-        $stream = Stream::where('streamer_id', '=', Auth::user()->id)->first();
-        $type = Type::where('name', '=', $request->get('type'))->first();
-
-        if($stream && $type){
-            $stream->type_id = $type->id;
-            $stream->save();
-            return ["ok" => "Modification enregistrée"];
-        }
-
         return ["erreur" => "Stream non trouvé"];
     }
 
