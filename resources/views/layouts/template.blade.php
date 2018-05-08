@@ -4,10 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="google-site-verification" content="" />
+        <meta name="google-site-verification" content="{{setting('site.google_analytics_tracking_id')}}">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
-    
+        <meta name="description" content="{{setting('site.description')}}">
+        <link rel="icon" href="<?php echo asset('storage/'.setting('site.favicon')); ?>" />
+
         <!-- CSS -->
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
@@ -19,8 +21,9 @@
         <header>
             <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
                 <div class="container">
+                    <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.setting('site.logo')); ?>">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ setting('site.title') }}
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
