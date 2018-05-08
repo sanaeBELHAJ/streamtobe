@@ -23,10 +23,13 @@ class StbViewersTableSeeder extends Seeder {
 
             foreach($users as $user){
                 $rank = ($stream->streamer_id == $user->id) ? 2 : 0;
+                $follower = ($stream->streamer_id == $user->id) ? 1 : 0;
+
                 Viewer::create([
                     'stream_id'  => $stream->id,
                     'user_id'    => $user->id,
                     'rank'       => $rank,
+                    'is_follower'=> $follower,
                     'created_at' => $date,
                     'updated_at' => $date
                 ]);

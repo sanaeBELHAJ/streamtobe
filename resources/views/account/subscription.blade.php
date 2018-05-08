@@ -34,9 +34,15 @@
                                         <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
                                         <td>
                                             @if($channel->stream->status==1)
-                                                {!! link_to_route('stream.show', 'En ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-success btn-block']) !!}
+                                                {!! link_to_route('stream.show',
+                                                                    'En ligne', 
+                                                                    [$channel->stream->user->pseudo], 
+                                                                    ['class' => 'btn btn-success btn-block']) !!}
                                             @else
-                                                {!! link_to_route('stream.show', 'Hors ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-secondary btn-block']) !!}
+                                                {!! link_to_route('stream.show', 
+                                                                    'Hors ligne', 
+                                                                    [$channel->stream->user->pseudo], 
+                                                                    ['class' => 'btn btn-secondary btn-block']) !!}
                                             @endif
                                         </td>
                                     </tr>
@@ -78,12 +84,12 @@
                     <tbody>
                         @if(count($subscriptions) > 0)
                             @foreach($subscriptions as $sub)
-                                <tr>
+                                {{-- <tr>
                                     <td>{{$sub->viewer->stream->user->pseudo}}</td>
                                     <td>{{$sub->amount}} €</td>
                                     <td>{{ Carbon\Carbon::parse($sub->created_at)->format('d/m/Y') }}</td>
                                     <td>@if($sub->renewable==1) Oui @else Non @endif</td>
-                                </tr>
+                                </tr> --}}
                             @endforeach
                         @else
                             <tr>

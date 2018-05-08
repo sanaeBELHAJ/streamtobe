@@ -27,11 +27,19 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($subscribers as $sub)
+        @if(count($subscribers) > 0)
+            @foreach($subscribers as $sub)
+                {{-- <tr>
+                    <td>{{$sub->viewer->user->pseudo}}</td>
+                    <td>{{$sub->amount}} €</td>
+                </tr> --}}
+            @endforeach
+        @else
             <tr>
-                <td>{{$sub->viewer->user->pseudo}}</td>
-                <td>{{$sub->amount}} €</td>
+                <td class="text-center" colspan="2">
+                    <i>Vous ne disposez actuellement d'aucun abonné</i>
+                </td>
             </tr>
-        @endforeach
+        @endif
     </tbody>
 </table>
