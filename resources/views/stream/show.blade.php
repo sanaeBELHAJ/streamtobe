@@ -114,7 +114,7 @@
 				<div class="col-12 mt-4">
 					<div id="streamer">
 						<h3>Description du streamer</h3>
-						<p></p>
+						<p>{{$streamer->description}}</p>
 					</div>
 				</div>
 			</div>

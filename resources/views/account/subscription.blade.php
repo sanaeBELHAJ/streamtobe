@@ -24,26 +24,28 @@
                     <tbody>
                         @if(count($channels) > 0)
                             @foreach($channels as $channel)
-                                <tr>
-                                    <td>
-                                        <img class="mh-25" src="<?php echo asset('storage/'.$channel->stream->user->avatar); ?>" 
-                                            alt="" title="Image de profil">
-                                    </td>
-                                    <td>{{$channel->stream->user->pseudo}}</td>
-                                    <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
-                                    <td>
-                                        @if($channel->stream->status==1)
-                                            {!! link_to_route('stream.show', 'En ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-success btn-block']) !!}
-                                        @else
-                                            {!! link_to_route('stream.show', 'Hors ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-secondary btn-block']) !!}
-                                        @endif
-                                    </td>
-                                </tr>
+                                @if($channel->is_follower == 1)
+                                    <tr>
+                                        <td>
+                                            <img class="mh-25" src="<?php echo asset('storage/'.$channel->stream->user->avatar); ?>" 
+                                                alt="" title="Image de profil">
+                                        </td>
+                                        <td>{{$channel->stream->user->pseudo}}</td>
+                                        <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
+                                        <td>
+                                            @if($channel->stream->status==1)
+                                                {!! link_to_route('stream.show', 'En ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-success btn-block']) !!}
+                                            @else
+                                                {!! link_to_route('stream.show', 'Hors ligne', [$channel->stream->user->pseudo], ['class' => 'btn btn-secondary btn-block']) !!}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         @else
                             <tr>
-                                <td>
-                                    <i>Vous ne suivez aucune chaine de stream pour l'instant.</i>
+                                <td colspan="4" class="text-center">
+                                    <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
                                 </td>
                             </tr>
                         @endif
@@ -126,7 +128,7 @@
                             @endforeach --}}
                         @else
                             <tr>
-                                <td>
+                                <td colspan="3" class="text-center">
                                     <i>Vous n'avez effectué aucun don.</i>
                                 </td>
                             </tr>

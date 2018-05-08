@@ -21,8 +21,8 @@
         <header>
             <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
                 <div class="container">
-                    <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.setting('site.logo')); ?>">
                     <a class="navbar-brand" href="{{ url('/') }}">
+                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.setting('site.logo')); ?>">
                         {{ setting('site.title') }}
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,9 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
-                            <li class="mx-3">
+                            <li class="mx-3 d-flex align-items-center">
                                 {{ Form::open(['method' => 'GET', 'route' => ['autocomplete'], 'id' => 'search_user']) }}
-                                    {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher une chaine'])}}
+                                    {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher un stream'])}}
                                 {{ Form::close() }}
                             </li>
                             <li class="mx-3"><a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a></li>
@@ -47,7 +47,7 @@
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
-                                <li class="mx-3">
+                                <li class="mx-3 d-flex align-items-center">
                                     <a href="#" class="d-flex align-start nav-link p-0">
                                         <i class="d-none far fa-envelope fa-2x text-dark"></i>
                                         <i class="fas fa-envelope fa-2x text-dark"></i>

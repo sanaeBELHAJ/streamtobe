@@ -29,12 +29,14 @@ class StreamController extends Controller
     public function index(){
         $streams = Stream::where('status', 1)->get();
         
-        $favorites = Viewer::where('user_id', Auth::user()->id)
-                            ->where('is_follower',1)
-                            ->get();
-        $followed = [];
-        foreach($favorites as $favorite)
-            $followed[] = $favorite->stream;
+        if(Auth::user()){
+            $favorites = Viewer::where('user_id', Auth::user()->id)
+                                ->where('is_follower',1)
+                                ->get();
+            $followed = [];
+            foreach($favorites as $favorite)
+                $followed[] = $favorite->stream;
+        }
 
         return view('stream.index', compact('streams', 'followed'));
     }
