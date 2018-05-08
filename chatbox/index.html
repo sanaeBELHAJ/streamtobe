@@ -61,11 +61,16 @@
             var socket = io.connect('http://localhost:8080');
             var token = getUrlParameter('token');
             var stream = getUrlParameter('stream');
-            socket.emit('nouveau_client', token, stream);
+            socket.emit('join', token, stream);
 
-            // Quand un nouveau client se connecte, on affiche l'information
-            socket.on('nouveau_client', function(pseudo) {
-                $('#zone_chat').prepend('<p><em>' + pseudo + ' a rejoint le chat !</em></p>');
+            //Arrivée d'un nouvel utilisateur sur le chat
+            socket.on('new', function(pseudo) {
+                $('#zone_chat').append('<p><em>' + pseudo + ' est nouveau sur le chat ! Bienvenue !</em></p>');
+            });
+
+            //Arrivée d'un utilisateur habitués sur le chat
+            socket.on('join', function(pseudo) {
+                $('#zone_chat').append('<p><em>' + pseudo + ' a rejoint le chat.</em></p>');
             });
 
             // Quand on reçoit un message, on l'insère dans la page
@@ -81,7 +86,7 @@
                             text += "<span><strong>"+data.pseudo+"</strong></span>";
                             break;
                         default: //viewer
-                            text += "<span>ADMIN</span>";
+                            text += "";
                             text += "<span><strong>"+data.pseudo+"</strong></span>";
                             break;
                     }

@@ -31,13 +31,13 @@ connection.connect((err) => {
 io.sockets.on('connection', function (socket, pseudo) {
     
     // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
-    socket.on('nouveau_client', async function(token, streamer_name) {
+    socket.on('join', async function(token, streamer_name) {
         //Recherche du stream ciblé
         await queryDB(
             `SELECT s.id
                 FROM stb_streams s
                 LEFT OUTER JOIN users u ON s.streamer_id = u.id
-                WHERE s.status > 0 AND u.pseudo = ?`,
+                WHERE u.pseudo = ?`,
                 streamer_name)
             .then(function(row){
                 socket.stream_id = row.id;
@@ -72,7 +72,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                         [socket.stream_id, socket.user_id])
                         .then(function(){
                             socket.new_viewer = true;
-                        });
+                        });                    
                 }
                 else{
                     socket.viewer_id = viewer.id;
@@ -93,9 +93,10 @@ io.sockets.on('connection', function (socket, pseudo) {
                     socket.viewer_rank = viewer.rank;
                 });
             delete socket.new_viewer;
+            io.emit("new", socket.user_pseudo);
         }
-
-        socket.emit("nouveau_client", socket.user_pseudo);
+        else
+            io.emit("join", socket.user_pseudo);
     });
 
     //EXECUTION DE REQUETE SQL
@@ -131,7 +132,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         await queryDB('INSERT INTO stb_chats SET ?', content);
 
         //Transmission aux autres spectateurs
-        socket.emit('message', { 
+        io.emit('message', { 
             pseudo: socket.user_pseudo, 
             message: content.message, 
             status: content.status,
