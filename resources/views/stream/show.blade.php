@@ -70,26 +70,37 @@
 								@endif
 							</p>
 							<p class="col text-center">
-								@if(isset($sub))
-									<i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-										data-placement="top" title="Envoyer un message au streamer"></i>	
-								@else
-									<i class="far fa-2x fa-comment" data-toggle="tooltip" 
-										data-placement="top" title="Communication privée reservée aux abonnés"></i>
-								@endif
+								@foreach($user->viewers as $viewer)
+									@if($streamer->stream->id == $viewer->stream_id)
+										@foreach($viewer->subscribes as $subscription)
+											@if($subscription->status == 1)
+												<i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
+													data-placement="top" title="Envoyer un message au streamer"></i>	
+												@break
+											@else
+												<i class="far fa-2x fa-comment" data-toggle="tooltip" 
+													data-placement="top" title="Communication privée reservée aux abonnés"></i>
+											@endif
+										@endforeach
+									@endif
+								@endforeach
 							</p>
 							<p class="col text-center">
 								<i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
 									data-placement="top" title="Faire un don / S'abonner"></i>
 							</p>
 							<p class="col text-center">
-								@if(isset($follower))
-									<i class="btn fas fa-2x fa-star" data-toggle="tooltip" 
-										data-placement="top" title="Ne plus suivre cette chaine"></i>
-								@else
-									<i class="btn far fa-2x fa-star" data-toggle="tooltip" 
-										data-placement="top" title="Suivre cette chaine"></i>
-								@endif
+								@foreach($user->viewers as $viewer)
+									@if($streamer->stream->id == $viewer->stream_id)
+										@if($viewer->is_follower == 1)
+											<i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+												data-placement="top" title="Ne plus suivre cette chaine"></i>
+										@else
+											<i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+												data-placement="top" title="Suivre cette chaine"></i>
+										@endif
+									@endif
+								@endforeach
 							</p>
 						</div>
 					@endif
@@ -255,7 +266,29 @@
 				}
 			});
 			
-			/* Config stream */
+			/* Buttons stream (viewer) */
+			function followingStream(){
+				var following = ($("#follow_stream").hasClass("fas")) ? 1 : 0;
+				var stream = "{{$streamer->pseudo}}";
+
+				$.ajax({
+					url: "/followStream",
+					type: 'POST',
+					data: {
+						stream: stream,
+						is_following: following
+					}
+				})
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+			}
+			$("#follow_stream").click(followingStream);
+
+			/* Config stream (owner) */
 			function updateStream(){
 				var key = $(this).data('config');
 				var value = "";
@@ -284,8 +317,7 @@
 					console.log(data);
 				});
 			}
-			$(".update_stream").change(updateStream);
-			
+			$(".update_stream").change(updateStream);			
 		});
 	</script>
 @endsection

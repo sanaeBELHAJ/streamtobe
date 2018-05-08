@@ -46,11 +46,6 @@
                     {{--  Mes informations personnelles  --}}
                     @include('account.infos')
                 </div>
-                <div class="tab-pane fade" id="v-pills-stream" role="tabpanel" 
-                aria-labelledby="v-pills-stream-tab">
-                    {{--  Mon stream  --}}
-                    @include('account.stream')
-                </div>
                 <div class="tab-pane fade" id="v-pills-stats" role="tabpanel" 
                 aria-labelledby="v-pills-stats-tab">
                     {{--  Mes statistiques  --}}

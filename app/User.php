@@ -55,4 +55,13 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasOne('App\Stream','streamer_id');
     }
+
+    /**
+     * Get his chat message
+     * 
+     */
+    public function viewers() 
+    {
+        return $this->hasMany('App\Viewer');
+    }
 }

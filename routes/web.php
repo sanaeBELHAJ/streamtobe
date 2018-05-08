@@ -36,10 +36,13 @@ Route::group(['middleware' => 'auth'], function(){
     /* Actions sur le stream */
         //FAVORIS : route "stream.favorites" à placer avant la route de la ressource "stream"
         Route::get('stream/favorites', 'StreamController@favorites')->name('stream.favorites');
-
         //Edit stream
         Route::post('/updateStream', 'StreamController@updateStream');
-    
+
+        //(Un-)follow stream
+        Route::post('/followStream', 'ViewerController@updateFollow');
+        
+        
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
