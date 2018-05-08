@@ -268,9 +268,8 @@
 			
 			/* Buttons stream (viewer) */
 			function followingStream(){
-				var following = ($("#follow_stream").hasClass("fas")) ? 1 : 0;
+				var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
 				var stream = "{{$streamer->pseudo}}";
-
 				$.ajax({
 					url: "/followStream",
 					type: 'POST',
@@ -280,7 +279,18 @@
 					}
 				})
 				.done(function(data){
-					console.log(data);
+					if(data == 0){
+						$("#follow_stream").removeClass("fas")
+											.addClass("far")
+											.attr('data-original-title', 'Suivre cette chaine')
+											.tooltip("show");
+					}
+					else{
+						$("#follow_stream").removeClass("far")
+											.addClass("fas")
+											.attr('data-original-title', 'Ne plus suivre cette chaine')
+											.tooltip("show");
+					}
 				})
 				.fail(function(data){
 					console.log(data);

@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Auth;
 
 class StreamController extends Controller
 {
-    protected $nbPerPage = 4;
-
     public function __construct(){
 
     }
