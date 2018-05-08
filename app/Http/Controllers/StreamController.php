@@ -28,23 +28,15 @@ class StreamController extends Controller
      */
     public function index(){
         $streams = Stream::where('status', 1)->get();
-        return view('stream.index', compact('streams'));
-    }
-
-    /**
-     * Display a listing of the favorites streams
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function favorites(){
+        
         $favorites = Viewer::where('user_id', Auth::user()->id)
                             ->where('is_follower',1)
                             ->get();
-        $streams = [];
+        $followed = [];
         foreach($favorites as $favorite)
-            $streams[] = $favorite->stream;
+            $followed[] = $favorite->stream;
 
-        return view('stream.index', compact('streams'));
+        return view('stream.index', compact('streams', 'followed'));
     }
 
     /**

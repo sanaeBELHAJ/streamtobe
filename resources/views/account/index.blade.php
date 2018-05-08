@@ -13,15 +13,15 @@
                 </a>
                 <a class="nav-link nav-item col-4 col-md-12"  data-toggle="pill" 
                     href="#v-pills-stats" role="tab" aria-controls="v-pills-stats" 
-                    aria-selected="false" title="Consulter mes statistiques">
+                    aria-selected="false" title="Consulter les statistiques de mon stream">
                     <span class="d-block d-md-none text-center"><i class="fas fa-signal"></i></span>
-                    <span class="d-none d-md-block">STATISTIQUES</span>
+                    <span class="d-none d-md-block">MON STREAM</span>
                 </a>
                 <a class="nav-link nav-item col-4 col-md-12"  data-toggle="pill" 
                     href="#v-pills-subscription" role="tab" aria-controls="v-pills-subscription" 
-                    aria-selected="false" title="Consulter un récapitulatif de mes abonnements">
+                    aria-selected="false" title="Obtenir un récapitulatif de mes activités">
                     <span class="d-block d-md-none text-center"><i class="far fa-credit-card"></i></span>
-                    <span class="d-none d-md-block">TRANSACTIONS</span>
+                    <span class="d-none d-md-block">HISTORIQUE</span>
                 </a>
             </nav>
         </div>
@@ -37,17 +37,17 @@
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-account" role="tabpanel" 
                 aria-labelledby="v-pills-account-tab">
-                    {{--  Mes informations personnelles  --}}
+                    {{--  COMPTE  --}}
                     @include('account.infos')
                 </div>
                 <div class="tab-pane fade" id="v-pills-stats" role="tabpanel" 
                 aria-labelledby="v-pills-stats-tab">
-                    {{--  Mes statistiques  --}}
+                    {{--  STREAM  --}}
                     @include('account.stats')
                 </div>
                 <div class="tab-pane fade" id="v-pills-subscription" role="tabpanel" 
                 aria-labelledby="v-pills-subscription-tab">
-                    {{--  Mes abonnements  --}}
+                    {{--  HISTORIQUE  --}}
                     @include('account.subscription')
                 </div>
             </div>

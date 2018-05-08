@@ -47,7 +47,6 @@
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
-                                <li class="mx-3 d-none d-lg-block"><a href="{{ route('stream.favorites') }}" class="nav-link">Mes streams suivis</a></li>
                                 <li class="mx-3">
                                     <a href="#" class="d-flex align-start nav-link p-0">
                                         <i class="d-none far fa-envelope fa-2x text-dark"></i>

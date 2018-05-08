@@ -27,3 +27,11 @@ header .dropdown-menu{
 .results_picture{
     width: 60px;
 }
+
+.mh-25{
+    max-height: 25%;
+}
+
+.btn:focus{
+    box-shadow: unset;    
+}

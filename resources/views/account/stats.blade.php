@@ -3,7 +3,7 @@
 {{-- {!! Form::model($user, ['route' => ['home.updateStats'], 'method' => 'put', 'class' => '']) !!} --}}
     
     <h5>Mes followers :</h5>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Pseudo</th>
@@ -14,14 +14,14 @@
             @foreach($viewers as $viewer)
                 <tr>
                     <td>{{$viewer->user->pseudo}}</td>
-                    <td>{{$viewer->created_at}}</td>
+                    <td>{{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <h5>Mes abonnés :</h5>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Pseudo</th>

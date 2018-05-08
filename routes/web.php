@@ -34,11 +34,8 @@ Route::middleware(['guest'])->group(function(){
 Route::group(['middleware' => 'auth'], function(){
 
     /* Actions sur le stream */
-        //FAVORIS : route "stream.favorites" à placer avant la route de la ressource "stream"
-        Route::get('stream/favorites', 'StreamController@favorites')->name('stream.favorites');
         //Edit stream
         Route::post('/updateStream', 'StreamController@updateStream');
-
         //(Un-)follow stream
         Route::post('/followStream', 'ViewerController@updateFollow');
         
