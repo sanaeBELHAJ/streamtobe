@@ -5,25 +5,19 @@
     <div class="row mt-5">
         <div class="col-12 col-md-3">
             <nav class="nav nav-tabs" role="tablist" aria-orientation="vertical">
-                <a class="nav-link nav-item active col-3 col-md-12"  data-toggle="pill" 
+                <a class="nav-link nav-item active col-4 col-md-12"  data-toggle="pill" 
                     href="#v-pills-account" role="tab" aria-controls="v-pills-account" 
                     aria-selected="true" title="Modifier mon compte">
                     <span class="d-block d-md-none text-center"><i class="fas fa-user-circle"></i></span>
                     <span class="d-none d-md-block">MON COMPTE</span>
                 </a>
-                <a class="nav-link nav-item col-3 col-md-12"  data-toggle="pill" 
-                    href="#v-pills-stream" role="tab" aria-controls="v-pills-stream" 
-                    aria-selected="false" title="Configurer mon interface de stream">
-                    <span class="d-block d-md-none text-center"><i class="fas fa-video"></i></span>
-                    <span class="d-none d-md-block">MON STREAM</span>
-                </a>
-                <a class="nav-link nav-item col-3 col-md-12"  data-toggle="pill" 
+                <a class="nav-link nav-item col-4 col-md-12"  data-toggle="pill" 
                     href="#v-pills-stats" role="tab" aria-controls="v-pills-stats" 
                     aria-selected="false" title="Consulter mes statistiques">
                     <span class="d-block d-md-none text-center"><i class="fas fa-signal"></i></span>
                     <span class="d-none d-md-block">STATISTIQUES</span>
                 </a>
-                <a class="nav-link nav-item col-3 col-md-12"  data-toggle="pill" 
+                <a class="nav-link nav-item col-4 col-md-12"  data-toggle="pill" 
                     href="#v-pills-subscription" role="tab" aria-controls="v-pills-subscription" 
                     aria-selected="false" title="Consulter un récapitulatif de mes abonnements">
                     <span class="d-block d-md-none text-center"><i class="far fa-credit-card"></i></span>

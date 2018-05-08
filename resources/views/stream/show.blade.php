@@ -29,20 +29,24 @@
 					@if($streamer->id == Auth::user()->id)
 						<div class="col-12 mt-4" id="config_stream">
 							<h3>Configurer mon stream</h3>
-							<p>
-								Titre : 
-								<input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
-								Catégorie : 
-								<select id="stream_type" class="update_stream" data-config="type">
-									@foreach($themes as $theme)
-										<optgroup label="{{$theme->name}}">
-											@foreach($theme->types as $type)
-												<option value="{{$type->name}}">{{$type->name}}</option>
-											@endforeach
-										</optgroup>
-									@endforeach
-								</select>
-							</p>
+							<div class="row">
+								<p class="col-12 col-md-6">
+									Titre : 
+									<input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
+								</p>
+								<p class="col-12 col-md-6">
+									Catégorie : 
+									<select id="stream_type" class="update_stream" data-config="type">
+										@foreach($themes as $theme)
+											<optgroup label="{{$theme->name}}">
+												@foreach($theme->types as $type)
+													<option value="{{$type->name}}">{{$type->name}}</option>
+												@endforeach
+											</optgroup>
+										@endforeach
+									</select>
+								</p>
+							</div>
 
 							<label>
 								<label class="switch align-middle m-0">
