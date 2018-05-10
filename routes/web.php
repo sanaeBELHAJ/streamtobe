@@ -38,14 +38,15 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/updateStream', 'StreamController@updateStream');
         //(Un-)follow stream
         Route::post('/followStream', 'ViewerController@updateFollow');
-        
+        //Report stream
+        Route::post('/reportStream', 'ViewerController@report')->name('report');
         
     /* Actions sur le compte */
-        Route::patch('/home/infos/', 'HomeController@updateInfos')->name('home.updateInfos');
-        Route::patch('/home/stream/', 'HomeController@updateStream')->name('home.updateStream');
-        Route::patch('/home/stats/', 'HomeController@updateStats')->name('home.updateStats');
-        Route::patch('/home/subscription/', 'HomeController@updateSubscription')->name('home.updateSubscription');
-        Route::resource('home', 'HomeController', ['only' => ['index','destroy']]);
+        Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
+        Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
+        Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
+        Route::patch('/home/subscription/', 'AccountController@updateSubscription')->name('home.updateSubscription');
+        Route::resource('home', 'AccountController', ['only' => ['index','destroy']]);
 });
 
 Route::group(['prefix' => 'admin'], function () {

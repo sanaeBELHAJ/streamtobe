@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests\Account\UserInfosRequest;
 
-class HomeController extends Controller
+class AccountController extends Controller
 {
     public $user;
 
