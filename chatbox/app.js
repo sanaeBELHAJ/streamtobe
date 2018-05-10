@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
     database: 'streamtobe'
 });
 
-var allClients = [];
+const allClients = [];
 
 /* Load */
 
@@ -95,24 +95,23 @@ io.sockets.on('connection', function (socket, pseudo) {
                     socket.viewer_rank = viewer.rank;
                 });
             delete socket.new_viewer;
-            io.emit("new", socket.user_pseudo);
         }
-        else
-            io.emit("join", socket.user_pseudo);
-
-        allClients.push(socket);
-
-        allClients.forEach(function(client, index) {
-            console.log(client.user_id);
-        });
+        
+        allClients.push(
+            {
+                socket_id: socket.id,
+                stream: socket.stream_id,
+                user: socket.user_id
+            }
+        );
+        console.log("----------");
+        console.log(allClients); 
     });
-
+    
     socket.on('disconnect', function(){
-        console.log('Got disconnect!');
         var i = allClients.indexOf(socket);
         allClients.splice(i, 1);
-        console.log(allClients);   
-    })
+    });
     
     // RECEPTION D'UN MESSAGE
     socket.on('message', async function (message) {
@@ -126,13 +125,16 @@ io.sockets.on('connection', function (socket, pseudo) {
         //Sauvegarde en BDD
         await queryDB('INSERT INTO stb_chats SET ?', content);
 
-        //Foreach Client
-        //Transmission aux autres spectateurs
-        io.emit('message', { 
-            pseudo: socket.user_pseudo, 
-            message: content.message, 
-            status: content.status,
-            viewer_rank: socket.viewer_rank
+        //Envoi du message aux utilisateurs connectés sur le même stream
+        allClients.forEach(function(client, index) {
+            if(client.stream == socket.stream_id){
+                io.in(client.socket_id).emit('message', { 
+                    pseudo: socket.user_pseudo, 
+                    message: content.message, 
+                    status: content.status,
+                    viewer_rank: socket.viewer_rank
+                });
+            }
         });
     }); 
 });
