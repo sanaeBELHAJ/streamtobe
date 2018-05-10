@@ -4,7 +4,7 @@
 	<div class="container-fluid">
 		<div class="row">
 
-			{{-- Lecteur vidéo --}}
+			{{-- Vidéo --}}
 			<div id="player" class="col-12 col-md-8 mt-4">
 				<video id="videoPlayer" controls>
 					<source/>
@@ -24,6 +24,14 @@
 
 
 			<div id="infos" class="col-12 d-none d-sm-block mt-4">
+				@if(Session::has('message'))
+					<p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						{{ Session::get('message') }}
+					</p>
+				@endif
 				@auth
 					{{-- Configuration du stream par le propriétaire --}}
 					@if($streamer->id == Auth::user()->id)
@@ -65,12 +73,15 @@
 					@else {{-- Panel d'action du viewer --}}
 						<div class="col-12 col-md-8 d-flex justify-content-between">
 							<p class="col text-center">
-								@if(isset($report))
+								@if($report)
 									<i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
 										data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
 								@else
-									<i class="btn fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
-										data-placement="top" title="Signaler cette chaine"></i>
+									<a class="btn" data-toggle="modal" data-target="#reportModal">
+										<i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
+											data-placement="top" title="Signaler cette chaine"></i>
+									</a>
+									@include('stream.modal.report')
 								@endif
 							</p>
 							<p class="col text-center">

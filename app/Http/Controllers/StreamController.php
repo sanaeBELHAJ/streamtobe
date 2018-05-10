@@ -13,6 +13,8 @@ use App\Theme;
 use App\Type;
 use App\Stream;
 use App\Viewer;
+use App\ReportCat;
+use App\Report;
 use Illuminate\Support\Facades\Auth;
 
 class StreamController extends Controller
@@ -56,9 +58,15 @@ class StreamController extends Controller
         
         $themes = Theme::all();
         $user = Auth::user();
-        if($user)
+        if($user){
             $user->token = $request->session()->get('_token');
-        return view('stream.show', compact('themes','streamer', 'user'));
+            $reportCat = ReportCat::all();
+            $report = Report::where('victim_id','=',$user->id)
+                            ->where('guilty_id','=',$streamer->id)
+                            ->where('status','=',1)
+                            ->first();
+        }
+        return view('stream.show', compact('themes','streamer', 'user','reportCat','report'));
     }
 
     /**

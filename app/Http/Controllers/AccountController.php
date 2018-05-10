@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-use App\Http\Requests\Account\UserInfosRequest;
+use App\Http\Requests\UserInfosRequest;
 
 class AccountController extends Controller
 {
@@ -54,7 +54,7 @@ class AccountController extends Controller
     /**
      * Update the specified account in storage
      * 
-     * @param \App\Http\Requests\Account\UserInfosRequest $request
+     * @param \App\Http\Requests\UserInfosRequest $request
      * @return \Illuminate\http\Response
      */
     public function updateInfos(UserInfosRequest $request){

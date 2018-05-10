@@ -9,11 +9,11 @@ use Session;
 use Response;
 use Illuminate\Support\Facades\Input;
 use App\User;
-use App\Theme;
-use App\Type;
-use App\Stream;
 use App\Viewer;
+use App\ReportCat;
+use App\Report;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ReportRequest;
 
 class ViewerController extends Controller
 {
@@ -27,6 +27,9 @@ class ViewerController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Edit the following status of the viewer
+     */
     public function updateFollow(Request $request){
         $streamer = User::where('pseudo', '=', $request->get('stream'))->first();
         $viewer = Viewer::where('stream_id', '=', $streamer->stream->id)
@@ -37,5 +40,26 @@ class ViewerController extends Controller
         $viewer->save();
 
         return $viewer->is_follower;
+    }
+
+    /**
+     * Report another user
+     */
+    public function report(ReportRequest $request){
+        $streamer = User::where('pseudo', '=', $request->get('streamer'))->first();
+        $reportCat = ReportCat::where('name', '=', $request->get('category'))->first();
+        
+        if($streamer && $reportCat){
+            Report::create([
+                'category_id'   => $reportCat->id,
+                'victim_id'     => Auth::user()->id,
+                'guilty_id'     => $streamer->id,
+                'description'   => $request->get('description'),
+                'status'        => 1
+            ]);
+            Session::flash('message', 'Votre signalement a correctement été effectué.');
+            Session::flash('alert-class', 'alert-success');
+        }
+        return redirect()->back();
     }
 }
