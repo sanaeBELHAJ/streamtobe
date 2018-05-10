@@ -13,6 +13,8 @@ const connection = mysql.createConnection({
     database: 'streamtobe'
 });
 
+var allClients = [];
+
 /* Load */
 
 // Chargement de la page index.html
@@ -97,28 +99,21 @@ io.sockets.on('connection', function (socket, pseudo) {
         }
         else
             io.emit("join", socket.user_pseudo);
+
+        allClients.push(socket);
+
+        allClients.forEach(function(client, index) {
+            console.log(client.user_id);
+        });
     });
 
-    //EXECUTION DE REQUETE SQL
-    async function queryDB(sql, value){
-        return new Promise(function(resolve, reject){
-            connection.query( sql, value, function(err, rows, fields){
-                if(err){ 
-                    console.log(err);
-                }
-                
-                console.log("----RESULTATS DE LA REQUETE----");
-                if(typeof rows !== 'undefined' && rows.length > 0){
-                    console.log(rows);
-                    resolve(rows[0]);
-                }
-                else{
-                    resolve();
-                }
-            });
-        });
-    }
-
+    socket.on('disconnect', function(){
+        console.log('Got disconnect!');
+        var i = allClients.indexOf(socket);
+        allClients.splice(i, 1);
+        console.log(allClients);   
+    })
+    
     // RECEPTION D'UN MESSAGE
     socket.on('message', async function (message) {
         message = ent.encode(message);
@@ -131,6 +126,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         //Sauvegarde en BDD
         await queryDB('INSERT INTO stb_chats SET ?', content);
 
+        //Foreach Client
         //Transmission aux autres spectateurs
         io.emit('message', { 
             pseudo: socket.user_pseudo, 
@@ -140,5 +136,27 @@ io.sockets.on('connection', function (socket, pseudo) {
         });
     }); 
 });
+
+
+//EXECUTION DE REQUETE SQL
+async function queryDB(sql, value){
+    return new Promise(function(resolve, reject){
+        connection.query( sql, value, function(err, rows, fields){
+            if(err){ 
+                console.log(err);
+            }
+            
+            //console.log("----RESULTATS DE LA REQUETE----");
+            if(typeof rows !== 'undefined' && rows.length > 0){
+                //console.log(rows);
+                resolve(rows[0]);
+            }
+            else{
+                resolve();
+            }
+        });
+    });
+}
+
 
 server.listen(8080);
