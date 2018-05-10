@@ -104,6 +104,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                 user: socket.user_id
             }
         );
+        socket.emit('welcome');
         console.log("----------");
         console.log(allClients); 
     });

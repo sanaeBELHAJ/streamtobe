@@ -64,8 +64,8 @@
             socket.emit('join', token, stream);
 
             //Arrivée d'un nouvel utilisateur sur le chat
-            socket.on('new', function(pseudo) {
-                $('#zone_chat').append('<p><em>' + pseudo + ' est nouveau sur le chat ! Bienvenue !</em></p>');
+            socket.on('welcome', function(pseudo) {
+                $('#zone_chat').append('<p><em>Bienvenue sur le chat !</em></p>');
             });
 
             // Quand on reçoit un message, on l'insère dans la page
