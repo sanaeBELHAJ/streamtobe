@@ -17,6 +17,15 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->double('price', 2);
+            $table->text('message');
+
+            $table->integer('viewer_id')->unsigned();
+            $table->foreign('viewer_id')
+                    ->references('id')
+                    ->on('stb_viewers')
+                    ->onDelete('restrict')
+                    ->onUpdate('restrict');
+
             $table->string('payment_status')->nullable();
             $table->string('recurring_id')->nullable();
             $table->timestamps();

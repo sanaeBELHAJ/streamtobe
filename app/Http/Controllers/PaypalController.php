@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Invoice;
+use URL;
 
 class PaypalController extends Controller
 {
     protected $provider;
+    protected $url_referer;
+
     public function __construct() {
         $this->provider = new ExpressCheckout();
+        $this->url_referer = URL::previous();
     }
 
     public function expressCheckout(Request $request) {
@@ -36,7 +40,11 @@ class PaypalController extends Controller
       
         // if there is no link redirect back with error message
         if (!$response['paypal_link']) {
-          return redirect('/')->with(['code' => 'danger', 'message' => 'Something went wrong with PayPal']);
+          return redirect($this->url_referer)
+                        ->with([
+                            'code' => 'danger', 
+                            'message' => 'Something went wrong with PayPal'
+                        ]);
           // For the actual error message dump out $response and see what's in there
         }
       
@@ -67,7 +75,7 @@ class PaypalController extends Controller
                 // every invoice id must be unique, else you'll get an error from paypal
                 'invoice_id' => config('paypal.invoice_prefix') . '_' . $invoice_id,
                 'invoice_description' => "Order #". $invoice_id ." Invoice",
-                'cancel_url' => url('/'),
+                'cancel_url' => $this->url_referer,
                 // total is calculated by multiplying price with quantity of all cart items and then adding them up
                 // in this case total is 20 because price is 20 and quantity is 1
                 'total' => 20, // Total price of the cart
@@ -95,7 +103,7 @@ class PaypalController extends Controller
             // every invoice id must be unique, else you'll get an error from paypal
             'invoice_id' => config('paypal.invoice_prefix') . '_' . $invoice_id,
             'invoice_description' => "Order #" . $invoice_id . " Invoice",
-            'cancel_url' => url('/'),
+            'cancel_url' => $this->url_referer,
             // total is calculated by multiplying price with quantity of all cart items and then adding them up
             // in this case total is 20 because Product 1 costs 10 (price 10 * quantity 1) and Product 2 costs 10 (price 5 * quantity 2)
             'total' => 20,
@@ -120,7 +128,11 @@ class PaypalController extends Controller
         // if response ACK value is not SUCCESS or SUCCESSWITHWARNING
         // we return back with error
         if (!in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {
-            return redirect('/')->with(['code' => 'danger', 'message' => 'Error processing PayPal payment']);
+            return redirect($this->url_referer)
+                    ->with([
+                        'code' => 'danger', 
+                        'message' => 'Error processing PayPal payment'
+                    ]);
         }
 
         // invoice id is stored in INVNUM
@@ -172,10 +184,18 @@ class PaypalController extends Controller
         // App\Invoice has a paid attribute that returns true or false based on payment status
         // so if paid is false return with error, else return with success message
         if ($invoice->paid) {
-            return redirect('/')->with(['code' => 'success', 'message' => 'Order ' . $invoice->id . ' has been paid successfully!']);
+            return redirect($this->url_referer)
+                    ->with([
+                        'code' => 'success',
+                        'message' => 'Order ' . $invoice->id . ' has been paid successfully!'
+                    ]);
         }
         
-        return redirect('/')->with(['code' => 'danger', 'message' => 'Error processing PayPal payment for Order ' . $invoice->id . '!']);
+        return redirect($this->url_referer)
+                ->with([
+                    'code' => 'danger',
+                    'message' => 'Error processing PayPal payment for Order ' . $invoice->id . '!'
+                ]);
     }
     
 }

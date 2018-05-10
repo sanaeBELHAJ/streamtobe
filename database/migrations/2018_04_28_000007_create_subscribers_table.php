@@ -13,7 +13,7 @@ class CreateSubscribersTable extends Migration
      */
     public function up()
     {
-        Schema::create('stb_subscribers', function (Blueprint $table) {
+        /*Schema::create('stb_subscribers', function (Blueprint $table) {
             $table->increments('id');
             
             $table->integer('viewer_id')->unsigned();
@@ -28,7 +28,7 @@ class CreateSubscribersTable extends Migration
             $table->integer('renewable')->default(0);
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-        });
+        });*/
     }
 
     /**

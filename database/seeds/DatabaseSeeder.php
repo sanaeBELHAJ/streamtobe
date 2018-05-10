@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StbStreamsTableSeeder::class);
         $this->call(StbViewersTableSeeder::class);
         $this->call(StbChatsTableSeeder::class);
-        $this->call(StbSubscribersTableSeeder::class);
+        //$this->call(StbSubscribersTableSeeder::class);
     }
 }
