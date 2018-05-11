@@ -20,14 +20,32 @@
                 overflow-y: scroll;
             }
 
-            #zone_chat strong {
-                color: white;
-                background-color: black;
-                padding: 2px;
+            #zone_chat p:first-of-type {
+                text-align: center;
             }
 
             form#formulaire_chat{
                 height: 15%;
+            }
+
+            .chat_user{
+                font-size: 20px;
+                padding: 0 5px;
+                margin: 0 10px;
+            }
+
+            .streamer{
+                background-color: #caa908;
+                color: black;
+            }
+
+            .mod{
+                background-color: #0ccebc;
+                color: black;
+            }
+
+            .chat_message{
+                font-size: 15px;
             }
 
             textarea{
@@ -39,6 +57,14 @@
                 width: 80%;
                 max-width: 80%;
                 vertical-align: middle;
+            }
+
+            a.delete{
+                font-size: 10px;
+                padding: 10px;
+                vertical-align: middle;
+                color: white;
+                font-weight: bold;
             }
         </style>
     </head>
@@ -70,35 +96,38 @@
 
             // Quand on reçoit un message, on l'insère dans la page
             socket.on('message', function(data) {
-                var text = "<p>";
-                if(!data.admin){
-                    switch(data.viewer_rank){
-                        case 1: //modérateur
-                            text += "<span>MODO</span>";
-                            break;
-                        case 2: //streamer
-                            text += "<span>ADMIN</span>";
-                            break;
-                        default: //viewer
-                            text += "";
-                            break;
-                    }
+                var text = "<p class='message-"+data.message_id+"'>";
+
+                text += (data.admin && data.viewer_rank==0) ? "<a href='#' class='delete'>supprimer</a>" : "";
+    
+                switch(data.viewer_rank){
+                    case 1: //modérateur
+                        text += "<span class='chat_user mod'>";
+                        break;
+                    case 2: //streamer
+                        text += "<span class='chat_user streamer'>";
+                        break;
+                    default: //viewer
+                        text += "<span class='chat_user'>";
+                        break;
                 }
-                else{
-                    text += "<span>Modérer/Bannir : </span>";
-                }
-                text += "<span><strong>"+data.pseudo+"</strong></span>";
-                text += "<span>"+data.message+"</span>";
+                text += data.pseudo+": </span>";
+                text += "<span class='chat_message'> "+data.message+"</span>";
                 text += "</p>";
                 $('#zone_chat').append(text);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
             });
 
             // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
             $('#formulaire_chat').submit(function (event) {
                 event.preventDefault();
                 var message = $('#message').val();
-                socket.emit('message', message); // Publie le message
+    
+                if(message != "")
+                    socket.emit('message', message); // Publie le message
+    
                 $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
             

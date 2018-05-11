@@ -125,7 +125,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         };
         
         //Sauvegarde en BDD
-        await queryDB('INSERT INTO stb_chats SET ?', content);
+        var message = await queryDB('INSERT INTO stb_chats SET ?', content);
 
         //Envoi du message aux utilisateurs connectés sur le même stream
         allClients.forEach(function(client, index) {
@@ -137,6 +137,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                         message: content.message, 
                         status: content.status,
                         viewer_rank: socket.viewer_rank,
+                        message_id: message.insertId,
                         admin: 1
                     });
                 }
@@ -145,7 +146,8 @@ io.sockets.on('connection', function (socket, pseudo) {
                         pseudo: socket.user_pseudo, 
                         message: content.message, 
                         status: content.status,
-                        viewer_rank: socket.viewer_rank
+                        viewer_rank: socket.viewer_rank,
+                        message_id: message.insertId,
                     });
                 }
             }
@@ -164,11 +166,10 @@ async function queryDB(sql, value){
             
             //console.log("----RESULTATS DE LA REQUETE----");
             if(typeof rows !== 'undefined' && rows.length > 0){
-                //console.log(rows);
                 resolve(rows[0]);
             }
             else{
-                resolve();
+                resolve(rows);
             }
         });
     });
