@@ -71,21 +71,24 @@
             // Quand on reçoit un message, on l'insère dans la page
             socket.on('message', function(data) {
                 var text = "<p>";
+                if(!data.admin){
                     switch(data.viewer_rank){
                         case 1: //modérateur
                             text += "<span>MODO</span>";
-                            text += "<span><strong>"+data.pseudo+"</strong></span>";
                             break;
                         case 2: //streamer
                             text += "<span>ADMIN</span>";
-                            text += "<span><strong>"+data.pseudo+"</strong></span>";
                             break;
                         default: //viewer
                             text += "";
-                            text += "<span><strong>"+data.pseudo+"</strong></span>";
                             break;
                     }
-                    text += "<span>"+data.message+"</span>";
+                }
+                else{
+                    text += "<span>Modérer/Bannir : </span>";
+                }
+                text += "<span><strong>"+data.pseudo+"</strong></span>";
+                text += "<span>"+data.message+"</span>";
                 text += "</p>";
                 $('#zone_chat').append(text);
             });

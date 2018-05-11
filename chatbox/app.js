@@ -100,8 +100,9 @@ io.sockets.on('connection', function (socket, pseudo) {
         allClients.push(
             {
                 socket_id: socket.id,
-                stream: socket.stream_id,
-                user: socket.user_id
+                stream_id: socket.stream_id,
+                user_id: socket.user_id,
+                viewer_rank: socket.viewer_rank
             }
         );
         socket.emit('welcome');
@@ -128,13 +129,25 @@ io.sockets.on('connection', function (socket, pseudo) {
 
         //Envoi du message aux utilisateurs connectés sur le même stream
         allClients.forEach(function(client, index) {
-            if(client.stream == socket.stream_id){
-                io.in(client.socket_id).emit('message', { 
-                    pseudo: socket.user_pseudo, 
-                    message: content.message, 
-                    status: content.status,
-                    viewer_rank: socket.viewer_rank
-                });
+            if(client.stream_id == socket.stream_id){
+                //Indicateur supplémentaire pour les modos/admin
+                if(client.viewer_rank!=0){
+                    io.to(client.socket_id).emit('message', { 
+                        pseudo: socket.user_pseudo, 
+                        message: content.message, 
+                        status: content.status,
+                        viewer_rank: socket.viewer_rank,
+                        admin: 1
+                    });
+                }
+                else{
+                    io.in(client.socket_id).emit('message', { 
+                        pseudo: socket.user_pseudo, 
+                        message: content.message, 
+                        status: content.status,
+                        viewer_rank: socket.viewer_rank
+                    });
+                }
             }
         });
     }); 
