@@ -26,6 +26,8 @@ class CreatePagesTable extends Migration
             $table->text('meta_keywords')->nullable();
             $table->enum('status', Page::$statuses)->default(Page::STATUS_INACTIVE);
             $table->timestamps();
+            $table->engine = 'InnoDB';	 
+
         });
     }
 

@@ -20,6 +20,8 @@ class AlterPostNullableFieldsTable extends Migration
             $table->text('excerpt')->nullable()->change();
             $table->text('meta_description')->nullable()->change();
             $table->text('meta_keywords')->nullable()->change();
+            $table->engine = 'InnoDB';	 
+
         });
     }
 
