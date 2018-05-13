@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubscribersTable extends Migration
+class CreateInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateSubscribersTable extends Migration
      */
     public function up()
     {
-        /*Schema::create('stb_subscribers', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
-            
+            $table->string('title');
+            $table->double('price', 2);
+            $table->text('message');
+
             $table->integer('viewer_id')->unsigned();
             $table->foreign('viewer_id')
                     ->references('id')
@@ -23,16 +26,12 @@ class CreateSubscribersTable extends Migration
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
 
-            $table->integer('status')->default(1);
-            $table->float('amount', 10, 2)->nullable();
-            $table->integer('renewable')->default(0);
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->engine = 'InnoDB';	 
+            $table->string('payment_status')->nullable();
+            $table->string('recurring_id')->nullable();
+            $table->timestamps();
         });
-        */
     }
-    
+
     /**
      * Reverse the migrations.
      *
@@ -40,6 +39,6 @@ class CreateSubscribersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stb_subscribers');
+        Schema::dropIfExists('invoices');
     }
 }

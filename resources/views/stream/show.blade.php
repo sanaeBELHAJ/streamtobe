@@ -101,8 +101,11 @@
 								@endforeach
 							</p>
 							<p class="col text-center">
-								<i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
-									data-placement="top" title="Faire un don / S'abonner"></i>
+								<a class="btn" data-toggle="modal" data-target="#paymentModal">
+									<i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
+										data-placement="top" title="Faire un don / S'abonner"></i>
+								</a>
+								@include('stream.modal.payment')
 							</p>
 							<p class="col text-center">
 								@foreach($user->viewers as $viewer)
