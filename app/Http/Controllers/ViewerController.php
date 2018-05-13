@@ -60,6 +60,15 @@ class ViewerController extends Controller
             Session::flash('message', 'Votre signalement a correctement été effectué.');
             Session::flash('alert-class', 'alert-success');
         }
+        else if(!$streamer){
+            Session::flash('message', 'Votre signalement doit préciser un utilisateur.');
+            Session::flash('alert-danger');
+        }
+        else if(!$reportCat){
+            Session::flash('message', "Vous devez préciser le type d'incident");
+            Session::flash('alert-danger');
+        }
+
         return redirect()->back();
     }
 }

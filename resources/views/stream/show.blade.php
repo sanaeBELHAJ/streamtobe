@@ -72,6 +72,8 @@
 						</div> --}}
 					@else {{-- Panel d'action du viewer --}}
 						<div class="col-12 col-md-8 d-flex justify-content-between">
+
+							{{-- Report --}}
 							<p class="col text-center">
 								@if($report)
 									<i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
@@ -84,6 +86,8 @@
 									@include('stream.modal.report')
 								@endif
 							</p>
+
+							{{-- Private Message --}}
 							<p class="col text-center">
 								@foreach($user->viewers as $viewer)
 									@if($streamer->stream->id == $viewer->stream_id)
@@ -100,13 +104,17 @@
 									@endif
 								@endforeach
 							</p>
+
+							{{-- Giveaway --}}
 							<p class="col text-center">
 								<a class="btn" data-toggle="modal" data-target="#paymentModal">
 									<i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
 										data-placement="top" title="Faire un don / S'abonner"></i>
-								</a>
-								@include('stream.modal.payment')
+								</a>								
 							</p>
+							@include('stream.modal.payment')
+
+							{{-- Following --}}
 							<p class="col text-center">
 								@foreach($user->viewers as $viewer)
 									@if($streamer->stream->id == $viewer->stream_id)
