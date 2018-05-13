@@ -34,8 +34,8 @@ io.sockets.on('connection', function (socket, pseudo) {
     
     // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
     socket.on('join', async function(token, streamer_name) {
-        //Recherche du stream ciblé
-        await queryDB(
+        
+        await queryDB( //Recherche du stream ciblé
             `SELECT s.id
                 FROM stb_streams s
                 LEFT OUTER JOIN users u ON s.streamer_id = u.id
@@ -45,8 +45,8 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket.stream_id = row.id;
             });
         
-        //Recherche de l'utilisateur connecté
-        await queryDB(
+        
+        await queryDB( //Recherche de l'utilisateur connecté
             `SELECT u.pseudo, u.id
                 FROM sessions s
                 LEFT OUTER JOIN users u ON s.user_id = u.id
@@ -57,15 +57,14 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket.user_pseudo = row.pseudo;
             });
 
-        //Association du user+stream au viewer correspondant
-        await queryDB(
+        
+        await queryDB( //Association du user+stream au viewer correspondant
             `SELECT id, rank, is_follower
                 FROM stb_viewers
                 WHERE stream_id = ? 
                     AND user_id = ?`, 
                 [socket.stream_id, socket.user_id])
-            .then(async function(viewer){
-                //Si nouveau viewer pour le stream, on le répertorie
+            .then(async function(viewer){ //Si nouveau viewer pour le stream, on le répertorie
                 if(!viewer){
                     await queryDB(
                         `INSERT INTO stb_viewers
@@ -82,8 +81,8 @@ io.sockets.on('connection', function (socket, pseudo) {
                 }
             });
         
-        //Si viewer récemment repertorié au stream, on récupère son ID
-        if(socket.new_viewer){
+        
+        if(socket.new_viewer){ //Si viewer récemment repertorié au stream, on récupère son ID
             await queryDB(
                 `SELECT id, rank, is_follower
                     FROM stb_viewers
@@ -106,16 +105,11 @@ io.sockets.on('connection', function (socket, pseudo) {
             }
         );
         socket.emit('welcome');
-        console.log("----------");
+        console.log("---- WELCOME ------");
         console.log(allClients); 
     });
-    
-    socket.on('disconnect', function(){
-        var i = allClients.indexOf(socket);
-        allClients.splice(i, 1);
-    });
-    
-    // RECEPTION D'UN MESSAGE
+        
+    // Réception d'un message
     socket.on('message', async function (message) {
         message = ent.encode(message);
         content = { 
@@ -130,29 +124,42 @@ io.sockets.on('connection', function (socket, pseudo) {
         //Envoi du message aux utilisateurs connectés sur le même stream
         allClients.forEach(function(client, index) {
             if(client.stream_id == socket.stream_id){
-                //Indicateur supplémentaire pour les modos/admin
-                if(client.viewer_rank!=0){
-                    io.to(client.socket_id).emit('message', { 
-                        pseudo: socket.user_pseudo, 
-                        message: content.message, 
-                        status: content.status,
-                        viewer_rank: socket.viewer_rank,
-                        message_id: message.insertId,
-                        admin: 1
-                    });
-                }
-                else{
-                    io.in(client.socket_id).emit('message', { 
-                        pseudo: socket.user_pseudo, 
-                        message: content.message, 
-                        status: content.status,
-                        viewer_rank: socket.viewer_rank,
-                        message_id: message.insertId,
-                    });
-                }
+
+                var datas = {
+                    pseudo: socket.user_pseudo, 
+                    message: content.message, 
+                    status: content.status,
+                    viewer_rank: socket.viewer_rank,
+                    message_id: message.insertId,
+                };
+
+                if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
+                    datas.admin = 1;
+
+                io.to(client.socket_id).emit('message', datas);
             }
         });
     }); 
+
+    socket.on('delete', function(message_id){
+        if(socket.viewer_rank > 0){ //Vérification du statut
+            queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);
+
+            //Envoi du message aux utilisateurs connectés sur le même stream
+            allClients.forEach(function(client, index) {
+                if(client.stream_id == socket.stream_id)
+                    io.to(client.socket_id).emit('delete', message_id);
+            });
+        }
+    });
+
+    //Déconnexion d'un utilisateur
+    socket.on('disconnect', function(){
+        var i = allClients.indexOf(socket);
+        allClients.splice(i, 1);
+        console.log("---- BYE ------");
+        console.log(allClients); 
+    });
 });
 
 
