@@ -303,11 +303,8 @@
 
         </footer>
         <!-- JAVASCRIPT -->
-        {!! HTML::script('jquery-3.3.1.min.js') !!}
-        {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
-        {!! HTML::script('bootstrap/js/popper.min.js') !!}
-        {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
-        {!! HTML::script('js/template.js') !!}
+      
+       
         <script>
             $(function () {
                 //CSRF Protection
