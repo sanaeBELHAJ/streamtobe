@@ -12,7 +12,7 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <!-- css -->
+  <!-- css 
   <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700|Open+Sans:300,400,600,700" rel="stylesheet">
   <link href="css/bootstrap.css" rel="stylesheet" />
   <link href="css/bootstrap-responsive.css" rel="stylesheet" />
@@ -20,15 +20,21 @@
   <link href="css/jcarousel.css" rel="stylesheet" />
   <link href="css/flexslider.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
-  <!-- Theme skin -->
-  <link href="skins/default.css" rel="stylesheet" />
+  <!-- Theme skin
+  <link href="skins/default.css" rel="stylesheet" />-->
   <!-- Fav and touch icons -->
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png" />
   <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png" />
   <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png" />
   <link rel="shortcut icon" href="ico/favicon.png" />
-    
+  {!! Html::style('css/bootstrap.css') !!}
+  {!! Html::style('css/bootstrap-responsive.css') !!}
+  {!! Html::style('css/fancybox/jquery.fancybox.css') !!}
+  {!! Html::style('css/jcarousel.css') !!}
+  {!! Html::style('css/flexslider.css') !!}
+  {!! Html::style('css/style.css') !!}
+  {!! Html::style('skins/default.css') !!}
       
     </head>
     <body>
@@ -56,6 +62,11 @@
         </div>
         <div class="row nomargin">
           <div class="span12">
+            <div class="span4">
+                <div class="logo">
+                    <center><a href="{{ url('/') }}">{{ HTML::image('img/logo.png', 'a picture') }}Streamtobe</a></center>
+                </div>
+            </div>
             <div class="headnav">
               <ul>
                     @guest
@@ -101,10 +112,7 @@
         </div>
         <div class="row">
           <div class="span4">
-            <div class="logo">
-              <a href="{{ url('/') }}"><img src="" alt="" class="logo" />StreamTobo logo</a>
-              <h1>Flat and trendy bootstrap template</h1>
-            </div>
+           
           </div>
           <div class="span8">
             <div class="navbar navbar-static-top">
@@ -270,25 +278,23 @@
         </div>
       </div>
     </footer>
-          <script src="js/jquery.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/jcarousel/jquery.jcarousel.min.js"></script>
-  <script src="js/jquery.fancybox.pack.js"></script>
-  <script src="js/jquery.fancybox-media.js"></script>
-  <script src="js/google-code-prettify/prettify.js"></script>
-  <script src="js/portfolio/jquery.quicksand.js"></script>
-  <script src="js/portfolio/setting.js"></script>
-  <script src="js/jquery.flexslider.js"></script>
-  <script src="js/jquery.nivo.slider.js"></script>
-  <script src="js/modernizr.custom.js"></script>
-  <script src="js/jquery.ba-cond.min.js"></script>
-  <script src="js/jquery.slitslider.js"></script>
-  <script src="js/animate.js"></script>
+    {!! Html::SCRIPT('js/jquery.js') !!}
+    {!! Html::SCRIPT('js/jquery.easing.1.3.js') !!}
+    {!! Html::SCRIPT('js/bootstrap.js') !!}
+    {!! Html::SCRIPT('js/jcarousel/jquery.jcarousel.min.js') !!}
+    {!! Html::SCRIPT('js/jquery.fancybox.pack.js') !!}
+    {!! Html::SCRIPT('js/jquery.fancybox-media.js') !!}
+    {!! Html::SCRIPT('js/google-code-prettify/prettify.js') !!}
+    {!! Html::SCRIPT('js/portfolio/jquery.quicksand.js') !!}
+    {!! Html::SCRIPT('js/portfolio/setting.js') !!}
+    {!! Html::SCRIPT('js/jquery.flexslider.js') !!}
+    {!! Html::SCRIPT('js/jquery.nivo.slider.js') !!}
+    {!! Html::SCRIPT('js/modernizr.custom.js') !!}
+    {!! Html::SCRIPT('js/jquery.ba-cond.min.js') !!}
+    {!! Html::SCRIPT('js/jquery.slitslider.js') !!}
+    {!! Html::SCRIPT('js/animate.js') !!}
+    {!! Html::SCRIPT('js/custom.js') !!}
 
-  <!-- Template Custom JavaScript File -->
-  <script src="js/custom.js"></script>
-        <!-- JAVASCRIPT -->
       
     </body>
 </html>
