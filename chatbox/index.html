@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Super Chat temps réel !</title>
+        <style>
+            html, body{
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #zone_chat{
+                width: 100%;
+                background: green;
+                color: #fff;
+                height: 80%;
+                font-size: 1.2em;
+                overflow-wrap: break-word;
+                overflow-y: scroll;
+            }
+
+            #zone_chat p:first-of-type {
+                text-align: center;
+            }
+
+            form#formulaire_chat{
+                height: 15%;
+            }
+
+            .chat_user{
+                font-size: 20px;
+                padding: 0 5px;
+                margin: 0 10px;
+            }
+
+            .streamer{
+                background-color: #caa908;
+                color: black;
+            }
+
+            .mod{
+                background-color: #0ccebc;
+                color: black;
+            }
+
+            .chat_message{
+                font-size: 15px;
+            }
+
+            textarea{
+                min-height:50%;
+                height: 95%;
+                max-height: 95%;
+                padding: 0;
+                min-width:50%;
+                width: 80%;
+                max-width: 80%;
+                vertical-align: middle;
+            }
+
+            a.delete{
+                font-size: 10px;
+                padding: 10px;
+                vertical-align: middle;
+                color: white;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+ 
+    <body>   
+        <section id="zone_chat">
+            
+        </section>
+
+        <form action="/" id="formulaire_chat" class="h-100 row m-0">
+            <textarea name="message" id="message" placeholder="Votre message..." autofocus></textarea>
+            <input type="submit" id="envoi_message" value="Envoyer" />
+        </form>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            /* ENVOI */
+
+            // Connexion à socket.io
+            var socket = io.connect('http://localhost:8080');
+            var token = getUrlParameter('token');
+            var stream = getUrlParameter('stream');
+            socket.emit('join', token, stream);
+
+            // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+            $('#formulaire_chat').submit(function (event) {
+                event.preventDefault();
+                var message = $('#message').val();
+    
+                if(message != "")
+                    socket.emit('message', message); // Publie le message
+    
+                $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                return false; // Permet de bloquer l'envoi "classique" du formulaire
+            });
+
+            //Lorsqu'on souhaite modérer un message, on envoie son ID
+            function detectDelete(){
+                $('.delete').on('click', function(){
+                    var message_id = $(this).parent().data('message');
+                    socket.emit('delete', message_id);
+                });
+            }
+
+            /* RECEPTION */
+            
+            //Arrivée d'un nouvel utilisateur sur le chat
+            socket.on('welcome', function(pseudo) {
+                $('#zone_chat').append('<p><em>Bienvenue sur le chat !</em></p>');
+            });
+
+            // Quand on reçoit un message, on l'insère dans la page
+            socket.on('message', function(data) {
+                var text = "<p data-message='"+data.message_id+"'>";
+                    text += (data.admin && data.viewer_rank==0) ? "<a href='#' class='delete'>supprimer</a>" : "";
+        
+                    switch(data.viewer_rank){
+                        case 1: //modérateur
+                            text += "<span class='chat_user mod'>";
+                            break;
+                        case 2: //streamer
+                            text += "<span class='chat_user streamer'>";
+                            break;
+                        default: //viewer
+                            text += "<span class='chat_user'>";
+                            break;
+                    }
+                    text += data.pseudo+":</span>";
+                    text += "<span class='chat_message'> "+data.message+"</span>";
+                text += "</p>";
+                $('#zone_chat').append(text);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                //Ajout d'un Listener sur l'élèment HTML pour la DOM Jquery
+                detectDelete();
+            });
+
+            //Modération d'un message
+            socket.on('delete', function(message_id) {
+                $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
+            });
+
+            /* FONCTIONS */
+            
+            //Recupère les paramètres fournies dans l'URL
+            function getUrlParameter(sParam) {
+                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+            
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+            
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : sParameterName[1];
+                    }
+                }
+            };
+        </script>
+    </body>
+</html>
+
