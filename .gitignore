@@ -1,10 +1,16 @@
 /bootstrap/compiled.php
 /vendor
+/vendor/*
 composer.phar
 composer.lock
-.env.*.php
+.env.*
 .env.php
 .env
 .DS_Store
 Thumbs.db
 /nbproject
+.idea
+/config
+/config/*
+/tests
+/tests/*
