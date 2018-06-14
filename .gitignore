@@ -1,6 +1,7 @@
 /bootstrap/compiled.php
 /vendor
 /vendor/*
+/public/vendor
 composer.phar
 composer.lock
 .env.*
@@ -14,3 +15,4 @@ Thumbs.db
 /config/*
 /tests
 /tests/*
+/chatbox/node_modules

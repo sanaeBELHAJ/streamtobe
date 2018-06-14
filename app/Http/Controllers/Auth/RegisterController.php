@@ -2,7 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+
+use Mail;
+use Session;
 use App\User;
+use App\Stream;
+use App\Viewer;
+use App\Type;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -49,24 +57,91 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'pseudo' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create new user and stream instances after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $data['confirmation_code'] = str_random(30);
+        $user = User::create([
+                'pseudo'            => $data['pseudo'],
+                'email'             => $data['email'],
+                'password'          => Hash::make($data['password']),
+                'confirmation_code' => $data['confirmation_code']
+            ]);
+
+        $type = Type::where('name', 'default')->firstOrFail();
+        $stream = Stream::create([
+            'title' => 'Titre',
+            'streamer_id' => $user->id,
+            'type_id' => $type->id
         ]);
+        
+        $viewer = Viewer::create([
+            'stream_id' => $stream->id,
+            'user_id'   => $user->id,
+            'rank'      => 2, //Propriétaire du stream,
+            'is_follower' => 1 
+        ]);
+
+        return $user;
+    }
+
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        /*event(new Registered(*/$user = $this->create($request->all())/*))*/;
+        $data = $user->getAttributes();
+
+        Mail::send('auth.confirmation', $data, function($message) use($data) 
+        {
+            $message->to($data['email'])->subject("Confirmation d'inscription");
+        });
+
+        Session::flash('messageRegister', 'Inscription effectuée, un email de confirmation vous a été adressé.');
+        Session::flash('alert-class', 'alert-success'); 
+
+        return redirect($this->redirectPath())->with('messageRegister', 'Your message');
+    }
+
+    /**
+     * Activate the account user
+     * 
+     * @param $confirmation_code
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmAccount($confirmation_code){
+
+        $user = User::whereConfirmationCode($confirmation_code)->first();
+
+        if (!$user){
+            return redirect('login');
+        }
+
+        $user->activated = 1;
+        $user->confirmation_code = null;
+        $user->save();
+
+        Session::flash('message', 'Vous avez correctement vérifié votre compte, vous pouvez dès à présent vous logger.');
+        Session::flash('alert-class', 'alert-success'); 
+
+        return redirect('login');
     }
 }
