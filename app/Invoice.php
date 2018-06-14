@@ -11,7 +11,8 @@ class Invoice extends Model
         'price', 
         'message', 
         'viewer_id', 
-        'payment_status'
+        'payment_status',
+        'recurring_id'
     ];
 
     public function getPaidAttribute() {

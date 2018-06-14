@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Invoice;
+use App\Viewer;
+use App\User;
+use App\Stream;
 use URL;
 
 class PaypalController extends Controller
@@ -13,10 +17,11 @@ class PaypalController extends Controller
     protected $url_referer;
 
     public function __construct() {
+        $this->middleware('auth');
         $this->provider = new ExpressCheckout();
         $this->url_referer = URL::previous();
     }
-
+    
     public function expressCheckout(Request $request) {
         // check if payment is recurring
         $recurring = $request->input('recurring', false) ? true : false;
@@ -31,32 +36,31 @@ class PaypalController extends Controller
         $invoice = new Invoice();
         $invoice->title = $cart['invoice_description'];
         $invoice->price = $cart['total'];
+        $invoice->viewer_id = $this->getViewerId($request->input('stream'));
         $invoice->save();
       
         // send a request to paypal 
         // paypal should respond with an array of data
         // the array should contain a link to paypal's payment system
         $response = $this->provider->setExpressCheckout($cart, $recurring);
-      
+        
         // if there is no link redirect back with error message
         if (!$response['paypal_link']) {
-          return redirect($this->url_referer)
+            dd($response);
+            return redirect($this->url_referer)
                         ->with([
                             'code' => 'danger', 
                             'message' => 'Something went wrong with PayPal'
                         ]);
-          // For the actual error message dump out $response and see what's in there
+            // For the actual error message dump out $response and see what's in there
         }
       
         // redirect to paypal
-        // after payment is done paypal
-        // will redirect us back to $this->expressCheckoutSuccess
+        // after payment is done paypal will redirect us back to $this->expressCheckoutSuccess
         return redirect($response['paypal_link']);
     }
 
-    private function getCart($recurring, $invoice_id)
-    {
-
+    private function getCart($recurring, $invoice_id) {
         if ($recurring) {
             return [
                 // if payment is recurring cart needs only one item
@@ -91,22 +95,19 @@ class PaypalController extends Controller
                     'price' => 10,
                     'qty' => 1,
                 ],
-                [
+                /*[
                     'name' => 'Product 2',
                     'price' => 5,
-                    'qty' => 2,
-                ],
+                    'qty' => 5,
+                ],*/
             ],
-
+            'total' => 35,
             // return url is the url where PayPal returns after user confirmed the payment
             'return_url' => url('/paypal/express-checkout-success'),
             // every invoice id must be unique, else you'll get an error from paypal
             'invoice_id' => config('paypal.invoice_prefix') . '_' . $invoice_id,
             'invoice_description' => "Order #" . $invoice_id . " Invoice",
             'cancel_url' => $this->url_referer,
-            // total is calculated by multiplying price with quantity of all cart items and then adding them up
-            // in this case total is 20 because Product 1 costs 10 (price 10 * quantity 1) and Product 2 costs 10 (price 5 * quantity 2)
-            'total' => 20,
         ];
     }
 
@@ -198,4 +199,13 @@ class PaypalController extends Controller
                 ]);
     }
     
+    private function getViewerId($pseudo){
+        $streamer = User::where('pseudo', $pseudo)->first();
+        
+        $viewer = Viewer::where('user_id', Auth::user()->id)
+                        ->where('stream_id', $streamer->stream->id)
+                        ->first();
+        return $viewer->id;
+    }
+
 }
