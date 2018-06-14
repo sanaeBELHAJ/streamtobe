@@ -148,6 +148,18 @@
                 $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
             });
 
+            //Arrivée d'un nouvel utilisateur sur le chat
+            socket.on('error', function(error) {
+                
+                switch(error.type){
+                    case 'user_missing':
+                        alert("Identifiant utilisateur incorrect");
+                }
+
+                $("#formulaire_chat textarea").prop("disabled", true);
+                $("#formulaire_chat input").prop("disabled", true);
+            });
+            
             /* FONCTIONS */
             
             //Recupère les paramètres fournies dans l'URL
