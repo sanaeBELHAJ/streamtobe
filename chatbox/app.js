@@ -53,7 +53,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                 WHERE FROM_BASE64(s.payload) LIKE ?`, 
                 '%'+token+'%')
             .then(function(row){
-                if(typeof rows === 'undefined' || rows.length == 0)
+                if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing' );
 
                 socket.user_id = row.id;
