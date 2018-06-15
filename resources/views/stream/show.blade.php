@@ -266,6 +266,7 @@
 @endsection
 
 @section('js')
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script>	
 		$(function(){
 			//Texte du slider
@@ -353,7 +354,65 @@
 					console.log(data);
 				});
 			}
-			$(".update_stream").change(updateStream);			
+			$(".update_stream").change(updateStream);	
+			
+			/* Paypal Button */
+			paypal.Button.render({
+				env: 'sandbox', // Or 'production',
+				
+				client: {
+					sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
+					//production: 'xxxxxxxxx'
+				},
+				
+				commit: true, // Show a 'Pay Now' button
+
+				style: {
+					color: 'gold',
+					size: 'small'
+				},
+
+				payment: function(data, actions) {
+					/*
+					* Set up the payment here
+					*/
+					return actions.payment.create({
+						payment: {
+							transactions: [
+								{
+									amount: { 
+										total: $('#giveaway_change').val(), 
+										currency: 'EUR'
+									}
+								}
+							]
+						}
+					});
+				},
+
+				onAuthorize: function(data, actions) {
+					/*
+					* Execute the payment here
+					*/
+					return actions.payment.execute().then(function(payment) {
+						console.log(payment);
+						// The payment is complete!
+						// You can now show a confirmation message to the customer
+					});
+				},
+
+				onCancel: function(data, actions) {
+					/*
+					* Buyer cancelled the payment
+					*/
+				},
+
+				onError: function(err) {
+					/*
+					* An error occurred during the transaction
+					*/
+				}
+			}, '#paypal-button');
 		});
 	</script>
 @endsection
