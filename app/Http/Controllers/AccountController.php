@@ -33,8 +33,7 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         $user = Auth::user();
         $stream = $user->stream;
         
@@ -42,7 +41,7 @@ class AccountController extends Controller
         $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
-        
+
         $channels = Viewer::where('user_id', $user->id)->get();
         $subscriptions = [];
         foreach($channels as $channel)
@@ -127,5 +126,5 @@ class AccountController extends Controller
         
         Auth::logout();
         return redirect('/login');
-    }
+    }   
 }
