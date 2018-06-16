@@ -373,9 +373,7 @@
 				},
 
 				payment: function(data, actions) {
-					/*
-					* Set up the payment here
-					*/
+					//Set up the payment here
 					return actions.payment.create({
 						payment: {
 							transactions: [
@@ -391,26 +389,35 @@
 				},
 
 				onAuthorize: function(data, actions) {
-					/*
-					* Execute the payment here
-					*/
+					//Execute the payment here
 					return actions.payment.execute().then(function(payment) {
-						console.log(payment);
 						// The payment is complete!
 						// You can now show a confirmation message to the customer
+						payment.streamer = $('#pseudo').val();
+						payment.message = $('#giveaway_message').val();
+						$.ajax({
+							url: "/validGiveaway",
+							type: 'POST',
+							dataType: "JSON",
+							data: {
+								payment: payment
+							}
+						})
+						.done(function(data){
+							console.log(data);
+						})
+						.fail(function(data){
+							console.log(data);
+						});
 					});
 				},
 
 				onCancel: function(data, actions) {
-					/*
-					* Buyer cancelled the payment
-					*/
+					//Buyer cancelled the payment
 				},
 
 				onError: function(err) {
-					/*
-					* An error occurred during the transaction
-					*/
+					//An error occurred during the transaction
 				}
 			}, '#paypal-button');
 		});

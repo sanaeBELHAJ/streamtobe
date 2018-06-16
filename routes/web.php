@@ -46,7 +46,9 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/followStream', 'ViewerController@updateFollow');
         //Report stream
         Route::post('/reportStream', 'ViewerController@report')->name('report');
-        
+        //Dons Paypal
+        Route::post('/validGiveaway', 'PaypalController@validGiveaway');
+
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
