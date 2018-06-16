@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    protected $table = 'stb_invoices';
+
     protected $fillable = [
         'paypal_id', 
         'paypal_cart', 
@@ -19,4 +21,12 @@ class Invoice extends Model
         'status',
         'created_at',
     ];
+
+    /**
+     * Viewer writer
+     */
+    public function viewer() 
+    {
+        return $this->belongsTo('App\Viewer');
+    }
 }

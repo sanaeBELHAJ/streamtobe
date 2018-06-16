@@ -6,6 +6,7 @@ use Session;
 use App\Stream;
 use App\Viewer;
 use App\Chat;
+use App\Invoice;
 use App\Subscriber;
 
 use Illuminate\Http\Request;
@@ -36,18 +37,38 @@ class AccountController extends Controller
     public function index(){
         $user = Auth::user();
         $stream = $user->stream;
-        
+        $channels = Viewer::where('user_id', $user->id)->get();
+
+        //Mes followers
         $viewers = $stream->viewers;
         $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
 
-        $channels = Viewer::where('user_id', $user->id)->get();
+        //Mes abonnés
+
+        //Mes dons 
+        $donations = [];
+        foreach($channels as $channel){
+            foreach($channel->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        //Mes abonnements
         $subscriptions = [];
         foreach($channels as $channel)
             $subscriptions[] = $channel->subscribes->where('viewer_id', $channel->id)->first();
 
-        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers', 'channels', 'subscriptions'));
+        return view('account.index')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers', 
+                    'subscribers', 
+                    'donations', 
+                    'channels', 
+                    'subscriptions'
+                ));
     }
 
     /**

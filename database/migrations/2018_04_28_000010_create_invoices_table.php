@@ -13,7 +13,7 @@ class CreateInvoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('stb_invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('paypal_id');
             $table->string('paypal_cart');
@@ -43,6 +43,6 @@ class CreateInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('stb_invoices');
     }
 }
