@@ -31,9 +31,10 @@ Route::middleware(['guest'])->group(function(){
 });
 
 
-Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
+/*Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
 Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
 Route::post('paypal/notify', 'PaypalController@notify');
+*/
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
@@ -45,7 +46,13 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/followStream', 'ViewerController@updateFollow');
         //Report stream
         Route::post('/reportStream', 'ViewerController@report')->name('report');
-        
+        //Dons Paypal
+        Route::post('/validGiveaway', 'PaypalController@validGiveaway');
+        //Liste des bannis et Modérateurs du chatbox
+        Route::get('/getStreamViewer', 'ViewerController@getStreamViewer');
+        //Bannissement / Modérateur du chatbox
+        Route::post('/updateViewer', 'ViewerController@updateViewer');
+
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');

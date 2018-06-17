@@ -33,11 +33,11 @@
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
                             <li class="mx-3 d-flex align-items-center">
-                                {{ Form::open(['method' => 'GET', 'route' => ['autocomplete'], 'id' => 'search_user']) }}
-                                    {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher un stream'])}}
-                                {{ Form::close() }}
+                                {{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                             </li>
-                            <li class="mx-3"><a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a></li>
+                            <li class="mx-3">
+                                <a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a>
+                            </li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
@@ -91,12 +91,14 @@
         <footer>
 
         </footer>
+
         <!-- JAVASCRIPT -->
         {!! HTML::script('jquery-3.3.1.min.js') !!}
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
         {!! HTML::script('js/template.js') !!}
+        
         <script>
             $(function () {
                 //CSRF Protection
@@ -108,25 +110,92 @@
 
                 $('[data-toggle="tooltip"]').tooltip();
 
-                $('#search_user').submit(function(event){
-                    event.preventDefault();
-                    return false;
+                //Recherche d'utilisateurs
+                $(".searchUser").each(function(){
+                    $(this).autocomplete({
+                        source: "/autocomplete",
+                        minLength: 2,
+                        select: function(event, ui) {
+                            $(this).val(ui.item.value);
+                            var action = $(this).data('action');
+    
+                            if(action == "redirect")
+                                window.location.replace("/stream/"+ui.item.value);
+                            else if(action == "ban" || action == "mod")
+                                statusViewer(ui.item.value, action, 1); //Fonction appelée dans stream.show
+                        }
+                    })
+                    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                        return $( "<li></li>" )
+                            .data( "ui-autocomplete-item", item )
+                            .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
+                            .appendTo( ul );
+                    };
                 });
+                
+                //Edit modération/bannissement
+                function statusViewer(pseudo, rank, set){
+                    $.ajax({
+                        url: "/updateViewer",
+                        type: 'POST',
+                        dataType: "JSON",
+                        data: {
+                            pseudo: pseudo,
+                            rank: rank,
+                            set: set
+                        }
+                    })
+                    .done(function(data){
+                        updateList();
+                        $(".searchUser").val("");
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                }
+                
+                //Detection du click() sur les boutons générés par les appels Ajax
+                if($("#config_stream").length > 0){
+                    $("#config_stream").on("click", ".rmvRankUser", function(){
+                        var action = $(this).data('action');
+                        var pseudo = $(this).data('pseudo');
+                        statusViewer(pseudo, action, 0);
+                    });
+                }
 
-                $( "#q" ).autocomplete({
-                    source: "/autocomplete",
-                    minLength: 2,
-                    select: function(event, ui) {
-                        $('#q').val(ui.item.value);
-                        window.location.replace("/stream/"+ui.item.value);
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                        .data( "ui-autocomplete-item", item )
-                        .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
-                        .appendTo( ul );
-                };
+                //Liste modérateurs / bannis
+                updateList();
+                function updateList(){
+                    $.ajax({
+                        url: "/getStreamViewer",
+                        type: 'GET'
+                    })
+                    .done(function(data){
+                        $("#listMods").html('');
+                        $("#listBans").html('');
+                        $.each(data, function(index, element){
+                            var text = "";
+                            text +='<tr class="d-flex justify-content-between">';
+                                text += '<td>'+element.pseudo+'</td>';
+
+                                if(element.rank == 1)
+                                    text += "<td><button data-action='mod' data-pseudo='"+element.pseudo+"' ";
+                                else if(element.rank == -1)
+                                    text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
+
+                                text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>"; 
+                            text += "</tr>";
+
+                            if(element.rank == 1)
+                                $("#listMods").append(text);
+                            else if(element.rank == -1)
+                                $("#listBans").append(text);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                }
             });
         </script>
         @yield('js')

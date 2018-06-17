@@ -47,4 +47,14 @@ class LoginController extends Controller
     {
         return array_merge($request->only($this->username(), 'password'), ['activated' => 1]);
     }
+
+    /**
+     * Redirect to previous page before the login page
+     */
+    public function showLoginForm(){
+        if(!session()->has('url.intended'))
+            session(['url.intended' => url()->previous()]);
+            
+        return view('auth.login');    
+    }
 }

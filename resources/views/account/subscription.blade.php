@@ -120,21 +120,23 @@
                         <tr>
                             <th>Chaîne</th>
                             <th>Montant</th>
+                            <th>Message</th>
                             <th>Date de l'envoi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if(count($subscribers) > 0)
-                            {{-- @foreach($subscribers as $sub)
+                        @if(count($donations) > 0)
+                            @foreach($donations as $donation)
                                 <tr>
-                                    <td>{{$sub->viewer->user->pseudo}}</td>
-                                    <td>{{$sub->amount}} €</td>
-                                    <td>{{ Carbon\Carbon::parse($sub->created_at)->format('d/m/Y') }}</td>
+                                    <td>{{$donation->viewer->stream->user->pseudo}}</td>
+                                    <td>{{$donation->amount}} €</td>
+                                    <td>{{$donation->message}}</td>
+                                    <td>{{ Carbon\Carbon::parse($donation->created_at)->format('d/m/Y') }}</td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         @else
                             <tr>
-                                <td colspan="3" class="text-center">
+                                <td colspan="4" class="text-center">
                                     <i>Vous n'avez effectué aucun don.</i>
                                 </td>
                             </tr>

@@ -53,6 +53,9 @@ io.sockets.on('connection', function (socket, pseudo) {
                 WHERE FROM_BASE64(s.payload) LIKE ?`, 
                 '%'+token+'%')
             .then(function(row){
+                if(typeof row === 'undefined' || row.length == 0)
+                    return new Error('user_missing' );
+
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
             });
@@ -118,13 +121,11 @@ io.sockets.on('connection', function (socket, pseudo) {
             status: 1
         };
         
-        //Sauvegarde en BDD
-        var message = await queryDB('INSERT INTO stb_chats SET ?', content);
+        var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
 
-        //Envoi du message aux utilisateurs connectés sur le même stream
-        allClients.forEach(function(client, index) {
-            if(client.stream_id == socket.stream_id){
-
+        
+        allClients.forEach(function(client, index) { //Diffusion du message
+            if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
                 var datas = {
                     pseudo: socket.user_pseudo, 
                     message: content.message, 
@@ -141,6 +142,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         });
     }); 
 
+    //Modération d'un message
     socket.on('delete', function(message_id){
         if(socket.viewer_rank > 0){ //Vérification du statut
             queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);

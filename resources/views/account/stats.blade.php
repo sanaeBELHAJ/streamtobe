@@ -12,7 +12,10 @@
         @foreach($viewers as $viewer)
             <tr>
                 <td>{{$viewer->user->pseudo}}</td>
-                <td>{{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}</td>
+                <td>
+                    {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
+                    <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
+                </td>
             </tr>
         @endforeach
     </tbody>

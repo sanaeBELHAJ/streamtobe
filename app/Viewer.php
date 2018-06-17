@@ -41,6 +41,15 @@ class Viewer extends Model
     }
 
     /**
+     * Get his donations
+     * 
+     */
+    public function donations() 
+    {
+        return $this->hasMany('App\Invoice');
+    }
+
+    /**
      * Get his chat message
      * 
      */
