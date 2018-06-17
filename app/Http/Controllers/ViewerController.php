@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use DB;
 use Mail;
 use Session;
 use Response;
@@ -40,6 +41,36 @@ class ViewerController extends Controller
         $viewer->save();
 
         return $viewer->is_follower;
+    }
+
+    /**
+     * Get the list of the viewers of this stream
+     */
+    public function getStreamViewer(Request $request){
+        return DB::table('stb_viewers')
+                    ->join('users', 'users.id', '=', 'stb_viewers.user_id')
+                    ->select('users.pseudo', 'stb_viewers.rank')
+                    ->where('stream_id', '=', Auth::user()->stream->id)
+                    ->get();
+    }
+    
+    /**
+     * Edit the chatbox status of the viewer
+     */
+    public function updateViewer(Request $request){
+        $user = User::where('pseudo', '=', $request->get('pseudo'))->first();
+        $viewer = Viewer::where('stream_id', '=', Auth::user()->stream->id)
+                        ->where('user_id', '=', $user->id)
+                        ->first();
+        
+        if($request->get('rank')=="mod")
+            $viewer->rank = (intval($request->get('set'))==0) ? 0 : 1;
+        else if($request->get('rank')=="ban")
+            $viewer->rank = (intval($request->get('set'))==0) ? 0 : -1;
+    
+        $viewer->save();
+
+        return $viewer;
     }
 
     /**

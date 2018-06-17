@@ -48,6 +48,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/reportStream', 'ViewerController@report')->name('report');
         //Dons Paypal
         Route::post('/validGiveaway', 'PaypalController@validGiveaway');
+        //Liste des bannis et Modérateurs du chatbox
+        Route::get('/getStreamViewer', 'ViewerController@getStreamViewer');
+        //Bannissement / Modérateur du chatbox
+        Route::post('/updateViewer', 'ViewerController@updateViewer');
 
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
