@@ -30,12 +30,6 @@ Route::middleware(['guest'])->group(function(){
     Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
 
-
-/*Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
-Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
-Route::post('paypal/notify', 'PaypalController@notify');
-*/
-
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
 
@@ -59,6 +53,9 @@ Route::group(['middleware' => 'auth'], function(){
         Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
         Route::patch('/home/subscription/', 'AccountController@updateSubscription')->name('home.updateSubscription');
         Route::resource('home', 'AccountController', ['only' => ['index','destroy']]);
+    
+    /*Messages privées entre utilisateurs */
+    Route::get('/messages', 'MessageController@index');
 });
 
 Route::group(['prefix' => 'admin'], function () {

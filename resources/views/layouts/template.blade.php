@@ -48,10 +48,10 @@
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
                                 <li class="mx-3 d-flex align-items-center">
-                                    <a href="#" class="d-flex align-start nav-link p-0">
-                                        <i class="d-none far fa-envelope fa-2x text-dark"></i>
-                                        <i class="fas fa-envelope fa-2x text-dark"></i>
-                                        <span class="h-50 badge badge-pill badge-danger">5</span>
+                                    <a href="/messages" class="d-flex align-start nav-link p-0">
+                                        <i class="far fa-envelope fa-2x text-dark"></i>
+                                        {{-- <i class="fas fa-envelope fa-2x text-dark"></i>
+                                        <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
