@@ -2,16 +2,19 @@
 var app = require('express')(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
-    ent = require('ent'), // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
-    fs = require('fs');
+    ent = require('ent'); // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
+    
 
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+
+const config = {
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'streamtobe'
-});
+};
+const connection = mysql.createConnection(config);
+
 
 const allClients = [];
 
@@ -19,7 +22,7 @@ const allClients = [];
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 //DB Connection
@@ -162,6 +165,38 @@ io.sockets.on('connection', function (socket, pseudo) {
         console.log("---- BYE ------");
         console.log(allClients); 
     });
+
+    //Dons
+    async function checkDonations(socket){
+        //Recherche du stream ciblé
+        if(socket && typeof socket.last_donation == "undefined")
+            socket.last_donation = 0;
+
+        var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+        if(socket && typeof socket.stream_id != "undefined"){
+            await queryDB( 
+                `SELECT i.*, u.pseudo
+                    FROM stb_invoices i
+                    LEFT OUTER JOIN stb_viewers v ON i.viewer_id = v.id
+                    LEFT OUTER JOIN users u ON v.user_id = u.id
+                    WHERE v.stream_id = ?
+                    AND i.id > ?
+                    AND i.created_at >= ?
+                    ORDER BY i.id ASC
+                    LIMIT 1`, 
+                    [socket.stream_id, socket.last_donation, date])
+                .then(function(row){
+
+                    if(row.id != "undefined" && row.id > socket.last_donation){
+                        socket.last_donation = row.id;
+                        socket.emit('dons', row);
+                    }
+                });
+        }
+    }
+    setInterval(function(){checkDonations(socket)}, 1000);
+
 });
 
 
@@ -172,7 +207,7 @@ async function queryDB(sql, value){
             if(err){ 
                 console.log(err);
             }
-            
+
             //console.log("----RESULTATS DE LA REQUETE----");
             if(typeof rows !== 'undefined' && rows.length > 0){
                 resolve(rows[0]);

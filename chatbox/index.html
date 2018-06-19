@@ -104,12 +104,12 @@
             });
 
             //Lorsqu'on souhaite modérer un message, on envoie son ID
-            function detectDelete(){
-                $('.delete').on('click', function(){
+            //function detectDelete(){
+                $('#zone_chat').on('click',".delete", function(){
                     var message_id = $(this).parent().data('message');
                     socket.emit('delete', message_id);
                 });
-            }
+            //}
 
             /* RECEPTION */
             
@@ -140,12 +140,19 @@
                 $('#zone_chat').append(text);
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
                 //Ajout d'un Listener sur l'élèment HTML pour la DOM Jquery
-                detectDelete();
+                //detectDelete();
             });
 
             //Modération d'un message
             socket.on('delete', function(message_id) {
                 $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
+            });
+
+            //Réception de dons
+            socket.on('dons', function(data) {
+                $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
+                if(data.message)
+                    $('#zone_chat').append('<p>'+data.message+'</p>');
             });
 
             //Arrivée d'un nouvel utilisateur sur le chat
