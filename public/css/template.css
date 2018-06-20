@@ -35,3 +35,12 @@ header .dropdown-menu{
 .btn:focus{
     box-shadow: unset;    
 }
+.bg-dark{
+    background-color: #4b367c;
+}
+.top{
+    margin-top: 102px;
+}
+.bottom{
+    margin-bottom: 102px;
+}

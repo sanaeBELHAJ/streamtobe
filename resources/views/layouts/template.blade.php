@@ -13,17 +13,20 @@
         <!-- CSS -->
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
+        {!! Html::style('css/half-slider.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
         @yield('css')
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.setting('site.logo')); ?>">
-                        {{ setting('site.title') }}
+                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo.jpg'); ?>">
+                        <!--{{ setting('site.title') }}-->
+                        <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">StreamToBe</span>
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -33,7 +36,7 @@
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
                             <li class="mx-3 d-flex align-items-center">
-                                {{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
+                                {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                             </li>
                             <li class="mx-3">
                                 <a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a>
@@ -88,15 +91,21 @@
 
         @yield('content')
 
-        <footer>
+        <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; StreamToBe 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 
-        </footer>
 
         <!-- JAVASCRIPT -->
         {!! HTML::script('jquery-3.3.1.min.js') !!}
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
+        {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!}
         {!! HTML::script('js/template.js') !!}
         
         <script>
