@@ -114,7 +114,7 @@
             /* RECEPTION */
             
             //Arrivée d'un nouvel utilisateur sur le chat
-            socket.on('welcome', function(pseudo) {
+            socket.on('welcome', function() {
                 $('#zone_chat').append('<p><em>Bienvenue sur le chat !</em></p>');
             });
 

@@ -136,7 +136,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                     viewer_rank: socket.viewer_rank,
                     message_id: message.insertId,
                 };
-
+                console.log(datas);
                 if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
                     datas.admin = 1;
 
@@ -160,11 +160,16 @@ io.sockets.on('connection', function (socket, pseudo) {
 
     //Déconnexion d'un utilisateur
     socket.on('disconnect', function(){
-        var i = allClients.indexOf(socket);
-        allClients.splice(i, 1);
+        var i = allClients.findIndex(findSocket);
+        if(i>-1)
+            allClients.splice(i, 1);
         console.log("---- BYE ------");
-        console.log(allClients); 
+        console.log(allClients);
     });
+    
+    function findSocket(element){
+        return element.socket_id == socket.id;
+    }
 
     //Dons
     async function checkDonations(socket){
@@ -218,6 +223,5 @@ async function queryDB(sql, value){
         });
     });
 }
-
 
 server.listen(8080);
