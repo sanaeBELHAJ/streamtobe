@@ -10,7 +10,8 @@ class StbViewersTableSeeder extends Seeder {
 
     private function randDate()
 	{
-		return Carbon::createFromDate(null, rand(1, 12), rand(1, 28));
+        //Date aléatoire : createFromDate(annee, mois, jour)
+		return Carbon::createFromDate(2017, rand(1, 12), rand(1, 28));
 	}
 
 	public function run()
