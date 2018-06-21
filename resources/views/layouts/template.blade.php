@@ -24,7 +24,7 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo.jpg'); ?>">
+                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
                         <!--{{ setting('site.title') }}-->
                         <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">StreamToBe</span>
                     </a>

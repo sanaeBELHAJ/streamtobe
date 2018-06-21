@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-	<div class="container-fluid">
+	<div class="container-fluid top bottom">
 		<div class="row">
 
 			{{-- Vidéo --}}
