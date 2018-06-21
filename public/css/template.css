@@ -63,3 +63,6 @@ header .dropdown-menu{
 .gold:hover{
     color: #4b367c;
 }
+.visible{
+    background: rgb(75, 54, 124,.2)!important;
+}
