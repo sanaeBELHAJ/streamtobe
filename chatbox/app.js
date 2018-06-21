@@ -53,7 +53,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         
         
         await queryDB( //Recherche de l'utilisateur connecté
-            `SELECT u.pseudo, u.id
+            `SELECT u.pseudo, u.id, u.avatar
                 FROM sessions s
                 LEFT OUTER JOIN users u ON s.user_id = u.id
                 WHERE FROM_BASE64(s.payload) LIKE ?`, 
@@ -61,7 +61,8 @@ io.sockets.on('connection', function (socket, pseudo) {
             .then(function(row){
                 if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing' );
-
+                    
+                socket.user_avatar = row.avatar;
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
             });
@@ -134,6 +135,7 @@ io.sockets.on('connection', function (socket, pseudo) {
             if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
                 var datas = {
                     pseudo: socket.user_pseudo, 
+                    avatar: socket.user_avatar,
                     message: content.message, 
                     status: content.status,
                     viewer_rank: socket.viewer_rank,

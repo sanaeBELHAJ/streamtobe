@@ -34,6 +34,12 @@
                 margin: 0 10px;
             }
 
+            .chat_avatar{
+                width: 40px;
+                vertical-align: middle;
+                padding-left: 10px;
+            }
+
             .streamer{
                 background-color: #caa908;
                 color: black;
@@ -59,16 +65,19 @@
                 vertical-align: middle;
             }
 
-            a.delete{
-                font-size: 10px;
+            .delete{
                 padding: 10px;
                 vertical-align: middle;
                 color: white;
-                font-weight: bold;
+            }
+
+            .delete:hover{
+                cursor: pointer;
             }
         </style>
+        <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
     </head>
- 
+
     <body>   
         <section id="zone_chat">
             
@@ -104,12 +113,11 @@
             });
 
             //Lorsqu'on souhaite modérer un message, on envoie son ID
-            //function detectDelete(){
-                $('#zone_chat').on('click',".delete", function(){
-                    var message_id = $(this).parent().data('message');
-                    socket.emit('delete', message_id);
-                });
-            //}
+            $('#zone_chat').on('click',".delete", function(){
+                console.log($(this).html());
+                var message_id = $(this).parent().data('message');
+                socket.emit('delete', message_id);
+            });
 
             /* RECEPTION */
             
@@ -121,8 +129,9 @@
             // Quand on reçoit un message, on l'insère dans la page
             socket.on('message', function(data) {
                 var text = "<p data-message='"+data.message_id+"'>";
-                    text += (data.admin && data.viewer_rank==0) ? "<a href='#' class='delete'>supprimer</a>" : "";
-        
+                    text += (data.admin && data.viewer_rank==0) ? "<i class='fas fa-ban delete'></i>" : "";
+                    
+                    text += "<img class='chat_avatar' src='http://localhost:8000/storage/"+data.avatar+"'>";
                     switch(data.viewer_rank){
                         case 1: //modérateur
                             text += "<span class='chat_user mod'>";
@@ -139,8 +148,6 @@
                 text += "</p>";
                 $('#zone_chat').append(text);
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
-                //Ajout d'un Listener sur l'élèment HTML pour la DOM Jquery
-                //detectDelete();
             });
 
             //Modération d'un message
