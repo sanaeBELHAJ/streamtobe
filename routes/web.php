@@ -13,8 +13,8 @@
 
 /**
  * 
- * Pour consulter l'ensemble des routes mises en place : php artisan route:list
- * 
+ * Pour consulter l'ensemble des routes mises en place : 
+ * php artisan route:list
  */
 
 Route::get('/', function () {
@@ -69,3 +69,6 @@ Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
+
+//Accord d'utilisation des cookies
+Route::post('/valid_cookie', 'HomeController@valid_cookie');

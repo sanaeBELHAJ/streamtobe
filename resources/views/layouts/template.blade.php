@@ -16,6 +16,23 @@
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
         @yield('css')
+        <style>
+            #cookies{
+                position: fixed;
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                color: white;
+                font-weight: bold;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                padding: 13px 0;
+                background-color: cornflowerblue;
+                bottom: 20px;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -61,8 +78,8 @@
                                     </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
                                         <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
+                                        <a href="{{ route('home.index') }}" class="dropdown-item">Paramètres</a>
                                         <hr>
                                         @if(Auth::user()->role_id == 1)
                                             <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
@@ -88,8 +105,8 @@
 
         @yield('content')
 
-        <footer>
-
+        <footer class="row">
+            @include('layouts.footer')
         </footer>
 
         <!-- JAVASCRIPT -->
@@ -196,6 +213,20 @@
                         console.log(data);
                     });
                 }
+
+                //Validation cookie
+                $('#valid_cookie').click(function(){
+                    $.ajax({
+                        url: "/valid_cookie",
+                        type: 'POST'
+                    })
+                    .done(function(data){
+                        $("#cookies").hide();
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                });
             });
         </script>
         @yield('js')
