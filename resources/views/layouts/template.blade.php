@@ -32,6 +32,10 @@
                 background-color: cornflowerblue;
                 bottom: 20px;
             }
+
+            footer #support_user textarea{
+                height: 100px;
+            }
         </style>
     </head>
     <body>
@@ -226,6 +230,30 @@
                     .fail(function(data){
                         console.log(data);
                     });
+                });
+
+                //Support utilisateur
+                $('#support_user').submit(function(event){
+                    event.preventDefault();
+                    $.ajax({
+                        url: "/support",
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            opinion: $("[name='opinion']").val()
+                        }
+                    })
+                    .done(function(data){
+                        $("[name='opinion']").val('');
+                        $("#support_user .alert-success").removeClass('d-none').addClass('d-block');
+                        $("#support_user .alert-danger").removeClass('d-block').addClass('d-none');
+                    })
+                    .fail(function(data){
+                        $("#support_user .alert-success").removeClass('d-block').addClass('d-none');
+                        $("#support_user .alert-danger").removeClass('d-none').addClass('d-block');
+                        console.log(data);
+                    });
+                    return false;
                 });
             });
         </script>

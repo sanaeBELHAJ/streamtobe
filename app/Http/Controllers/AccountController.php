@@ -113,18 +113,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Update the specified account in storage
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateSubscription(Request $request){
-        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
-        Session::flash('alert-class', 'alert-success'); 
-        return redirect('home');
-    }
-
-    /**
      * Remove the specified account from storage
      * Disable the stream channel
      * 
