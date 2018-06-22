@@ -7,6 +7,7 @@
         
         <div>
             Filtre
+            {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
         </div>
 	<div class="row mt-5">
 	   <div class="col-12">
