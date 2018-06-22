@@ -64,4 +64,13 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasMany('App\Viewer');
     }
+
+    /**
+     * Get his messages
+     * 
+     */
+    public function messages() 
+    {
+        return $this->hasMany('App\Message');
+    }
 }

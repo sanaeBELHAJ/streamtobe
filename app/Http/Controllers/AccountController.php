@@ -36,28 +36,28 @@ class AccountController extends Controller
      */
     public function index(){
         $user = Auth::user();
-        $stream = $user->stream;
-        $channels = Viewer::where('user_id', $user->id)->get();
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
 
         //Mes followers
-        $viewers = $stream->viewers;
         $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
 
-        //Mes abonnés
+        //Mes dons reçus 
+        $donations = [];
+        foreach($viewers as $viewer){
+            foreach($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
 
-        //Mes dons 
+        //Mes streams favoris 
         $donations = [];
         foreach($channels as $channel){
             foreach($channel->donations as $donation)
                 $donations[] = $donation;
         }
-
-        //Mes abonnements
-        $subscriptions = [];
-        foreach($channels as $channel)
-            $subscriptions[] = $channel->subscribes->where('viewer_id', $channel->id)->first();
 
         return view('account.index')
                 ->with(compact(
@@ -66,8 +66,7 @@ class AccountController extends Controller
                     'viewers', 
                     'subscribers', 
                     'donations', 
-                    'channels', 
-                    'subscriptions'
+                    'channels'
                 ));
     }
 
@@ -108,18 +107,6 @@ class AccountController extends Controller
      * @return \Illuminate\http\Response
      */
     public function updateStats(Request $request){
-        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
-        Session::flash('alert-class', 'alert-success'); 
-        return redirect('home');
-    }
-
-    /**
-     * Update the specified account in storage
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateSubscription(Request $request){
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success'); 
         return redirect('home');

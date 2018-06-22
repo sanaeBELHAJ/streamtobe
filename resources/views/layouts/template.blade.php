@@ -17,6 +17,27 @@
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
         @yield('css')
+        <style>
+            #cookies{
+                position: fixed;
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                color: white;
+                font-weight: bold;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                padding: 13px 0;
+                background-color: cornflowerblue;
+                bottom: 20px;
+            }
+
+            footer #support_user textarea{
+                height: 100px;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -51,10 +72,10 @@
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
                                 <li class="mx-3 d-flex align-items-center">
-                                    <a href="#" class="d-flex align-start nav-link p-0">
-                                        <i class="d-none far fa-envelope fa-2x text-dark"></i>
-                                        <i class="fas fa-envelope fa-2x text-dark"></i>
-                                        <span class="h-50 badge badge-pill badge-danger">5</span>
+                                    <a href="/messages" class="d-flex align-start nav-link p-0">
+                                        <i class="far fa-envelope fa-2x text-dark"></i>
+                                        {{-- <i class="fas fa-envelope fa-2x text-dark"></i>
+                                        <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -64,8 +85,8 @@
                                     </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
                                         <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
+                                        <a href="{{ route('home.index') }}" class="dropdown-item">Paramètres</a>
                                         <hr>
                                         @if(Auth::user()->role_id == 1)
                                             <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
@@ -91,14 +112,15 @@
 
         @yield('content')
 
-        <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; StreamToBe 2018</p>
-      </div>
-      <!-- /.container -->
-    </footer>
 
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                {{-- @include('layouts.footer')   --}}
+                <p class="m-0 text-center text-white">Copyright &copy; StreamToBe 2018</p>
+            </div>
+        <!-- /.container -->
+        </footer>
 
         <!-- JAVASCRIPT -->
         {!! HTML::script('jquery-3.3.1.min.js') !!}
@@ -205,6 +227,44 @@
                         console.log(data);
                     });
                 }
+
+                //Validation cookie
+                $('#valid_cookie').click(function(){
+                    $.ajax({
+                        url: "/valid_cookie",
+                        type: 'POST'
+                    })
+                    .done(function(data){
+                        $("#cookies").hide();
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                });
+
+                //Support utilisateur
+                $('#support_user').submit(function(event){
+                    event.preventDefault();
+                    $.ajax({
+                        url: "/support",
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            opinion: $("[name='opinion']").val()
+                        }
+                    })
+                    .done(function(data){
+                        $("[name='opinion']").val('');
+                        $("#support_user .alert-success").removeClass('d-none').addClass('d-block');
+                        $("#support_user .alert-danger").removeClass('d-block').addClass('d-none');
+                    })
+                    .fail(function(data){
+                        $("#support_user .alert-success").removeClass('d-block').addClass('d-none');
+                        $("#support_user .alert-danger").removeClass('d-none').addClass('d-block');
+                        console.log(data);
+                    });
+                    return false;
+                });
             });
         </script>
         @yield('js')

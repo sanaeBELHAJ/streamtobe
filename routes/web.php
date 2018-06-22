@@ -13,8 +13,8 @@
 
 /**
  * 
- * Pour consulter l'ensemble des routes mises en place : php artisan route:list
- * 
+ * Pour consulter l'ensemble des routes mises en place : 
+ * php artisan route:list
  */
 
 Route::get('/', function () {
@@ -29,12 +29,6 @@ Route::middleware(['guest'])->group(function(){
     //Confirmation de l'email d'inscription
     Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
-
-
-/*Route::get('paypal/express-checkout', 'PaypalController@expressCheckout')->name('paypal.express-checkout');
-Route::get('paypal/express-checkout-success', 'PaypalController@expressCheckoutSuccess');
-Route::post('paypal/notify', 'PaypalController@notify');
-*/
 
 /*Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
@@ -57,8 +51,14 @@ Route::group(['middleware' => 'auth'], function(){
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
         Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
-        Route::patch('/home/subscription/', 'AccountController@updateSubscription')->name('home.updateSubscription');
         Route::resource('home', 'AccountController', ['only' => ['index','destroy']]);
+    
+    /*Messages privées entre utilisateurs */
+        Route::get('/messages', 'MessageController@index');
+
+    /* Support technique pour utilisateur */
+        Route::post('/support', 'HomeController@support');
+        Route::get('/support', 'HomeController@support');
 });
 
 Route::group(['prefix' => 'admin'], function () {
@@ -72,3 +72,6 @@ Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
+
+//Accord d'utilisation des cookies
+Route::post('/valid_cookie', 'HomeController@valid_cookie');

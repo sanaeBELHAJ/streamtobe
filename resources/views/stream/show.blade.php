@@ -303,7 +303,12 @@
 @endsection
 
 @section('js')
-	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	@auth
+		@if($streamer->id != Auth::user()->id)
+			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		@endif
+	@endauth
+	
 	<script>
 		$(function(){		
 			//Texte du slider
