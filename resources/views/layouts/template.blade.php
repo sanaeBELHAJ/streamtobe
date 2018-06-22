@@ -8,7 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('storage/'.setting('site.favicon')); ?>" />
+        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
 
         <!-- CSS -->
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
