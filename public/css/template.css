@@ -35,3 +35,34 @@ header .dropdown-menu{
 .btn:focus{
     box-shadow: unset;    
 }
+.bg-dark{
+    background-color: #4b367c;
+}
+.top{
+    margin-top: 102px;
+}
+.bottom{
+    margin-bottom: 102px;
+}
+
+.gold
+{
+    color: white;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #FFEEB5;
+    /* For WebKit (Safari, Chrome, etc) */
+    background: #FFEEB5 -webkit-gradient(linear, left top, left bottom, from(#AE8913), to(#FFEEB5)) no-repeat;
+    /* Mozilla,Firefox/Gecko */
+    background: #FFEEB5 -moz-linear-gradient(top, #AE8913, #FFEEB5) no-repeat;
+    /* IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#FFEEB5) no-repeat;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#AE8913)" no-repeat;
+}
+.gold:hover{
+    color: #4b367c;
+}
+.visible{
+    background: rgb(75, 54, 124,.2)!important;
+}

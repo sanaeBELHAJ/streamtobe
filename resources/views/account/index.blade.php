@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container">
+<div class="container top bottom">
     <div class="row mt-5">
         <div class="col-12">
             <nav class="nav nav-tabs" role="tablist" aria-orientation="vertical">
