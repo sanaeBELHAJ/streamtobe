@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="container">
+    <div class="container top bottom">
 		<div class="col-sm-offset-4 col-sm-4">
 			<div class="panel panel-danger">
 				<div class="panel-heading">
