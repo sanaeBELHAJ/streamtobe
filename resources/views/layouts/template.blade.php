@@ -34,6 +34,10 @@
                 bottom: 20px;
             }
 
+            ul.ui-autocomplete{
+                z-index: 1050;
+            }
+            
             footer #support_user textarea{
                 height: 100px;
             }
