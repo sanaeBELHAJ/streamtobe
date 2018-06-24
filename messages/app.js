@@ -39,16 +39,18 @@ connection.connect((err) => {
 io.sockets.on('connection', function (socket, pseudo) {
     
     // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
-    socket.on('join', async function(token, streamer_name) {
-        
-        await queryDB( //Recherche du stream ciblé
-            `SELECT s.id
-                FROM stb_streams s
-                LEFT OUTER JOIN users u ON s.streamer_id = u.id
-                WHERE u.pseudo = ?`,
-                streamer_name)
+    socket.on('join', async function(token, friend) {
+
+        await queryDB( //Recherche de l'utilisateur contacté
+            `SELECT pseudo, avatar, id
+                FROM users
+                WHERE status > 0
+                AND pseudo = ?`,
+                friend)
             .then(function(row){
-                socket.stream_id = row.id;
+                socket.friend_pseudo = row.pseudo;
+                socket.friend_id = row.id;
+                socket.friend_avatar = row.avatar;
             });
         
         
@@ -67,58 +69,50 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket.user_pseudo = row.pseudo;
             });
 
+        var conversations = [];
         
-        await queryDB( //Association du user+stream au viewer correspondant
-            `SELECT id, rank, is_follower
-                FROM stb_viewers
-                WHERE stream_id = ? 
-                    AND user_id = ?`, 
-                [socket.stream_id, socket.user_id])
-            .then(async function(viewer){ //Si nouveau viewer pour le stream, on le répertorie
-                if(!viewer){
-                    await queryDB(
-                        `INSERT INTO stb_viewers
-                            SET stream_id = ? ,
-                            user_id = ?`,
-                        [socket.stream_id, socket.user_id])
-                        .then(function(){
-                            socket.new_viewer = true;
-                        });                    
-                }
-                else{
-                    socket.viewer_id = viewer.id;
-                    socket.viewer_rank = viewer.rank;
-                }
-            });
-        
-        
-        if(socket.new_viewer){ //Si viewer récemment repertorié au stream, on récupère son ID
-            await queryDB(
-                `SELECT id, rank, is_follower
-                    FROM stb_viewers
-                    WHERE stream_id = ? 
-                        AND user_id = ?`, 
-                    [socket.stream_id, socket.user_id])
-                .then(async function(viewer){                    
-                    socket.viewer_id = viewer.id;
-                    socket.viewer_rank = viewer.rank;
+        //console.log("USER : "+socket.user_id);
+        //console.log("FRIEND : "+socket.friend_id);
+
+        await queryDB( //Recherche des messages entre les 2 utilisateurs
+            `SELECT message, user_exped, user_receiv, created_at
+                FROM stb_messages
+                WHERE status = 1
+                AND (user_exped = ? OR user_receiv = ?)
+                AND (user_exped = ? OR user_receiv = ?)`, 
+                [socket.user_id, socket.user_id, socket.friend_id, socket.friend_id])
+            .then(function(row){
+                if(typeof row === 'undefined' || row.length == 0)
+                    return new Error('user_missing' );
+                
+                row.forEach(function(element){
+                    conversations.push({
+                        message: element.message,
+                        user_exped: element.user_exped,
+                        user_receiv: element.user_receiv,
+                        created_at: element.created_at
+                    });
                 });
-            delete socket.new_viewer;
+            });
+
+
+        var infos = {
+            friend_pseudo: socket.friend_pseudo,
+            friend_avatar: socket.friend_avatar,
+            user_avatar: socket.user_avatar,
+            user_pseudo: socket.user_pseudo,
+        };
+
+        var datas = {
+            infos: infos,
+            conversations: conversations
         }
-        
-        allClients.push(
-            {
-                socket_id: socket.id,
-                stream_id: socket.stream_id,
-                user_id: socket.user_id,
-                viewer_rank: socket.viewer_rank
-            }
-        );
-        socket.emit('welcome');
+        console.log(datas);
+        socket.emit('join', datas);
         console.log("---- WELCOME ------");
-        console.log(allClients); 
     });
         
+    
     // Réception d'un message
     socket.on('message', async function (message) {
         message = ent.encode(message);
@@ -149,19 +143,6 @@ io.sockets.on('connection', function (socket, pseudo) {
             }
         });
     }); 
-
-    //Modération d'un message
-    socket.on('delete', function(message_id){
-        if(socket.viewer_rank > 0){ //Vérification du statut
-            queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);
-
-            //Envoi du message aux utilisateurs connectés sur le même stream
-            allClients.forEach(function(client, index) {
-                if(client.stream_id == socket.stream_id)
-                    io.to(client.socket_id).emit('delete', message_id);
-            });
-        }
-    });
 
     //Déconnexion d'un utilisateur
     socket.on('disconnect', function(){
@@ -219,12 +200,11 @@ async function queryDB(sql, value){
             }
 
             //console.log("----RESULTATS DE LA REQUETE----");
-            if(typeof rows !== 'undefined' && rows.length > 0){
+            //console.log(rows);
+            if(typeof rows !== 'undefined' && rows.length > 0 && rows.length == 1)
                 resolve(rows[0]);
-            }
-            else{
+            else
                 resolve(rows);
-            }
         });
     });
 }

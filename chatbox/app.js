@@ -219,12 +219,10 @@ async function queryDB(sql, value){
             }
 
             //console.log("----RESULTATS DE LA REQUETE----");
-            if(typeof rows !== 'undefined' && rows.length > 0){
+            if(typeof rows !== 'undefined' && rows.length > 0 && rows.length == 1)
                 resolve(rows[0]);
-            }
-            else{
+            else
                 resolve(rows);
-            }
         });
     });
 }

@@ -26,10 +26,6 @@
                 overflow-y: scroll;
             }
 
-            #zone_chat p:first-of-type {
-                text-align: center;
-            }
-
             form#formulaire_chat{
                 height: 15%;
             }
@@ -82,27 +78,30 @@
         <div class="container h-100"> 
             <div class="row">
                 <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" data-toggle="pill" href="#" role="tab" aria-selected="true">
-                        Home
+                    <a class="nav-link active" data-toggle="pill" 
+                        href="#" role="tab" aria-selected="true">
+                        Nouveau contact
                     </a>
-                    <a class="nav-link" data-toggle="pill" href="#" role="tab" aria-selected="false">
-                        Profile
+                    <a class="nav-link" data-pseudo="reco" data-toggle="pill" 
+                        href="#" role="tab" aria-selected="true">
+                        Reco
                     </a>
-                    <a class="nav-link" data-toggle="pill" href="#" role="tab" aria-selected="false">
-                        Messages
-                    </a>
-                    <a class="nav-link" data-toggle="pill" href="#" role="tab" aria-selected="false">
-                        Settings
+                    <a class="nav-link" data-pseudo="admin" data-toggle="pill" 
+                        href="#" role="tab" aria-selected="false">
+                        Admin
                     </a>
                 </div>
                 <div class="col-8 col-md-10">
                     <div class="row">
-                        <div id="infos_user" class="d-none d-md-block col-3">
-                            <img src="#">
-                            <button class="btn">Suivre cet utilisateur</button>
-                            <button class="btn">Supprimer cette discussion</button>
-                            <button class="btn">Bloquer la communication</button>
-                            <button class="btn">Signaleur l'utilisateur</button>
+                        <div id="infos_user" class="d-none d-md-flex flex-column justify-content-around col-3">
+                            <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
+                            <a href="#" id="profile_pseudo">
+                                <button id="profile_follow" class="btn btn-primary col-12">
+                                    Profil de <span></span>
+                                </button>
+                            </a>
+                            <button id="profile_delete" class="btn btn-warning">Archiver cette discussion</button>
+                            <button id="profile_block" class="btn btn-danger">Bloquer la communication</button>
                         </div>
                         <div id="conversation" class="col-12 col-md-9">
                             <section id="zone_chat">
@@ -128,10 +127,35 @@
             /* ENVOI */
 
             // Connexion à socket.io
-            var socket = io.connect('http://localhost:8080');
+            var socket = io.connect('http://localhost:3000');
             var token = getUrlParameter('token');
-            var stream = getUrlParameter('stream');
-            socket.emit('join', token, stream);
+            
+            //Changement de conversation
+            $('.nav-link').click(function(){
+                var friend = $(this).data('pseudo');
+                socket.emit('join', token, friend);
+            });
+
+            //Chargement de la conversaton
+            socket.on('join', function(data) {
+                var infos = data.infos;
+                $("#profile_img").prop("src", "http://localhost:8000/storage/"+infos.friend_avatar);
+                $("#profile_pseudo").prop("href", "http://localhost:8000/stream/"+infos.friend_pseudo);
+                $("#profile_pseudo span").html(infos.friend_pseudo);
+
+                var conversations = data.conversations;
+                var text = "";
+                $.each(conversations, function(index, element){
+                    var message = "<p ";
+                        message += (element.user_exped == 1) ? "class='text-right'" : "class='text-left'";
+                        message += ">";
+                        message += element.message; 
+                    message += "</p>";
+                    text += message;
+                });
+
+                $("#zone_chat").html(text);
+            });
 
             // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
             $('#formulaire_chat').submit(function (event) {
@@ -146,20 +170,8 @@
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
-            //Lorsqu'on souhaite modérer un message, on envoie son ID
-            $('#zone_chat').on('click',".delete", function(){
-                console.log($(this).html());
-                var message_id = $(this).parent().data('message');
-                socket.emit('delete', message_id);
-            });
-
             /* RECEPTION */
             
-            //Arrivée d'un nouvel utilisateur sur le chat
-            socket.on('welcome', function() {
-                $('#zone_chat').append('<p><em>Bienvenue sur le chat !</em></p>');
-            });
-
             // Quand on reçoit un message, on l'insère dans la page
             socket.on('message', function(data) {
                 var text = "<p data-message='"+data.message_id+"'>";
@@ -184,28 +196,11 @@
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
             });
 
-            //Modération d'un message
-            socket.on('delete', function(message_id) {
-                $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
-            });
-
             //Réception de dons
             socket.on('dons', function(data) {
                 $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
                 if(data.message)
                     $('#zone_chat').append('<p>'+data.message+'</p>');
-            });
-
-            //Arrivée d'un nouvel utilisateur sur le chat
-            socket.on('error', function(error) {
-                
-                switch(error.type){
-                    case 'user_missing':
-                        alert("Identifiant utilisateur incorrect");
-                }
-
-                $("#formulaire_chat textarea").prop("disabled", true);
-                $("#formulaire_chat input").prop("disabled", true);
             });
             
             /* FONCTIONS */
