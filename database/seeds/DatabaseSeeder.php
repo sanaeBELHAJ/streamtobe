@@ -27,3 +27,9 @@ class DatabaseSeeder extends Seeder
         //$this->call(StbSubscribersTableSeeder::class);
     }
 }
+/*
+composer update
+composer dump-autoload
+php artisan migrate:fresh --seed
+php artisan voyager:install
+*/

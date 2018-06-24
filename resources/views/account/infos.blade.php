@@ -1,5 +1,3 @@
-<h3 class="text-center">Modification de mon compte</h3>
-
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
     <div class="form-group">
         <label for="pictureAccountInput">
@@ -47,7 +45,7 @@
             {!! Form::textarea('description',null, ['id' => 'descriptionAccount',
                                                     'class' => 'form-control form-control-sm', 
                                                     'size' => '30x5',
-                                                    'placeholder' => 'Descrivez-vous en quelques lignes.']) !!}
+                                                    'placeholder' => 'Descrivez-vous en quelques lignes. Ce paragraphe apparaitra en dessous de votre page de streaming.']) !!}
             {!! $errors->first('description', 
                                 '<small class="form-text alert alert-danger">:message
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

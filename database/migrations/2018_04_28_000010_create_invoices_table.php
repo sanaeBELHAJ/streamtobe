@@ -13,11 +13,16 @@ class CreateInvoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('stb_invoices', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->double('price', 2);
-            $table->text('message');
+            $table->string('paypal_id');
+            $table->string('paypal_cart');
+            $table->double('amount', 2);
+            $table->string('currency');
+            $table->string('country');
+            $table->string('city');
+            $table->text('message')->nullable();
+            $table->string('paypal_payer_id');
 
             $table->integer('viewer_id')->unsigned();
             $table->foreign('viewer_id')
@@ -26,9 +31,10 @@ class CreateInvoicesTable extends Migration
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
 
-            $table->string('payment_status')->nullable();
-            $table->string('recurring_id')->nullable();
-            $table->timestamps();
+            $table->string('status')->nullable();
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->engine = 'InnoDB';
         });
     }
 
@@ -39,6 +45,6 @@ class CreateInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('stb_invoices');
     }
 }

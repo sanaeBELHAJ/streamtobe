@@ -6,6 +6,7 @@ use Session;
 use App\Stream;
 use App\Viewer;
 use App\Chat;
+use App\Invoice;
 use App\Subscriber;
 
 use Illuminate\Http\Request;
@@ -33,22 +34,40 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         $user = Auth::user();
-        $stream = $user->stream;
-        
-        $viewers = $stream->viewers;
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
+
+        //Mes followers
         $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
-        
-        $channels = Viewer::where('user_id', $user->id)->get();
-        $subscriptions = [];
-        foreach($channels as $channel)
-            $subscriptions[] = $channel->subscribes->where('viewer_id', $channel->id)->first();
 
-        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers', 'channels', 'subscriptions'));
+        //Mes dons reçus 
+        $donations = [];
+        foreach($viewers as $viewer){
+            foreach($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        //Mes streams favoris 
+        $donations = [];
+        foreach($channels as $channel){
+            foreach($channel->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        return view('account.index')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers', 
+                    'subscribers', 
+                    'donations', 
+                    'channels'
+                ));
     }
 
     /**
@@ -94,18 +113,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Update the specified account in storage
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateSubscription(Request $request){
-        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
-        Session::flash('alert-class', 'alert-success'); 
-        return redirect('home');
-    }
-
-    /**
      * Remove the specified account from storage
      * Disable the stream channel
      * 
@@ -127,5 +134,5 @@ class AccountController extends Controller
         
         Auth::logout();
         return redirect('/login');
-    }
+    }   
 }
