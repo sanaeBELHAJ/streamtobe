@@ -1,6 +1,40 @@
 @extends('layouts.template')
 
 @section('content')
+@auth
+
+<div class="row">
+        <div class="col-sm-3 gold">
+            <div class="top bottom">
+                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                    <i class="far fa-edit text-white"></i>
+                </a>
+                <div class="cadre-style">
+                    <center>
+                        <img class="resize-img" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
+                    </center> 
+                </div>
+                <center>{{ Auth::user()->pseudo }}</center>
+                <center>
+                    <ul class="navbar-nav">
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                    </ul>
+                    <a class="btn btn-primary btn-lg active" href="">Ma chaine</a>
+                </center>
+            </div>
+        </div>
+        <div class="col-sm-9 pull-right top bottom">
+                             les stream les plus populaires actives: 
+        </div>
+</div>
+
+
+
+
+
+@else
     <header>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -58,7 +92,7 @@
         <p>Si vous avez du talents et vous n'avez pas peur de caméra, créez votre chaine et montrez vous! On vous attend :p
       </div>
     </section>
-
+@endauth
 
 
 

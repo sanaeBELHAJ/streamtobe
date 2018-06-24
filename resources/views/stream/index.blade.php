@@ -7,7 +7,18 @@
         
         <div>
             Filtre
-            {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
+            {{ Form::text('q', '', ['class' =>  'form-control myInput', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
+            Catégorie : 
+		<select id="stream_type" class="update_stream" data-config="type">
+		    @foreach($themes as $theme)
+			<optgroup label="{{$theme->name}}">
+			    @foreach($theme->types as $type)
+				<option value="{{$type->name}}">{{$type->name}}</option>
+			    @endforeach
+			</optgroup>
+		    @endforeach
+		</select>            
+            {{ Form::select('pays', ['FR', 'USA', 'MA']) }}
         </div>
 	<div class="row mt-5">
 	   <div class="col-12">
@@ -19,8 +30,12 @@
                             @foreach ($streams as $stream)
                                 <div class="col-lg-3 col-md-4 col-xs-6">
                                     <a href="#" class="">
-                                       <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                                       <!--<img class="img-fluid img-thumbnail" src="<?php //echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">-->
+                                       <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
+                                       @if($stream->user->avatar!="users/default.png")
+                                            <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
+                                       @else
+                                            <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                                       @endif
                                     </a>
                                    <strong>{!! $stream->user->pseudo !!}</strong>
                                     @if($stream->status==1)

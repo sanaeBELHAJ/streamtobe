@@ -66,3 +66,24 @@ header .dropdown-menu{
 .visible{
     background: rgb(75, 54, 124,.2)!important;
 }
+.img-thumbnail{
+  height: 250px;
+    width: 400px;  
+}
+
+.cadre-style img{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid #4b367c;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.right{
+    float: right;
+}
+.left{
+    float: left;
+}

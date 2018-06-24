@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="container">
+    <div class="container top bottom">
 		<div class="row mt-5">
 			<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 				<a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" 

@@ -39,8 +39,9 @@ class StreamController extends Controller
             foreach($favorites as $favorite)
                 $followed[] = $favorite->stream;
         }
+        $themes = Theme::all();
 
-        return view('stream.index', compact('streams', 'followed'));
+        return view('stream.index', compact('streams', 'followed', 'themes'));
     }
 
     /**
