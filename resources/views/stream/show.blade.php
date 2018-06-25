@@ -1,18 +1,31 @@
 @extends('layouts.template')
 
 @section('content')
+
 	<div class="container-fluid">
 		<div class="row">
-
-			{{-- Vidéo --}}
 			<div id="player" class="col-12 col-md-8 mt-4">
-				<video id="videoPlayer" controls>
-					<source/>
-				</video>
+			@auth
+					<div class = "bodyDiv">
+				@if($streamer->id == Auth::user()->id)
+				{{-- Vidéo --}}
+					<div id="vid-box"></div>
+					<div id="stream-info" hidden="true">
+						<img src="img/person_dark.png"/>
+						<span id="here-now">0</span>
+					</div>
+					@else
+
+						<div id="vid-box-viewer"></div>
+						<div id="stream-info"><img src="img/person_dark.png"/><span id="here-now">0</span>
+						</div>
+					@endif
+					@endauth
+				</div>
 			</div>
 
 			{{-- Chatbox --}}
-			<div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
+		{{--	<div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
 				@guest
                     <p class="border-top d-flex flex-column justify-content-center text-center h-100">
 						Connectez-vous pour rédiger un message.
@@ -20,7 +33,7 @@
 				@else
 					<iframe src="http://localhost:8080/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
 				@endguest
-			</div>
+			</div>--}}
 
 
 			<div id="infos" class="col-12 d-none d-sm-block mt-4">
@@ -58,10 +71,10 @@
 
 							<label>
 								<label class="switch align-middle m-0">
-									<input id="stream_status" class="update_stream" data-config="status" type="checkbox" 
+									<input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
 											@if($streamer->stream->status == 1) checked @endif >
 									<span class="slider round"></span>
-								</label> 
+								</label>
 								Activer / Interrompre la diffusion
 							</label>
 						</div>
@@ -266,7 +279,13 @@
 @endsection
 
 @section('js')
-	<script>	
+
+        <script src="/js/modernizr.custom.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+	<script src="/js/webrtc.js"></script>
+	<script src="/js/rtc-controller.js"></script>
+	<script>
 		$(function(){
 			//Texte du slider
 			$('.sliderText').click(function(){
@@ -356,4 +375,84 @@
 			$(".update_stream").change(updateStream);			
 		});
 	</script>
+	<script type="text/javascript">
+
+        var video_out  = document.getElementById("vid-box");
+        var here_now   = document.getElementById('here-now');
+        var stream_info= document.getElementById('stream-info');
+        var video_out_viewer  = document.getElementById("vid-box-viewer");
+        var streamName;
+
+        function stream(name) {
+            console.log(name);
+            var currentvalue = document.getElementById('stream_status').value;
+            console.log(currentvalue);
+             if(currentvalue == "Off"){
+                 end();
+                 document.getElementById("stream_status").value="On";
+             }else{
+                 document.getElementById("stream_status").value="Off";
+
+            streamName = name || Math.floor(Math.random()*100)+'';
+            var phone = window.phone = PHONE({
+                number        : streamName,
+                publish_key   : 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
+                subscribe_key : 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
+                oneway        : true,
+                broadcast     : true
+            });
+            var ctrl = window.ctrl = CONTROLLER(phone);
+            ctrl.ready(function(){
+                ctrl.addLocalStream(video_out);
+                ctrl.stream();
+                stream_info.hidden=false;
+            });
+            ctrl.receive(function(session){
+                session.connected(function(session){ addLog(session.number + " has joined."); });
+                session.ended(function(session) { addLog(session.number + " has left."); console.log(session)});
+            });
+            ctrl.streamPresence(function(m){
+                here_now.innerHTML=m.occupancy;
+            });
+            return false;
+             }
+        }
+
+       window.onload = function watch(){
+            var num = "youcef";
+            var phone = window.phone = PHONE({
+                number        : "Viewer" + Math.floor(Math.random()*100),
+                publish_key   : 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
+                subscribe_key : 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
+                oneway        : true
+            });
+            var ctrl = window.ctrl = CONTROLLER(phone);
+           ctrl.ready(function(){
+               ctrl.isStreaming(num, function(isOn){
+                   if (isOn) ctrl.joinStream(num);
+                   else alert("User is not streaming!");
+               });
+           });
+            ctrl.receive(function(session){
+                session.connected(function(session){
+                    video_out_viewer.appendChild(session.video);
+                    stream_info.hidden=false;
+                });
+            });
+            ctrl.streamPresence(function(m){
+                here_now.innerHTML=m.occupancy;
+
+            });
+            return false;
+        };
+
+			function end(){
+            if (!window.phone) return;
+            ctrl.hangup();
+            video_out.innerHTML = "";
+        }
+
+
+        </script>
+
 @endsection

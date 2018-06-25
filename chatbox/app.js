@@ -9,8 +9,8 @@ const mysql = require('mysql');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root',
-    database: 'streamtobe'
+    password: '',
+    database: 'forge'
 });
 
 const allClients = [];

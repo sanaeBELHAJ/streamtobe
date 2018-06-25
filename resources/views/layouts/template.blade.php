@@ -15,6 +15,9 @@
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
+        {!! HTML::style('css/style.css') !!}
+        {!! HTML::style('css/normalize.css') !!}
+        {!! HTML::style('css/font-awesome.min.css') !!}
         @yield('css')
     </head>
     <body>
