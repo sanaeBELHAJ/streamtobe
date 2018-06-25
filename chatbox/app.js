@@ -227,4 +227,4 @@ async function queryDB(sql, value){
     });
 }
 
-server.listen(8080);
+server.listen(3000);

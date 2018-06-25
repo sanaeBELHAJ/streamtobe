@@ -94,7 +94,7 @@
             /* ENVOI */
 
             // Connexion à socket.io
-            var socket = io.connect('http://localhost:8080');
+            var socket = io.connect('http://localhost:3000');
             var token = getUrlParameter('token');
             var stream = getUrlParameter('stream');
             socket.emit('join', token, stream);
