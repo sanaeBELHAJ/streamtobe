@@ -17,10 +17,10 @@
  * php artisan route:list
  */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
-
+});*/
+Route::get('/', 'HomeController@index');
 //Routes basiques d'inscription/connexion/déconnexion
 Auth::routes();
 

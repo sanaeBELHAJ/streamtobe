@@ -9,8 +9,9 @@
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
         <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
         <!-- CSS -->
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
