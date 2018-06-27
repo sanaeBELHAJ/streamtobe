@@ -8,6 +8,7 @@ use App\Viewer;
 use App\Chat;
 use App\Invoice;
 use App\Subscriber;
+use App\Countries;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

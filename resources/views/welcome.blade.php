@@ -16,6 +16,7 @@
                     </center> 
                 </div>
                 <center>{{ Auth::user()->pseudo }}</center>
+                <center>{{ Auth::user()->country->name }}</center>
                 <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
@@ -49,10 +50,11 @@
                                        @endif
                                     </a>
                                     @if($stream->status==1)
-                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'btn btn-success btn-block']) !!}
+                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
                                     @else
-                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'btn btn-secondary btn-block']) !!}
+                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
                                     @endif
+                                    <img style="width:10%" src="{{ Auth::user()->country->svg }}">
                                 </div>
                             @endforeach
                        </div>

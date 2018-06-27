@@ -10,6 +10,7 @@ use App\User;
 use App\Stream;
 use App\Viewer;
 use App\Type;
+use App\Countries;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -48,6 +49,18 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    
+    /**
+    * Show the application registration form.
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function showRegistrationForm()
+    {
+       $countries = Countries::all();
+       return view('auth.register', compact('countries'));
+    }
+    
     /**
      * Get a validator for an incoming registration request.
      *
@@ -58,6 +71,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'pseudo' => 'required|string|max:255|unique:users',
+            'countries' => 'in:stb_countries',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);

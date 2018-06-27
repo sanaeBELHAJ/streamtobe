@@ -15,6 +15,7 @@ use App\Stream;
 use App\Viewer;
 use App\ReportCat;
 use App\Report;
+use App\Countries;
 use Illuminate\Support\Facades\Auth;
 
 class StreamController extends Controller
@@ -28,8 +29,21 @@ class StreamController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $streams = Stream::where('status', 1)->get();
+    public function index(Request $request){
+        if($request->all()){
+           if(strlen($request->input("country"))>0 && strlen($request->input("name"))>0 && strlen($request->input("theme"))>0){
+                $streamer = User::where('pseudo','=',$request->input("name"))
+                            ->where('id_countries','=',$request->input("country"))
+                            ->first();
+                $streams = Stream::where('streamer_id','=',$streamer->id)
+                            ->where('type_id','=',$request->input("theme"))
+                            ->where('status','=',1);
+                dd($streams);
+           }
+            
+        }else{
+            $streams = Stream::where('status', 1)->get();
+        }
         
         if(Auth::user()){
             $favorites = Viewer::where('user_id', Auth::user()->id)
@@ -40,8 +54,9 @@ class StreamController extends Controller
                 $followed[] = $favorite->stream;
         }
         $themes = Theme::all();
+        $countries = Countries::all();
 
-        return view('stream.index', compact('streams', 'followed', 'themes'));
+        return view('stream.index', compact('streams', 'followed', 'themes','countries'));
     }
 
     /**

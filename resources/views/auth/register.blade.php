@@ -24,6 +24,17 @@
                                 @endif
                             </div>
                         </div>
+                        
+                        <div class="form-group row">
+                            <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('countries') }}</label>
+                                <div class="col-sm-3">
+                                     <select id="stream_type" class="update_stream" data-config="type">
+                                        @foreach($countries as $country)
+                                               <option value="{{$country->code}}">{{$country->name}}</option>
+                                        @endforeach
+                                    </select>        
+                                </div>
+                        </div>
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
