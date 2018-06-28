@@ -33,6 +33,10 @@
             form#formulaire_chat{
                 height: 15%;
             }
+            
+            #listContacts a.nav-link{
+                margin: 5px 0;
+            }
 
             .chat_user{
                 font-size: 20px;
@@ -81,8 +85,11 @@
     <body>
         <div class="container h-100"> 
             <div class="row">
-                <div class="nav flex-column nav-pills col-4 col-md-2" id="listContacts" role="tablist" aria-orientation="vertical">
+                <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
+                    <input type="text" id="search_contact" class="form-control" placeholder="Rechercher">
+                    <span id="listContacts">
 
+                    </span>
                 </div>
                 <div class="col-8 col-md-10">
                     <div class="row">
@@ -203,6 +210,16 @@
                 });
                 
                 $('#listContacts').html(text);
+            });
+
+            //Recherche et affichage d'un membre parmi la liste de contact disponible
+            $("#search_contact").keyup(function(){
+                if($(this).val() == "")
+                    $("#listContacts a.nav-link").show();
+                else{
+                    $("#listContacts a.nav-link").hide();
+                    $("#listContacts a.nav-link[data-pseudo*='"+$(this).val()+"']").show();
+                }
             });
 
             //Réception de dons
