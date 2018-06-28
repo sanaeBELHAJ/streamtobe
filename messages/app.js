@@ -36,7 +36,7 @@ connection.connect((err) => {
 
 /* Ecoute */
 
-io.sockets.on('connection', function (socket, pseudo) {
+io.sockets.on('connection', function (socket) {
     
     // Dès qu'on nous donne un token : récupération de la liste des contacts
     socket.on('bringFriends', async function(token) {
@@ -53,66 +53,11 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket.user_avatar = row.avatar;
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
+                checkFriends(socket);
+                setInterval(function(){
+                    checkFriends(socket);
+                }, 1000);
             });
-            
-        await queryDB( //Recherche des utilisateurs followers au stream
-            `SELECT u_follower.id
-                FROM users u_streamer
-                LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
-                LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
-                LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
-                WHERE v.is_follower = 1
-                AND u_follower.id <> u_streamer.id
-                AND u_streamer.id = ?`,
-                socket.user_id)
-            .then(function(row){
-                if(typeof row !== 'undefined'){
-                    socket.list_followers = (row.length > 1) ? row : [row];
-                }
-            });
-            
-        await queryDB( //Liste des streamers followés par l'utilisateur
-                `SELECT u_streamer.id
-                    FROM users u_streamer
-                    LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
-                    LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
-                    LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
-                    WHERE v.is_follower = 1
-                    AND u_follower.id <> u_streamer.id
-                    AND u_follower.id = ?`,
-                    socket.user_id)
-                .then(function(row){
-                    if(typeof row !== 'undefined'){
-                        socket.list_streamers = (row.length > 1) ? row : [row];
-                    }
-                });
-        
-        //Selection des followers et streamers suivis mutuellement
-        var list = socket.list_followers.concat(socket.list_streamers);
-        var list_ord = list.slice().sort();
-
-        var results = [];
-        for (var i = 0; i < list_ord.length - 1; i++) {
-            if (list_ord[i + 1].id == list_ord[i].id) {
-                results.push(list_ord[i].id);
-                results.push(list_ord[i].id);
-            }
-        }
-       
-        if(typeof results !== 'undefined' && results.length > 0){
-            socket.contactList = [];
-
-            await queryDB( //Liste des streamers followés par l'utilisateur
-            "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
-                results)
-            .then(function(row){
-                if(typeof row !== 'undefined'){
-                    socket.contactList.push(row.pseudo);
-                }
-            });
-
-            socket.emit('bringFriends', socket.contactList);
-        }
     });
 
     //Récupération d'une autre conversation
@@ -212,15 +157,67 @@ io.sockets.on('connection', function (socket, pseudo) {
         });*/
     }); 
 
-    //Déconnexion d'un utilisateur
-    socket.on('disconnect', function(){
-        console.log("---- BYE ------");
-    });
-    
-    function findSocket(element){
-        return element.socket_id == socket.id;
-    }
+    //Modification de la liste d'amis
+    async function checkFriends(socket){
+        await queryDB( //Recherche des utilisateurs followers au stream
+            `SELECT u_follower.id
+                FROM users u_streamer
+                LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
+                LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
+                LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
+                WHERE v.is_follower = 1
+                AND u_follower.id <> u_streamer.id
+                AND u_streamer.id = ?`,
+                socket.user_id)
+            .then(function(row){
+                if(typeof row !== 'undefined'){
+                    socket.list_followers = (row.length > 1) ? row : [row];
+                }
+            });
+            
+        await queryDB( //Liste des streamers followés par l'utilisateur
+                `SELECT u_streamer.id
+                    FROM users u_streamer
+                    LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
+                    LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
+                    LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
+                    WHERE v.is_follower = 1
+                    AND u_follower.id <> u_streamer.id
+                    AND u_follower.id = ?`,
+                    socket.user_id)
+                .then(function(row){
+                    if(typeof row !== 'undefined'){
+                        socket.list_streamers = (row.length > 1) ? row : [row];
+                    }
+                });
+        
+        //Selection des followers et streamers suivis mutuellement
+        var list = socket.list_followers.concat(socket.list_streamers);
+        var list_ord = list.slice().sort();
 
+        var results = [];
+        for (var i = 0; i < list_ord.length - 1; i++) {
+            if (list_ord[i + 1].id == list_ord[i].id) {
+                results.push(list_ord[i].id);
+                results.push(list_ord[i].id);
+            }
+        }
+
+        socket.contactList = [];
+        if(typeof results !== 'undefined' && results.length > 0){
+        
+            await queryDB( //Liste des streamers followés par l'utilisateur
+            "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
+                results)
+            .then(function(row){
+                if(typeof row !== 'undefined'){
+                    socket.contactList.push(row.pseudo);
+                }
+            });
+        }
+        socket.emit('bringFriends', socket.contactList);
+    }
+    
 });
 
 
