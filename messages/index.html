@@ -26,6 +26,10 @@
                 overflow-y: scroll;
             }
 
+            #zone_chat p{
+                padding: 0 20px;
+            }
+
             form#formulaire_chat{
                 height: 15%;
             }
@@ -77,19 +81,8 @@
     <body>
         <div class="container h-100"> 
             <div class="row">
-                <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" data-toggle="pill" 
-                        href="#" role="tab" aria-selected="true">
-                        Nouveau contact
-                    </a>
-                    <a class="nav-link" data-pseudo="reco" data-toggle="pill" 
-                        href="#" role="tab" aria-selected="true">
-                        Reco
-                    </a>
-                    <a class="nav-link" data-pseudo="admin" data-toggle="pill" 
-                        href="#" role="tab" aria-selected="false">
-                        Admin
-                    </a>
+                <div class="nav flex-column nav-pills col-4 col-md-2" id="listContacts" role="tablist" aria-orientation="vertical">
+
                 </div>
                 <div class="col-8 col-md-10">
                     <div class="row">
@@ -100,8 +93,6 @@
                                     Profil de <span></span>
                                 </button>
                             </a>
-                            <button id="profile_delete" class="btn btn-warning">Archiver cette discussion</button>
-                            <button id="profile_block" class="btn btn-danger">Bloquer la communication</button>
                         </div>
                         <div id="conversation" class="col-12 col-md-9">
                             <section id="zone_chat">
@@ -130,10 +121,12 @@
             var socket = io.connect('http://localhost:3001');
             var token = getUrlParameter('token');
             
+            socket.emit('bringFriends', token);
+            
             //Changement de conversation
-            $('.nav-link').click(function(){
+            $('#listContacts').on("click", ".nav-link", function(){
                 var friend = $(this).data('pseudo');
-                socket.emit('join', token, friend);
+                socket.emit('join', friend);
             });
 
             //Chargement de la conversaton
@@ -147,7 +140,7 @@
                 var text = "";
                 $.each(conversations, function(index, element){
                     var message = "<p ";
-                        message += (element.user_exped == 1) ? "class='text-right'" : "class='text-left'";
+                        message += (element.user_exped == "me") ? "class='text-right'" : "class='text-left'";
                         message += ">";
                         message += element.message; 
                     message += "</p>";
@@ -162,9 +155,13 @@
                 event.preventDefault();
                 var message = $('#message').val();
     
-                if(message != "")
+                if(message != ""){
+                    var text = "";
+                    var content = "<p class='text-right'>"+message+"</p>";
+                    $("#zone_chat").append(content);
                     socket.emit('message', message); // Publie le message
-    
+                }
+
                 $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
@@ -194,6 +191,18 @@
                 text += "</p>";
                 $('#zone_chat').append(text);
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+            });
+
+             // Affichage de la liste des contacts mutuels
+             socket.on('bringFriends', function(data) {
+                var text = "";
+                $.each(data, function(index, value){
+                    text += "<a class='nav-link text-center' data-pseudo='"+value+"' data-toggle='pill' href='#' role='tab' aria-selected='false'>";
+                        text += value;
+                    text += "</a>";
+                });
+                
+                $('#listContacts').html(text);
             });
 
             //Réception de dons

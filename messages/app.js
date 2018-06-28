@@ -38,22 +38,8 @@ connection.connect((err) => {
 
 io.sockets.on('connection', function (socket, pseudo) {
     
-    // Dès qu'on nous donne un token, on le recherche dans la table session pour l'associer à un utilisateur
-    socket.on('join', async function(token, friend) {
-
-        await queryDB( //Recherche de l'utilisateur contacté
-            `SELECT pseudo, avatar, id
-                FROM users
-                WHERE status > 0
-                AND pseudo = ?`,
-                friend)
-            .then(function(row){
-                socket.friend_pseudo = row.pseudo;
-                socket.friend_id = row.id;
-                socket.friend_avatar = row.avatar;
-            });
-        
-        
+    // Dès qu'on nous donne un token : récupération de la liste des contacts
+    socket.on('bringFriends', async function(token) {
         await queryDB( //Recherche de l'utilisateur connecté
             `SELECT u.pseudo, u.id, u.avatar
                 FROM sessions s
@@ -68,11 +54,83 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
             });
+            
+        await queryDB( //Recherche des utilisateurs followers au stream
+            `SELECT u_follower.id
+                FROM users u_streamer
+                LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
+                LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
+                LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
+                WHERE v.is_follower = 1
+                AND u_follower.id <> u_streamer.id
+                AND u_streamer.id = ?`,
+                socket.user_id)
+            .then(function(row){
+                if(typeof row !== 'undefined'){
+                    socket.list_followers = (row.length > 1) ? row : [row];
+                }
+            });
+            
+        await queryDB( //Liste des streamers followés par l'utilisateur
+                `SELECT u_streamer.id
+                    FROM users u_streamer
+                    LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
+                    LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
+                    LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
+                    WHERE v.is_follower = 1
+                    AND u_follower.id <> u_streamer.id
+                    AND u_follower.id = ?`,
+                    socket.user_id)
+                .then(function(row){
+                    if(typeof row !== 'undefined'){
+                        socket.list_streamers = (row.length > 1) ? row : [row];
+                    }
+                });
+        
+        //Selection des followers et streamers suivis mutuellement
+        var list = socket.list_followers.concat(socket.list_streamers);
+        var list_ord = list.slice().sort();
+
+        var results = [];
+        for (var i = 0; i < list_ord.length - 1; i++) {
+            if (list_ord[i + 1].id == list_ord[i].id) {
+                results.push(list_ord[i].id);
+                results.push(list_ord[i].id);
+            }
+        }
+       
+        if(typeof results !== 'undefined' && results.length > 0){
+            socket.contactList = [];
+
+            await queryDB( //Liste des streamers followés par l'utilisateur
+            "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
+                results)
+            .then(function(row){
+                if(typeof row !== 'undefined'){
+                    socket.contactList.push(row.pseudo);
+                }
+            });
+
+            socket.emit('bringFriends', socket.contactList);
+        }
+    });
+
+    //Récupération d'une autre conversation
+    socket.on('join', async function(friend) {
+
+        await queryDB( //Recherche de l'utilisateur contacté
+            `SELECT pseudo, avatar, id
+                FROM users
+                WHERE status > 0
+                AND pseudo = ?`,
+                friend)
+            .then(function(row){
+                socket.friend_pseudo = row.pseudo;
+                socket.friend_id = row.id;
+                socket.friend_avatar = row.avatar;
+            });
 
         var conversations = [];
-        
-        //console.log("USER : "+socket.user_id);
-        //console.log("FRIEND : "+socket.friend_id);
 
         await queryDB( //Recherche des messages entre les 2 utilisateurs
             `SELECT message, user_exped, user_receiv, created_at
@@ -82,14 +140,18 @@ io.sockets.on('connection', function (socket, pseudo) {
                 AND (user_exped = ? OR user_receiv = ?)`, 
                 [socket.user_id, socket.user_id, socket.friend_id, socket.friend_id])
             .then(function(row){
+
                 if(typeof row === 'undefined' || row.length == 0)
-                    return new Error('user_missing' );
+                    return new Error('user_missing');
                 
+                var array = [];
+                var row = array.concat(row);
+
                 row.forEach(function(element){
                     conversations.push({
                         message: element.message,
-                        user_exped: element.user_exped,
-                        user_receiv: element.user_receiv,
+                        user_exped: (socket.user_id == element.user_exped) ? 'me' : 'friend',
+                        user_receiv: (socket.user_id == element.user_receiv) ? 'me' : 'friend',
                         created_at: element.created_at
                     });
                 });
@@ -107,25 +169,31 @@ io.sockets.on('connection', function (socket, pseudo) {
             infos: infos,
             conversations: conversations
         }
-        console.log(datas);
+        //console.log(datas);
         socket.emit('join', datas);
         console.log("---- WELCOME ------");
     });
         
-    
-    // Réception d'un message
+
+    // Message émis par l'utilisateur
     socket.on('message', async function (message) {
         message = ent.encode(message);
         content = { 
-            viewer_id: socket.viewer_id, 
+            user_exped: socket.user_id, 
+            user_receiv: socket.friend_id, 
             message: message, 
             status: 1
         };
         
-        var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
+        var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
 
-        
-        allClients.forEach(function(client, index) { //Diffusion du message
+        //création nouveau chat
+        //reception recepteur
+        //socket personnels
+        //archive
+        //blocage
+
+        /*allClients.forEach(function(client, index) { //Diffusion du message
             if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
                 var datas = {
                     pseudo: socket.user_pseudo, 
@@ -141,52 +209,17 @@ io.sockets.on('connection', function (socket, pseudo) {
 
                 io.to(client.socket_id).emit('message', datas);
             }
-        });
+        });*/
     }); 
 
     //Déconnexion d'un utilisateur
     socket.on('disconnect', function(){
-        var i = allClients.findIndex(findSocket);
-        if(i>-1)
-            allClients.splice(i, 1);
         console.log("---- BYE ------");
-        console.log(allClients);
     });
     
     function findSocket(element){
         return element.socket_id == socket.id;
     }
-
-    //Dons
-    async function checkDonations(socket){
-        //Recherche du stream ciblé
-        if(socket && typeof socket.last_donation == "undefined")
-            socket.last_donation = 0;
-
-        var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-
-        if(socket && typeof socket.stream_id != "undefined"){
-            await queryDB( 
-                `SELECT i.*, u.pseudo
-                    FROM stb_invoices i
-                    LEFT OUTER JOIN stb_viewers v ON i.viewer_id = v.id
-                    LEFT OUTER JOIN users u ON v.user_id = u.id
-                    WHERE v.stream_id = ?
-                    AND i.id > ?
-                    AND i.created_at >= ?
-                    ORDER BY i.id ASC
-                    LIMIT 1`, 
-                    [socket.stream_id, socket.last_donation, date])
-                .then(function(row){
-
-                    if(row.id != "undefined" && row.id > socket.last_donation){
-                        socket.last_donation = row.id;
-                        socket.emit('dons', row);
-                    }
-                });
-        }
-    }
-    setInterval(function(){checkDonations(socket)}, 1000);
 
 });
 
@@ -200,7 +233,6 @@ async function queryDB(sql, value){
             }
 
             //console.log("----RESULTATS DE LA REQUETE----");
-            //console.log(rows);
             if(typeof rows !== 'undefined' && rows.length > 0 && rows.length == 1)
                 resolve(rows[0]);
             else
