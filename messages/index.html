@@ -128,15 +128,24 @@
             var socket = io.connect('http://localhost:3001');
             var token = getUrlParameter('token');
             
+            // Affichage de la liste des contacts mutuels
             socket.emit('bringFriends', token);
-            
+            socket.on('bringFriends', function(data) {
+                var text = "";
+                $.each(data, function(index, value){
+                    text += "<a class='nav-link text-center' data-pseudo='"+value+"' data-toggle='pill' href='#' role='tab' aria-selected='false'>";
+                        text += value;
+                    text += "</a>";
+                });
+                $('#listContacts').html(text);
+            });
+
             //Changement de conversation
             $('#listContacts').on("click", ".nav-link", function(){
+                $(".nav-link").removeClass("active show").prop("aria-selected", false);
                 var friend = $(this).data('pseudo');
                 socket.emit('join', friend);
             });
-
-            //Chargement de la conversaton
             socket.on('join', function(data) {
                 var infos = data.infos;
                 $("#profile_img").prop("src", "http://localhost:8000/storage/"+infos.friend_avatar);
@@ -153,9 +162,9 @@
                     message += "</p>";
                     text += message;
                 });
-
                 $("#zone_chat").html(text);
             });
+
 
             // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
             $('#formulaire_chat').submit(function (event) {
@@ -199,19 +208,7 @@
                 $('#zone_chat').append(text);
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
             });
-
-             // Affichage de la liste des contacts mutuels
-             socket.on('bringFriends', function(data) {
-                var text = "";
-                $.each(data, function(index, value){
-                    text += "<a class='nav-link text-center' data-pseudo='"+value+"' data-toggle='pill' href='#' role='tab' aria-selected='false'>";
-                        text += value;
-                    text += "</a>";
-                });
-                
-                $('#listContacts').html(text);
-            });
-
+            
             //Recherche et affichage d'un membre parmi la liste de contact disponible
             $("#search_contact").keyup(function(){
                 if($(this).val() == "")
@@ -222,13 +219,6 @@
                 }
             });
 
-            //Réception de dons
-            socket.on('dons', function(data) {
-                $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
-                if(data.message)
-                    $('#zone_chat').append('<p>'+data.message+'</p>');
-            });
-            
             /* FONCTIONS */
             
             //Recupère les paramètres fournies dans l'URL

@@ -49,7 +49,7 @@ io.sockets.on('connection', function (socket) {
             .then(function(row){
                 if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing' );
-                    
+
                 socket.user_avatar = row.avatar;
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
@@ -88,9 +88,6 @@ io.sockets.on('connection', function (socket) {
 
                 if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing');
-                
-                var array = [];
-                var row = array.concat(row);
 
                 row.forEach(function(element){
                     conversations.push({
@@ -132,11 +129,8 @@ io.sockets.on('connection', function (socket) {
         
         var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
 
-        //création nouveau chat
         //reception recepteur
         //socket personnels
-        //archive
-        //blocage
 
         /*allClients.forEach(function(client, index) { //Diffusion du message
             if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
@@ -170,8 +164,15 @@ io.sockets.on('connection', function (socket) {
                 AND u_streamer.id = ?`,
                 socket.user_id)
             .then(function(row){
+                socket.list_followers = [];
                 if(typeof row !== 'undefined'){
-                    socket.list_followers = (row.length > 1) ? row : [row];
+                    if(row.length > 1){
+                        row.forEach(function(element){
+                            socket.list_followers.push(element.id);
+                        });
+                    }
+                    else
+                        socket.list_followers = [row.id];
                 }
             });
             
@@ -186,8 +187,15 @@ io.sockets.on('connection', function (socket) {
                     AND u_follower.id = ?`,
                     socket.user_id)
                 .then(function(row){
+                    socket.list_streamers = [];
                     if(typeof row !== 'undefined'){
-                        socket.list_streamers = (row.length > 1) ? row : [row];
+                        if(row.length > 1){
+                            row.forEach(function(element){
+                                socket.list_streamers.push(element.id);
+                            });
+                        }
+                        else
+                            socket.list_streamers = [row.id];
                     }
                 });
         
@@ -197,27 +205,50 @@ io.sockets.on('connection', function (socket) {
 
         var results = [];
         for (var i = 0; i < list_ord.length - 1; i++) {
-            if (list_ord[i + 1].id == list_ord[i].id) {
-                results.push(list_ord[i].id);
-                results.push(list_ord[i].id);
+            if (list_ord[i + 1] == list_ord[i]) {
+                results.push(list_ord[i]);
+                results.push(list_ord[i]);
             }
         }
 
+        if(socket.contactList)
+            var previousList = socket.contactList;
+
         socket.contactList = [];
         if(typeof results !== 'undefined' && results.length > 0){
-        
             await queryDB( //Liste des streamers followés par l'utilisateur
-            "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
-                results)
-            .then(function(row){
-                if(typeof row !== 'undefined'){
-                    socket.contactList.push(row.pseudo);
-                }
-            });
+                "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
+                [results])
+                .then(function(row){
+                    if(typeof row !== 'undefined'){
+                        if(row.length > 1){
+                            row.forEach(function(element){
+                                socket.contactList.push(element.pseudo);
+                            });
+                        }
+                        else
+                            socket.contactList = [row.pseudo];
+                    }
+                });
         }
-        socket.emit('bringFriends', socket.contactList);
+
+        var oldList = false;
+
+        if(previousList){
+            for(i in previousList){
+                if(socket.contactList.indexOf(previousList[i]) === -1)
+                    oldList = true;
+            }
+
+            for(i in socket.contactList){
+                if(previousList.indexOf(socket.contactList[i]) === -1)
+                    oldList = true;
+            }
+        }
+
+        if(!previousList || (previousList && oldList))
+            socket.emit('bringFriends', socket.contactList);
     }
-    
 });
 
 
@@ -229,7 +260,7 @@ async function queryDB(sql, value){
                 console.log(err);
             }
 
-            //console.log("----RESULTATS DE LA REQUETE----");
+            //console.log("----RESULTATS DE LA REQUETE----");console.log(rows);
             if(typeof rows !== 'undefined' && rows.length > 0 && rows.length == 1)
                 resolve(rows[0]);
             else
