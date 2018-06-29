@@ -4,7 +4,6 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     ent = require('ent'); // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
-    
 
 const mysql = require('mysql');
 
@@ -16,8 +15,7 @@ const config = {
 };
 const connection = mysql.createConnection(config);
 
-
-const allClients = [];
+let user_dest = null;
 
 /* Load */
 
@@ -129,26 +127,7 @@ io.sockets.on('connection', function (socket) {
         
         var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
 
-        //reception recepteur
-        //socket personnels
-
-        /*allClients.forEach(function(client, index) { //Diffusion du message
-            if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
-                var datas = {
-                    pseudo: socket.user_pseudo, 
-                    avatar: socket.user_avatar,
-                    message: content.message, 
-                    status: content.status,
-                    viewer_rank: socket.viewer_rank,
-                    message_id: message.insertId,
-                };
-                console.log(datas);
-                if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
-                    datas.admin = 1;
-
-                io.to(client.socket_id).emit('message', datas);
-            }
-        });*/
+        socket.to(socketid).emit('message', 'I just met you');
     }); 
 
     //Modification de la liste d'amis

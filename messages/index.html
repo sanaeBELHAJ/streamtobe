@@ -164,15 +164,13 @@
                 });
                 $("#zone_chat").html(text);
             });
-
-
-            // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+            
+            // Quand on reçoit un message, on l'insère dans la page
             $('#formulaire_chat').submit(function (event) {
                 event.preventDefault();
                 var message = $('#message').val();
     
                 if(message != ""){
-                    var text = "";
                     var content = "<p class='text-right'>"+message+"</p>";
                     $("#zone_chat").append(content);
                     socket.emit('message', message); // Publie le message
@@ -183,29 +181,12 @@
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
-            /* RECEPTION */
-            
-            // Quand on reçoit un message, on l'insère dans la page
-            socket.on('message', function(data) {
-                var text = "<p data-message='"+data.message_id+"'>";
-                    text += (data.admin && data.viewer_rank==0) ? "<i class='fas fa-ban delete'></i>" : "";
-                    
-                    text += "<img class='chat_avatar' src='http://localhost:8000/storage/"+data.avatar+"'>";
-                    switch(data.viewer_rank){
-                        case 1: //modérateur
-                            text += "<span class='chat_user mod'>";
-                            break;
-                        case 2: //streamer
-                            text += "<span class='chat_user streamer'>";
-                            break;
-                        default: //viewer
-                            text += "<span class='chat_user'>";
-                            break;
-                    }
-                    text += data.pseudo+":</span>";
-                    text += "<span class='chat_message'> "+data.message+"</span>";
-                text += "</p>";
-                $('#zone_chat').append(text);
+            socket.on('message', function(message) {
+                if(message){
+                    var content = "<p class='text-left'>"+message+"</p>";
+                    $("#zone_chat").append(content);
+                    socket.emit('message', message); // Publie le message
+                }
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
             });
             
