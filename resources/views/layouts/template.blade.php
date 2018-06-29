@@ -8,9 +8,10 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('storage/'.setting('site.favicon')); ?>" />
+        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
 
         <!-- CSS -->
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
@@ -45,7 +46,6 @@
     </head>
     <body>
         <header>
-
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
@@ -77,8 +77,8 @@
                             @else
                                 <li class="mx-3 d-flex align-items-center">
                                     <a href="/messages" class="d-flex align-start nav-link p-0">
-                                        <i class="far fa-envelope fa-2x text-dark"></i>
-                                        {{-- <i class="fas fa-envelope fa-2x text-dark"></i>
+                                        <i class="far fa-envelope fa-2x text-white"></i>
+                                        {{-- <i class="fas fa-envelope fa-2x text-white"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
                                 </li>

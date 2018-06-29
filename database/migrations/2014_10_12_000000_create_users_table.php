@@ -19,6 +19,16 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable()->unique();
             $table->integer('status')->default(0);
+            
+            $table->integer('id_countries')->unsigned()
+                                           ->nullable();
+;
+            $table->foreign('id_countries')
+                    ->references('id')
+                    ->on('stb_countries')
+                    ->onDelete('restrict')
+                    ->onUpdate('restrict');
+            
             $table->text('description');
             $table->integer('activated')->default(0);
             $table->string('password');

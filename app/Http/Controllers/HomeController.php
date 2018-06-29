@@ -10,6 +10,10 @@ use Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Theme;
+use App\Type;
+use App\Stream;
+use App\Viewer;
 
 use App\Http\Requests\SupportRequest;
 
@@ -17,6 +21,27 @@ class HomeController extends Controller
 {
     public function __construct(){
         
+    }
+    
+     /**
+     * Display a listing of the actives streams
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function index(){
+        $streams = Stream::where('status', 1)->get();
+        
+        if(Auth::user()){
+            $favorites = Viewer::where('user_id', Auth::user()->id)
+                                ->where('is_follower',1)
+                                ->get();
+            $followed = [];
+            foreach($favorites as $favorite)
+                $followed[] = $favorite->stream;
+        }
+        $themes = Theme::all();
+
+        return view('welcome', compact('streams', 'followed', 'themes'));
     }
     
     /**
