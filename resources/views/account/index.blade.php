@@ -1,66 +1,43 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container top bottom">
-    <div class="row mt-5">
-        <div class="col-12">
-            <nav class="nav nav-tabs" role="tablist" aria-orientation="vertical">
-                <a class="nav-link nav-item active col-6 text-center"  data-toggle="pill" 
-                    href="#v-pills-account" role="tab" aria-controls="v-pills-account" 
-                    aria-selected="true" title="Modifier mon compte">
-                    <span class="d-block d-md-none text-center"><i class="fas fa-user-circle"></i></span>
-                    <span class="d-none d-md-block">Configuration de mon compte</span>
+<div class="row">
+        <div class="col-sm-3 gold">
+            <div class="top bottom">
+                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                    <i class="far fa-edit text-white"></i>
                 </a>
-                <a class="nav-link nav-item col-6 text-center"  data-toggle="pill" 
-                    href="#v-pills-stats" role="tab" aria-controls="v-pills-stats" 
-                    aria-selected="false" title="Consulter les statistiques de mon stream">
-                    <span class="d-block d-md-none text-center"><i class="fas fa-video"></i></span>
-                    <span class="d-none d-md-block">Activité de ma chaine de streaming</span>
-                </a>
-            </nav>
-        </div>
-        <div class="col-12 mt-5">
-            @if(Session::has('message'))
-                <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ Session::get('message') }}
+                <br>
+                <div class="cadre-style">
+                    <center>
+                        <img class="resize-img" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
+                    </center> 
+                </div>
+                <p>
+                    <center>{{ Auth::user()->pseudo }}</center>
+                    <center>
+                        <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
+                        <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                    </center>
                 </p>
-            @endif
-            <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-account" 
-                    role="tabpanel" aria-labelledby="v-pills-account-tab">
-                    {{--  COMPTE  --}}
-                    @include('account.infos')
-                </div>
-                <div class="tab-pane fade" id="v-pills-stats" 
-                    role="tabpanel" aria-labelledby="v-pills-stats-tab">
-                    {{--  STREAM  --}}
-                    @include('account.stats')
-                </div>
+                <center>
+                    <ul class="navbar-nav">
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                    </ul>
+                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">Ma chaine                    
+                                        <i class="far fa-play-circle text-white"></i>
+                    </a>
+
+                </center>
             </div>
         </div>
-    </div>
-</div>
-@endsection
+        <div class="col-sm-9 pull-right top bottom">
+                    @include('account.infos')
+        </div>
+ </div>
 
-@section('css')
-<style>
-    .pictureAccount{
-        width: 100px;
-        display: inline-block;
-        height: 100px;
-        border: 1px solid;
-        border-radius: 50%;
-        vertical-align: bottom;
-        cursor: pointer;
-    }
-
-    .avatar_follower{
-        width: 50px;
-    }
-</style>
 @endsection
 
 @section('js')

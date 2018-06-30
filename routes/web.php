@@ -67,6 +67,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
         Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
         Route::resource('home', 'AccountController', ['only' => ['index','destroy']]);
+        Route::get('/stats', 'AccountController@stats');
+        Route::get('/fans', 'AccountController@fans');
+        Route::get('/follows', 'AccountController@follows');
+
     
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');

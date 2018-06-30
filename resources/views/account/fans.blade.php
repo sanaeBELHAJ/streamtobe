@@ -34,36 +34,29 @@
             </div>
     </div>
     <div class="col-sm-9 pull-right top bottom">
-    <thead>
-        <tr>
-            <th class="text-center" colspan="4">Dons reçus</th>
-        </tr>
-        <tr>
-            <th>Utilisateur</th>
-            <th>Montant</th>
-            <th>Message</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if(count($donations) > 0)
-            @foreach($donations as $donation)
+        <table>
+            <thead>
                 <tr>
-                    <td>{{$donation->viewer->stream->user->pseudo}}</td>
-                    <td>{{$donation->amount}} €</td>
-                    <td>{{$donation->message}}</td>
-                    <td>{{ Carbon\Carbon::parse($donation->created_at)->format('d/m/Y') }}</td>
+                    <th colspan="3" class="text-center">Utilisateurs qui me suivent</th>
+                <tr>
+                    <th>Image</th>
+                    <th>Pseudo</th>
+                    <th>Ancienneté</th>
                 </tr>
-            @endforeach
-        @else
-            <tr>
-                <td colspan="4" class="text-center">
-                    <i>Vous n'avez reçu aucun don pour l'instant.</i>
-                </td>
-            </tr>
-        @endif
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @foreach($viewers as $viewer)
+                    <tr>
+                        <td><img class='avatar_follower' src="<?php echo asset('storage/'.$viewer->user->avatar); ?>"></td>
+                        <td>{{$viewer->user->pseudo}}</td>
+                        <td>
+                            {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
+                            <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 </div>
 </div>
 @endsection
