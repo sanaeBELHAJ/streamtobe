@@ -200,13 +200,15 @@ io.sockets.on('connection', function (socket) {
                 [results])
                 .then(function(row){
                     if(typeof row !== 'undefined'){
-                        if(row.length > 1){
-                            row.forEach(function(element){
-                                socket.contactList.push(element.pseudo);
-                            });
+                        if(row.length > 0){
+                            if(row.length > 1){
+                                row.forEach(function(element){
+                                    socket.contactList.push(element.pseudo);
+                                });
+                            }
+                            else
+                                socket.contactList = [row.pseudo];
                         }
-                        else
-                            socket.contactList = [row.pseudo];
                     }
                 });
         }
