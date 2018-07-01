@@ -8,9 +8,10 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('storage/'.setting('site.favicon')); ?>" />
+        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
 
         <!-- CSS -->
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
@@ -45,15 +46,15 @@
     </head>
     <body>
         <header>
-
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
-                        <!--{{ setting('site.title') }}-->
-                        <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">StreamToBe</span>
+                        <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">{{ setting('site.title') }}</span>
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                            aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
     
@@ -64,7 +65,7 @@
                                 {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                             </li>
                             <li class="mx-3">
-                                <a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a>
+                                <a href="{{ route('stream.index') }}" class="nav-link">{{ __('Streams') }}</a>
                             </li>
                         </ul>
     
@@ -77,8 +78,8 @@
                             @else
                                 <li class="mx-3 d-flex align-items-center">
                                     <a href="/messages" class="d-flex align-start nav-link p-0">
-                                        <i class="far fa-envelope fa-2x text-dark"></i>
-                                        {{-- <i class="fas fa-envelope fa-2x text-dark"></i>
+                                        <i class="far fa-envelope fa-1x text-white"></i>
+                                        {{-- <i class="fas fa-envelope fa-2x text-white"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
                                 </li>
@@ -89,11 +90,11 @@
                                     </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
-                                        <a href="{{ route('home.index') }}" class="dropdown-item">Paramètres</a>
+                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">{{ __('My stream') }}</a>
+                                        <a href="{{ route('home.index') }}" class="dropdown-item">{{ __('Settings') }}</a>
                                         <hr>
                                         @if(Auth::user()->role_id == 1)
-                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
+                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">{{ __('Administration') }}</a>
                                             <hr>
                                         @endif
                                         <a class="dropdown-item" href="{{ route('logout') }}"
@@ -121,9 +122,8 @@
         <footer class="py-5 bg-dark">
             <div class="container">
                 {{-- @include('layouts.footer')   --}}
-                <p class="m-0 text-center text-white">Copyright &copy; StreamToBe 2018</p>
+                <p class="m-0 text-center text-white">{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p>
             </div>
-        <!-- /.container -->
         </footer>
 
         <!-- JAVASCRIPT -->

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-            <div class="col-sm-3 gold">
+        <div class="col-sm-3 gold">
                 <div class="top bottom">
                     <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
                         <i class="far fa-edit text-white"></i>
@@ -34,50 +34,32 @@
 
                     </center>
                 </div>
-            </div>
-            <div class="col-sm-9 pull-right top bottom">
-                        @include('account.infos')
-            </div>
+        </div>
+        <div class="col-sm-9 pull-right top bottom">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">Utilisateurs qui me suivent</th>
+                    <tr>
+                        <th>Image</th>
+                        <th>Pseudo</th>
+                        <th>Ancienneté</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($viewers as $viewer)
+                        <tr>
+                            <td><img class='avatar_follower' src="<?php echo asset('storage/'.$viewer->user->avatar); ?>"></td>
+                            <td>{{$viewer->user->pseudo}}</td>
+                            <td>
+                                {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
+                                <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-@endsection
-
-@section('js')
-    <script>
-        $(document).ready(function(){
-            $(".anciennete").each(function(){
-                var date = $(this).data("date");
-                var anciennete = dateDiff(new Date(date), new Date());
-
-                var text = "( ";
-                if(anciennete.month!=0) text+=anciennete.month+"m ";
-                if(anciennete.day!=0)   text+=anciennete.day+"j ";
-                if(anciennete.hour!=0)  text+=anciennete.hour+"h ";
-                text += " )";
-                $(this).html(text);
-            });
-        });
-        
-        function dateDiff(date1, date2){
-            var diff = {}                           // Initialisation du retour
-            var tmp = date2 - date1;
-
-            tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
-            diff.sec = tmp % 60;                    // Extraction du nombre de secondes
-
-            tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
-            diff.min = tmp % 60;                    // Extraction du nombre de minutes
-
-            tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
-            diff.hour = tmp % 24;                   // Extraction du nombre d'heures
-
-            tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
-            diff.day = tmp%24;
-
-            tmp = Math.floor((tmp-diff.day)/30);    // Nombre de mois restants
-            diff.month = tmp%30;
-
-            return diff;
-        }
-    </script>
 @endsection

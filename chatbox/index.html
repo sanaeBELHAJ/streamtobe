@@ -94,7 +94,7 @@
             /* ENVOI */
 
             // Connexion à socket.io
-            var socket = io.connect('http://localhost:8080');
+            var socket = io.connect('http://'+window.location.hostname+':3000');
             var token = getUrlParameter('token');
             var stream = getUrlParameter('stream');
             socket.emit('join', token, stream);
@@ -108,7 +108,7 @@
                     socket.emit('message', message); // Publie le message
     
                 $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
@@ -130,8 +130,8 @@
             socket.on('message', function(data) {
                 var text = "<p data-message='"+data.message_id+"'>";
                     text += (data.admin && data.viewer_rank==0) ? "<i class='fas fa-ban delete'></i>" : "";
-                    
-                    text += "<img class='chat_avatar' src='http://localhost:8000/storage/"+data.avatar+"'>";
+                    var port = (window.location.hostname == "localhost") ? ":8000" : "";
+                    text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+data.avatar+"'>";
                     switch(data.viewer_rank){
                         case 1: //modérateur
                             text += "<span class='chat_user mod'>";
@@ -147,7 +147,7 @@
                     text += "<span class='chat_message'> "+data.message+"</span>";
                 text += "</p>";
                 $('#zone_chat').append(text);
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
             });
 
             //Modération d'un message

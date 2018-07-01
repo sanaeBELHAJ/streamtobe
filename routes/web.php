@@ -17,12 +17,27 @@
  * php artisan route:list
  */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
-
+});*/
+Route::get('/', 'HomeController@index');
 //Routes basiques d'inscription/connexion/déconnexion
-Auth::routes();
+//Auth::routes();
+
+// Authentication Routes...
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
+// Registration Routes...
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
@@ -51,7 +66,12 @@ Route::group(['middleware' => 'auth'], function(){
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
         Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
-        Route::resource('home', 'AccountController', ['only' => ['index','destroy']]);
+        Route::resource('home', 'AccountController', ['only' => ['index','destroy','show']]);
+        
+        Route::get('/stats', 'AccountController@stats');
+        Route::get('/fans', 'AccountController@fans');
+        Route::get('/follows', 'AccountController@follows');
+
     
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
@@ -69,6 +89,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 //Informations des streams
 Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
+Route::post('stream', 'StreamController@index')->name('index');
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');

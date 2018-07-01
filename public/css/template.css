@@ -60,9 +60,93 @@ header .dropdown-menu{
     /* IE 8 */
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#AE8913)" no-repeat;
 }
+.gold-text{
+    color: #FFEEB5;
+}
 .gold:hover{
     color: #4b367c;
 }
 .visible{
     background: rgb(75, 54, 124,.2)!important;
+}
+.img-thumbnail{
+  height: 250px;
+    width: 400px;  
+}
+
+.cadre-style img{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid #4b367c;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.right{
+    float: right;
+}
+.left{
+    float: left;
+}
+
+
+.machaine{
+display:block;
+width:150px;
+line-height:50px;
+text-align:center;
+vertical-align:middle;
+background: #4b367c;
+color:white;
+text-decoration:none;
+}
+.machaine:hover {
+    color:white;
+    text-decoration:none; 
+
+}
+.watch{
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    height: 20px;
+    padding-right: 10px;
+    line-height: 18px;
+    border: 1px solid #868891;
+    border-radius: 11px;
+    background-color: rgba(0,0,0,.6);
+    font-size: 12px;
+    z-index: 2;
+    color: white;
+}
+.video_list .row .item {
+    height: 265px;
+    width: 265px;
+}
+.video_list .item {
+    display: block;
+    height: 240px;
+    width: 240px;
+    position: relative;
+}
+.material-icons {
+    font-size: 13px;
+    padding-top: 3px;
+    color: white;
+    padding-left: 3px;
+}
+.pictureAccount{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+.avatar_follower{
+    width: 50px;
 }

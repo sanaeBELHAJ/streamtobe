@@ -2,6 +2,7 @@
 /vendor
 /vendor/*
 /public/vendor
+/public/storage
 composer.phar
 composer.lock
 .env.*

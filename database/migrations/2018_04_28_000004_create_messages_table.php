@@ -16,15 +16,15 @@ class CreateMessagesTable extends Migration
         Schema::create('stb_messages', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_first')->unsigned();
-            $table->foreign('user_first')
+            $table->integer('user_exped')->unsigned();
+            $table->foreign('user_exped')
                     ->references('id')
                     ->on('users')
                     ->onDelete('restrict')
                     ->onUpdate('restrict');
 
-            $table->integer('user_second')->unsigned();
-            $table->foreign('user_second')
+            $table->integer('user_receiv')->unsigned();
+            $table->foreign('user_receiv')
                     ->references('id')
                     ->on('users')
                     ->onDelete('restrict')
