@@ -2,8 +2,10 @@
 
 @section('content')
 	<div class="container-fluid top bottom">
+            <div class="row">
+                
+            </div>
 		<div class="row">
-
 			{{-- Vidéo --}}
 			<div id="player" class="col-12 col-md-8 mt-4">
 				<video id="videoPlayer" controls>
