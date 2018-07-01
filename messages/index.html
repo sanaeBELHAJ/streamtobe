@@ -93,13 +93,20 @@
                 </div>
                 <div class="col-8 col-md-10">
                     <div class="row">
-                        <div id="infos_user" class="d-none d-md-flex flex-column justify-content-around col-3">
-                            <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
-                            <a href="#" id="profile_pseudo">
-                                <button id="profile_follow" class="btn btn-primary col-12">
-                                    Profil de <span></span>
-                                </button>
-                            </a>
+                        <div id="infos_user" class="d-none d-md-flex col-3">
+                            <div id="none" class="d-flex flex-column justify-content-center w-100">
+                                <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
+                                <br>
+                                <small>Vous devez suivre mutuellement vos chaines respectives.</small>
+                            </div>
+                            <div id="profile" class="d-none flex-column justify-content-around w-100">
+                                <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
+                                <a href="#" id="profile_pseudo">
+                                    <button id="profile_follow" class="btn btn-primary col-12">
+                                        Profil de <span></span>
+                                    </button>
+                                </a>
+                            </div>
                         </div>
                         <div id="conversation" class="col-12 col-md-9">
                             <section id="zone_chat">
@@ -107,8 +114,10 @@
                             </section>
                 
                             <form action="/" id="formulaire_chat" class="m-0">
-                                <textarea name="message" id="message" placeholder="Votre message..." autofocus></textarea>
-                                <input type="submit" id="envoi_message" value="Envoyer" />
+                                <textarea name="message" id="message" 
+                                            placeholder="Veuillez sélectionner une conversation pour envoyer un message" 
+                                            autofocus disabled></textarea>
+                                <input type="submit" id="envoi_message" value="Envoyer" disabled>
                             </form>
                         </div>
                     </div>
@@ -163,6 +172,12 @@
                     text += message;
                 });
                 $("#zone_chat").html(text);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
+
+                $("#none").removeClass("d-flex").addClass("d-none");
+                $("#profile").removeClass("d-none").addClass("d-flex");
+                $("#formulaire_chat input").prop("disabled", false);
+                $("#formulaire_chat textarea").prop("disabled", false).prop("placeholder", "Saisissez ici votre message");
             });
             
             // Quand on reçoit un message, on l'insère dans la page
