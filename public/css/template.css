@@ -94,13 +94,14 @@ header .dropdown-menu{
 
 .machaine{
 display:block;
-width:150px;
+width:100px;
 line-height:50px;
 text-align:center;
 vertical-align:middle;
 background: #4b367c;
 color:white;
 text-decoration:none;
+border-radius: 50%;
 }
 .machaine:hover {
     color:white;

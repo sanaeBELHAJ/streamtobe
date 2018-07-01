@@ -26,10 +26,13 @@
                         <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
                         <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
                     </ul>
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">Ma chaine                    
-                                        <i class="far fa-play-circle text-white"></i>
+                  <br>
+                    <br>
+                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                            videocam
+                        </i>
                     </a>
-
                 </center>
             </div>
         </div>
