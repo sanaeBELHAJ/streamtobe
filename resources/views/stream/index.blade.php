@@ -65,7 +65,9 @@
                                     @else
                                         {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
                                     @endif
-                                    <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
+                                    @if( $stream->user->country!=null)
+                                        <img style="width:10%" src="@if(Auth::user()->country){{ $stream->user->country->svg }}@endif">
+                                    @endif
                                 </div>
                             @endforeach
                        </div>
