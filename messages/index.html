@@ -134,7 +134,7 @@
             /* ENVOI */
 
             // Connexion à socket.io
-            var socket = io.connect('http://localhost:3001');
+            var socket = io.connect('http://'+window.location.hostname+':3001');
             var token = getUrlParameter('token');
             
             // Affichage de la liste des contacts mutuels
@@ -157,8 +157,9 @@
             });
             socket.on('join', function(data) {
                 var infos = data.infos;
-                $("#profile_img").prop("src", "http://localhost:8000/storage/"+infos.friend_avatar);
-                $("#profile_pseudo").prop("href", "http://localhost:8000/stream/"+infos.friend_pseudo);
+                var port = (window.location.hostname == "localhost") ? ":8000" : "";
+                $("#profile_img").prop("src", "http://"+window.location.hostname+"/storage/"+infos.friend_avatar);
+                $("#profile_pseudo").prop("href", "http://"+window.location.hostname+port+"/stream/"+infos.friend_pseudo);
                 $("#profile_pseudo span").html(infos.friend_pseudo);
 
                 var conversations = data.conversations;
