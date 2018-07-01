@@ -29,9 +29,11 @@
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('countries') }}</label>
                                 <div class="col-sm-3">
                                      <select id="stream_type" class="update_stream" data-config="type">
-                                        @foreach($countries as $country)
-                                               <option value="{{$country->code}}">{{$country->name}}</option>
-                                        @endforeach
+                                        @if($countries)
+                                            @foreach($countries as $country)
+                                                <option value="{{$country->code}}">{{$country->name}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>        
                                 </div>
                         </div>

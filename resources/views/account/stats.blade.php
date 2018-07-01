@@ -16,8 +16,9 @@
                 <p>
                     <center>{{ Auth::user()->pseudo }}</center>
                     <center>
-                        <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
-                        <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                        <i class="material-icons" style="font-size: 16px;">location_on</i>
+                        @if(Auth::user()->country){{ Auth::user()->country->name }}@endif
+                        <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
                     </center>
                 </p>
                 <center>
