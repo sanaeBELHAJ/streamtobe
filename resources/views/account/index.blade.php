@@ -23,9 +23,9 @@
                 </p>
                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a></li>
                     </ul>
                   <br>
                     <br>
