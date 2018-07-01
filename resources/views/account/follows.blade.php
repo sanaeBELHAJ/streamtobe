@@ -1,7 +1,6 @@
 @extends('layouts.template')
 
 @section('content')
-
 <div class="row">
     <div class="col-sm-3 gold">
             <div class="top bottom">
