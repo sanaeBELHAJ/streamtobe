@@ -13,10 +13,8 @@
 
                         <div class="form-group row">
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('Pseudo') }}</label>
-
                             <div class="col-md-6">
                                 <input id="pseudo" type="text" class="form-control{{ $errors->has('pseudo') ? ' is-invalid' : '' }}" name="pseudo" value="{{ old('pseudo') }}" required autofocus>
-
                                 @if ($errors->has('pseudo'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('pseudo') }}</strong>
@@ -26,24 +24,22 @@
                         </div>
                         
                         <div class="form-group row">
-                            <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('countries') }}</label>
-                                <div class="col-sm-3">
-                                     <select id="stream_type" class="update_stream" data-config="type">
-                                        @if($countries)
-                                            @foreach($countries as $country)
-                                                <option value="{{$country->code}}">{{$country->name}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>        
-                                </div>
+                            <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('Countries') }}</label>
+                            <div class="col-sm-3">
+                                <select id="stream_type" class="update_stream" data-config="type">
+                                    @if($countries)
+                                        @foreach($countries as $country)
+                                            <option value="{{$country->code}}">{{$country->name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>        
+                            </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('email') }}</strong>
@@ -54,10 +50,8 @@
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -68,7 +62,6 @@
 
                         <div class="form-group row">
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
