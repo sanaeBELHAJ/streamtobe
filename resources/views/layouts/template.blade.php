@@ -155,7 +155,7 @@
                             var action = $(this).data('action');
     
                             if(action == "redirect")
-                                window.location.replace("/stream/"+ui.item.value);
+                                window.location.replace("/home/"+ui.item.value);
                             else if(action == "ban" || action == "mod")
                                 statusViewer(ui.item.value, action, 1); //Fonction appelée dans stream.show
                         }

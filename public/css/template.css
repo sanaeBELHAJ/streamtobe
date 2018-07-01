@@ -94,18 +94,18 @@ header .dropdown-menu{
 
 .machaine{
 display:block;
-width:150px;
+width:90px;
 line-height:50px;
 text-align:center;
 vertical-align:middle;
 background: #4b367c;
 color:white;
 text-decoration:none;
+border-radius: 50%;
 }
 .machaine:hover {
-    color:white;
+    color:#ff66b3;
     text-decoration:none; 
-
 }
 .watch{
     position: absolute;
@@ -149,4 +149,22 @@ text-decoration:none;
 
 .avatar_follower{
     width: 50px;
+}
+.btn-follow {
+    display: block;
+    width: 200px;
+    height: 44px;
+    line-height: 44px;
+    margin: 0 auto;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #ffbf27;
+    -webkit-box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    -moz-box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    color: #fff;
+    margin-top: 10px;
 }
