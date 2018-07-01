@@ -22,6 +22,7 @@ class UsersTableSeeder extends Seeder
             'email'          => 'admin@admin.com',
             'status'         => 1,
             'activated'      => 1,
+            'id_countries'   => 1,
             'password'       => bcrypt('password'),
             'remember_token' => str_random(60),
             'role_id'        => $role->id,
@@ -35,6 +36,7 @@ class UsersTableSeeder extends Seeder
             'status'         => 1,
             'password'       => bcrypt('test'),
             'activated'      => 1,
+            'id_countries'   => 1,
             'remember_token' => str_random(60),
             'role_id'        => $role->id,
         ]);
