@@ -317,10 +317,9 @@
 
 @section('js')
 
-    <script src="/js/modernizr.custom.js"></script>
 	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
-	<script src="https://cdn.pubnub.com/webrtc.js"></script>
-	<script src="https://cdn.pubnub.com/webrtc/rtc-controller.js"></script>
+	<script src="/js/webrtc.js"></script>
+	<script src="/js/rtc-controller.js"></script>
 
 	@auth
 		@if($streamer->id != Auth::user()->id)
