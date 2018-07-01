@@ -137,3 +137,16 @@ text-decoration:none;
     color: white;
     padding-left: 3px;
 }
+.pictureAccount{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+.avatar_follower{
+    width: 50px;
+}

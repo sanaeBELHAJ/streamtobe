@@ -77,7 +77,7 @@
                             @else
                                 <li class="mx-3 d-flex align-items-center">
                                     <a href="/messages" class="d-flex align-start nav-link p-0">
-                                        <i class="far fa-envelope fa-2x text-white"></i>
+                                        <i class="far fa-envelope fa-1x text-white"></i>
                                         {{-- <i class="fas fa-envelope fa-2x text-white"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>

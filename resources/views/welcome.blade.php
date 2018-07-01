@@ -15,8 +15,13 @@
                         <img class="resize-img" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
                     </center> 
                 </div>
-                <center>{{ Auth::user()->pseudo }}</center>
-                <center>{{ Auth::user()->country->name }}</center>
+                <p>
+                    <center>{{ Auth::user()->pseudo }}</center>
+                    <center>
+                        <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
+                        <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                    </center>
+                </p>
                 <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
