@@ -15,7 +15,7 @@ const config = {
 };
 const connection = mysql.createConnection(config);
 
-let user_dest = null;
+const allClients = [];
 
 /* Load */
 
@@ -51,6 +51,14 @@ io.sockets.on('connection', function (socket) {
                 socket.user_avatar = row.avatar;
                 socket.user_id = row.id;
                 socket.user_pseudo = row.pseudo;
+
+                allClients.push(
+                    {
+                        socket_id: socket.id,
+                        user_id: socket.user_id
+                    }
+                );
+                console.log(allClients);
                 checkFriends(socket);
                 setInterval(function(){
                     checkFriends(socket);
@@ -87,14 +95,24 @@ io.sockets.on('connection', function (socket) {
                 if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing');
 
-                row.forEach(function(element){
-                    conversations.push({
-                        message: element.message,
-                        user_exped: (socket.user_id == element.user_exped) ? 'me' : 'friend',
-                        user_receiv: (socket.user_id == element.user_receiv) ? 'me' : 'friend',
-                        created_at: element.created_at
+                if(Array.isArray(row)){
+                    row.forEach(function(element){
+                        conversations.push({
+                            message: element.message,
+                            user_exped: (socket.user_id == element.user_exped) ? 'me' : 'friend',
+                            user_receiv: (socket.user_id == element.user_receiv) ? 'me' : 'friend',
+                            created_at: element.created_at
+                        });
                     });
-                });
+                }
+                else{
+                    conversations.push({
+                        message: row.message,
+                        user_exped: (socket.user_id == row.user_exped) ? 'me' : 'friend',
+                        user_receiv: (socket.user_id == row.user_receiv) ? 'me' : 'friend',
+                        created_at: row.created_at
+                    });
+                }
             });
 
 
@@ -124,11 +142,29 @@ io.sockets.on('connection', function (socket) {
             message: message, 
             status: 1
         };
-        
+        console.log(content);
         var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
-
-        socket.to(socketid).emit('message', 'I just met you');
+        console.log(allClients);
+        allClients.forEach(function(client, index) { //Diffusion du message à l'utilisateur regardant les messages
+            if(client.user_id == socket.friend_id){
+                console.log(client);
+                io.to(client.socket_id).emit('message', content.message);
+            }
+        });
     }); 
+
+    //Déconnexion d'un utilisateur
+    socket.on('disconnect', function(){
+        var i = allClients.findIndex(findSocket);
+        if(i>-1)
+            allClients.splice(i, 1);
+        console.log("---- BYE ------");
+        console.log(allClients);
+    });
+    
+    function findSocket(element){
+        return element.socket_id == socket.id;
+    }
 
     //Modification de la liste d'amis
     async function checkFriends(socket){
@@ -199,7 +235,7 @@ io.sockets.on('connection', function (socket) {
                 "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
                 [results])
                 .then(function(row){
-                    if(typeof row !== 'undefined'){
+                    if(typeof row !== 'undefined' && Array.isArray(row)){
                         if(row.length > 0){
                             if(row.length > 1){
                                 row.forEach(function(element){
@@ -210,6 +246,8 @@ io.sockets.on('connection', function (socket) {
                                 socket.contactList = [row.pseudo];
                         }
                     }
+                    else
+                        socket.contactList = [row.pseudo];
                 });
         }
 

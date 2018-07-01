@@ -177,7 +177,7 @@
                 }
 
                 $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
@@ -185,9 +185,8 @@
                 if(message){
                     var content = "<p class='text-left'>"+message+"</p>";
                     $("#zone_chat").append(content);
-                    socket.emit('message', message); // Publie le message
                 }
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
             });
             
             //Recherche et affichage d'un membre parmi la liste de contact disponible
