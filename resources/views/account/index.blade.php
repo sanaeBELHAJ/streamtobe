@@ -1,6 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
+
 <div class="row">
         <div class="col-sm-3 gold">
             <div class="top bottom">
@@ -35,12 +36,11 @@
                     </a>
                 </center>
             </div>
-        </div>
-        <div class="col-sm-9 pull-right top bottom">
-                    @include('account.infos')
-        </div>
- </div>
-
+            <div class="col-sm-9 pull-right top bottom">
+                        @include('account.infos')
+            </div>
+    </div>
+</div>
 @endsection
 
 @section('js')

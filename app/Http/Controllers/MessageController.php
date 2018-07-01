@@ -24,7 +24,11 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        return view('messages.index');
+    public function index(Request $request){
+        $user = Auth::user();
+        if($user)
+            $user->token = $request->session()->get('_token');
+
+        return view('messages.index', compact('user'));
     }
 }

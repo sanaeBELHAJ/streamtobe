@@ -77,13 +77,49 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="4" class="text-center">
-                            <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
-                        </td>
+                        <th>Image</th>
+                        <th>Chaîne</th>
+                        <th>Ancienneté</th>
+                        <th>Statut</th>
                     </tr>
-                @endif
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @if(count($channels) > 0)
+                        @foreach($channels as $channel)
+                            @if($channel->is_follower == 1)
+                                <tr>
+                                    <td>
+                                        <img class="avatar_follower" src="<?php echo asset('storage/'.$channel->stream->user->avatar); ?>" 
+                                            alt="" title="Image de profil">
+                                    </td>
+                                    <td>{{$channel->stream->user->pseudo}}</td>
+                                    <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
+                                    <td>
+                                        @if($channel->stream->status==1)
+                                            {!! link_to_route('stream.show',
+                                                                'En ligne', 
+                                                                [$channel->stream->user->pseudo], 
+                                                                ['class' => 'btn btn-success btn-block']) !!}
+                                        @else
+                                            {!! link_to_route('stream.show', 
+                                                                'Hors ligne', 
+                                                                [$channel->stream->user->pseudo], 
+                                                                ['class' => 'btn btn-secondary btn-block']) !!}
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

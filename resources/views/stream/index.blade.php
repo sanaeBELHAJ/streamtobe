@@ -28,9 +28,11 @@
                     <div class="form-group">
                             <label for="countries">Pays : </label>
                                 <select name="country" id="stream_type"  data-config="type" class="form-control">
-                                    @foreach($countries as $country)
-                                        <option value="{{$country->id}}">{{$country->name}}</option>
-                                    @endforeach
+                                    @if($countries)
+                                        @foreach($countries as $country)
+                                            <option value="{{$country->id}}">{{$country->name}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>        
                     </div>
                      <div class="form-group">
@@ -63,7 +65,7 @@
                                     @else
                                         {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
                                     @endif
-                                    <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                                    <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
                                 </div>
                             @endforeach
                        </div>
