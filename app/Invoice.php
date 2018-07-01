@@ -6,18 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    protected $table = 'stb_invoices';
+
     protected $fillable = [
-        'title', 
-        'price', 
+        'paypal_id', 
+        'paypal_cart', 
+        'amount', 
+        'currency', 
+        'country', 
+        'city', 
         'message', 
+        'paypal_payer_id', 
         'viewer_id', 
-        'payment_status'
+        'status',
+        'created_at',
     ];
 
-    public function getPaidAttribute() {
-    	if ($this->payment_status == 'Invalid') {
-    		return false;
-    	}
-    	return true;
+    /**
+     * Viewer writer
+     */
+    public function viewer() 
+    {
+        return $this->belongsTo('App\Viewer');
     }
 }

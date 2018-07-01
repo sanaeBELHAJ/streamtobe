@@ -8,27 +8,56 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('storage/'.setting('site.favicon')); ?>" />
+        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
 
         <!-- CSS -->
+         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
+        {!! Html::style('css/half-slider.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
         {!! HTML::style('css/font-awesome.min.css') !!}
         @yield('css')
+        <style>
+            #cookies{
+                position: fixed;
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                color: white;
+                font-weight: bold;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                padding: 13px 0;
+                background-color: cornflowerblue;
+                bottom: 20px;
+            }
+
+            ul.ui-autocomplete{
+                z-index: 1050;
+            }
+            
+            footer #support_user textarea{
+                height: 100px;
+            }
+        </style>
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.setting('site.logo')); ?>">
-                        {{ setting('site.title') }}
+                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
+                        <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">{{ setting('site.title') }}</span>
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                            aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
     
@@ -36,11 +65,11 @@
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
                             <li class="mx-3 d-flex align-items-center">
-                                {{ Form::open(['method' => 'GET', 'route' => ['autocomplete'], 'id' => 'search_user']) }}
-                                    {{ Form::text('q', '', ['id' =>  'q', 'placeholder' =>  'Rechercher un stream'])}}
-                                {{ Form::close() }}
+                                {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                             </li>
-                            <li class="mx-3"><a href="{{ route('stream.index') }}" class="nav-link">Streams actifs</a></li>
+                            <li class="mx-3">
+                                <a href="{{ route('stream.index') }}" class="nav-link">{{ __('Streams') }}</a>
+                            </li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
@@ -51,10 +80,10 @@
                                 <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
                                 <li class="mx-3 d-flex align-items-center">
-                                    <a href="#" class="d-flex align-start nav-link p-0">
-                                        <i class="d-none far fa-envelope fa-2x text-dark"></i>
-                                        <i class="fas fa-envelope fa-2x text-dark"></i>
-                                        <span class="h-50 badge badge-pill badge-danger">5</span>
+                                    <a href="/messages" class="d-flex align-start nav-link p-0">
+                                        <i class="far fa-envelope fa-1x text-white"></i>
+                                        {{-- <i class="fas fa-envelope fa-2x text-white"></i>
+                                        <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -64,11 +93,11 @@
                                     </a>
     
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('home.index') }}" class="dropdown-item">Mon compte</a>
-                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">Mon stream</a>
+                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">{{ __('My stream') }}</a>
+                                        <a href="{{ route('home.index') }}" class="dropdown-item">{{ __('Settings') }}</a>
                                         <hr>
                                         @if(Auth::user()->role_id == 1)
-                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">Administration</a>
+                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">{{ __('Administration') }}</a>
                                             <hr>
                                         @endif
                                         <a class="dropdown-item" href="{{ route('logout') }}"
@@ -91,15 +120,23 @@
 
         @yield('content')
 
-        <footer>
 
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                {{-- @include('layouts.footer')   --}}
+                <p class="m-0 text-center text-white">{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p>
+            </div>
         </footer>
+
         <!-- JAVASCRIPT -->
         {!! HTML::script('jquery-3.3.1.min.js') !!}
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
+        {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!}
         {!! HTML::script('js/template.js') !!}
+        
         <script>
             $(function () {
                 //CSRF Protection
@@ -111,25 +148,130 @@
 
                 $('[data-toggle="tooltip"]').tooltip();
 
-                $('#search_user').submit(function(event){
-                    event.preventDefault();
-                    return false;
+                //Recherche d'utilisateurs
+                $(".searchUser").each(function(){
+                    $(this).autocomplete({
+                        source: "/autocomplete",
+                        minLength: 2,
+                        select: function(event, ui) {
+                            $(this).val(ui.item.value);
+                            var action = $(this).data('action');
+    
+                            if(action == "redirect")
+                                window.location.replace("/home/"+ui.item.value);
+                            else if(action == "ban" || action == "mod")
+                                statusViewer(ui.item.value, action, 1); //Fonction appelée dans stream.show
+                        }
+                    })
+                    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                        return $( "<li></li>" )
+                            .data( "ui-autocomplete-item", item )
+                            .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
+                            .appendTo( ul );
+                    };
+                });
+                
+                //Edit modération/bannissement
+                function statusViewer(pseudo, rank, set){
+                    $.ajax({
+                        url: "/updateViewer",
+                        type: 'POST',
+                        dataType: "JSON",
+                        data: {
+                            pseudo: pseudo,
+                            rank: rank,
+                            set: set
+                        }
+                    })
+                    .done(function(data){
+                        updateList();
+                        $(".searchUser").val("");
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                }
+                
+                //Detection du click() sur les boutons générés par les appels Ajax
+                if($("#config_stream").length > 0){
+                    $("#config_stream").on("click", ".rmvRankUser", function(){
+                        var action = $(this).data('action');
+                        var pseudo = $(this).data('pseudo');
+                        statusViewer(pseudo, action, 0);
+                    });
+                }
+
+                //Liste modérateurs / bannis
+                updateList();
+                function updateList(){
+                    $.ajax({
+                        url: "/getStreamViewer",
+                        type: 'GET'
+                    })
+                    .done(function(data){
+                        $("#listMods").html('');
+                        $("#listBans").html('');
+                        $.each(data, function(index, element){
+                            var text = "";
+                            text +='<tr class="d-flex justify-content-between">';
+                                text += '<td>'+element.pseudo+'</td>';
+
+                                if(element.rank == 1)
+                                    text += "<td><button data-action='mod' data-pseudo='"+element.pseudo+"' ";
+                                else if(element.rank == -1)
+                                    text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
+
+                                text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>"; 
+                            text += "</tr>";
+
+                            if(element.rank == 1)
+                                $("#listMods").append(text);
+                            else if(element.rank == -1)
+                                $("#listBans").append(text);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+                }
+
+                //Validation cookie
+                $('#valid_cookie').click(function(){
+                    $.ajax({
+                        url: "/valid_cookie",
+                        type: 'POST'
+                    })
+                    .done(function(data){
+                        $("#cookies").hide();
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
                 });
 
-                $( "#q" ).autocomplete({
-                    source: "/autocomplete",
-                    minLength: 2,
-                    select: function(event, ui) {
-                        $('#q').val(ui.item.value);
-                        window.location.replace("/stream/"+ui.item.value);
-                    }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                        .data( "ui-autocomplete-item", item )
-                        .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
-                        .appendTo( ul );
-                };
+                //Support utilisateur
+                $('#support_user').submit(function(event){
+                    event.preventDefault();
+                    $.ajax({
+                        url: "/support",
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            opinion: $("[name='opinion']").val()
+                        }
+                    })
+                    .done(function(data){
+                        $("[name='opinion']").val('');
+                        $("#support_user .alert-success").removeClass('d-none').addClass('d-block');
+                        $("#support_user .alert-danger").removeClass('d-block').addClass('d-none');
+                    })
+                    .fail(function(data){
+                        $("#support_user .alert-success").removeClass('d-block').addClass('d-none');
+                        $("#support_user .alert-danger").removeClass('d-none').addClass('d-block');
+                        console.log(data);
+                    });
+                    return false;
+                });
             });
         </script>
         @yield('js')

@@ -34,6 +34,12 @@
                 margin: 0 10px;
             }
 
+            .chat_avatar{
+                width: 40px;
+                vertical-align: middle;
+                padding-left: 10px;
+            }
+
             .streamer{
                 background-color: #caa908;
                 color: black;
@@ -59,16 +65,19 @@
                 vertical-align: middle;
             }
 
-            a.delete{
-                font-size: 10px;
+            .delete{
                 padding: 10px;
                 vertical-align: middle;
                 color: white;
-                font-weight: bold;
+            }
+
+            .delete:hover{
+                cursor: pointer;
             }
         </style>
+        <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
     </head>
- 
+
     <body>   
         <section id="zone_chat">
             
@@ -79,13 +88,13 @@
             <input type="submit" id="envoi_message" value="Envoyer" />
         </form>
 
-        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             /* ENVOI */
 
             // Connexion à socket.io
-            var socket = io.connect('http://localhost:8080');
+            var socket = io.connect('http://'+window.location.hostname+':3000');
             var token = getUrlParameter('token');
             var stream = getUrlParameter('stream');
             socket.emit('join', token, stream);
@@ -99,30 +108,30 @@
                     socket.emit('message', message); // Publie le message
     
                 $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
             //Lorsqu'on souhaite modérer un message, on envoie son ID
-            function detectDelete(){
-                $('.delete').on('click', function(){
-                    var message_id = $(this).parent().data('message');
-                    socket.emit('delete', message_id);
-                });
-            }
+            $('#zone_chat').on('click',".delete", function(){
+                console.log($(this).html());
+                var message_id = $(this).parent().data('message');
+                socket.emit('delete', message_id);
+            });
 
             /* RECEPTION */
             
             //Arrivée d'un nouvel utilisateur sur le chat
-            socket.on('welcome', function(pseudo) {
+            socket.on('welcome', function() {
                 $('#zone_chat').append('<p><em>Bienvenue sur le chat !</em></p>');
             });
 
             // Quand on reçoit un message, on l'insère dans la page
             socket.on('message', function(data) {
                 var text = "<p data-message='"+data.message_id+"'>";
-                    text += (data.admin && data.viewer_rank==0) ? "<a href='#' class='delete'>supprimer</a>" : "";
-        
+                    text += (data.admin && data.viewer_rank==0) ? "<i class='fas fa-ban delete'></i>" : "";
+                    var port = (window.location.hostname == "localhost") ? ":8000" : "";
+                    text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+data.avatar+"'>";
                     switch(data.viewer_rank){
                         case 1: //modérateur
                             text += "<span class='chat_user mod'>";
@@ -138,9 +147,7 @@
                     text += "<span class='chat_message'> "+data.message+"</span>";
                 text += "</p>";
                 $('#zone_chat').append(text);
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat").height() }, 100);
-                //Ajout d'un Listener sur l'élèment HTML pour la DOM Jquery
-                detectDelete();
+                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
             });
 
             //Modération d'un message
@@ -148,6 +155,25 @@
                 $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
             });
 
+            //Réception de dons
+            socket.on('dons', function(data) {
+                $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
+                if(data.message)
+                    $('#zone_chat').append('<p>'+data.message+'</p>');
+            });
+
+            //Arrivée d'un nouvel utilisateur sur le chat
+            socket.on('error', function(error) {
+                
+                switch(error.type){
+                    case 'user_missing':
+                        alert("Identifiant utilisateur incorrect");
+                }
+
+                $("#formulaire_chat textarea").prop("disabled", true);
+                $("#formulaire_chat input").prop("disabled", true);
+            });
+            
             /* FONCTIONS */
             
             //Recupère les paramètres fournies dans l'URL

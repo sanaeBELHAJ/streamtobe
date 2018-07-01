@@ -35,3 +35,136 @@ header .dropdown-menu{
 .btn:focus{
     box-shadow: unset;    
 }
+.bg-dark{
+    background-color: #4b367c;
+}
+.top{
+    margin-top: 102px;
+}
+.bottom{
+    margin-bottom: 102px;
+}
+
+.gold
+{
+    color: white;
+    font-weight: bold;
+    padding: 15px;
+    background-color: #FFEEB5;
+    /* For WebKit (Safari, Chrome, etc) */
+    background: #FFEEB5 -webkit-gradient(linear, left top, left bottom, from(#AE8913), to(#FFEEB5)) no-repeat;
+    /* Mozilla,Firefox/Gecko */
+    background: #FFEEB5 -moz-linear-gradient(top, #AE8913, #FFEEB5) no-repeat;
+    /* IE 5.5 - 7 */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#FFEEB5) no-repeat;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#AE8913)" no-repeat;
+}
+.gold-text{
+    color: #FFEEB5;
+}
+.gold:hover{
+    color: #4b367c;
+}
+.visible{
+    background: rgb(75, 54, 124,.2)!important;
+}
+.img-thumbnail{
+  height: 250px;
+    width: 400px;  
+}
+
+.cadre-style img{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid #4b367c;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.right{
+    float: right;
+}
+.left{
+    float: left;
+}
+
+
+.machaine{
+display:block;
+width:90px;
+line-height:50px;
+text-align:center;
+vertical-align:middle;
+background: #4b367c;
+color:white;
+text-decoration:none;
+border-radius: 50%;
+}
+.machaine:hover {
+    color:#ff66b3;
+    text-decoration:none; 
+}
+.watch{
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    height: 20px;
+    padding-right: 10px;
+    line-height: 18px;
+    border: 1px solid #868891;
+    border-radius: 11px;
+    background-color: rgba(0,0,0,.6);
+    font-size: 12px;
+    z-index: 2;
+    color: white;
+}
+.video_list .row .item {
+    height: 265px;
+    width: 265px;
+}
+.video_list .item {
+    display: block;
+    height: 240px;
+    width: 240px;
+    position: relative;
+}
+.material-icons {
+    font-size: 13px;
+    padding-top: 3px;
+    color: white;
+    padding-left: 3px;
+}
+.pictureAccount{
+    width: 100px;
+    display: inline-block;
+    height: 100px;
+    border: 1px solid;
+    border-radius: 50%;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+.avatar_follower{
+    width: 50px;
+}
+.btn-follow {
+    display: block;
+    width: 200px;
+    height: 44px;
+    line-height: 44px;
+    margin: 0 auto;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #ffbf27;
+    -webkit-box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    -moz-box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    box-shadow: 0 4px 16px 0 rgba(255,191,39,.4);
+    color: #fff;
+    margin-top: 10px;
+}

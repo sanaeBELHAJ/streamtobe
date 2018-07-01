@@ -6,7 +6,13 @@ use Session;
 use App\Stream;
 use App\Viewer;
 use App\Chat;
+use App\Invoice;
 use App\Subscriber;
+use App\Countries;
+use App\User;
+use App\Theme;
+use App\ReportCat;
+use App\Report;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,22 +39,137 @@ class AccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         $user = Auth::user();
-        $stream = $user->stream;
-        
-        $viewers = $stream->viewers;
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
+
+        //Mes followers
         $subscribers = [];
         foreach($viewers as $viewer)
             $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
-        
-        $channels = Viewer::where('user_id', $user->id)->get();
-        $subscriptions = [];
-        foreach($channels as $channel)
-            $subscriptions[] = $channel->subscribes->where('viewer_id', $channel->id)->first();
 
-        return view('account.index')->with(compact('user', 'stream', 'viewers', 'subscribers', 'channels', 'subscriptions'));
+        //Mes dons reçus 
+        $donations = [];
+        foreach($viewers as $viewer){
+            foreach($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        //Mes streams favoris 
+        $donations = [];
+        foreach($channels as $channel){
+            foreach($channel->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        return view('account.index')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers', 
+                    'subscribers', 
+                    'donations', 
+                    'channels'
+                ));
+    }
+     /**
+     * Show the account form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function stats(){
+        $user = Auth::user();
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
+
+        //Mes followers
+        $subscribers = [];
+        foreach($viewers as $viewer)
+            $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
+
+        //Mes dons reçus 
+        $donations = [];
+        foreach($viewers as $viewer){
+            foreach($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        //Mes streams favoris 
+        $donations = [];
+        foreach($channels as $channel){
+            foreach($channel->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        return view('account.stats')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers', 
+                    'subscribers', 
+                    'donations', 
+                    'channels'
+                ));
+    }
+      /**
+     * Show the account form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fans(){
+        $user = Auth::user();
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+
+        return view('account.fans')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers'
+                ));
+    }
+      /**
+     * Show the account form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function follows(){
+        $user = Auth::user();
+        $stream = $user->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
+
+        //Mes followers
+        $subscribers = [];
+        foreach($viewers as $viewer)
+            $subscribers[] = $viewer->subscribes->where('viewer_id',$viewer->id)->first();
+
+        //Mes dons reçus 
+        $donations = [];
+        foreach($viewers as $viewer){
+            foreach($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        //Mes streams favoris 
+        $donations = [];
+        foreach($channels as $channel){
+            foreach($channel->donations as $donation)
+                $donations[] = $donation;
+        }
+
+        return view('account.follows')
+                ->with(compact(
+                    'user', 
+                    'stream', 
+                    'viewers', 
+                    'subscribers', 
+                    'donations', 
+                    'channels'
+                ));
     }
 
     /**
@@ -80,6 +201,7 @@ class AccountController extends Controller
         Session::flash('alert-class', 'alert-success');
         return redirect('home');
     }
+    
 
     /**
      * Update the specified account in storage
@@ -92,17 +214,30 @@ class AccountController extends Controller
         Session::flash('alert-class', 'alert-success'); 
         return redirect('home');
     }
-
     /**
-     * Update the specified account in storage
+     * Display the specified resource
      * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
+     * @param string $pseudo
+     * @return \Illuminate\Http\Response
      */
-    public function updateSubscription(Request $request){
-        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
-        Session::flash('alert-class', 'alert-success'); 
-        return redirect('home');
+    public function show(Request $request, $pseudo){
+        $streamer = User::where('pseudo',$pseudo)
+                    ->where('status',1)
+                    ->first();        
+        if(!$streamer)
+            abort(404);
+        
+        $themes = Theme::all();
+        $user = Auth::user();
+        if($user){
+            $user->token = $request->session()->get('_token');
+            $reportCat = ReportCat::all();
+            $report = Report::where('victim_id','=',$user->id)
+                            ->where('guilty_id','=',$streamer->id)
+                            ->where('status','=',1)
+                            ->first();
+        }
+        return view('account.profil', compact('themes','streamer', 'user','reportCat','report'));
     }
 
     /**
@@ -127,5 +262,5 @@ class AccountController extends Controller
         
         Auth::logout();
         return redirect('/login');
-    }
+    }   
 }

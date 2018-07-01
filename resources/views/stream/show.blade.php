@@ -1,8 +1,8 @@
 @extends('layouts.template')
 
 @section('content')
+	<div class="container-fluid top bottom">
 
-	<div class="container-fluid">
 		<div class="row">
 			<div id="player" class="col-12 col-md-8 mt-4">
 			@auth
@@ -25,15 +25,15 @@
 			</div>
 
 			{{-- Chatbox --}}
-		{{--	<div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
+			<div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
 				@guest
                     <p class="border-top d-flex flex-column justify-content-center text-center h-100">
 						Connectez-vous pour rédiger un message.
 					</p>
 				@else
-					<iframe src="http://localhost:8080/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+					<iframe src="<?php echo str_replace(":8000","",Request::root()); ?>:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
 				@endguest
-			</div>--}}
+			</div>
 
 
 			<div id="infos" class="col-12 d-none d-sm-block mt-4">
@@ -49,7 +49,7 @@
 					{{-- Configuration du stream par le propriétaire --}}
 					@if($streamer->id == Auth::user()->id)
 						<div class="col-12 mt-4" id="config_stream">
-							<h3>Configurer mon stream</h3>
+							<h3 class="mb-5">Configurer mon stream</h3>
 							<div class="row">
 								<p class="col-12 col-md-6">
 									Titre : 
@@ -77,12 +77,39 @@
 								</label>
 								Activer / Interrompre la diffusion
 							</label>
-						</div>
-
-						{{-- <div class="col-12 mt-4">
-							<h3>Gestion des spectateurs</h3>
 							
-						</div> --}}
+							<hr>
+							
+							<h3 class="mt-5 mb-5">Configurer mon chat</h3>
+							<div class="row">
+								<table class="col-5 col-md-4 listUsers">
+									<thead class="text-center">
+										<tr>
+											<th>Utilisateurs modérateurs</th>
+										</tr>
+										<tr>
+											<th>
+												{{ Form::text('q', '', ['class' =>  'searchUser','data-action' => 'mod', 'placeholder' =>  'Ajouter un utilisateur'])}}
+											</th>
+										</tr>
+									</thead>
+									<tbody class="align-top" id="listMods"></tbody>
+								</table>
+								<table class="col-5 offset-2 col-md-4 offset-md-4 listUsers">
+									<thead class="text-center">
+										<tr>
+											<th>Utilisateurs bannis</th>
+										</tr>
+										<tr>
+											<th>
+												{{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'ban', 'placeholder' =>  'Ajouter un utilisateur'])}}
+											</th>
+										</tr>
+									</thead>
+									<tbody class="align-top" id="listBans"></tbody>
+								</table>
+							</div>
+						</div>
 					@else {{-- Panel d'action du viewer --}}
 						<div class="col-12 col-md-8 d-flex justify-content-between">
 
@@ -142,16 +169,16 @@
 								@endforeach
 							</p>
 						</div>
+
+						{{-- Description du streamer --}}
+						<div class="col-12 mt-4">
+							<div id="streamer">
+								<h3>Description du streamer</h3>
+								<p>{{$streamer->description}}</p>
+							</div>
+						</div>
 					@endif
-				@endauth
-				
-				{{-- Description du streamer --}}
-				<div class="col-12 mt-4">
-					<div id="streamer">
-						<h3>Description du streamer</h3>
-						<p>{{$streamer->description}}</p>
-					</div>
-				</div>
+				@endauth				
 			</div>
 			
 			{{-- Boutons d'affichage mobile --}}
@@ -166,6 +193,16 @@
 
 @section('css')
 	<style>
+		table.listUsers{
+			min-height: 200px;
+			margin-bottom: 100px;
+			border: 1px solid;
+		}
+
+		table.listUsers tbody tr{
+			padding: 0 20px;
+		}
+
 		video{
 			background-color:black;
 			width:100%;
@@ -280,13 +317,21 @@
 
 @section('js')
 
-        <script src="/js/modernizr.custom.js"></script>
+    <script src="/js/modernizr.custom.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
 	<script src="/js/webrtc.js"></script>
 	<script src="/js/rtc-controller.js"></script>
+
+	@auth
+		@if($streamer->id != Auth::user()->id)
+			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		@endif
+	@endauth
+	
 	<script>
-		$(function(){
+		$(function(){		
+
 			//Texte du slider
 			$('.sliderText').click(function(){
 				$('#myRange').val($(this).data('value')).change();
@@ -372,7 +417,74 @@
 					console.log(data);
 				});
 			}
-			$(".update_stream").change(updateStream);			
+			$(".update_stream").change(updateStream);	
+			
+			/* Paypal Button */
+			if($("#paymentModal").length > 0){
+				paypal.Button.render({
+					env: 'sandbox', // Or 'production',
+					
+					client: {
+						sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
+						//production: 'xxxxxxxxx'
+					},
+					
+					commit: true, // Show a 'Pay Now' button
+
+					style: {
+						color: 'gold',
+						size: 'small'
+					},
+
+					payment: function(data, actions) {
+						//Set up the payment here
+						return actions.payment.create({
+							payment: {
+								transactions: [
+									{
+										amount: { 
+											total: $('#giveaway_change').val(), 
+											currency: 'EUR'
+										}
+									}
+								]
+							}
+						});
+					},
+
+					onAuthorize: function(data, actions) {
+						//Execute the payment here
+						return actions.payment.execute().then(function(payment) {
+							// The payment is complete!
+							// You can now show a confirmation message to the customer
+							payment.streamer = $('#pseudo').val();
+							payment.message = $('#giveaway_message').val();
+							$.ajax({
+								url: "/validGiveaway",
+								type: 'POST',
+								dataType: "JSON",
+								data: {
+									payment: payment
+								}
+							})
+							.done(function(data){
+								console.log(data);
+							})
+							.fail(function(data){
+								console.log(data);
+							});
+						});
+					},
+
+					onCancel: function(data, actions) {
+						//Buyer cancelled the payment
+					},
+
+					onError: function(err) {
+						//An error occurred during the transaction
+					}
+				}, '#paypal-button');
+			}
 		});
 	</script>
 	<script type="text/javascript">

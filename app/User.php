@@ -24,6 +24,7 @@ class User extends \TCG\Voyager\Models\User
         'pseudo', 
         'email', 
         'password',
+        'id_countries',
         'description',
         'status',
         'confirmation_code',
@@ -55,7 +56,14 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasOne('App\Stream','streamer_id');
     }
-
+     /**
+     * Get his stream list
+     * 
+     */
+    public function country() 
+    {
+        return $this->hasOne('App\Countries','id');
+    }
     /**
      * Get his chat message
      * 
@@ -63,5 +71,14 @@ class User extends \TCG\Voyager\Models\User
     public function viewers() 
     {
         return $this->hasMany('App\Viewer');
+    }
+
+    /**
+     * Get his messages
+     * 
+     */
+    public function messages() 
+    {
+        return $this->hasMany('App\Message');
     }
 }
