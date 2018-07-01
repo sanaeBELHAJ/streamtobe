@@ -23,18 +23,21 @@
                 </p>
                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a></li>
                     </ul>
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">Ma chaine                    
-                                        <i class="far fa-play-circle text-white"></i>
+                    <br>
+                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                            videocam
+                        </i>
                     </a>
-
                 </center>
             </div>
     </div>
     <div class="col-sm-9 pull-right top bottom">
+        <table class="table">
     <thead>
         <tr>
             <th class="text-center" colspan="4">Dons reçus</th>

@@ -22,11 +22,10 @@
                 </p>
                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a></li>
+                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a></li>
                     </ul>
-                   <br>
                     <br>
                     <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
                         <i style="font-size: 50px;margin-top: 10px" class="material-icons">
@@ -37,7 +36,7 @@
             </div>
     </div>
     <div class="col-sm-9 pull-right top bottom">
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th colspan="4" class="text-center">Mes chaines suivies</th>
@@ -78,49 +77,13 @@
                     @endforeach
                 @else
                     <tr>
-                        <th>Image</th>
-                        <th>Chaîne</th>
-                        <th>Ancienneté</th>
-                        <th>Statut</th>
+                        <td colspan="4" class="text-center">
+                            <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @if(count($channels) > 0)
-                        @foreach($channels as $channel)
-                            @if($channel->is_follower == 1)
-                                <tr>
-                                    <td>
-                                        <img class="avatar_follower" src="<?php echo asset('storage/'.$channel->stream->user->avatar); ?>" 
-                                            alt="" title="Image de profil">
-                                    </td>
-                                    <td>{{$channel->stream->user->pseudo}}</td>
-                                    <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
-                                    <td>
-                                        @if($channel->stream->status==1)
-                                            {!! link_to_route('stream.show',
-                                                                'En ligne', 
-                                                                [$channel->stream->user->pseudo], 
-                                                                ['class' => 'btn btn-success btn-block']) !!}
-                                        @else
-                                            {!! link_to_route('stream.show', 
-                                                                'Hors ligne', 
-                                                                [$channel->stream->user->pseudo], 
-                                                                ['class' => 'btn btn-secondary btn-block']) !!}
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="4" class="text-center">
-                                <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
-                            </td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
+                @endif
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection

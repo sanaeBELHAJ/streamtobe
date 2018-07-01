@@ -24,7 +24,8 @@ app.use(express.static(__dirname + "/public"));
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    //res.sendFile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 //DB Connection

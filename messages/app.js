@@ -10,7 +10,7 @@ const mysql = require('mysql');
 const config = {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'streamtobe'
 };
 const connection = mysql.createConnection(config);
@@ -23,7 +23,8 @@ app.use(express.static(__dirname + "/public"));
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    //res.sendFile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 //DB Connection
