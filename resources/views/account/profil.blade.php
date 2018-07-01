@@ -65,8 +65,13 @@
           <p class="title">{{ $streamer->description }}</p>
 
           <span>
-           <i class="material-icons" style="font-size: 16px;color: purple">location_on</i>{{ $streamer->country->name }}
-           <img style="width:10%" src="{{$streamer->country->svg }}">
+            @if($streamer->country != null)
+                <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
+                <img style="width:10%" src="{{ $streamer->country->svg }}">
+            @else
+                <i class="material-icons" style="font-size: 16px;">location_on</i>
+                Inconnu
+            @endif
           </span>
           <div style="margin: 24px 0;">
          </div>
