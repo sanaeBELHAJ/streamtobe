@@ -26,10 +26,10 @@
                         <div class="form-group row">
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('Countries') }}</label>
                             <div class="col-sm-3">
-                                <select id="stream_type" class="update_stream" data-config="type">
+                                <select id="stream_type" class="update_stream" data-config="type" name="country">
                                     @if($countries)
                                         @foreach($countries as $country)
-                                            <option value="{{$country->code}}">{{$country->name}}</option>
+                                            <option value="{{$country->id}}">{{$country->name}}</option>
                                         @endforeach
                                     @endif
                                 </select>        

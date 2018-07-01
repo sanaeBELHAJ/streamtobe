@@ -1,7 +1,6 @@
 @extends('layouts.template')
 
 @section('content')
-
 <div class="row">
     <div class="col-sm-3 gold">
             <div class="top bottom">
@@ -50,25 +49,16 @@
             <tbody>
                 @foreach($viewers as $viewer)
                     <tr>
-                        <th>Image</th>
-                        <th>Pseudo</th>
-                        <th>Ancienneté</th>
+                        <td><img class='avatar_follower' src="<?php echo asset('storage/'.$viewer->user->avatar); ?>"></td>
+                        <td>{{$viewer->user->pseudo}}</td>
+                        <td>
+                            {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
+                            <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach($viewers as $viewer)
-                        <tr>
-                            <td><img class='avatar_follower' src="<?php echo asset('storage/'.$viewer->user->avatar); ?>"></td>
-                            <td>{{$viewer->user->pseudo}}</td>
-                            <td>
-                                {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
-                                <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+                @endforeach
+            </tbody>
+        </table>
+</div>
 </div>
 @endsection

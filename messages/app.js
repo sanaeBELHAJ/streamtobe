@@ -10,7 +10,7 @@ const mysql = require('mysql');
 const config = {
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'streamtobe'
 };
 const connection = mysql.createConnection(config);

@@ -89,11 +89,11 @@ class RegisterController extends Controller
         $user = User::create([
                 'pseudo'            => $data['pseudo'],
                 'email'             => $data['email'],
-                'name'             => str_random(10),
+                'name'              => str_random(10),
+                'id_countries'      => $data['country'],
                 'password'          => Hash::make($data['password']),
                 'confirmation_code' => $data['confirmation_code']
             ]);
-
         $type = Type::where('name', 'default')->firstOrFail();
         $stream = Stream::create([
             'title' => 'Titre',

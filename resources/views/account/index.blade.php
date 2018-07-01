@@ -17,8 +17,13 @@
                 <p>
                     <center>{{ Auth::user()->pseudo }}</center>
                     <center>
-                        <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
-                        <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                        @if(Auth::user()->country != null)
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
+                            <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                        @else
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>
+                            Inconnu
+                        @endif
                     </center>
                 </p>
                 <center>
@@ -36,9 +41,10 @@
                     </a>
                 </center>
             </div>
-            <div class="col-sm-9 pull-right top bottom">
-                        @include('account.infos')
-            </div>
+      
+    </div>
+    <div class="col-sm-9 pull-right top bottom">
+        @include('account.infos')
     </div>
 </div>
 @endsection
