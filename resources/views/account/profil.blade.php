@@ -28,22 +28,32 @@
      font-size: 18px;
    }
 
-   a {
-     text-decoration: none;
-     font-size: 22px;
-     color: black;
+  .machaine:hover{
+        background-color:#b82e8a;
+        opacity: 0.7;
    }
-
-   button:hover, a:hover {
+   button:hover{
      opacity: 0.7;
    }
    </style>
 
-<div class="row">
-    <div class="col-sm-3">
-           
+<div class="row  top bottom ">
+    <div class="col-sm-4">
+            <div>
+            <center>
+                <a class="btn-follow" href="#">                  
+                    S'abonner               
+                </a>
+            </center>
+                
+            <center>
+                <a class="btn-follow" href="#">                  
+                    Disabonner               
+                </a>
+            </center>
+        </div>
     </div>
-    <div class="col-sm-6 pull-right top bottom">
+    <div class="col-sm-4">
         <h2 style="text-align:center"></h2>
         <div class="card">
             <div class="cadre-style">
@@ -63,8 +73,18 @@
          <p><button>Contacter</button></p>
         </div>
     </div>
-    <div class="col-sm-3">
-          <i class="far fa-play-circle text-white"></i>
+    <div class="col-sm-4">
+        
+        <p>{{ $streamer->pseudo }} est acctuellement en direct, vous pouvez rejoindre sa chaine.</p>
+        <div>
+            <center>
+                <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
+                    <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                       play_circle_filled
+                    </i>
+                </a>
+            </center>
+        </div>
     </div>
 </div>
 @endsection
