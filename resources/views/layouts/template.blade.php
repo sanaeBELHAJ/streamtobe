@@ -20,7 +20,6 @@
         {!! HTML::style('css/template.css') !!}
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
-        {!! HTML::style('css/font-awesome.min.css') !!}
         @yield('css')
         <style>
             #cookies{

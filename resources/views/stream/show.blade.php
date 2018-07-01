@@ -317,7 +317,7 @@
 
 @section('js')
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/modernizr.custom.js"></script>
 	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
 	<script src="https://cdn.pubnub.com/webrtc.js"></script>
 	<script src="https://cdn.pubnub.com/webrtc/rtc-controller.js"></script>
