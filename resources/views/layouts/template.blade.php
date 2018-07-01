@@ -17,6 +17,9 @@
         {!! Html::style('css/half-slider.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
+        {!! HTML::style('css/style.css') !!}
+        {!! HTML::style('css/normalize.css') !!}
+        {!! HTML::style('css/font-awesome.min.css') !!}
         @yield('css')
         <style>
             #cookies{
@@ -127,7 +130,7 @@
         </footer>
 
         <!-- JAVASCRIPT -->
-        {!! HTML::script('jquery-3.3.1.min.js') !!}
+        {!! HTML::script('jquery-2.2.4.min.js') !!}
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
