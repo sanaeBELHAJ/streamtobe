@@ -318,7 +318,6 @@
 @section('js')
 
     <script src="/js/modernizr.custom.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
 	<script src="/js/webrtc.js"></script>
 	<script src="/js/rtc-controller.js"></script>
@@ -565,6 +564,6 @@
         }
 
 
-        </script>
+    </script>
 
 @endsection
