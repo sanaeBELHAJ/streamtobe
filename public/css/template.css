@@ -153,7 +153,6 @@ border-radius: 50%;
     display: block;
     width: 200px;
     height: 44px;
-    line-height: 44px;
     margin: 0 auto;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
@@ -167,6 +166,15 @@ border-radius: 50%;
     color: #fff;
     margin-top: 10px;
 }
+
+.btn-follow:hover{
+    cursor: pointer;
+}
+
+.btn-follow:disabled{
+    cursor: not-allowed;
+}
+
 .send {
     position: absolute;
     right: 10px;

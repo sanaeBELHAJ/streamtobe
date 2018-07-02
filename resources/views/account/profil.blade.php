@@ -39,18 +39,29 @@
 
 <div class="row  top bottom ">
     <div class="col-sm-4">
-            <div>
-            <center>
-                <a class="btn-follow" href="#">                  
-                    S'abonner               
-                </a>
-            </center>
-                
-            <center>
-                <a class="btn-follow" href="#">                  
-                    Disabonner               
-                </a>
-            </center>
+        <div>
+            @foreach($user->viewers as $viewer)
+                @if($streamer->stream->id == $viewer->stream_id)
+                    @if($viewer->is_follower == 1)
+                        <center>
+                            <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                        </center>
+                        <center>
+                            <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
+                        </center>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                        <center>
+                            <button class="btn btn-follow" id="abo" href="#" disabled>S'abonner</button>
+                        </center>
+                        <center>
+                            <button class="btn btn-follow" id="desabo" href="#">Désabonner</button>
+                        </center>
+                    @endif
+                @endif
+            @endforeach
         </div>
     </div>
     <div class="col-sm-4">
@@ -80,7 +91,7 @@
     </div>
     <div class="col-sm-4">
         
-        <p>{{ $streamer->pseudo }} est acctuellement en direct, vous pouvez rejoindre sa chaine.</p>
+        <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
         <div>
             <center>
                 <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
@@ -92,4 +103,32 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')	
+	<script>
+		$(function(){		
+            /* Buttons stream (viewer) */
+			function followingStream(){
+                var following = ($(this).is("#abo")) ? 1 : 0;
+                var stream = "{{$streamer->pseudo}}";
+
+				$.ajax({
+					url: "/followStream",
+					type: 'POST',
+					data: {
+						stream: stream,
+						is_following: following
+					}
+				})
+				.done(function(data){
+                    $(".btn-follow").prop('disabled', function(i, v) { return !v; });
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+            }
+			$(".btn-follow").click(followingStream);
+		});
+	</script>
 @endsection
