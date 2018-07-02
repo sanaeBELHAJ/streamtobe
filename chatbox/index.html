@@ -25,7 +25,8 @@
             }
 
             form#formulaire_chat{
-                height: 15%;
+                height: 20%;
+                position: relative;
             }
 
             .chat_user{
@@ -56,9 +57,7 @@
             }
 
             textarea{
-                min-height:50%;
-                height: 95%;
-                max-height: 95%;
+                height: 100%;
                 padding: 0;
                 min-width:50%;
                 width: 80%;
@@ -77,10 +76,11 @@
             }
             .send {
                 position: absolute;
-                right: 10px;
-                bottom: 9px;
-                width: 50px;
+                right: 0;
+                top: 50%;
+                width: 75px;
                 height: 29px;
+                transform: translateY(-50%);
                 background: #7e27ff;
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
@@ -102,7 +102,7 @@
             
         </section>
 
-        <form action="/" id="formulaire_chat" class="h-100 row m-0">
+        <form action="/" id="formulaire_chat" class="row m-0">
             <textarea class="form-control" name="message" id="message" placeholder="Votre message..." autofocus></textarea>
             <input type="submit" id="envoi_message" class="send" value="Envoyer" />
         </form>
@@ -142,9 +142,9 @@
             
             //Arrivée d'un nouvel utilisateur sur le chat
             socket.on('welcome', function() {
-                $('#zone_chat').append('<p><em>\n\
-        \n\
-Message du system : Le contenu relatif à la violence, au tabagisme, à la drogue ou à la pornographie est strictement interdit. Les administrateurs effectueront des patrouilles 24 heures sur 24, 7 jours sur 7 et tout utilisateur trouvé avec un tel contenu sera banni.</em></p>');
+                $('#zone_chat').append(`<p><em>
+                    Important : Tout message ou contenu enfreignant les règles d'utilisations du site
+                    entrainera des sanctions immédiates pouvant aller au bannissement.</em></p>`);
             });
 
             // Quand on reçoit un message, on l'insère dans la page

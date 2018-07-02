@@ -5,23 +5,24 @@
 
 		<div class="row">
 			<div id="player" class="col-12 col-md-8 mt-4">
-			@auth
+				@auth
+					{{-- Vidéo --}}
 					<div class = "bodyDiv">
-				@if($streamer->id == Auth::user()->id)
-				{{-- Vidéo --}}
-					<div id="vid-box"></div>
-					<div id="stream-info" hidden="true">
-						<img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
-						<span id="here-now">0</span>
+						@if($streamer->id == Auth::user()->id)
+							<div id="vid-box"></div>
+							<div id="stream-info" hidden="true">
+								<img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
+								<span id="here-now">0</span>
+							</div>
+						@else
+							<div id="vid-box-viewer"></div>
+							<div id="stream-info">
+								<img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
+								<span id="here-now">0</span>
+							</div>
+						@endif
 					</div>
-					@else
-
-						<div id="vid-box-viewer"></div>
-						<div id="stream-info"><img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/><span id="here-now">0</span>
-						</div>
-					@endif
-			@endauth
-				</div>
+				@endauth
 			</div>
 
 			{{-- Chatbox --}}
