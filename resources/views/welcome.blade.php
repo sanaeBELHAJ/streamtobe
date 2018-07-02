@@ -40,8 +40,9 @@
                 </center>
             </div>
         </div>
-        <div class="col-sm-9 pull-right top bottom">
-                            les stream les plus populaires actives: 
+        <div class="col-sm-9 pull-right bottom" style="margin-top: 50px;">
+            <p> Les chaines que vous suivez :</p>
+            <hr>
                             <div class="col-12">
         @if(session()->has('ok'))
             <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
