@@ -48,7 +48,7 @@
         </style>
     </head>
     <body>
-        <header style="font-size:12px">
+        <header style="font-size:13px">
             <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class="row container-fluid">
                     <a class="navbar-brand" href="{{ url('/') }}">
@@ -76,7 +76,7 @@
                                  <div class="container-1">
                                     {{ Form::text('q', '', ['id' =>  'search', 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                                     <span class="icon">
-                                        <i class="material-icons" >
+                                        <i class="material-icons">
                                             search
                                         </i>
                                     </span>
