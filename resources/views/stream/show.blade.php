@@ -11,16 +11,16 @@
 				{{-- Vidéo --}}
 					<div id="vid-box"></div>
 					<div id="stream-info" hidden="true">
-						<img src="img/person_dark.png"/>
+						<img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
 						<span id="here-now">0</span>
 					</div>
 					@else
 
 						<div id="vid-box-viewer"></div>
-						<div id="stream-info"><img src="img/person_dark.png"/><span id="here-now">0</span>
+						<div id="stream-info"><img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/><span id="here-now">0</span>
 						</div>
 					@endif
-					@endauth
+			@endauth
 				</div>
 			</div>
 
