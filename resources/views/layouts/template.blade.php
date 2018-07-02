@@ -57,14 +57,14 @@
         </script>
     </head>
     <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container">
+        <header style="font-size:12px">
+            <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                <div class="row container-fluid">
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
-                        <span style="  font-family: BaskervilleAmpersand, Helvetica, Arial, Serif;">{{ setting('site.title') }}</span>
+                        <span class="logo-text">{{ setting('site.title') }}</span>
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                    <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" 
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -73,15 +73,25 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="d-flex justify-content-around  navbar-nav mr-auto">
-                            <li class="mx-3 d-flex align-items-center">
-                                {{ Form::text('q', '', ['class' =>  'form-control searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
-                            </li>
                             <li class="mx-3">
                                 <a href="{{ route('stream.index') }}" class="nav-link">{{ __('Streams') }}</a>
                             </li>
                         </ul>
     
                         <!-- Right Side Of Navbar -->
+                        
+                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
+                             <li class="mx-3 d-flex align-items-center">
+                                 <div class="container-1">
+                                    {{ Form::text('q', '', ['id' =>  'search', 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
+                                    <span class="icon">
+                                        <i class="material-icons" >
+                                            search
+                                        </i>
+                                    </span>
+                                 </div>
+                             </li>
+                        </ul>
                         <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
@@ -90,7 +100,9 @@
                             @else
                                 <li class="mx-3 d-flex align-items-center">
                                     <a href="/messages" class="d-flex align-start nav-link p-0">
-                                        <i class="far fa-envelope fa-1x text-white"></i>
+                                        <i class="material-icons">
+                                        mail_outline
+                                        </i>      
                                         {{-- <i class="fas fa-envelope fa-2x text-white"></i>
                                         <span class="h-50 badge badge-pill badge-danger">5</span> --}}
                                     </a>
@@ -143,7 +155,7 @@
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
-        {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!}
+        {{-- {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!} --}}
         {!! HTML::script('js/template.js') !!}
         
         <script>

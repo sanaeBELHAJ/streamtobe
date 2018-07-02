@@ -1,11 +1,11 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid p-0">
     @auth
 
     <div class="row">
-        <div class="col-sm-3 gold">
+        <div class="col-sm-3 profil-panel">
             <div class="top bottom">
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
                     <i class="far fa-edit text-white"></i>
@@ -40,8 +40,9 @@
                 </center>
             </div>
         </div>
-        <div class="col-sm-9 pull-right top bottom">
-                            les stream les plus populaires actives: 
+        <div class="col-sm-9 pull-right bottom" style="margin-top: 50px;">
+            <p> Les chaines que vous suivez :</p>
+            <hr>
                             <div class="col-12">
         @if(session()->has('ok'))
             <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
