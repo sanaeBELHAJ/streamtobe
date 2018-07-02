@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-        <div class="col-sm-3 gold">
+        <div class="col-sm-3  profil-panel">
             <div class="top bottom">
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
                     <i class="far fa-edit text-white"></i>

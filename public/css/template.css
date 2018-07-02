@@ -49,14 +49,12 @@ header .dropdown-menu{
 .profil-panel
 {
     color: white;
-    font-weight: bold;
     padding: 10px;
     background-color: #17141f;
 }
 .gold
 {
     color: white;
-    font-weight: bold;
     padding: 15px;
     background-color: #ffbf27;
 }
@@ -64,7 +62,8 @@ header .dropdown-menu{
     color: #FFEEB5;
 }
 .gold:hover{
-    color: #4b367c;
+    background: #ffc94d;
+    color: white;
 }
 .visible{
     background: rgb(75, 54, 124,.2)!important;
@@ -203,4 +202,7 @@ border-radius: 50%;
 .container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
     outline:none;
     background: #ffffff;
+}
+.watch .material-icons {
+    font-size: 12px;
 }
