@@ -25,17 +25,13 @@
                  <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item">
-                            <hr>
                             <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
-                            <hr>
                         </li>
                         <li  class="nav-item">
                             <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
-                            <hr>
                         </li>
                         <li  class="nav-item">
                             <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
-                            <hr>
                         </li>
                     </ul>
                     <br>

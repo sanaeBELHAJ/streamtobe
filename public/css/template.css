@@ -216,3 +216,25 @@ border-radius: 10%;
   margin-top: 8px;
   margin-bottom: 8px;
 }
+.profil-panel .btn{
+  border-top: 1.5px solid #17141f;
+  background: #17141f;
+  width:100%;
+}
+.profil-panel li a{
+  background:#17141f;
+  width:100%;
+  -webkit-appearance: button-bevel;
+    line-height: 1.8;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 5px;
+  box-shadow:0 -3px 3px -3px #4b367c; 
+}
+.profil-panel li a:hover{
+  background:black;
+  text-decoration: none;
+}
+.profil-panel .active{
+    background:black;
+}
