@@ -6,8 +6,15 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
                 <div class="card-body">
+                    @if(Session::has('message'))
+                        <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ Session::get('message') }}
+                        </p>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -66,12 +73,4 @@
         </div>
     </div>
 </div>
-@if(Session::has('messageRegister'))
-    <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        {{ Session::get('message') }}
-    </p>
-@endif
 @endsection

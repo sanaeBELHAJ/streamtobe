@@ -1,6 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
+
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-2 profil-panel">
@@ -31,6 +32,7 @@
                 {{-- Chatbox --}}
                 <div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
                     @guest
+
                     <p class="border-top d-flex flex-column justify-content-center text-center h-100">
                         Connectez-vous pour rédiger un message.
                     </p>

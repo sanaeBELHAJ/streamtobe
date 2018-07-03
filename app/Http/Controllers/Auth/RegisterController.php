@@ -130,10 +130,10 @@ class RegisterController extends Controller
             $message->to($data['email'])->subject("Confirmation d'inscription");
         });
 
-        Session::flash('messageRegister', 'Inscription effectuée, un email de confirmation vous a été adressé.');
+        Session::flash('message', 'Inscription effectuée, un email de confirmation vous a été adressé.');
         Session::flash('alert-class', 'alert-success'); 
 
-        return redirect($this->redirectPath())->with('messageRegister', 'Your message');
+        return redirect('/login');
     }
 
     /**
@@ -147,9 +147,12 @@ class RegisterController extends Controller
         $user = User::whereConfirmationCode($confirmation_code)->first();
 
         if (!$user){
+            Session::flash('message', 'Code de confirmation invalide ou expiré.');
+            Session::flash('alert-class', 'alert-danger'); 
             return redirect('login');
         }
 
+        $user->status = 1;
         $user->activated = 1;
         $user->confirmation_code = null;
         $user->save();
