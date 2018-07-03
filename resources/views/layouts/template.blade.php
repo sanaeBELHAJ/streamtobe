@@ -68,21 +68,18 @@
                             </li>
                         </ul>
     
-                        <!-- Right Side Of Navbar -->
-                        
+
                         <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                              <li class="mx-3 d-flex align-items-center">
-                                 <div class="container-1">
-                                    {{ Form::text('q', '', ['id' =>  'search', 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
-                                    <span class="icon">
+                                 <div class="search">
+                                     <button type="submit">
                                         <i class="material-icons">
                                             search
                                         </i>
-                                    </span>
+                                     </button>
+                                    {{ Form::text('q', '', [ 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                                  </div>
                              </li>
-                        </ul>
-                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
