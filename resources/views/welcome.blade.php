@@ -5,10 +5,12 @@
     @auth
 
     <div class="row">
-        <div class="col-sm-3 profil-panel">
+        <div class="col-sm-2 profil-panel">
             <div class="top bottom">
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                    <i class="far fa-edit text-white"></i>
+                   <i class="material-icons">
+                    edit
+                   </i>
                 </a>
                 <br>
                 <div class="cadre-style">
@@ -24,13 +26,22 @@
                         <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
                     </center>
                 </p>
-                <center>
+                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a></li>
+                        <li  class="nav-item">
+                            <hr>
+                            <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
+                            <hr>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
+                            <hr>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
+                            <hr>
+                        </li>
                     </ul>
-                    <br>
                     <br>
                     <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
                         <i style="font-size: 50px;margin-top: 10px" class="material-icons">
@@ -40,7 +51,7 @@
                 </center>
             </div>
         </div>
-        <div class="col-sm-9 pull-right bottom" style="margin-top: 50px;">
+        <div class="col-sm-10 pull-right bottom" style="margin-top: 50px;">
             <p> Les chaines que vous suivez :</p>
             <hr>
                             <div class="col-12">

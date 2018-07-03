@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="row">
-    <div class="col-sm-3 gold">
+  <div class="col-sm-2  profil-panel">
             <div class="top bottom">
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                    <i class="far fa-edit text-white"></i>
+                   <i class="material-icons">
+                    edit
+                   </i>
                 </a>
                 <br>
                 <div class="cadre-style">
@@ -16,16 +18,30 @@
                 <p>
                     <center>{{ Auth::user()->pseudo }}</center>
                     <center>
-                        <i class="material-icons" style="font-size: 16px;">location_on</i>
-                        @if(Auth::user()->country){{ Auth::user()->country->name }}@endif
-                        <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
+                        @if(Auth::user()->country != null)
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
+                            <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                        @else
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>
+                            Inconnu
+                        @endif
                     </center>
                 </p>
-                <center>
+                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a></li>
+                        <li  class="nav-item">
+                            <hr>
+                            <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
+                            <hr>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
+                            <hr>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
+                            <hr>
+                        </li>
                     </ul>
                     <br>
                     <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
@@ -35,6 +51,7 @@
                     </a>
                 </center>
             </div>
+      
     </div>
     <div class="col-sm-9 pull-right top bottom">
         <table class="table">

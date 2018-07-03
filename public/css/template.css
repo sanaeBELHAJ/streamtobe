@@ -100,7 +100,7 @@ vertical-align:middle;
 background: #4b367c;
 color:white;
 text-decoration:none;
-border-radius: 50%;
+border-radius: 10%;
 }
 .machaine:hover {
     color:#ff66b3;
@@ -205,4 +205,14 @@ border-radius: 50%;
 }
 .watch .material-icons {
     font-size: 12px;
+}
+.profil-panel .top{
+    margin-top: 50px;
+}
+.profil-panel hr{
+  border: 0.5px solid;
+  background: #4b367c;
+  color: #4b367c;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
