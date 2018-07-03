@@ -254,7 +254,8 @@
 
 		/*******/
 
-
+		/* Bouton d'activation du stream */
+		
 		/* The switch - the box around the slider */
 		#config_stream .switch {
 			position: relative;

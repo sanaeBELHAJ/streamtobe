@@ -111,12 +111,19 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket_id: socket.id,
                 stream_id: socket.stream_id,
                 user_id: socket.user_id,
+                user_pseudo: socket.user_pseudo,
                 viewer_rank: socket.viewer_rank
             }
         );
-        socket.emit('welcome');
+
         console.log("---- WELCOME ------");
         console.log(allClients); 
+        socket.emit('welcome');
+        
+        checkViewers(socket);
+        setInterval(function(){
+            checkViewers(socket);
+        }, 3000);
     });
         
     // Réception d'un message
@@ -207,6 +214,24 @@ io.sockets.on('connection', function (socket, pseudo) {
     }
     setInterval(function(){checkDonations(socket)}, 1000);
 
+    //Modification de la liste d'amis
+    async function checkViewers(socket){
+        var tab = allClients.sort(function(a,b){
+            return a.viewer_rank - b.viewer_rank;
+        });
+
+        var viewers = [];
+
+        tab.forEach(function(element){
+            if(element.stream_id == socket.stream_id)
+                viewers.push({
+                    pseudo: element.user_pseudo,
+                    rank: element.viewer_rank
+                });
+        });
+
+        socket.emit('updateList', viewers);
+    }
 });
 
 
