@@ -152,6 +152,7 @@ class RegisterController extends Controller
             return redirect('login');
         }
 
+        $user->status = 1;
         $user->activated = 1;
         $user->confirmation_code = null;
         $user->save();
