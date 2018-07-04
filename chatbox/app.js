@@ -112,6 +112,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                 stream_id: socket.stream_id,
                 user_id: socket.user_id,
                 user_pseudo: socket.user_pseudo,
+                user_avatar: socket.user_avatar,
                 viewer_rank: socket.viewer_rank
             }
         );
@@ -226,7 +227,8 @@ io.sockets.on('connection', function (socket, pseudo) {
             if(element.stream_id == socket.stream_id)
                 viewers.push({
                     pseudo: element.user_pseudo,
-                    rank: element.viewer_rank
+                    rank: element.viewer_rank,
+                    avatar: element.user_avatar
                 });
         });
 

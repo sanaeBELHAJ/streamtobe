@@ -79,7 +79,7 @@
 								Activer / Interrompre la diffusion
 							</label>
 							
-							<hr>
+							{{-- <hr>
 							
 							<h3 class="mt-5 mb-5">Configurer mon chat</h3>
 							<div class="row">
@@ -109,7 +109,7 @@
 									</thead>
 									<tbody class="align-top" id="listBans"></tbody>
 								</table>
-							</div>
+							</div> --}}
 						</div>
 					@else {{-- Panel d'action du viewer --}}
 						<div class="col-12 col-md-8 d-flex justify-content-between">

@@ -17,7 +17,6 @@
             #zone_chat, #zone_users{
                 width: 100%;
                 background: #330033;
-                color: yellow;
                 height: 70%;
                 font-size: 12px;
                 overflow-wrap: break-word;
@@ -28,9 +27,24 @@
                 text-align: center;
             }
 
-
-            #zone_users a.nav-link{
+            .white{
                 color: white;
+            }
+
+            .red{
+                color: red;
+            }
+
+            .green{
+                color: green;
+            }
+
+            .yellow{
+                color: yellow;
+            }
+
+            #zone_users a:hover {
+                color: inherit;
             }
 
             form#formulaire_chat{
@@ -151,9 +165,9 @@
             </div>	
         </div>
 
-        <section id="zone_chat" class="d-block"></section>
+        <section id="zone_chat" class="yellow d-block"></section>
 
-        <section id="zone_users" class="d-none">
+        <section id="zone_users" class="white d-none">
             <input type="text" id="search_contact" class="form-control w-75 mx-auto" placeholder="Rechercher">
             <span></span>
         </section>
@@ -249,26 +263,58 @@
             
             // Affichage de la liste des viewers
             socket.on('updateList', function(data) {
+                
                 console.log(data);
                 var text = "";
+                var port = (window.location.hostname == "localhost") ? ":8000" : "";
+                
                 $.each(data, function(index, user){
-                    text += "<a class='nav-link text-center' data-pseudo='"+user.pseudo+"' href='#'>"+user.pseudo+" ( "+user.rank+" )</a>";
+                    console.log(user.rank);
+                    text += "<p class='nav-link text-center' data-pseudo='"+user.pseudo+"'>";
+
+                        var ban = "<i class='btn fas fa-user-times'></i>";
+                        var mod = "<i class='btn fas fa-cog'></i>";
+                        var color = "white";
+
+                        if(user.rank<0){ //banni
+                            ban = "<i class='fas fa-user'></i>";
+                            color = "red";
+                        }
+                        else if(user.rank==1){ //mod
+                            mod = "<i class='fas fa-user'></i>";
+                            color = "green";
+                        }
+                        else if(user.rank==2){ //streamer
+                            mod = "";
+                            ban = "";
+                            color = "yellow";
+                        }
+                        text += ban+mod;
+                        text += "<a href='http://localhost:8000/home/"+user.pseudo+"' target='_blank' class='btn "+color+"'>";
+                            text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+user.avatar+"'> ";
+                            text += user.pseudo;
+                        text += "</a>";
+                    text += "</p>";
                 });
                 $('#zone_users span').html(text);
+                searchingViewers();
             });
 
             //Recherche et affichage d'un membre parmi la liste de contact disponible
-            $("#search_contact").keyup(function(){
-                if($(this).val() == "")
-                    $("#zone_users a.nav-link").show();
-                else{
-                    $("#zone_users a.nav-link").hide();
-                    $("#zone_users a.nav-link[data-pseudo*='"+$(this).val()+"']").show();
-                }
-            });
+            $("#search_contact").keyup(searchingViewers);
                         
             /* FONCTIONS */
             
+            //N'affiche que les viewers recherchés
+            function searchingViewers(){
+                if($("#search_contact").val() == "")
+                    $("#zone_users .nav-link").show();
+                else{
+                    $("#zone_users .nav-link").hide();
+                    $("#zone_users .nav-link[data-pseudo*='"+$("#search_contact").val()+"']").show();
+                }
+            }
+
             //Recupère les paramètres fournies dans l'URL
             function getUrlParameter(sParam) {
                 var sPageURL = decodeURIComponent(window.location.search.substring(1)),
