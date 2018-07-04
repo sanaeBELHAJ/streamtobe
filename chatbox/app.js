@@ -129,6 +129,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         
     // Envoi d'un message
     socket.on('message', async function (message) {
+        updateViewer(socket, allClients);
         if(socket.viewer_rank >= 0){ //Vérification du statut
             message = ent.encode(message);
             content = { 
@@ -158,10 +159,14 @@ io.sockets.on('connection', function (socket, pseudo) {
                 }
             });
         }
+        else{//Bannissement
+            io.to(socket.id).emit('ban');
+        }
     }); 
 
     //Modération d'un message
     socket.on('delete', function(message_id){
+        updateViewer(socket, allClients);
         if(socket.viewer_rank >= 1){ //Vérification du statut
             queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);
 
@@ -175,7 +180,8 @@ io.sockets.on('connection', function (socket, pseudo) {
 
     //Changement du statut
     socket.on('editRank', function(status, pseudo){
-        if(status !== false && socket.viewer_rank==2){ //Vérification du statut
+        updateViewer(socket, allClients);
+        if(status !== false && socket.viewer_rank==2){ //Vérification du statut du staff
             allClients.forEach(function(element){
                 if(element.user_pseudo == pseudo){
                     queryDB(
@@ -241,15 +247,38 @@ io.sockets.on('connection', function (socket, pseudo) {
         var viewers = [];
 
         tab.forEach(function(element){
-            if(element.stream_id == socket.stream_id)
+            if(element.stream_id == socket.stream_id){
+                //Si le viewer est un modo / streamer
+                var staff = (socket.viewer_rank>=1);
                 viewers.push({
                     pseudo: element.user_pseudo,
                     rank: element.viewer_rank,
-                    avatar: element.user_avatar
+                    avatar: element.user_avatar,
+                    is_staff: staff
                 });
+            }
         });
 
         socket.emit('updateList', viewers);
+    }
+
+    function updateViewer(socket, allClients){
+        /*
+            {
+                socket_id: socket.id,
+                stream_id: socket.stream_id,
+                user_id: socket.user_id,
+                user_pseudo: socket.user_pseudo,
+                user_avatar: socket.user_avatar,
+                viewer_rank: socket.viewer_rank
+            }
+        */
+        allClients.forEach(function(element){
+            if(socket.user_id == element.user_id){
+                socket.stream_id = element.stream_id;
+                socket.viewer_rank = element.viewer_rank;
+            }
+        });
     }
 });
 

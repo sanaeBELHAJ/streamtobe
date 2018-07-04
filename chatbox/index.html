@@ -240,6 +240,12 @@
             //Modération d'un message
             socket.on('delete', function(message_id) {
                 $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
+                $('p[data-message="'+message_id+'"] .fa-ban.delete').hide();
+            });
+
+            //Bannissement de l'utilisateur
+            socket.on('ban', function() {
+                $('#zone_chat').append("<p>Envoi impossible : Vous avez été banni du chat.</p>");
             });
 
             //Réception de dons
@@ -267,26 +273,28 @@
                 var port = (window.location.hostname == "localhost") ? ":8000" : "";
                 
                 $.each(data, function(index, user){
+                    var color = "white";
                     text += "<p class='nav-link text-center' data-pseudo='"+user.pseudo+"'>";
-
-                        var ban = "<i class='btn fas fa-user-times ban' title='Bannir cet utilisateur du chat'></i>";
-                        var mod = "<i class='btn fas fa-cog modo' title='Promouvoir cet utilisateur comme modérateur'></i>";
-                        var color = "white";
-
-                        if(user.rank<0){ //banni
-                            ban = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
-                            color = "red";
+                        //Si le viewer est un modo / streamer
+                        if(user.is_staff){
+                            var ban = "<i class='btn fas fa-user-times ban' title='Bannir cet utilisateur du chat'></i>";
+                            var mod = "<i class='btn fas fa-cog modo' title='Promouvoir cet utilisateur comme modérateur'></i>";
+                            
+                            if(user.rank<0){ //banni
+                                ban = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
+                                color = "red";
+                            }
+                            else if(user.rank==1){ //mod
+                                mod = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
+                                color = "green";
+                            }
+                            else if(user.rank==2){ //streamer
+                                mod = "";
+                                ban = "";
+                                color = "yellow";
+                            }
+                            text += ban+mod;
                         }
-                        else if(user.rank==1){ //mod
-                            mod = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
-                            color = "green";
-                        }
-                        else if(user.rank==2){ //streamer
-                            mod = "";
-                            ban = "";
-                            color = "yellow";
-                        }
-                        text += ban+mod;
                         text += "<a href='http://localhost:8000/home/"+user.pseudo+"' target='_blank' class='btn "+color+"'>";
                             text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+user.avatar+"'> ";
                             text += user.pseudo;
