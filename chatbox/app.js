@@ -124,49 +124,66 @@ io.sockets.on('connection', function (socket, pseudo) {
         checkViewers(socket);
         setInterval(function(){
             checkViewers(socket);
-        }, 3000);
+        }, 2000);
     });
         
-    // Réception d'un message
+    // Envoi d'un message
     socket.on('message', async function (message) {
-        message = ent.encode(message);
-        content = { 
-            viewer_id: socket.viewer_id, 
-            message: message, 
-            status: 1
-        };
-        
-        var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
+        if(socket.viewer_rank >= 0){ //Vérification du statut
+            message = ent.encode(message);
+            content = { 
+                viewer_id: socket.viewer_id, 
+                message: message, 
+                status: 1
+            };
+            
+            var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
 
-        
-        allClients.forEach(function(client, index) { //Diffusion du message
-            if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
-                var datas = {
-                    pseudo: socket.user_pseudo, 
-                    avatar: socket.user_avatar,
-                    message: content.message, 
-                    status: content.status,
-                    viewer_rank: socket.viewer_rank,
-                    message_id: message.insertId,
-                };
-                console.log(datas);
-                if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
-                    datas.admin = 1;
+            
+            allClients.forEach(function(client, index) { //Diffusion du message
+                if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
+                    var datas = {
+                        pseudo: socket.user_pseudo, 
+                        avatar: socket.user_avatar,
+                        message: content.message, 
+                        status: content.status,
+                        viewer_rank: socket.viewer_rank,
+                        message_id: message.insertId,
+                    };
+                    console.log(datas);
+                    if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
+                        datas.admin = 1;
 
-                io.to(client.socket_id).emit('message', datas);
-            }
-        });
+                    io.to(client.socket_id).emit('message', datas);
+                }
+            });
+        }
     }); 
 
     //Modération d'un message
     socket.on('delete', function(message_id){
-        if(socket.viewer_rank > 0){ //Vérification du statut
+        if(socket.viewer_rank >= 1){ //Vérification du statut
             queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);
 
             //Envoi du message aux utilisateurs connectés sur le même stream
             allClients.forEach(function(client, index) {
                 if(client.stream_id == socket.stream_id)
                     io.to(client.socket_id).emit('delete', message_id);
+            });
+        }
+    });
+
+    //Changement du statut
+    socket.on('editRank', function(status, pseudo){
+        if(status !== false && socket.viewer_rank==2){ //Vérification du statut
+            allClients.forEach(function(element){
+                if(element.user_pseudo == pseudo){
+                    queryDB(
+                        'UPDATE stb_viewers SET rank = ? WHERE user_id = ? AND stream_id = ?', 
+                        [status, element.user_id, element.stream_id]
+                    );
+                    element.viewer_rank = status;
+                }
             });
         }
     });
@@ -215,7 +232,7 @@ io.sockets.on('connection', function (socket, pseudo) {
     }
     setInterval(function(){checkDonations(socket)}, 1000);
 
-    //Modification de la liste d'amis
+    //Modification de la liste de viewers
     async function checkViewers(socket){
         var tab = allClients.sort(function(a,b){
             return a.viewer_rank - b.viewer_rank;
