@@ -176,6 +176,9 @@ io.sockets.on('connection', function (socket, pseudo) {
                     io.to(client.socket_id).emit('delete', message_id);
             });
         }
+        else{//Bannissement
+            io.to(socket.id).emit('demod');
+        }
     });
 
     //Changement du statut

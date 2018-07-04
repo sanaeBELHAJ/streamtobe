@@ -248,6 +248,11 @@
                 $('#zone_chat').append("<p>Envoi impossible : Vous avez été banni du chat.</p>");
             });
 
+            //Retrait du statut de modérateur
+            socket.on('demod', function() {
+                $('#zone_chat').append("<p>Erreur : Vous n'êtes pas modérateur de ce chat.</p>");
+            });
+
             //Réception de dons
             socket.on('dons', function(data) {
                 $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');

@@ -42,24 +42,26 @@
         <div>
             @foreach($user->viewers as $viewer)
                 @if($streamer->stream->id == $viewer->stream_id)
-                    @if($viewer->is_follower == 1)
-                        <center>
-                            <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
-                        </center>
-                        <center>
-                            <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
-                        </center>
-                        @break
-                    @endif
 
-                    @if($loop->last)
+                    {{-- Si l'utilisateur suit le streamer --}}
+                    @if($viewer->is_follower == 1)
                         <center>
                             <button class="btn btn-follow" id="abo" href="#" disabled>S'abonner</button>
                         </center>
                         <center>
                             <button class="btn btn-follow" id="desabo" href="#">Désabonner</button>
                         </center>
+                        @break
                     @endif
+                    
+                    {{-- Sinon --}}
+                    <center>
+                        <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                    </center>
+                    <center>
+                        <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
+                    </center>
+                    
                 @endif
             @endforeach
         </div>
