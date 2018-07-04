@@ -181,7 +181,7 @@ io.sockets.on('connection', function (socket, pseudo) {
     //Changement du statut
     socket.on('editRank', function(status, pseudo){
         updateViewer(socket, allClients);
-        if(status !== false && socket.viewer_rank==2){ //Vérification du statut du staff
+        if(status !== false && socket.viewer_rank>=1){ //Vérification du statut du staff
             allClients.forEach(function(element){
                 if(element.user_pseudo == pseudo){
                     queryDB(
@@ -192,6 +192,7 @@ io.sockets.on('connection', function (socket, pseudo) {
                 }
             });
         }
+        updateViewer(socket, allClients);
     });
 
     //Déconnexion d'un utilisateur
@@ -240,8 +241,11 @@ io.sockets.on('connection', function (socket, pseudo) {
 
     //Modification de la liste de viewers
     async function checkViewers(socket){
+        updateViewer(socket, allClients);
         var tab = allClients.sort(function(a,b){
-            return a.viewer_rank - b.viewer_rank;
+            if(a.user_pseudo < b.user_pseudo) return -1;
+            if(a.user_pseudo > b.user_pseudo) return 1;
+            return 0;
         });
 
         var viewers = [];
