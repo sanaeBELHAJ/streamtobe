@@ -24,14 +24,14 @@
                 </p>
                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
+                         <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
+                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
                         </li>
                     </ul>
                     <br>

@@ -1,41 +1,53 @@
 @extends('layouts.template')
 
 @section('content')
-    <style>
-   .card {
-     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-     max-width: 300px;
-     margin: auto;
-     text-align: center;
-     font-family: arial;
-   }
-
-   .title {
-     color: grey;
-     font-size: 18px;
-   }
-
-   button {
-     border: none;
-     outline: 0;
-     display: inline-block;
-     padding: 8px;
-     color: white;
-     background-color: #4b367c;
-     text-align: center;
-     cursor: pointer;
-     width: 100%;
-     font-size: 18px;
-   }
-
-  .machaine:hover{
-        background-color:#b82e8a;
-        opacity: 0.7;
-   }
-   button:hover{
-     opacity: 0.7;
-   }
-   </style>
+<div class="row">
+        <div class="col-sm-2  profil-panel">
+            <div class="top bottom">
+               
+                <br>
+                <div class="cadre-style">
+                    <center>
+                        <img class="resize-img" src="<?php echo asset('storage/'.$streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
+                    </center> 
+                </div>
+                <p>
+                    <center>{{ $streamer->pseudo }}</center>
+                    <center>
+                        @if($streamer->country != null)
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
+                            <img style="width:10%" src="{{ $streamer->country->svg }}">
+                        @else
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>
+                            Inconnu
+                        @endif
+                    </center>
+                </p>
+                 <center>
+                    <ul class="navbar-nav">
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                            videocam
+                        </i>
+                    </a>
+                </center>
+            </div>
+      
+    </div>
+    <div class="col-sm-10 pull-right top bottom">
+    </div>
+</div>
 
 <div class="row  top bottom ">
     <div class="col-sm-4">

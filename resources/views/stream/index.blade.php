@@ -16,9 +16,9 @@
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
                         <option> Séléctionner une catégorie</option>
                         @foreach($themes as $theme)
-                        @foreach($theme->types as $type)
-                        <option value="{{$type->id}}">{{$type->name}}</option>
-                        @endforeach
+                            @foreach($theme->types as $type)
+                                <option value="{{$type->id}}">{{$type->name}}</option>
+                            @endforeach
                         @endforeach
                     </select>        
                 </div>
@@ -27,9 +27,9 @@
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
                         <option> Séléctionner un pays</option>
                         @if($countries)
-                        @foreach($countries as $country)
-                        <option value="{{$country->id}}">{{$country->name}}</option>
-                        @endforeach
+                            @foreach($countries as $country)
+                                <option value="{{$country->id}}">{{$country->name}}</option>
+                            @endforeach
                         @endif
                     </select>        
                 </div>
@@ -59,12 +59,18 @@
                         <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
                         @endif
                     </a>
-                    @if($stream->status==1)
-                    {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
-                    @else
-                    {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
-                    @endif
-                    <img style="width:10%" src="@auth @if(Auth::user()->country){{ Auth::user()->country->svg }}@endif @endauth">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @if($stream->status==1)
+                            <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                    {{ $stream->user->pseudo}}
+                                </a>
+                            @endif
+                        </div>
+                        <div class="col-sm-6">
+                            <img class="right" style="width:20%; padding-top: 4px" src="@auth @if(Auth::user()->country){{ Auth::user()->country->svg }}@endif @endauth">
+                        </div>
+                    </div>
                 </div>
                 @endforeach
             </div>
