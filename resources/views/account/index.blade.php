@@ -5,11 +5,13 @@
 <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">
-                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                   <i class="material-icons">
-                    edit
-                   </i>
-                </a>
+                @if( Auth::user()->pseudo == $streamer->pseudo)
+                    <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                       <i class="material-icons">
+                        edit
+                       </i>
+                    </a>
+                @endif
                 <br>
                 <div class="cadre-style">
                     <center>

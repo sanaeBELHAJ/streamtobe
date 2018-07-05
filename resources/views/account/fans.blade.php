@@ -4,22 +4,29 @@
 <div class="row">
     <div class="col-sm-2  profil-panel">
             <div class="top bottom">
-                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                   <i class="material-icons">
-                    edit
-                   </i>
-                </a>
+                @if( Auth::user()->pseudo == $streamer->pseudo)
+                    <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                       <i class="material-icons">
+                        edit
+                       </i>
+                    </a>
+                @endif
                 <br>
                 <div class="cadre-style">
                     <center>
-                        <img class="resize-img" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
+                        <img class="resize-img" src="<?php echo asset('storage/'.$streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
                     </center> 
                 </div>
                 <p>
-                    <center>{{ Auth::user()->pseudo }}</center>
+                    <center>{{ $streamer->pseudo }}</center>
                     <center>
-                        <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
-                        <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                        @if($streamer->country != null)
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
+                            <img style="width:10%" src="{{ $streamer->country->svg }}">
+                        @else
+                            <i class="material-icons" style="font-size: 16px;">location_on</i>
+                            Inconnu
+                        @endif
                     </center>
                 </p>
                 <center>
@@ -35,11 +42,13 @@
                         </li>
                     </ul>
                     <br>
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
-                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                            videocam
-                        </i>
-                    </a>
+                    @if( Auth::user()->pseudo == $streamer->pseudo)
+                        <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                            <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                                videocam
+                            </i>
+                        </a>
+                    @endif
                 </center>
             </div>
     </div>

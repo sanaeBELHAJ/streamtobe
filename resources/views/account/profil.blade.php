@@ -36,6 +36,7 @@
                         </li>
                     </ul>
                     <br>
+
                     <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
                         <i style="font-size: 50px;margin-top: 10px" class="material-icons">
                             videocam
@@ -46,6 +47,31 @@
       
     </div>
     <div class="col-sm-10 pull-right top bottom">
+         <div class=''>
+            @foreach($user->viewers as $viewer)
+                @if($streamer->stream->id == $viewer->stream_id)
+                    @if($viewer->is_follower == 1)
+                        <center>
+                            <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                        </center>
+                        <center>
+                            <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
+                        </center>
+                        @break
+                    @endif
+
+                    @if($loop->last)
+                        <center>
+                            <button class="btn btn-follow" id="abo" href="#" disabled>S'abonner</button>
+                        </center>
+                        <center>
+                            <button class="btn btn-follow" id="desabo" href="#">Désabonner</button>
+                        </center>
+                    @endif
+                @endif
+            @endforeach
+        </div>
+        
     </div>
 </div>
 
