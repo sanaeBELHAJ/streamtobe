@@ -125,7 +125,10 @@ class StreamController extends Controller
         $term = Input::get('term');
         $results = array();
         
-        $queries = User::where('pseudo', 'LIKE', '%'.$term.'%')->take(5)->get();
+        $queries = User::where('pseudo', 'LIKE', '%'.$term.'%')
+                        ->where("status",'>=', 1)
+                        ->take(5)
+                        ->get();
         
         foreach ($queries as $query)
             $results[] = [ 

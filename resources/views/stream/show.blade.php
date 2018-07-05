@@ -84,7 +84,49 @@
                         Activer / Interrompre la diffusion
                     </label>
 
-                    <hr>
+							<label>
+								<label class="switch align-middle m-0">
+									<input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
+											@if($streamer->stream->status == 1) checked @endif >
+									<span class="slider round"></span>
+								</label>
+								Activer / Interrompre la diffusion
+							</label>
+							
+							{{-- <hr>
+							
+							<h3 class="mt-5 mb-5">Configurer mon chat</h3>
+							<div class="row">
+								<table class="col-5 col-md-4 listUsers">
+									<thead class="text-center">
+										<tr>
+											<th>Utilisateurs modérateurs</th>
+										</tr>
+										<tr>
+											<th>
+												{{ Form::text('q', '', ['class' =>  'searchUser','data-action' => 'mod', 'placeholder' =>  'Ajouter un utilisateur'])}}
+											</th>
+										</tr>
+									</thead>
+									<tbody class="align-top" id="listMods"></tbody>
+								</table>
+								<table class="col-5 offset-2 col-md-4 offset-md-4 listUsers">
+									<thead class="text-center">
+										<tr>
+											<th>Utilisateurs bannis</th>
+										</tr>
+										<tr>
+											<th>
+												{{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'ban', 'placeholder' =>  'Ajouter un utilisateur'])}}
+											</th>
+										</tr>
+									</thead>
+									<tbody class="align-top" id="listBans"></tbody>
+								</table>
+							</div> --}}
+						</div>
+					@else {{-- Panel d'action du viewer --}}
+						<div class="col-12 col-md-8 d-flex justify-content-between">
 
                     <h3 class="mt-5 mb-5">Configurer mon chat</h3>
                     <div class="row">
@@ -260,14 +302,15 @@
 
     /*******/
 
-
-    /* The switch - the box around the slider */
-    #config_stream .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
+		/* Bouton d'activation du stream */
+		
+		/* The switch - the box around the slider */
+		#config_stream .switch {
+			position: relative;
+			display: inline-block;
+			width: 60px;
+			height: 34px;
+		}
 
     /* Hide default HTML checkbox */
     #config_stream .switch input {display:none;}
