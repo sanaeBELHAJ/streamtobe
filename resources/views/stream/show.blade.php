@@ -125,7 +125,7 @@
 								</table>
 							</div> --}}
 						</div>
-					@else {{-- Panel d'action du viewer --}}
+					<!--else {{-- Panel d'action du viewer --}}-->
 						<div class="col-12 col-md-8 d-flex justify-content-between">
 
                     <h3 class="mt-5 mb-5">Configurer mon chat</h3>

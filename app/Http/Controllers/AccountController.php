@@ -36,12 +36,18 @@ class AccountController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user = null) {
-        $user = Auth::user();
+    public function index(Request $request, $pseudo = null) {
+        if ($pseudo != null) {
+            $streamer = User::where('pseudo', $pseudo)
+                    ->first();
+        } else {
+            $streamer = Auth::user();
+            $user = Auth::user();
+        }
 
-        $stream = $user->stream; //Chaine de l'utilisateur
+        $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
-        $channels = Viewer::where('user_id', $user->id)->get(); //Chaines suivies par l'utilisateur
+        $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
         //Mes followers
         $subscribers = [];
         foreach ($viewers as $viewer)
@@ -63,7 +69,7 @@ class AccountController extends Controller {
 
         return view('account.index')
                         ->with(compact(
-                                        'user', 'stream', 'viewers', 'subscribers', 'donations', 'channels'
+                                        'user', 'streamer','stream', 'viewers', 'subscribers', 'donations', 'channels'
         ));
     }
 
