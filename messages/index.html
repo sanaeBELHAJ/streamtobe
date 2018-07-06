@@ -86,9 +86,9 @@
         <div class="container h-100"> 
             <div class="row">
                 <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
-                    <input type="text" id="search_contact" class="form-control" placeholder="Rechercher">
+                    <input type="text" id="search_contact" class="form-control mb-3" placeholder="Rechercher">
                     <span id="listContacts">
-
+                        
                     </span>
                 </div>
                 <div class="col-8 col-md-10">
@@ -97,7 +97,7 @@
                             <div id="none" class="d-flex flex-column justify-content-center w-100">
                                 <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
                                 <br>
-                                <small>Vous devez suivre mutuellement vos chaines respectives.</small>
+                                <small><b>Vous devez vous abonner mutuellement à vos chaines respectives.</b></small>
                             </div>
                             <div id="profile" class="d-none flex-column justify-content-around w-100">
                                 <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
@@ -146,6 +146,8 @@
                         text += value;
                     text += "</a>";
                 });
+                if(text=="")
+                    text = "<p>Aucun contact de joignable.</p>";
                 $('#listContacts').html(text);
             });
 

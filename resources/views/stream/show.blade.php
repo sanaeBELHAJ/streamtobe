@@ -98,32 +98,32 @@
                             {{-- Report --}}
                             <p class="col text-center">
                                 @if($report)
-                                <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
-                                data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
+                                    <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
+                                    data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
                                 @else
-                                <a class="btn" data-toggle="modal" data-target="#reportModal">
-                                    <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
-                                    data-placement="top" title="Signaler cette chaine"></i>
-                                </a>
-                                @include('stream.modal.report')
+                                    <a class="btn" data-toggle="modal" data-target="#reportModal">
+                                        <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
+                                        data-placement="top" title="Signaler cette chaine"></i>
+                                    </a>
+                                    @include('stream.modal.report')
                                 @endif
                             </p>
 
                             {{-- Private Message --}}
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
-                                @if($streamer->stream->id == $viewer->stream_id)
-                                @foreach($viewer->subscribes as $subscription)
-                                @if($subscription->status == 1)
-                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-                                data-placement="top" title="Envoyer un message au streamer"></i>	
-                                @break
-                                @else
-                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
-                                data-placement="top" title="Communication privée reservée aux abonnés"></i>
-                                @endif
-                                @endforeach
-                                @endif
+                                    @if($streamer->stream->id == $viewer->stream_id)
+                                        @foreach($viewer->subscribes as $subscription)
+                                            @if($subscription->status == 1)
+                                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
+                                                data-placement="top" title="Envoyer un message au streamer"></i>	
+                                                @break
+                                            @else
+                                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
+                                                data-placement="top" title="Communication privée reservée aux abonnés"></i>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 @endforeach
                             </p>
 
@@ -139,15 +139,15 @@
                             {{-- Following --}}
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
-                                @if($streamer->stream->id == $viewer->stream_id)
-                                @if($viewer->is_follower == 1)
-                                <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                data-placement="top" title="Ne plus suivre cette chaine"></i>
-                                @else
-                                <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                data-placement="top" title="Suivre cette chaine"></i>
-                                @endif
-                                @endif
+                                    @if($streamer->stream->id == $viewer->stream_id)
+                                        @if($viewer->is_follower == 1)
+                                            <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                            data-placement="top" title="Ne plus suivre cette chaine"></i>
+                                        @else
+                                            <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                            data-placement="top" title="Suivre cette chaine"></i>
+                                        @endif
+                                    @endif
                                 @endforeach
                             </p>
                         </div>
