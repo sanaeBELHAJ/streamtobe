@@ -29,21 +29,17 @@
                  <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item">
-                            <hr>
-                            <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
-                            <hr>
+                            <a class="text-white" href="{{ route('home.follows', ['pseudo' =>  Auth::user()->pseudo ])}}">Suivi</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
-                            <hr>
+                            <a class="text-white"  href="{{ route('home.fans', ['pseudo' =>  Auth::user()->pseudo ])}}">Fans</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
-                            <hr>
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' =>  Auth::user()->pseudo ]) }}">Revenus</a>
                         </li>
                     </ul>
                     <br>
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                    <a class="machaine" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
                         <i style="font-size: 50px;margin-top: 10px" class="material-icons">
                             videocam
                         </i>
@@ -64,7 +60,7 @@
                                 <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
                                     <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
                                     <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                        <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
+                                    <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
                                     @if($stream->user->avatar!="users/default.png")
                                             <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
                                     @else

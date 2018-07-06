@@ -10,11 +10,15 @@
                 padding: 0;
             }
 
-            #zone_chat{
+            #responsive_slider{
+                height: 10%;
+            }
+
+            #zone_chat, #zone_users{
                 width: 100%;
                 background: #330033;
-                color: yellow;
-                height: 80%;
+                height: 70%;
+                padding: 5px 5px 0;
                 font-size: 12px;
                 overflow-wrap: break-word;
                 overflow-y: scroll;
@@ -22,6 +26,26 @@
 
             #zone_chat p:first-of-type {
                 text-align: center;
+            }
+
+            .white{
+                color: white;
+            }
+
+            .red{
+                color: red;
+            }
+
+            .green{
+                color: green;
+            }
+
+            .yellow{
+                color: yellow;
+            }
+
+            #zone_users a:hover {
+                color: inherit;
             }
 
             form#formulaire_chat{
@@ -92,14 +116,61 @@
                 font-size: 13px;
                 cursor: pointer;
             }
+
+            /* The slider itself */
+            #responsive_slider .slider {
+                -webkit-appearance: none;  /* Override default CSS styles */
+                appearance: none;
+                padding: 0;
+                width: 100%; /* Full-width */
+                height: 25px; /* Specified height */
+                background: #d3d3d3; /* Grey background */
+                outline: none; /* Remove outline */
+                opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+                -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+                transition: opacity .2s;
+            }
+
+            /* Mouse-over effects */
+            #responsive_slider .slider:hover {
+                opacity: 1; /* Fully shown on mouse-over */
+            }
+
+            /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+            #responsive_slider .slider::-webkit-slider-thumb {
+                -webkit-appearance: none; /* Override default look */
+                appearance: none;
+                width: 50%; /* Set a specific slider handle width */
+                height: 25px; /* Slider handle height */
+                background: rgb(86, 27, 141); /* Violet background */
+                cursor: pointer; /* Cursor on hover */
+            }
+
+            #responsive_slider .slider::-moz-range-thumb {
+                width: 50%; /* Set a specific slider handle width */
+                height: 25px; /* Slider handle height */
+                background: rgb(86, 27, 141); /* Violet background */
+                cursor: pointer; /* Cursor on hover */
+            }
         </style>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
     </head>
 
-    <body>   
-        <section id="zone_chat">
-            
+    <body>
+        <div class="container">
+            <div id="responsive_slider" class="d-flex justify-content-around pb-1 pt-1 row">
+                <p class="sliderText col text-center font-weight-bold m-0" data-value="1">Chat</p>
+                    <input id="myRange" type="range" min="1" max="2" value="1" class="btn slider col"> 
+                <p class="sliderText col text-center m-0" data-value="2">Spectateurs</p>
+            </div>	
+        </div>
+
+        <section id="zone_chat" class="yellow d-block"></section>
+
+        <section id="zone_users" class="white d-none">
+            <input type="text" id="search_contact" class="form-control w-75 mx-auto" placeholder="Rechercher">
+            <span></span>
         </section>
 
         <form action="/" id="formulaire_chat" class="row m-0">
@@ -110,9 +181,7 @@
         <script src="jquery-1.10.1.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            /* ENVOI */
-
-            // Connexion à socket.io
+            /* Connexion à socket.io */
             var socket = io.connect('http://'+window.location.hostname+':3000');
             var token = getUrlParameter('token');
             var stream = getUrlParameter('stream');
@@ -137,8 +206,6 @@
                 var message_id = $(this).parent().data('message');
                 socket.emit('delete', message_id);
             });
-
-            /* RECEPTION */
             
             //Arrivée d'un nouvel utilisateur sur le chat
             socket.on('welcome', function() {
@@ -174,6 +241,17 @@
             //Modération d'un message
             socket.on('delete', function(message_id) {
                 $('p[data-message="'+message_id+'"] .chat_message').html('<em>Ce message a été supprimé.</em>');
+                $('p[data-message="'+message_id+'"] .fa-ban.delete').hide();
+            });
+
+            //Bannissement de l'utilisateur
+            socket.on('ban', function() {
+                $('#zone_chat').append("<p>Envoi impossible : Vous avez été banni du chat.</p>");
+            });
+
+            //Retrait du statut de modérateur
+            socket.on('demod', function() {
+                $('#zone_chat').append("<p>Erreur : Vous n'êtes pas modérateur de ce chat.</p>");
             });
 
             //Réception de dons
@@ -195,8 +273,76 @@
                 $("#formulaire_chat input").prop("disabled", true);
             });
             
+            // Affichage de la liste des viewers
+            socket.on('updateList', function(data) {
+                var text = "";
+                var port = (window.location.hostname == "localhost") ? ":8000" : "";
+                
+                $.each(data, function(index, user){
+                    var color = "white";
+                    text += "<p class='nav-link text-center' data-pseudo='"+user.pseudo+"'>";
+                        //Si le viewer est un modo / streamer
+                        if(user.is_staff){
+                            var ban = "<i class='btn fas fa-user-times ban' title='Bannir cet utilisateur du chat'></i>";
+                            var mod = "<i class='btn fas fa-cog modo' title='Promouvoir cet utilisateur comme modérateur'></i>";
+                            
+                            if(user.rank<0){ //banni
+                                ban = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
+                                color = "red";
+                            }
+                            else if(user.rank==1){ //mod
+                                mod = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
+                                color = "green";
+                            }
+                            else if(user.rank==2){ //streamer
+                                mod = "";
+                                ban = "";
+                                color = "yellow";
+                            }
+                            text += ban+mod;
+                        }
+                        text += "<a href='http://localhost:8000/home/"+user.pseudo+"' target='_blank' class='btn "+color+"'>";
+                            text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+user.avatar+"'> ";
+                            text += user.pseudo;
+                        text += "</a>";
+                    text += "</p>";
+                });
+                $('#zone_users span').html(text);
+                searchingViewers();
+            });
+
+            //Changement du statut
+            $('#zone_users').on('click',".modo, .ban, .user", function(){
+                var status = false;
+                if($(this).hasClass('modo')){
+                    status = 1;
+                }
+                if($(this).hasClass('ban')){
+                    status = -1;
+                }
+                if($(this).hasClass('user')){
+                    status = 0;
+                }
+                
+                var pseudo = $(this).parent().data('pseudo');
+                socket.emit('editRank', status, pseudo);
+            });
+
+            //Recherche et affichage d'un membre parmi la liste de contact disponible
+            $("#search_contact").keyup(searchingViewers);
+                        
             /* FONCTIONS */
             
+            //N'affiche que les viewers recherchés
+            function searchingViewers(){
+                if($("#search_contact").val() == "")
+                    $("#zone_users .nav-link").show();
+                else{
+                    $("#zone_users .nav-link").hide();
+                    $("#zone_users .nav-link[data-pseudo*='"+$("#search_contact").val()+"']").show();
+                }
+            }
+
             //Recupère les paramètres fournies dans l'URL
             function getUrlParameter(sParam) {
                 var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -212,6 +358,30 @@
                     }
                 }
             };
+            
+            //Texte du slider
+			$('.sliderText').click(function(){
+				$('#myRange').val($(this).data('value')).change();
+			});
+
+			//Slider en vue responsive
+			$('#myRange').change(function(){
+				//Chat
+				if($(this).val()==1){
+					$('.sliderText[data-value="1"]').addClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').removeClass('font-weight-bold');
+					
+					$('#zone_chat').addClass('d-block').removeClass('d-none');
+					$('#zone_users').addClass('d-none').removeClass('d-block');
+				}//Description
+				else{
+					$('.sliderText[data-value="1"]').removeClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').addClass('font-weight-bold');
+					
+					$('#zone_chat').addClass('d-none').removeClass('d-block');
+					$('#zone_users').addClass('d-block').removeClass('d-none');
+				}
+			});
         </script>
     </body>
 </html>

@@ -1,4 +1,6 @@
-
+body{
+    background-color: #faf9fa;
+}
 header #navbarDropdown.nav-link{
     padding: 0 1rem;
 }
@@ -80,7 +82,6 @@ header .dropdown-menu{
     border: 1px solid #4b367c;
     border-radius: 50%;
     vertical-align: bottom;
-    cursor: pointer;
     vertical-align: middle;
 }
 .right{
@@ -92,15 +93,15 @@ header .dropdown-menu{
 
 
 .machaine{
-display:block;
-width:90px;
-line-height:50px;
-text-align:center;
-vertical-align:middle;
-background: #4b367c;
-color:white;
-text-decoration:none;
-border-radius: 10%;
+    display:block;
+    width:90px;
+    line-height:50px;
+    text-align:center;
+    vertical-align:middle;
+    background: #4b367c;
+    color:white;
+    text-decoration:none;
+    border-radius: 10%;
 }
 .machaine:hover {
     color:#ff66b3;
@@ -215,4 +216,137 @@ border-radius: 10%;
   color: #4b367c;
   margin-top: 8px;
   margin-bottom: 8px;
+}
+.profil-panel .btn{
+  border-top: 1.5px solid #17141f;
+  background: #17141f;
+  width:100%;
+}
+.profil-panel li a{
+  background:#17141f;
+  width:100%;
+  -webkit-appearance: button-bevel;
+    line-height: 1.8;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 5px;
+  box-shadow:0 -3px 3px -3px #4b367c; 
+}
+.profil-panel li a:hover{
+  background:black;
+  text-decoration: none;
+}
+.profil-panel .active{
+    background:black;
+}
+.search input[type=text] {
+    border: 1px solid grey;
+    border-left: none;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+.searchUser:focus , .search input[type=text]:focus {
+  border-color: inherit;
+  -webkit-box-shadow: inherit;
+  box-shadow: inherit;
+  outline-style: none;
+}
+.searchUser:active {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.search button {
+    float: left;
+    width: 20%;
+    background: #f1f1f1;
+    color: grey;
+    border:  1px solid grey;
+    border-right: none;
+    cursor: pointer;
+}
+
+.search button:hover {
+  background: #f1f1f1;
+}
+.search button:focus {
+  border-color: inherit;
+  -webkit-box-shadow: inherit;
+  box-shadow: inherit;
+  background: #f1f1f1;
+  outline-style: none;
+}
+
+.search::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.search .material-icons{
+    padding:0px;
+    font-size: 12px;
+    color: grey;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    
+     height: calc(1.60rem + 2px); 
+}
+.div-filter{
+    font-size: 11px;
+    background: white;
+    border: 0.5px solid #dad8de;
+    margin: 0;
+    padding: 20px;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+.form-control{
+    outline: 0;
+    font-family: inherit;
+    appearance: none;
+    border: 1px solid #b19dd8;
+    background: #fff;
+    color: #433f4a;
+    transition: box-shadow .12s ease-in,border .12s ease-in;
+    line-height: 1.5;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    line-height: 1.5;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+.form-control:focus, .form-control:active{
+    outline: 0;
+    outline-style: none;
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+    border: none;
+    box-shadow: 0 0 6px #6441a4; 
+}
+.btn-filter{
+    background: transparent;
+    border: 1px solid #b19dd8;
+    color: #6441a4;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    margin-right: 0px;
+    margin-left: 180px;
+    width: 130px;;
+    float: right;        
+}
+.btn-filter:hover{
+    background: #faf9fa;
+    color: black;
+    border: 1px solid #b19dd8;
+    border-radius: .1rem;
+}
+label, select, input {
+    font-size: 14px;
+}
+.broadcastname{
+    color: black;
 }

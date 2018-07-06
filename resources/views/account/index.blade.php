@@ -5,11 +5,13 @@
 <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">
-                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                   <i class="material-icons">
-                    edit
-                   </i>
-                </a>
+                @if( Auth::user()->pseudo == $streamer->pseudo)
+                    <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                       <i class="material-icons">
+                        edit
+                       </i>
+                    </a>
+                @endif
                 <br>
                 <div class="cadre-style">
                     <center>
@@ -31,17 +33,13 @@
                  <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item">
-                            <hr>
-                            <a class="text-white"  href="{{ route('home.follows') }}">Mes abonnés</a>
-                            <hr>
+                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans') }}">Mes fans</a>
-                            <hr>
+                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats') }}">Mes revenus</a>
-                            <hr>
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
                         </li>
                     </ul>
                     <br>

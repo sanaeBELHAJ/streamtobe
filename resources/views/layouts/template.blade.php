@@ -4,7 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <?php if(strpos(Request::root(), "localhost") === false): ?>
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <?php endif; ?>
         <meta name="google-site-verification" content="{{setting('site.google_analytics_tracking_id')}}">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
@@ -46,7 +48,7 @@
                 height: 100px;
             }
         </style>
-        <!-- Global Site Tag (gtag.js) - Google Analytics -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65526992-2"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -78,21 +80,18 @@
                             </li>
                         </ul>
     
-                        <!-- Right Side Of Navbar -->
-                        
+
                         <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                              <li class="mx-3 d-flex align-items-center">
-                                 <div class="container-1">
-                                    {{ Form::text('q', '', ['id' =>  'search', 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
-                                    <span class="icon">
+                                 <div class="search">
+                                     <button type="submit">
                                         <i class="material-icons">
                                             search
                                         </i>
-                                    </span>
+                                     </button>
+                                    {{ Form::text('q', '', [ 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
                                  </div>
                              </li>
-                        </ul>
-                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
                                 <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
