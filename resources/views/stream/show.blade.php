@@ -78,9 +78,15 @@
 
                             <label>
                                 <label class="switch align-middle m-0">
-                                    <input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
-                                        @if($streamer->stream->status == 1) checked @endif >
-                                        <span class="slider round"></span>
+                                    <input id="stream_status" class="update_stream" name="stream_submit" data-config="status" type="checkbox" 
+                                            onclick="stream('youcef');" 
+                                            @if($streamer->stream->status == 0) 
+                                                value="On"
+                                            @else
+                                                value="Off"
+                                                checked 
+                                            @endif >
+                                    <span class="slider round"></span>
                                 </label>
                                 Activer / Interrompre la diffusion
                             </label>
