@@ -5,227 +5,155 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-2 profil-panel">
-            <div class="top bottom">
-            </div>
+            <div class="top bottom"></div>
         </div>
         <div class="col-sm-10 pull-right top bottom">
             <div class="row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
-                    <div class = "bodyDiv">
-                        @if($streamer->id == Auth::user()->id)
-                        {{-- Vidéo --}}
-                        <div id="vid-box"></div>
-                        <div id="stream-info" hidden="true">
-                            <img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
-                            <span id="here-now">0</span>
+                        <div class="bodyDiv">
+                            {{-- Vidéo --}}
+                            @if($streamer->id == Auth::user()->id)
+                                <div id="vid-box"></div>
+                            @else
+                                <div id="vid-box-viewer"></div>
+                            @endif
+
+                            {{-- Image de déconnexion --}}
+                            <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
+                                <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
+                            </div>
+
+                            {{-- Nombre de viewers --}}
+                            <p id="here-now">0</p>
                         </div>
-                        @else
-                        <div id="vid-box-viewer"></div>
-                        <div id="stream-info"><img src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/><span id="here-now">0</span>
-                        </div>
-                        @endif
-                        @endauth
-                    </div>
+                    @endauth
                 </div>
 
                 {{-- Chatbox --}}
-                <div id="messages" class="col-12 d-sm-block col-md-4 mt-4">
+                <div id="messages" class="col-12 d-sm-block col-md-4">
                     @guest
-
-                    <p class="border-top d-flex flex-column justify-content-center text-center h-100">
-                        Connectez-vous pour rédiger un message.
-                    </p>
+                        <p class="border-top d-flex flex-column justify-content-center text-center h-100">
+                            Connectez-vous pour rédiger un message.
+                        </p>
                     @else
-                    <iframe src="<?php echo str_replace(":8000", "", Request::root()); ?>:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        <iframe src="<?php echo str_replace(":8000", "", Request::root()); ?>:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
                     @endguest
                 </div>
             </div>
 
             <div id="infos" class="col-12 d-none d-sm-block mt-4">
                 @if(Session::has('message'))
-                <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ Session::get('message') }}
-                </p>
+                    <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ Session::get('message') }}
+                    </p>
                 @endif
+
                 @auth
-                {{-- Configuration du stream par le propriétaire --}}
-                @if($streamer->id == Auth::user()->id)
-                <div class="col-12 mt-4" id="config_stream">
-                    <h3 class="mb-5">Configurer mon stream</h3>
-                    <div class="row">
-                        <p class="col-12 col-md-6">
-                            Titre : 
-                            <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
-                        </p>
-                        <p class="col-12 col-md-6">
-                            Catégorie : 
-                            <select id="stream_type" class="update_stream" data-config="type">
-                                @foreach($themes as $theme)
-                                <optgroup label="{{$theme->name}}">
-                                    @foreach($theme->types as $type)
-                                    <option value="{{$type->name}}">{{$type->name}}</option>
-                                    @endforeach
-                                </optgroup>
+                    {{-- Configuration du stream par le propriétaire --}}
+                    @if($streamer->id == Auth::user()->id)
+                        <div class="col-12 mt-4" id="config_stream">
+                            <h3 class="mb-5">Configurer mon stream</h3>
+                            <div class="row">
+                                <p class="col-12 col-md-6">
+                                    Titre : 
+                                    <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
+                                </p>
+                                <p class="col-12 col-md-6">
+                                    Catégorie : 
+                                    <select id="stream_type" class="update_stream" data-config="type">
+                                        @foreach($themes as $theme)
+                                        <optgroup label="{{$theme->name}}">
+                                            @foreach($theme->types as $type)
+                                            <option value="{{$type->name}}">{{$type->name}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                        @endforeach
+                                    </select>
+                                </p>
+                            </div>
+
+                            <label>
+                                <label class="switch align-middle m-0">
+                                    <input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
+                                        @if($streamer->stream->status == 1) checked @endif >
+                                        <span class="slider round"></span>
+                                </label>
+                                Activer / Interrompre la diffusion
+                            </label>
+                                    
+                        </div>
+                    @else {{-- Panel d'action du viewer --}}
+                        <div class="col-12 col-md-8 d-flex justify-content-between">
+
+                            {{-- Report --}}
+                            <p class="col text-center">
+                                @if($report)
+                                <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
+                                data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
+                                @else
+                                <a class="btn" data-toggle="modal" data-target="#reportModal">
+                                    <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
+                                    data-placement="top" title="Signaler cette chaine"></i>
+                                </a>
+                                @include('stream.modal.report')
+                                @endif
+                            </p>
+
+                            {{-- Private Message --}}
+                            <p class="col text-center">
+                                @foreach($user->viewers as $viewer)
+                                @if($streamer->stream->id == $viewer->stream_id)
+                                @foreach($viewer->subscribes as $subscription)
+                                @if($subscription->status == 1)
+                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
+                                data-placement="top" title="Envoyer un message au streamer"></i>	
+                                @break
+                                @else
+                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
+                                data-placement="top" title="Communication privée reservée aux abonnés"></i>
+                                @endif
                                 @endforeach
-                            </select>
-                        </p>
-                    </div>
+                                @endif
+                                @endforeach
+                            </p>
 
-                    <label>
-                        <label class="switch align-middle m-0">
-                            <input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
-                                   @if($streamer->stream->status == 1) checked @endif >
-                                   <span class="slider round"></span>
-                        </label>
-                        Activer / Interrompre la diffusion
-                    </label>
+                            {{-- Giveaway --}}
+                            <p class="col text-center">
+                                <a class="btn" data-toggle="modal" data-target="#paymentModal">
+                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
+                                    data-placement="top" title="Faire un don / S'abonner"></i>
+                                </a>								
+                            </p>
+                            @include('stream.modal.payment')
 
-							<label>
-								<label class="switch align-middle m-0">
-									<input id="stream_status" class="update_stream" data-config="status" type="checkbox" onclick="stream('youcef');" value="On" name="stream_submit"
-											@if($streamer->stream->status == 1) checked @endif >
-									<span class="slider round"></span>
-								</label>
-								Activer / Interrompre la diffusion
-							</label>
-							
-							{{-- <hr>
-							
-							<h3 class="mt-5 mb-5">Configurer mon chat</h3>
-							<div class="row">
-								<table class="col-5 col-md-4 listUsers">
-									<thead class="text-center">
-										<tr>
-											<th>Utilisateurs modérateurs</th>
-										</tr>
-										<tr>
-											<th>
-												{{ Form::text('q', '', ['class' =>  'searchUser','data-action' => 'mod', 'placeholder' =>  'Ajouter un utilisateur'])}}
-											</th>
-										</tr>
-									</thead>
-									<tbody class="align-top" id="listMods"></tbody>
-								</table>
-								<table class="col-5 offset-2 col-md-4 offset-md-4 listUsers">
-									<thead class="text-center">
-										<tr>
-											<th>Utilisateurs bannis</th>
-										</tr>
-										<tr>
-											<th>
-												{{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'ban', 'placeholder' =>  'Ajouter un utilisateur'])}}
-											</th>
-										</tr>
-									</thead>
-									<tbody class="align-top" id="listBans"></tbody>
-								</table>
-							</div> --}}
-						</div>
-					<!--else {{-- Panel d'action du viewer --}}-->
-						<div class="col-12 col-md-8 d-flex justify-content-between">
+                            {{-- Following --}}
+                            <p class="col text-center">
+                                @foreach($user->viewers as $viewer)
+                                @if($streamer->stream->id == $viewer->stream_id)
+                                @if($viewer->is_follower == 1)
+                                <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                data-placement="top" title="Ne plus suivre cette chaine"></i>
+                                @else
+                                <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                data-placement="top" title="Suivre cette chaine"></i>
+                                @endif
+                                @endif
+                                @endforeach
+                            </p>
+                        </div>
 
-                    <h3 class="mt-5 mb-5">Configurer mon chat</h3>
-                    <div class="row">
-                        <table class="col-5 col-md-4 listUsers">
-                            <thead class="text-center">
-                                <tr>
-                                    <th>Utilisateurs modérateurs</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ Form::text('q', '', ['class' =>  'searchUser','data-action' => 'mod', 'placeholder' =>  'Ajouter un utilisateur'])}}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-top" id="listMods"></tbody>
-                        </table>
-                        <table class="col-5 offset-2 col-md-4 offset-md-4 listUsers">
-                            <thead class="text-center">
-                                <tr>
-                                    <th>Utilisateurs bannis</th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ Form::text('q', '', ['class' =>  'searchUser', 'data-action' => 'ban', 'placeholder' =>  'Ajouter un utilisateur'])}}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="align-top" id="listBans"></tbody>
-                        </table>
-                    </div>
-                </div>
-                @else {{-- Panel d'action du viewer --}}
-                <div class="col-12 col-md-8 d-flex justify-content-between">
-
-                    {{-- Report --}}
-                    <p class="col text-center">
-                        @if($report)
-                        <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
-                           data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
-                        @else
-                        <a class="btn" data-toggle="modal" data-target="#reportModal">
-                            <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
-                               data-placement="top" title="Signaler cette chaine"></i>
-                        </a>
-                        @include('stream.modal.report')
-                        @endif
-                    </p>
-
-                    {{-- Private Message --}}
-                    <p class="col text-center">
-                        @foreach($user->viewers as $viewer)
-                        @if($streamer->stream->id == $viewer->stream_id)
-                        @foreach($viewer->subscribes as $subscription)
-                        @if($subscription->status == 1)
-                        <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-                           data-placement="top" title="Envoyer un message au streamer"></i>	
-                        @break
-                        @else
-                        <i class="far fa-2x fa-comment" data-toggle="tooltip" 
-                           data-placement="top" title="Communication privée reservée aux abonnés"></i>
-                        @endif
-                        @endforeach
-                        @endif
-                        @endforeach
-                    </p>
-
-                    {{-- Giveaway --}}
-                    <p class="col text-center">
-                        <a class="btn" data-toggle="modal" data-target="#paymentModal">
-                            <i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
-                               data-placement="top" title="Faire un don / S'abonner"></i>
-                        </a>								
-                    </p>
-                    @include('stream.modal.payment')
-
-                    {{-- Following --}}
-                    <p class="col text-center">
-                        @foreach($user->viewers as $viewer)
-                        @if($streamer->stream->id == $viewer->stream_id)
-                        @if($viewer->is_follower == 1)
-                        <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                           data-placement="top" title="Ne plus suivre cette chaine"></i>
-                        @else
-                        <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                           data-placement="top" title="Suivre cette chaine"></i>
-                        @endif
-                        @endif
-                        @endforeach
-                    </p>
-                </div>
-
-                {{-- Description du streamer --}}
-                <div class="col-12 mt-4">
-                    <div id="streamer">
-                        <h3>Description du streamer</h3>
-                        <p>{{$streamer->description}}</p>
-                    </div>
-                </div>
-                @endif
+                        {{-- Description du streamer --}}
+                        <div class="col-12 mt-4">
+                            <div id="streamer">
+                                <h3>Description du streamer</h3>
+                                <p>{{$streamer->description}}</p>
+                            </div>
+                        </div>
+                    @endif
                 @endauth				
             </div>
 
@@ -302,15 +230,15 @@
 
     /*******/
 
-		/* Bouton d'activation du stream */
-		
-		/* The switch - the box around the slider */
-		#config_stream .switch {
-			position: relative;
-			display: inline-block;
-			width: 60px;
-			height: 34px;
-		}
+    /* Bouton d'activation du stream */
+    
+    /* The switch - the box around the slider */
+    #config_stream .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
 
     /* Hide default HTML checkbox */
     #config_stream .switch input {display:none;}
@@ -373,170 +301,170 @@
 <script src="/js/rtc-controller.js"></script>
 
 @auth
-@if($streamer->id != Auth::user()->id)
-<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-@endif
+    @if($streamer->id != Auth::user()->id)
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    @endif
 @endauth
 
 <script>
-                            $(function () {
+    $(function () {
 
-                                //Texte du slider
-                                $('.sliderText').click(function () {
-                                    $('#myRange').val($(this).data('value')).change();
-                                });
+        //Texte du slider
+        $('.sliderText').click(function () {
+            $('#myRange').val($(this).data('value')).change();
+        });
 
-                                //Slider en vue responsive
-                                $('#myRange').change(function () {
-                                    //Chat
-                                    if ($(this).val() == 1) {
-                                        $('.sliderText[data-value="1"]').addClass('font-weight-bold');
-                                        $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
+        //Slider en vue responsive
+        $('#myRange').change(function () {
+            //Chat
+            if ($(this).val() == 1) {
+                $('.sliderText[data-value="1"]').addClass('font-weight-bold');
+                $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
 
-                                        $('#messages').addClass('d-12').removeClass('d-none');
-                                        $('#infos').addClass('d-none').removeClass('d-12');
-                                    }//Description
-                                    else {
-                                        $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
-                                        $('.sliderText[data-value="2"]').addClass('font-weight-bold');
+                $('#messages').addClass('d-12').removeClass('d-none');
+                $('#infos').addClass('d-none').removeClass('d-12');
+            }//Description
+            else {
+                $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
+                $('.sliderText[data-value="2"]').addClass('font-weight-bold');
 
-                                        $('#messages').addClass('d-none').removeClass('d-12');
-                                        $('#infos').addClass('d-12').removeClass('d-none');
+                $('#messages').addClass('d-none').removeClass('d-12');
+                $('#infos').addClass('d-12').removeClass('d-none');
+            }
+        });
+
+        /* Buttons stream (viewer) */
+        function followingStream() {
+            var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
+            var stream = "{{$streamer->pseudo}}";
+            $.ajax({
+                url: "/followStream",
+                type: 'POST',
+                data: {
+                    stream: stream,
+                    is_following: following
+                }
+            })
+            .done(function (data) {
+                if (data == 0) {
+                    $("#follow_stream").removeClass("fas")
+                            .addClass("far")
+                            .attr('data-original-title', 'Suivre cette chaine')
+                            .tooltip("show");
+                } else {
+                    $("#follow_stream").removeClass("far")
+                            .addClass("fas")
+                            .attr('data-original-title', 'Ne plus suivre cette chaine')
+                            .tooltip("show");
+                }
+            })
+            .fail(function (data) {
+                console.log(data);
+            });
+        }
+        $("#follow_stream").click(followingStream);
+
+        /* Config stream (owner) */
+        function updateStream() {
+            var key = $(this).data('config');
+            var value = "";
+
+            switch (key) {
+                case "title":
+                    value = $("#stream_title").val();
+                    break;
+                case "status":
+                    value = $("#stream_status").is(":checked");
+                    break;
+                case "type":
+                    value = $("#stream_type").val();
+                    break;
+            }
+
+            $.ajax({
+                url: "/updateStream",
+                type: 'POST',
+                data: {
+                    config: key,
+                    value: value
+                }
+            })
+            .done(function (data) {
+                console.log(data);
+            })
+            .fail(function (data) {
+                console.log(data);
+            });
+        }
+        $(".update_stream").change(updateStream);
+
+        /* Paypal Button */
+        if ($("#paymentModal").length > 0) {
+            paypal.Button.render({
+                env: 'sandbox', // Or 'production',
+
+                client: {
+                    sandbox: 'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
+                    //production: 'xxxxxxxxx'
+                },
+
+                commit: true, // Show a 'Pay Now' button
+
+                style: {
+                    color: 'gold',
+                    size: 'small'
+                },
+
+                payment: function (data, actions) {
+                    //Set up the payment here
+                    return actions.payment.create({
+                        payment: {
+                            transactions: [
+                                {
+                                    amount: {
+                                        total: $('#giveaway_change').val(),
+                                        currency: 'EUR'
                                     }
+                                }
+                            ]
+                        }
+                    });
+                },
+
+                onAuthorize: function (data, actions) {
+                    //Execute the payment here
+                    return actions.payment.execute().then(function (payment) {
+                        // The payment is complete!
+                        // You can now show a confirmation message to the customer
+                        payment.streamer = $('#pseudo').val();
+                        payment.message = $('#giveaway_message').val();
+                        $.ajax({
+                            url: "/validGiveaway",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                payment: payment
+                            }
+                        })
+                                .done(function (data) {
+                                    console.log(data);
+                                })
+                                .fail(function (data) {
+                                    console.log(data);
                                 });
+                    });
+                },
 
-                                /* Buttons stream (viewer) */
-                                function followingStream() {
-                                    var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
-                                    var stream = "{{$streamer->pseudo}}";
-                                    $.ajax({
-                                        url: "/followStream",
-                                        type: 'POST',
-                                        data: {
-                                            stream: stream,
-                                            is_following: following
-                                        }
-                                    })
-                                            .done(function (data) {
-                                                if (data == 0) {
-                                                    $("#follow_stream").removeClass("fas")
-                                                            .addClass("far")
-                                                            .attr('data-original-title', 'Suivre cette chaine')
-                                                            .tooltip("show");
-                                                } else {
-                                                    $("#follow_stream").removeClass("far")
-                                                            .addClass("fas")
-                                                            .attr('data-original-title', 'Ne plus suivre cette chaine')
-                                                            .tooltip("show");
-                                                }
-                                            })
-                                            .fail(function (data) {
-                                                console.log(data);
-                                            });
-                                }
-                                $("#follow_stream").click(followingStream);
+                onCancel: function (data, actions) {
+                    //Buyer cancelled the payment
+                },
 
-                                /* Config stream (owner) */
-                                function updateStream() {
-                                    var key = $(this).data('config');
-                                    var value = "";
-
-                                    switch (key) {
-                                        case "title":
-                                            value = $("#stream_title").val();
-                                            break;
-                                        case "status":
-                                            value = $("#stream_status").is(":checked");
-                                            break;
-                                        case "type":
-                                            value = $("#stream_type").val();
-                                            break;
-                                    }
-
-                                    $.ajax({
-                                        url: "/updateStream",
-                                        type: 'POST',
-                                        data: {
-                                            config: key,
-                                            value: value
-                                        }
-                                    })
-                                            .done(function (data) {
-                                                console.log(data);
-                                            })
-                                            .fail(function (data) {
-                                                console.log(data);
-                                            });
-                                }
-                                $(".update_stream").change(updateStream);
-
-                                /* Paypal Button */
-                                if ($("#paymentModal").length > 0) {
-                                    paypal.Button.render({
-                                        env: 'sandbox', // Or 'production',
-
-                                        client: {
-                                            sandbox: 'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
-                                            //production: 'xxxxxxxxx'
-                                        },
-
-                                        commit: true, // Show a 'Pay Now' button
-
-                                        style: {
-                                            color: 'gold',
-                                            size: 'small'
-                                        },
-
-                                        payment: function (data, actions) {
-                                            //Set up the payment here
-                                            return actions.payment.create({
-                                                payment: {
-                                                    transactions: [
-                                                        {
-                                                            amount: {
-                                                                total: $('#giveaway_change').val(),
-                                                                currency: 'EUR'
-                                                            }
-                                                        }
-                                                    ]
-                                                }
-                                            });
-                                        },
-
-                                        onAuthorize: function (data, actions) {
-                                            //Execute the payment here
-                                            return actions.payment.execute().then(function (payment) {
-                                                // The payment is complete!
-                                                // You can now show a confirmation message to the customer
-                                                payment.streamer = $('#pseudo').val();
-                                                payment.message = $('#giveaway_message').val();
-                                                $.ajax({
-                                                    url: "/validGiveaway",
-                                                    type: 'POST',
-                                                    dataType: "JSON",
-                                                    data: {
-                                                        payment: payment
-                                                    }
-                                                })
-                                                        .done(function (data) {
-                                                            console.log(data);
-                                                        })
-                                                        .fail(function (data) {
-                                                            console.log(data);
-                                                        });
-                                            });
-                                        },
-
-                                        onCancel: function (data, actions) {
-                                            //Buyer cancelled the payment
-                                        },
-
-                                        onError: function (err) {
-                                            //An error occurred during the transaction
-                                        }
-                                    }, '#paypal-button');
-                                }
-                            });
+                onError: function (err) {
+                    //An error occurred during the transaction
+                }
+            }, '#paypal-button');
+        }
+    });
 </script>
 <script type="text/javascript">
 
@@ -568,7 +496,7 @@
             ctrl.ready(function () {
                 ctrl.addLocalStream(video_out);
                 ctrl.stream();
-                stream_info.hidden = false;
+                stream_info.hidden = true;
             });
             ctrl.receive(function (session) {
                 session.connected(function (session) {
@@ -597,10 +525,12 @@
         var ctrl = window.ctrl = CONTROLLER(phone);
         ctrl.ready(function () {
             ctrl.isStreaming(num, function (isOn) {
-                if (isOn)
+                if (isOn){
                     ctrl.joinStream(num);
-                else
-                        /*alert("User is not streaming!");*/
+                }
+                else{
+                    /*alert("User is not streaming!");*/
+                }
             });
         });
         ctrl.receive(function (session) {
@@ -621,8 +551,8 @@
             return;
         ctrl.hangup();
         video_out.innerHTML = "";
+        stream_info.hidden = false;
     }
-
 
 </script>
 
