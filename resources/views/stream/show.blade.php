@@ -13,19 +13,31 @@
                     @auth
                         <div class="bodyDiv">
                             {{-- Vidéo --}}
+                            <div id="videos-container"></div>
                             @if($streamer->id == Auth::user()->id)
-                                <div id="vid-box"></div>
+                                <section class="experiment">
+                                    <section>
+                                        <select id="broadcasting-option">
+                                            <option>Audio + Video</option>
+                                            <option>Only Audio</option>
+                                            <option>Screen</option>
+                                        </select>
+                                        <input type="text" id="broadcast-name">
+                                        <button id="setup-new-broadcast" class="setup">Setup New Broadcast</button>
+                                    </section>
+                                </section>
                             @else
-                                <div id="vid-box-viewer"></div>
+                            <!-- list of all available broadcasting rooms -->
+                                <table style="width: 100%;" id="rooms-list"></table>
+
                             @endif
 
-                            {{-- Image de déconnexion --}}
-                            <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
-                                <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
-                            </div>
+
 
                             {{-- Nombre de viewers --}}
-                            <p id="here-now">0</p>
+                            @if($streamer->stream->status == 1)
+
+                            @endif
                         </div>
                     @endauth
                 </div>
@@ -79,7 +91,7 @@
                             <label>
                                 <label class="switch align-middle m-0">
                                     <input id="stream_status" class="update_stream" name="stream_submit" data-config="status" type="checkbox" 
-                                            onclick="stream('youcef');" 
+                                            onclick="stream( '{{$streamer->name}}');"
                                             @if($streamer->stream->status == 0) 
                                                 value="On"
                                             @else
@@ -300,17 +312,24 @@
 @endsection
 
 @section('js')
-    <script src="/js/modernizr.custom.js"></script>
-	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
-	<script src="/js/webrtc.js"></script>
-	<script src="/js/rtc-controller.js"></script>
-
-	@auth
+    @auth
+    <script src="/js/broadcast.js"></script>
+	<script src="/js/rtc-connection.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
 		@if($streamer->id != Auth::user()->id)
 			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 		@endif
 	@endauth
-	
+    <script>
+        if(!location.hash.replace('#', '').length) {
+            location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
+            location.reload();
+        }
+    </script>
 	<script>
 		$(function(){		
 
@@ -468,96 +487,192 @@
 				}, '#paypal-button');
 			}
 		});
-	</script>
 
-    <script type="text/javascript">
+        var config = {
+            openSocket: function(config) {
+                var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
-        var video_out = document.getElementById("vid-box");
-        var here_now = document.getElementById('here-now');
-        var stream_info = document.getElementById('stream-info');
-        var video_out_viewer = document.getElementById("vid-box-viewer");
-        var streamName;
+                config.channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g, '');
+                var sender = Math.round(Math.random() * 999999999) + 999999999;
 
-        function stream(name) {
-            console.log(name);
-            var currentvalue = document.getElementById('stream_status').value;
-            console.log(currentvalue);
-            if (currentvalue == "Off") {
-                end();
-                document.getElementById("stream_status").value = "On";
-            } else {
-                document.getElementById("stream_status").value = "Off";
-
-                streamName = name || Math.floor(Math.random() * 100) + '';
-                var phone = window.phone = PHONE({
-                    number: streamName,
-                    publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-                    subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-                    oneway: true,
-                    broadcast: true
+                io.connect(SIGNALING_SERVER).emit('new-channel', {
+                    channel: config.channel,
+                    sender: sender
                 });
-                var ctrl = window.ctrl = CONTROLLER(phone);
-                ctrl.ready(function () {
-                    ctrl.addLocalStream(video_out);
-                    ctrl.stream();
-                    stream_info.hidden = true;
+
+                var socket = io.connect(SIGNALING_SERVER + config.channel);
+                socket.channel = config.channel;
+                socket.on('connect', function () {
+                    if (config.callback) config.callback(socket);
                 });
-                ctrl.receive(function (session) {
-                    session.connected(function (session) {
-                        addLog(session.number + " has joined.");
+
+                socket.send = function (message) {
+                    socket.emit('message', {
+                        sender: sender,
+                        data: message
                     });
-                    session.ended(function (session) {
-                        addLog(session.number + " has left.");
-                        console.log(session)
+                };
+
+                socket.on('message', config.onmessage);
+            },
+            onRemoteStream: function(htmlElement) {
+                videosContainer.appendChild(htmlElement);
+                rotateInCircle(htmlElement);
+            },
+            onRoomFound: function(room) {
+                var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                if (alreadyExist) return;
+
+                if (typeof roomsList === 'undefined') roomsList = document.body;
+
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td><strong>' + room.roomName + '</strong> is broadcasting his media!</td>' +
+                    '<td><button class="join">Join</button></td>';
+                roomsList.appendChild(tr);
+
+                var joinRoomButton = tr.querySelector('.join');
+                joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
+                joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
+                joinRoomButton.onclick = function() {
+                    this.disabled = true;
+
+                    var broadcaster = this.getAttribute('data-broadcaster');
+                    var roomToken = this.getAttribute('data-roomToken');
+                    broadcastUI.joinRoom({
+                        roomToken: roomToken,
+                        joinUser: broadcaster
+                    });
+                    hideUnnecessaryStuff();
+                };
+            },
+            onNewParticipant: function(numberOfViewers) {
+                document.title = 'Viewers: ' + numberOfViewers;
+            },
+            onReady: function() {
+                console.log('now you can open or join rooms');
+            }
+        };
+
+        function setupNewBroadcastButtonClickHandler() {
+            document.getElementById('broadcast-name').disabled = true;
+            document.getElementById('setup-new-broadcast').disabled = true;
+
+            DetectRTC.load(function() {
+                captureUserMedia(function() {
+                    var shared = 'video';
+                    if (window.option == 'Only Audio') {
+                        shared = 'audio';
+                    }
+                    if (window.option == 'Screen') {
+                        shared = 'screen';
+                    }
+
+                    broadcastUI.createRoom({
+                        roomName: (document.getElementById('broadcast-name') || { }).value || 'Anonymous',
+                        isAudio: shared === 'audio'
                     });
                 });
-                ctrl.streamPresence(function (m) {
-                    here_now.innerHTML = m.occupancy;
-                });
-                return false;
+                hideUnnecessaryStuff();
+            });
+        }
+
+        function captureUserMedia(callback) {
+            var constraints = null;
+            window.option = broadcastingOption ? broadcastingOption.value : '';
+            if (option === 'Only Audio') {
+                constraints = {
+                    audio: true,
+                    video: false
+                };
+
+                if(DetectRTC.hasMicrophone !== true) {
+                    alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
+                }
+            }
+            if (option === 'Screen') {
+                var video_constraints = {
+                    mandatory: {
+                        chromeMediaSource: 'screen'
+                    },
+                    optional: []
+                };
+                constraints = {
+                    audio: false,
+                    video: video_constraints
+                };
+
+                if(DetectRTC.isScreenCapturingSupported !== true) {
+                    alert('DetectRTC library is unable to find screen capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-screen-capturing"');
+                }
+            }
+
+            if (option != 'Only Audio' && option != 'Screen' && DetectRTC.hasWebcam !== true) {
+                alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
+            }
+
+            var htmlElement = document.createElement(option === 'Only Audio' ? 'audio' : 'video');
+
+            htmlElement.muted = true;
+            htmlElement.volume = 0;
+
+            try {
+                htmlElement.setAttributeNode(document.createAttribute('autoplay'));
+                htmlElement.setAttributeNode(document.createAttribute('playsinline'));
+                htmlElement.setAttributeNode(document.createAttribute('controls'));
+            } catch (e) {
+                htmlElement.setAttribute('autoplay', true);
+                htmlElement.setAttribute('playsinline', true);
+                htmlElement.setAttribute('controls', true);
+            }
+
+            var mediaConfig = {
+                video: htmlElement,
+                onsuccess: function(stream) {
+                    config.attachStream = stream;
+
+                    videosContainer.appendChild(htmlElement);
+                    rotateInCircle(htmlElement);
+
+                    callback && callback();
+                },
+                onerror: function() {
+                    if (option === 'Only Audio') alert('unable to get access to your microphone');
+                    else if (option === 'Screen') {
+                        if (location.protocol === 'http:') alert('Please test this WebRTC experiment on HTTPS.');
+                        else alert('Screen capturing is either denied or not supported. Are you enabled flag: "Enable screen capture support in getUserMedia"?');
+                    } else alert('unable to get access to your webcam');
+                }
+            };
+            if (constraints) mediaConfig.constraints = constraints;
+            getUserMedia(mediaConfig);
+        }
+
+        var broadcastUI = broadcast(config);
+
+        /* UI specific */
+        var videosContainer = document.getElementById('videos-container') || document.body;
+        var setupNewBroadcast = document.getElementById('setup-new-broadcast');
+        var roomsList = document.getElementById('rooms-list');
+
+        var broadcastingOption = document.getElementById('broadcasting-option');
+
+        if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
+
+        function hideUnnecessaryStuff() {
+            var visibleElements = document.getElementsByClassName('visible'),
+                length = visibleElements.length;
+            for (var i = 0; i < length; i++) {
+                visibleElements[i].style.display = 'none';
             }
         }
 
-        window.onload = function watch() {
-            var num = "youcef";
-            var phone = window.phone = PHONE({
-                number: "Viewer" + Math.floor(Math.random() * 100),
-                publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-                subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-                oneway: true
-            });
-            var ctrl = window.ctrl = CONTROLLER(phone);
-            ctrl.ready(function () {
-                ctrl.isStreaming(num, function (isOn) {
-                    if (isOn){
-                        ctrl.joinStream(num);
-                    }
-                    else{
-                        /*alert("User is not streaming!");*/
-                    }
-                });
-            });
-            ctrl.receive(function (session) {
-                session.connected(function (session) {
-                    video_out_viewer.appendChild(session.video);
-                    stream_info.hidden = false;
-                });
-            });
-            ctrl.streamPresence(function (m) {
-                here_now.innerHTML = m.occupancy;
-
-            });
-            return false;
-        };
-
-        function end() {
-            if (!window.phone)
-                return;
-            ctrl.hangup();
-            video_out.innerHTML = "";
-            stream_info.hidden = false;
+        function rotateInCircle(video) {
+            video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
+            setTimeout(function() {
+                video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
+            }, 1000);
         }
 
-    </script>
+	</script>
 
 @endsection
