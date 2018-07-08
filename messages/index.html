@@ -10,6 +10,7 @@
                 height: 100%;
                 margin: 0;
                 padding: 0;
+                background-color: #faf9fa;
             }
             
             #conversation{
@@ -18,7 +19,7 @@
 
             #zone_chat{
                 width: 100%;
-                background: green;
+                background: #330033;
                 color: #fff;
                 height: 80%;
                 font-size: 1.2em;
@@ -28,6 +29,15 @@
 
             #zone_chat p{
                 padding: 0 20px;
+                display: flex;
+            }
+
+            #zone_chat span {
+                width: 200px;
+                background-color: white;
+                color: black;
+                padding: 5px;
+                margin: 5px;
             }
 
             form#formulaire_chat{
@@ -38,45 +48,23 @@
                 margin: 5px 0;
             }
 
-            .chat_user{
-                font-size: 20px;
-                padding: 0 5px;
-                margin: 0 10px;
-            }
-
-            .chat_avatar{
-                width: 40px;
-                vertical-align: middle;
-                padding-left: 10px;
-            }
-
-            .streamer{
-                background-color: #caa908;
-                color: black;
-            }
-
-            .mod{
-                background-color: #0ccebc;
-                color: black;
-            }
-
-            .chat_message{
-                font-size: 15px;
-            }
-
             textarea{
                 padding: 0;
                 width: 80%;
                 vertical-align: middle;
             }
 
-            .delete{
-                padding: 10px;
-                vertical-align: middle;
-                color: white;
-            }
-
-            .delete:hover{
+            #envoi_message{
+                width: 75px;
+                height: 29px;
+                background: #7e27ff;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                color: #fff;
+                border: 0 none;
+                outline: 0 none;
+                font-size: 13px;
                 cursor: pointer;
             }
         </style>
@@ -101,7 +89,7 @@
                             </div>
                             <div id="profile" class="d-none flex-column justify-content-around w-100">
                                 <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
-                                <a href="#" id="profile_pseudo">
+                                <a href="#" target="_blank" id="profile_pseudo">
                                     <button id="profile_follow" class="btn btn-primary col-12">
                                         Profil de <span></span>
                                     </button>
@@ -160,7 +148,7 @@
             socket.on('join', function(data) {
                 var infos = data.infos;
                 var port = (window.location.hostname == "localhost") ? ":8000" : "";
-                $("#profile_img").prop("src", "http://"+window.location.hostname+"/storage/"+infos.friend_avatar);
+                $("#profile_img").prop("src", "http://"+window.location.hostname+port+"/storage/"+infos.friend_avatar);
                 $("#profile_pseudo").prop("href", "http://"+window.location.hostname+port+"/stream/"+infos.friend_pseudo);
                 $("#profile_pseudo span").html(infos.friend_pseudo);
 
@@ -168,9 +156,9 @@
                 var text = "";
                 $.each(conversations, function(index, element){
                     var message = "<p ";
-                        message += (element.user_exped == "me") ? "class='text-right'" : "class='text-left'";
+                        message += (element.user_exped == "me") ? "class='justify-content-end'" : "class='justify-content-start'";
                         message += ">";
-                        message += element.message; 
+                        message += "<span>"+element.message+"</span>"; 
                     message += "</p>";
                     text += message;
                 });

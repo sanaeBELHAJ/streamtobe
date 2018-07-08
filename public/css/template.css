@@ -1,4 +1,10 @@
+html, body{
+    height: 100%;
+}
+
 body{
+    display: flex;
+    flex-direction: column;
     background-color: #faf9fa;
 }
 header #navbarDropdown.nav-link{

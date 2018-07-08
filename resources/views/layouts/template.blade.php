@@ -142,7 +142,7 @@
 
 
         <!-- Footer -->
-        <footer class="py-4 bg-dark">
+        <footer class="py-5 bg-dark mt-auto">
             <div class="container">
                 <p class="m-0 pb-1 text-center text-white">{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p>
                 @if(!isset($_COOKIE['valid_cookie']))

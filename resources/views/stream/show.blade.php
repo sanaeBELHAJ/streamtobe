@@ -278,11 +278,11 @@
         }
 
         #config_stream input:checked + .slider {
-            background-color: #2196F3;
+            background-color: #39ca0c;
         }
 
         #config_stream input:focus + .slider {
-            box-shadow: 0 0 1px #2196F3;
+            box-shadow: 0 0 1px #39ca0c;
         }
 
         #config_stream input:checked + .slider:before {
