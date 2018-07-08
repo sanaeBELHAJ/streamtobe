@@ -68,7 +68,7 @@ header .dropdown-menu{
     color: white;
 }
 .visible{
-    background: rgb(75, 54, 124,.2)!important;
+    background: rgb(75, 54, 124,.4)!important;
 }
 .img-thumbnail{
   height: 250px;

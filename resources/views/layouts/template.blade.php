@@ -61,7 +61,7 @@
     <body>
         <header style="font-size:13px">
             <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="row container-fluid">
+                <div class=" container-fluid">
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
                         <span class="logo-text">{{ setting('site.title') }}</span>
