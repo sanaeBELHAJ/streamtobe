@@ -14,7 +14,7 @@
             }
             
             #conversation{
-                height: 100vh;
+                /*height: 100vh;*/
             }
 
             #zone_chat{
@@ -22,7 +22,6 @@
                 background: #330033;
                 color: #fff;
                 height: 80%;
-                font-size: 1.2em;
                 overflow-wrap: break-word;
                 overflow-y: scroll;
             }
@@ -33,11 +32,17 @@
             }
 
             #zone_chat span {
-                width: 200px;
-                background-color: white;
-                color: black;
                 padding: 5px;
                 margin: 5px;
+            }
+
+            #zone_chat span.message{
+                background-color: white;
+                color: black;
+            }
+
+            #zone_chat span.date{
+                
             }
 
             form#formulaire_chat{
@@ -67,20 +72,64 @@
                 font-size: 13px;
                 cursor: pointer;
             }
+
+            /* The slider itself */
+            #responsive_slider .slider {
+                -webkit-appearance: none;  /* Override default CSS styles */
+                appearance: none;
+                padding: 0;
+                width: 100%; /* Full-width */
+                height: 25px; /* Specified height */
+                background: #d3d3d3; /* Grey background */
+                outline: none; /* Remove outline */
+                opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+                -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+                transition: opacity .2s;
+            }
+
+            /* Mouse-over effects */
+            #responsive_slider .slider:hover {
+                opacity: 1; /* Fully shown on mouse-over */
+            }
+
+            /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+            #responsive_slider .slider::-webkit-slider-thumb {
+                -webkit-appearance: none; /* Override default look */
+                appearance: none;
+                width: 50%; /* Set a specific slider handle width */
+                height: 25px; /* Slider handle height */
+                background: #4CAF50; /* Green background */
+                cursor: pointer; /* Cursor on hover */
+            }
+
+            #responsive_slider .slider::-moz-range-thumb {
+                width: 50%; /* Set a specific slider handle width */
+                height: 25px; /* Slider handle height */
+                background: #4CAF50; /* Green background */
+                cursor: pointer; /* Cursor on hover */
+            }
         </style>
     </head>
 
     <body>
         <div class="container h-100"> 
-            <div class="row">
-                <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
+            <div class="row h-100">
+                <div class="container d-block d-sm-none" style="height:10%;">
+                    <div id="responsive_slider" class="d-flexjustify-content-around pb-1 pt-1 row">
+                        <p class="sliderText col text-center font-weight-bold m-0" data-value="1">Utilisateurs</p>
+                            <input id="myRange" type="range" min="1" max="2" value="1" class="btn slider col"> 
+                        <p class="sliderText col text-center m-0" data-value="2">Discussion</p>
+                    </div>	
+                </div>
+                <div class="nav flex-column nav-pills d-block d-sm-block col-12 col-sm-4 col-md-2" 
+                    id="searchContacts" role="tablist" aria-orientation="vertical" style="height:90%;">
                     <input type="text" id="search_contact" class="form-control mb-3" placeholder="Rechercher">
                     <span id="listContacts">
                         
                     </span>
                 </div>
-                <div class="col-8 col-md-10">
-                    <div class="row">
+                <div id="user_section" class="d-none d-sm-block col-12 col-sm-8 col-md-10" style="height:90%">
+                    <div class="row h-100">
                         <div id="infos_user" class="d-none d-md-flex col-3">
                             <div id="none" class="d-flex flex-column justify-content-center w-100">
                                 <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
@@ -96,7 +145,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div id="conversation" class="col-12 col-md-9">
+                        <div id="conversation" class="d-block col-12 col-sm-12 col-md-9 h-100">
                             <section id="zone_chat">
             
                             </section>
@@ -119,6 +168,15 @@
         <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
+            var options = {
+                year: 'numeric', 
+                month: 'numeric', 
+                day: 'numeric', 
+                hour: 'numeric', 
+                minute:'numeric'
+            };
+            var currentDate = new Date();
+
             /* ENVOI */
 
             // Connexion à socket.io
@@ -156,9 +214,11 @@
                 var text = "";
                 $.each(conversations, function(index, element){
                     var message = "<p ";
-                        message += (element.user_exped == "me") ? "class='justify-content-end'" : "class='justify-content-start'";
+                        message += (element.user_exped == "me") ? "class='row col-8 offset-4'" : "class='row col-8'";
                         message += ">";
-                        message += "<span>"+element.message+"</span>"; 
+                        message += "<span class='col-12 message'>"+element.message+"</span>";
+                        var messageDate = new Date(element.created_at);
+                        message += "<span class='col-12 date text-light h6'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
                     message += "</p>";
                     text += message;
                 });
@@ -171,13 +231,16 @@
                 $("#formulaire_chat textarea").prop("disabled", false).prop("placeholder", "Saisissez ici votre message");
             });
             
-            // Quand on reçoit un message, on l'insère dans la page
+            // Quand on envoie un message, on l'insère dans la page
             $('#formulaire_chat').submit(function (event) {
                 event.preventDefault();
                 var message = $('#message').val();
     
                 if(message != ""){
-                    var content = "<p class='text-right'>"+message+"</p>";
+                    var content = "<p class='row col-8 offset-4'>";
+                            content += "<span class='col-12 message'>"+message+"</span>";
+                            content += "<span class='col-12 date text-light h6'>"+currentDate.toLocaleDateString('fr-FR', options)+"</span>";
+                    content += "</p>";
                     $("#zone_chat").append(content);
                     socket.emit('message', message); // Publie le message
                 }
@@ -187,9 +250,13 @@
                 return false; // Permet de bloquer l'envoi "classique" du formulaire
             });
 
+            // Quand on recoit un message, on l'insère dans la page
             socket.on('message', function(message) {
                 if(message){
-                    var content = "<p class='text-left'>"+message+"</p>";
+                    var content = "<p class='justify-content-start'>";
+                        content += "<span class='message'>"+message+"</span>";
+                        content += "<span class='date'>"+currentDate.toLocaleDateString('fr-FR', options)+"</span>";
+                    content += "</p>";
                     $("#zone_chat").append(content);
                 }
                 $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
@@ -222,6 +289,30 @@
                     }
                 }
             };
+        
+            //Texte du slider
+			$('.sliderText').click(function(){
+				$('#myRange').val($(this).data('value')).change();
+			});
+
+			//Slider en vue responsive
+			$('#myRange').change(function(){
+				//Chat
+				if($(this).val()==1){
+					$('.sliderText[data-value="1"]').addClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').removeClass('font-weight-bold');
+					
+					$('#searchContacts').addClass('d-block').removeClass('d-none');
+					$('#user_section').addClass('d-none').removeClass('d-block');
+				}//Description
+				else{
+					$('.sliderText[data-value="1"]').removeClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').addClass('font-weight-bold');
+					
+					$('#searchContacts').addClass('d-none').removeClass('d-block');
+					$('#user_section').addClass('d-block').removeClass('d-none');
+				}
+			});
         </script>
     </body>
 </html>
