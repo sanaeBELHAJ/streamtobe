@@ -51,54 +51,24 @@
             </div>
     </div>
     <div class="col-sm-10 pull-right top bottom">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th colspan="4" class="text-center">Mes chaines suivies</th>
-                </tr>
-                <tr>
-                    <th>Image</th>
-                    <th>Chaîne</th>
-                    <th>Ancienneté</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(count($channels) > 0)
-                    @foreach($channels as $channel)
-                        @if($channel->is_follower == 1)
-                            <tr>
-                                <td>
-                                    <img class="avatar_follower" src="<?php echo asset('storage/'.$channel->stream->user->avatar); ?>" 
-                                        alt="" title="Image de profil">
-                                </td>
-                                <td>{{$channel->stream->user->pseudo}}</td>
-                                <td>{{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</td>
-                                <td>
-                                    @if($channel->stream->status==1)
-                                        {!! link_to_route('stream.show',
-                                                            'En ligne', 
-                                                            [$channel->stream->user->pseudo], 
-                                                            ['class' => 'btn btn-success btn-block']) !!}
-                                    @else
-                                        {!! link_to_route('stream.show', 
-                                                            'Hors ligne', 
-                                                            [$channel->stream->user->pseudo], 
-                                                            ['class' => 'btn btn-secondary btn-block']) !!}
-                                    @endif
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="4" class="text-center">
-                            <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
-                        </td>
-                    </tr>
+        <p>Mes chaines suivies</p
+        <hr>
+        <hr>
+        <br>
+        @if(count($channels) > 0)
+            @foreach($channels as $channel)
+                @if($channel->is_follower == 1)
+                    <div class='col-6 div-f'>
+                        <img class='avatar_follower' src="<?php echo asset('storage/' . $channel->user->avatar); ?>"><a class=""  href="/home/{{$channel->user->pseudo}}">{{$channel->user->pseudo}}</a></td>
+                        {{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}
+                        <span class="anciennete" data-date="{{$channel->created_at}}"></span>
+                        <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                    </div>
                 @endif
-            </tbody>
-        </table>
+            @endforeach
+        @else
+            <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
+        @endif
     </div>
 </div>
 @endsection
