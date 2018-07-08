@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid p-0">
+<div class="container-fluid @guest p-0 @endguest">
     @auth
 
     <div class="row">

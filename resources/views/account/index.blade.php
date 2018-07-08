@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-
+<div class="container-fluid">
 <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">
@@ -55,6 +55,7 @@
     <div class="col-sm-10 pull-right top bottom">
         @include('account.infos')
     </div>
+</div>
 </div>
 @endsection
 
