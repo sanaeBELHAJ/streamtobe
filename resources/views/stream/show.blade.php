@@ -12,20 +12,17 @@
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
                         <div class="bodyDiv">
-                            {{-- Vidéo --}}
-                            @if($streamer->id == Auth::user()->id)
-                                <div id="vid-box"></div>
-                            @else
-                                <div id="vid-box-viewer"></div>
-                            @endif
-
-                            {{-- Image de déconnexion --}}
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
                                 <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
                             </div>
-
-                            {{-- Nombre de viewers --}}
-                            <p id="here-now">0</p>
+                            {{-- Vidéo --}}
+                            <div id="videos-container"></div>
+                                {{-- Nombre de viewers --}}
+                            <i class="fas fa-eye"></i><span id="visitorStream"></span>
+                            @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
+                            <!-- list of all available broadcasting rooms -->
+                                <table style="width: 100%;" id="rooms-list"></table>
+                            @endif
                         </div>
                     @endauth
                 </div>
@@ -58,12 +55,19 @@
                         <div class="col-12 mt-4" id="config_stream">
                             <h3 class="mb-5">Configurer mon stream</h3>
                             <div class="row">
-                                <p class="col-12 col-md-6">
-                                    Titre : 
-                                    <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
-                                </p>
-                                <p class="col-12 col-md-6">
-                                    Catégorie : 
+
+                                    Stream : &nbsp;<section class="experiment">
+                                        <section>
+                                            <select id="broadcasting-option">
+                                                <option>Stream classique</option>
+                                                <option>Stream audio</option>
+                                            </select>
+                                            Titre :
+                                            <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
+                                        </section>
+                                    </section>
+                                    <p class="col-12 col-md-6">
+                                    Catégorie :
                                     <select id="stream_type" class="update_stream" data-config="type">
                                         @foreach($themes as $theme)
                                         <optgroup label="{{$theme->name}}">
@@ -78,19 +82,18 @@
 
                             <label>
                                 <label class="switch align-middle m-0">
-                                    <input id="stream_status" class="update_stream" name="stream_submit" data-config="status" type="checkbox" 
-                                            onclick="stream('youcef');" 
-                                            @if($streamer->stream->status == 0) 
+                                    <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                           @if($streamer->stream->status == 0)
                                                 value="On"
                                             @else
                                                 value="Off"
-                                                checked 
+                                                checked
                                             @endif >
                                     <span class="slider round"></span>
                                 </label>
                                 Activer / Interrompre la diffusion
                             </label>
-                                    
+
                         </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
@@ -130,9 +133,9 @@
                             {{-- Giveaway --}}
                             <p class="col text-center">
                                 <a class="btn" data-toggle="modal" data-target="#paymentModal">
-                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
+                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip"
                                     data-placement="top" title="Faire un don / S'abonner"></i>
-                                </a>								
+                                </a>
                             </p>
                             @include('stream.modal.payment')
 
@@ -160,406 +163,478 @@
                             </div>
                         </div>
                     @endif
-                @endauth				
+                @endauth
             </div>
 
             {{-- Boutons d'affichage mobile --}}
             <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
                 <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange"> 
+                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
                 <p class="sliderText col-3 text-center m-0" data-value="2">Description</p>
-            </div>		
+            </div>
         </div>
     </div>
 </div>
 @endsection
 
 @section('css')
-<style>
-    table.listUsers{
-        min-height: 200px;
-        margin-bottom: 100px;
-        border: 1px solid;
-    }
-
-    table.listUsers tbody tr{
-        padding: 0 20px;
-    }
-
-    video{
-        background-color:black;
-        width:100%;
-        height:100%;
-    }
-
-    @media(max-width: 768px){
-        #messages, #infos{
-            height: 400px;
+    <style>
+        table.listUsers{
+            min-height: 200px;
+            margin-bottom: 100px;
+            border: 1px solid;
         }
-    }
 
-    /* The slider itself */
-    #responsive_slider .slider {
-        -webkit-appearance: none;  /* Override default CSS styles */
-        appearance: none;
-        padding: 0;
-        width: 100%; /* Full-width */
-        height: 25px; /* Specified height */
-        background: #d3d3d3; /* Grey background */
-        outline: none; /* Remove outline */
-        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-        transition: opacity .2s;
-    }
+        table.listUsers tbody tr{
+            padding: 0 20px;
+        }
 
-    /* Mouse-over effects */
-    #responsive_slider .slider:hover {
-        opacity: 1; /* Fully shown on mouse-over */
-    }
+        video{
+            background-color:black;
+            width:100%;
+            height:100%;
+        }
 
-    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
-    #responsive_slider .slider::-webkit-slider-thumb {
-        -webkit-appearance: none; /* Override default look */
-        appearance: none;
-        width: 50%; /* Set a specific slider handle width */
-        height: 25px; /* Slider handle height */
-        background: #4CAF50; /* Green background */
-        cursor: pointer; /* Cursor on hover */
-    }
+        @media(max-width: 768px){
+            #messages, #infos{
+                height: 400px;
+            }
+        }
 
-    #responsive_slider .slider::-moz-range-thumb {
-        width: 50%; /* Set a specific slider handle width */
-        height: 25px; /* Slider handle height */
-        background: #4CAF50; /* Green background */
-        cursor: pointer; /* Cursor on hover */
-    }
+        /* The slider itself */
+        #responsive_slider .slider {
+            -webkit-appearance: none;  /* Override default CSS styles */
+            appearance: none;
+            padding: 0;
+            width: 100%; /* Full-width */
+            height: 25px; /* Specified height */
+            background: #d3d3d3; /* Grey background */
+            outline: none; /* Remove outline */
+            opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
 
-    /*******/
+        /* Mouse-over effects */
+        #responsive_slider .slider:hover {
+            opacity: 1; /* Fully shown on mouse-over */
+        }
 
-    /* Bouton d'activation du stream */
-    
-    /* The switch - the box around the slider */
-    #config_stream .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        #responsive_slider .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            width: 50%; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #4CAF50; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
 
-    /* Hide default HTML checkbox */
-    #config_stream .switch input {display:none;}
+        #responsive_slider .slider::-moz-range-thumb {
+            width: 50%; /* Set a specific slider handle width */
+            height: 25px; /* Slider handle height */
+            background: #4CAF50; /* Green background */
+            cursor: pointer; /* Cursor on hover */
+        }
 
-    /* The slider */
-    #config_stream .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
+        /*******/
 
-    #config_stream .slider:before {
-        position: absolute;
-        content: "";
-        height: 90%;
-        width: 26px;
-        left: 4px;
-        bottom: 5%;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
+        /* Bouton d'activation du stream */
 
-    #config_stream input:checked + .slider {
-        background-color: #2196F3;
-    }
+        /* The switch - the box around the slider */
+        #config_stream .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
 
-    #config_stream input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
+        /* Hide default HTML checkbox */
+        #config_stream .switch input {display:none;}
 
-    #config_stream input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
+        /* The slider */
+        #config_stream .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
 
-    /* Rounded sliders */
-    #config_stream .slider.round {
-        border-radius: 34px;
-    }
+        #config_stream .slider:before {
+            position: absolute;
+            content: "";
+            height: 90%;
+            width: 26px;
+            left: 4px;
+            bottom: 5%;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
 
-    #config_stream .slider.round:before {
-        border-radius: 50%;
-    }
-</style>
+        #config_stream input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        #config_stream input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        #config_stream input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        #config_stream .slider.round {
+            border-radius: 34px;
+        }
+
+        #config_stream .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 @endsection
 
 @section('js')
+    @auth
+    <script src="/js/broadcast.js"></script>
+	<script src="/js/rtc-connection.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+		@if($streamer->id != Auth::user()->id)
+			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		@endif
+	@endauth
 
-<script src="/js/modernizr.custom.js"></script>
-<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
-<script src="/js/webrtc.js"></script>
-<script src="/js/rtc-controller.js"></script>
+	<script>
+		$(function(){
 
-@auth
-    @if($streamer->id != Auth::user()->id)
-        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    @endif
-@endauth
+			//Texte du slider
+			$('.sliderText').click(function(){
+				$('#myRange').val($(this).data('value')).change();
+			});
 
-<script>
-    $(function () {
+			//Slider en vue responsive
+			$('#myRange').change(function(){
+				//Chat
+				if($(this).val()==1){
+					$('.sliderText[data-value="1"]').addClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').removeClass('font-weight-bold');
 
-        //Texte du slider
-        $('.sliderText').click(function () {
-            $('#myRange').val($(this).data('value')).change();
-        });
+					$('#messages').addClass('d-12').removeClass('d-none');
+					$('#infos').addClass('d-none').removeClass('d-12');
+				}//Description
+				else{
+					$('.sliderText[data-value="1"]').removeClass('font-weight-bold');
+					$('.sliderText[data-value="2"]').addClass('font-weight-bold');
 
-        //Slider en vue responsive
-        $('#myRange').change(function () {
-            //Chat
-            if ($(this).val() == 1) {
-                $('.sliderText[data-value="1"]').addClass('font-weight-bold');
-                $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
+					$('#messages').addClass('d-none').removeClass('d-12');
+					$('#infos').addClass('d-12').removeClass('d-none');
+				}
+			});
 
-                $('#messages').addClass('d-12').removeClass('d-none');
-                $('#infos').addClass('d-none').removeClass('d-12');
-            }//Description
+			/* Buttons stream (viewer) */
+			function followingStream(){
+				var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
+				var stream = "{{$streamer->pseudo}}";
+				$.ajax({
+					url: "/followStream",
+					type: 'POST',
+					data: {
+						stream: stream,
+						is_following: following
+					}
+				})
+				.done(function(data){
+					if(data == 0){
+						$("#follow_stream").removeClass("fas")
+											.addClass("far")
+											.attr('data-original-title', 'Suivre cette chaine')
+											.tooltip("show");
+					}
+					else{
+						$("#follow_stream").removeClass("far")
+											.addClass("fas")
+											.attr('data-original-title', 'Ne plus suivre cette chaine')
+											.tooltip("show");
+					}
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+			}
+			$("#follow_stream").click(followingStream);
+
+			/* Config stream (owner) */
+			function updateStream(){
+				var key = $(this).data('config');
+				var value = "";
+
+				switch(key){
+					case "title":
+						value = $("#stream_title").val();break;
+					case "status":
+						value = $("#setup-new-broadcast").is(":checked");break;
+					case "type":
+						value = $("#stream_type").val();break;
+				}
+
+				$.ajax({
+					url: "/updateStream",
+					type: 'POST',
+					data: {
+						config: key,
+						value: value
+					}
+				})
+				.done(function(data){
+					console.log(data);
+				})
+				.fail(function(data){
+					console.log(data);
+				});
+			}
+			$(".update_stream").change(updateStream);
+
+			/* Paypal Button */
+			if($("#paymentModal").length > 0){
+				paypal.Button.render({
+					env: 'sandbox', // Or 'production',
+
+					client: {
+						sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
+						//production: 'xxxxxxxxx'
+					},
+
+					commit: true, // Show a 'Pay Now' button
+
+					style: {
+						color: 'gold',
+						size: 'small'
+					},
+
+					payment: function(data, actions) {
+						//Set up the payment here
+						return actions.payment.create({
+							payment: {
+								transactions: [
+									{
+										amount: {
+											total: $('#giveaway_change').val(),
+											currency: 'EUR'
+										}
+									}
+								]
+							}
+						});
+					},
+
+					onAuthorize: function(data, actions) {
+						//Execute the payment here
+						return actions.payment.execute().then(function(payment) {
+							// The payment is complete!
+							// You can now show a confirmation message to the customer
+							payment.streamer = $('#pseudo').val();
+							payment.message = $('#giveaway_message').val();
+							$.ajax({
+								url: "/validGiveaway",
+								type: 'POST',
+								dataType: "JSON",
+								data: {
+									payment: payment
+								}
+							})
+							.done(function(data){
+								console.log(data);
+							})
+							.fail(function(data){
+								console.log(data);
+							});
+						});
+					},
+
+					onCancel: function(data, actions) {
+						//Buyer cancelled the payment
+					},
+
+					onError: function(err) {
+						//An error occurred during the transaction
+					}
+				}, '#paypal-button');
+			}
+		});
+
+        var config = {
+            openSocket: function(config) {
+                var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
+
+                config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}"
+                var sender = Math.round(Math.random() * 999999999) + 999999999;
+
+                io.connect(SIGNALING_SERVER).emit('new-channel', {
+                    channel: config.channel,
+                    sender: sender
+                });
+
+                var socket = io.connect(SIGNALING_SERVER + config.channel);
+                socket.channel = config.channel;
+                socket.on('connect', function () {
+                    if (config.callback) config.callback(socket);
+                });
+
+                socket.send = function (message) {
+                    socket.emit('message', {
+                        sender: sender,
+                        data: message
+                    });
+                };
+
+                socket.on('message', config.onmessage);
+            },
+            onRemoteStream: function(htmlElement) {
+                videosContainer.appendChild(htmlElement);
+                document.title = "{{ $streamer->stream->title }}";
+            },
+            onRoomFound: function(room) {
+                var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                if (alreadyExist) return;
+                if (typeof roomsList === 'undefined') roomsList = document.body;
+
+                broadcastUI.joinRoom({
+                    roomToken: room.roomToken,
+                    joinUser: room.broadcaster
+                });
+                document.getElementById('stream-info').hidden = true;
+
+            },
+            onNewParticipant: function(numberOfViewers) {
+                document.getElementById('visitorStream').innerHTML = "";
+                document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
+            },
+            onReady: function() {
+                console.log('now you can open or join rooms');
+            }
+        };
+
+        function setupNewBroadcastButtonClickHandler() {
+
+            if (document.getElementById('setup-new-broadcast').value === "Off") {
+                document.getElementById('videos-container').innerHTML = "";
+                config.attachStream.getTracks().forEach(function (track) {
+                    track.stop();
+                    document.getElementById("setup-new-broadcast").value = "On";
+                    document.getElementById('stream_title').disabled = false;
+                    document.getElementById('stream-info').hidden = false;
+                });}
             else {
-                $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
-                $('.sliderText[data-value="2"]').addClass('font-weight-bold');
-
-                $('#messages').addClass('d-none').removeClass('d-12');
-                $('#infos').addClass('d-12').removeClass('d-none');
-            }
-        });
-
-        /* Buttons stream (viewer) */
-        function followingStream() {
-            var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
-            var stream = "{{$streamer->pseudo}}";
-            $.ajax({
-                url: "/followStream",
-                type: 'POST',
-                data: {
-                    stream: stream,
-                    is_following: following
-                }
-            })
-            .done(function (data) {
-                if (data == 0) {
-                    $("#follow_stream").removeClass("fas")
-                            .addClass("far")
-                            .attr('data-original-title', 'Suivre cette chaine')
-                            .tooltip("show");
-                } else {
-                    $("#follow_stream").removeClass("far")
-                            .addClass("fas")
-                            .attr('data-original-title', 'Ne plus suivre cette chaine')
-                            .tooltip("show");
-                }
-            })
-            .fail(function (data) {
-                console.log(data);
-            });
-        }
-        $("#follow_stream").click(followingStream);
-
-        /* Config stream (owner) */
-        function updateStream() {
-            var key = $(this).data('config');
-            var value = "";
-
-            switch (key) {
-                case "title":
-                    value = $("#stream_title").val();
-                    break;
-                case "status":
-                    value = $("#stream_status").is(":checked");
-                    break;
-                case "type":
-                    value = $("#stream_type").val();
-                    break;
-            }
-
-            $.ajax({
-                url: "/updateStream",
-                type: 'POST',
-                data: {
-                    config: key,
-                    value: value
-                }
-            })
-            .done(function (data) {
-                console.log(data);
-            })
-            .fail(function (data) {
-                console.log(data);
-            });
-        }
-        $(".update_stream").change(updateStream);
-
-        /* Paypal Button */
-        if ($("#paymentModal").length > 0) {
-            paypal.Button.render({
-                env: 'sandbox', // Or 'production',
-
-                client: {
-                    sandbox: 'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
-                    //production: 'xxxxxxxxx'
-                },
-
-                commit: true, // Show a 'Pay Now' button
-
-                style: {
-                    color: 'gold',
-                    size: 'small'
-                },
-
-                payment: function (data, actions) {
-                    //Set up the payment here
-                    return actions.payment.create({
-                        payment: {
-                            transactions: [
-                                {
-                                    amount: {
-                                        total: $('#giveaway_change').val(),
-                                        currency: 'EUR'
-                                    }
-                                }
-                            ]
+                document.getElementById("setup-new-broadcast").value = "Off";
+                document.getElementById('stream_title').disabled = true;
+                DetectRTC.load(function () {
+                    captureUserMedia(function () {
+                        var shared = 'video';
+                        if (window.option == 'Stream audio') {
+                            shared = 'audio';
                         }
+                        broadcastUI.createRoom({
+                            roomName: (document.getElementById('stream_title') || {}).value || 'Anonymous',
+                            isAudio: shared === 'audio'
+                        });
                     });
-                },
-
-                onAuthorize: function (data, actions) {
-                    //Execute the payment here
-                    return actions.payment.execute().then(function (payment) {
-                        // The payment is complete!
-                        // You can now show a confirmation message to the customer
-                        payment.streamer = $('#pseudo').val();
-                        payment.message = $('#giveaway_message').val();
-                        $.ajax({
-                            url: "/validGiveaway",
-                            type: 'POST',
-                            dataType: "JSON",
-                            data: {
-                                payment: payment
-                            }
-                        })
-                                .done(function (data) {
-                                    console.log(data);
-                                })
-                                .fail(function (data) {
-                                    console.log(data);
-                                });
-                    });
-                },
-
-                onCancel: function (data, actions) {
-                    //Buyer cancelled the payment
-                },
-
-                onError: function (err) {
-                    //An error occurred during the transaction
-                }
-            }, '#paypal-button');
-        }
-    });
-</script>
-<script type="text/javascript">
-
-    var video_out = document.getElementById("vid-box");
-    var here_now = document.getElementById('here-now');
-    var stream_info = document.getElementById('stream-info');
-    var video_out_viewer = document.getElementById("vid-box-viewer");
-    var streamName;
-
-    function stream(name) {
-        console.log(name);
-        var currentvalue = document.getElementById('stream_status').value;
-        console.log(currentvalue);
-        if (currentvalue == "Off") {
-            end();
-            document.getElementById("stream_status").value = "On";
-        } else {
-            document.getElementById("stream_status").value = "Off";
-
-            streamName = name || Math.floor(Math.random() * 100) + '';
-            var phone = window.phone = PHONE({
-                number: streamName,
-                publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-                subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-                oneway: true,
-                broadcast: true
-            });
-            var ctrl = window.ctrl = CONTROLLER(phone);
-            ctrl.ready(function () {
-                ctrl.addLocalStream(video_out);
-                ctrl.stream();
-                stream_info.hidden = true;
-            });
-            ctrl.receive(function (session) {
-                session.connected(function (session) {
-                    addLog(session.number + " has joined.");
+                    document.getElementById('stream-info').hidden = true;
                 });
-                session.ended(function (session) {
-                    addLog(session.number + " has left.");
-                    console.log(session)
-                });
-            });
-            ctrl.streamPresence(function (m) {
-                here_now.innerHTML = m.occupancy;
-            });
-            return false;
+            }
         }
-    }
 
-    window.onload = function watch() {
-        var num = "youcef";
-        var phone = window.phone = PHONE({
-            number: "Viewer" + Math.floor(Math.random() * 100),
-            publish_key: 'pub-c-561a7378-fa06-4c50-a331-5c0056d0163c',
-            subscribe_key: 'sub-c-17b7db8a-3915-11e4-9868-02ee2ddab7fe',
-            oneway: true
-        });
-        var ctrl = window.ctrl = CONTROLLER(phone);
-        ctrl.ready(function () {
-            ctrl.isStreaming(num, function (isOn) {
-                if (isOn){
-                    ctrl.joinStream(num);
+        function captureUserMedia(callback) {
+            var constraints = null;
+            window.option = broadcastingOption ? broadcastingOption.value : '';
+            if (option === 'Stream audio') {
+                constraints = {
+                    audio: true,
+                    video: false
+                };
+
+                if(DetectRTC.hasMicrophone !== true) {
+                    alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
                 }
-                else{
-                    /*alert("User is not streaming!");*/
+            }
+            if (option === 'Stream caméra') {
+                var video_constraints = {
+                    mandatory: {
+                        chromeMediaSource: 'Stream caméra'
+                    },
+                    optional: []
+                };
+                constraints = {
+                    audio: false,
+                    video: video_constraints
+                };
+
+                if(DetectRTC.isScreenCapturingSupported !== true) {
+                    alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
                 }
-            });
-        });
-        ctrl.receive(function (session) {
-            session.connected(function (session) {
-                video_out_viewer.appendChild(session.video);
-                stream_info.hidden = false;
-            });
-        });
-        ctrl.streamPresence(function (m) {
-            here_now.innerHTML = m.occupancy;
+            }
 
-        });
-        return false;
-    };
+            if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
+                alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
+            }
 
-    function end() {
-        if (!window.phone)
-            return;
-        ctrl.hangup();
-        video_out.innerHTML = "";
-        stream_info.hidden = false;
-    }
+            var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
 
-</script>
+            htmlElement.muted = true;
+            htmlElement.volume = 0;
+
+            try {
+                htmlElement.setAttributeNode(document.createAttribute('autoplay'));
+                htmlElement.setAttributeNode(document.createAttribute('playsinline'));
+                htmlElement.setAttributeNode(document.createAttribute('controls'));
+            } catch (e) {
+                htmlElement.setAttribute('autoplay', true);
+                htmlElement.setAttribute('playsinline', true);
+                htmlElement.setAttribute('controls', true);
+            }
+
+            var mediaConfig = {
+                video: htmlElement,
+                onsuccess: function(stream) {
+                    config.attachStream = stream;
+
+                    videosContainer.appendChild(htmlElement);
+                    callback && callback();
+                },
+                onerror: function() {
+                    if (option === 'Stream audio') alert('unable to get access to your microphone');
+                    else if (option === 'Stream caméra') {
+                        if (location.protocol === 'http:') alert('Please test this WebRTC experiment on HTTPS.');
+                        else alert('Stream caméra capturing is either denied or not supported. Are you enabled flag: "Enable Stream caméra capture support in getUserMedia"?');
+                    } else alert('unable to get access to your webcam');
+                }
+            };
+            if (constraints) mediaConfig.constraints = constraints;
+            getUserMedia(mediaConfig);
+        }
+
+        var broadcastUI = broadcast(config);
+
+        /* UI specific */
+        var videosContainer = document.getElementById('videos-container') || document.body;
+        var setupNewBroadcast = document.getElementById('setup-new-broadcast');
+        var roomsList = document.getElementById('rooms-list');
+
+        var broadcastingOption = document.getElementById('broadcasting-option');
+
+        if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
+
+	</script>
 
 @endsection
