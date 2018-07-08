@@ -66,66 +66,14 @@
                         <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
                         <span class="logo-text">{{ setting('site.title') }}</span>
                     </a>
-                    
-                    <!-- Left Side Of Navbar -->
-                    <ul class="d-flex justify-content-around navbar-nav mr-auto">
-                        <li class="mx-3">
-                            <a href="http://localhost:8000/stream" class="nav-link">Streams actifs</a>
-                        </li>
-                    </ul>
-                    
                     <button class="navbar-toggler pull-right btn-nav" type="button" data-toggle="collapse"  
-                    aria-expanded="false" aria-label="Toggle navigation">
+                            aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-
-                    <div class="collapse navbar-collapse">
-                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
-                            <li class="mx-3 d-flex align-items-center">
-                                <div class="search">
-                                    <button type="submit">
-                                    <i class="material-icons">
-                                        search
-                                    </i>
-                                    </button>
-                                <input class="searchUser ui-autocomplete-input" data-action="redirect" placeholder="Rechercher un stream" name="q" type="text" value="" autocomplete="off">
-                                </div>
-                            </li>
-                            <!-- Authentication Links -->
-                            <li class="mx-3 d-flex align-items-center">
-                                <a href="/messages" class="d-flex align-start nav-link p-0">
-                                    <i class="material-icons">
-                                    mail_outline
-                                    </i>      
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre="">
-                                    <img class="pictureAccountTemplate" src="http://localhost:8000/storage/users/default.png" alt="Image de profil" title="Image de profil">
-                                    admin <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a href="http://localhost:8000/stream/admin" class="dropdown-item">Mon stream</a>
-                                    <a href="http://localhost:8000/home" class="dropdown-item">Paramètres</a>
-                                    <hr>
-                                    <a href="http://localhost:8000/admin/login" class="dropdown-item">Administration</a>
-                                    <hr>
-                                    <a class="dropdown-item" href="http://localhost:8000/logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        Déconnexion
-                                    </a>
-
-                                    <form id="logout-form" action="http://localhost:8000/logout" method="POST" style="display: none;">
-                                        <input type="hidden" name="_token" value="bYGsXwnu00s1V5isr3gOhYBPU53VTvnFzWwwiR9b">                                        </form>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </nav>
         </header>
 
-        {{-- SIDENAV Responsive --}}
         <div id="mySidenav" class="sidenav top">
             <a href="javascript:void(0)" class="closebtn btn-nav">&times;</a>
             <ul class="p-0">
