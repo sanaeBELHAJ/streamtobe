@@ -12,31 +12,16 @@
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
                         <div class="bodyDiv">
+                            <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
+                                <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
+                            </div>
                             {{-- Vidéo --}}
                             <div id="videos-container"></div>
-                            @if($streamer->id == Auth::user()->id)
-                                <section class="experiment">
-                                    <section>
-                                        <select id="broadcasting-option">
-                                            <option>Audio + Video</option>
-                                            <option>Only Audio</option>
-                                            <option>Screen</option>
-                                        </select>
-                                        <input type="text" id="broadcast-name">
-                                        <button id="setup-new-broadcast" class="setup">Setup New Broadcast</button>
-                                    </section>
-                                </section>
-                            @else
+                                {{-- Nombre de viewers --}}
+                            <i class="fas fa-eye"></i><span id="visitorStream"></span>
+                            @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
                             <!-- list of all available broadcasting rooms -->
                                 <table style="width: 100%;" id="rooms-list"></table>
-
-                            @endif
-
-
-
-                            {{-- Nombre de viewers --}}
-                            @if($streamer->stream->status == 1)
-
                             @endif
                         </div>
                     @endauth
@@ -70,12 +55,19 @@
                         <div class="col-12 mt-4" id="config_stream">
                             <h3 class="mb-5">Configurer mon stream</h3>
                             <div class="row">
-                                <p class="col-12 col-md-6">
-                                    Titre : 
-                                    <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
-                                </p>
-                                <p class="col-12 col-md-6">
-                                    Catégorie : 
+
+                                    Stream : &nbsp;<section class="experiment">
+                                        <section>
+                                            <select id="broadcasting-option">
+                                                <option>Stream classique</option>
+                                                <option>Stream audio</option>
+                                            </select>
+                                            Titre :
+                                            <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
+                                        </section>
+                                    </section>
+                                    <p class="col-12 col-md-6">
+                                    Catégorie :
                                     <select id="stream_type" class="update_stream" data-config="type">
                                         @foreach($themes as $theme)
                                         <optgroup label="{{$theme->name}}">
@@ -90,19 +82,18 @@
 
                             <label>
                                 <label class="switch align-middle m-0">
-                                    <input id="stream_status" class="update_stream" name="stream_submit" data-config="status" type="checkbox" 
-                                            onclick="stream( '{{$streamer->name}}');"
-                                            @if($streamer->stream->status == 0) 
+                                    <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                           @if($streamer->stream->status == 0)
                                                 value="On"
                                             @else
                                                 value="Off"
-                                                checked 
+                                                checked
                                             @endif >
                                     <span class="slider round"></span>
                                 </label>
                                 Activer / Interrompre la diffusion
                             </label>
-                                    
+
                         </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
@@ -110,11 +101,11 @@
                             {{-- Report --}}
                             <p class="col text-center">
                                 @if($report)
-                                <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
+                                <i class="fas fa-2x fa-exclamation" data-toggle="tooltip"
                                 data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
                                 @else
                                 <a class="btn" data-toggle="modal" data-target="#reportModal">
-                                    <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
+                                    <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip"
                                     data-placement="top" title="Signaler cette chaine"></i>
                                 </a>
                                 @include('stream.modal.report')
@@ -127,11 +118,11 @@
                                 @if($streamer->stream->id == $viewer->stream_id)
                                 @foreach($viewer->subscribes as $subscription)
                                 @if($subscription->status == 1)
-                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-                                data-placement="top" title="Envoyer un message au streamer"></i>	
+                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip"
+                                data-placement="top" title="Envoyer un message au streamer"></i>
                                 @break
                                 @else
-                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
+                                <i class="far fa-2x fa-comment" data-toggle="tooltip"
                                 data-placement="top" title="Communication privée reservée aux abonnés"></i>
                                 @endif
                                 @endforeach
@@ -142,9 +133,9 @@
                             {{-- Giveaway --}}
                             <p class="col text-center">
                                 <a class="btn" data-toggle="modal" data-target="#paymentModal">
-                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip" 
+                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip"
                                     data-placement="top" title="Faire un don / S'abonner"></i>
-                                </a>								
+                                </a>
                             </p>
                             @include('stream.modal.payment')
 
@@ -153,10 +144,10 @@
                                 @foreach($user->viewers as $viewer)
                                 @if($streamer->stream->id == $viewer->stream_id)
                                 @if($viewer->is_follower == 1)
-                                <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip"
                                 data-placement="top" title="Ne plus suivre cette chaine"></i>
                                 @else
-                                <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
+                                <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip"
                                 data-placement="top" title="Suivre cette chaine"></i>
                                 @endif
                                 @endif
@@ -172,15 +163,15 @@
                             </div>
                         </div>
                     @endif
-                @endauth				
+                @endauth
             </div>
 
             {{-- Boutons d'affichage mobile --}}
             <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
                 <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange"> 
+                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
                 <p class="sliderText col-3 text-center m-0" data-value="2">Description</p>
-            </div>		
+            </div>
         </div>
     </div>
 </div>
@@ -229,7 +220,7 @@
             opacity: 1; /* Fully shown on mouse-over */
         }
 
-        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
         #responsive_slider .slider::-webkit-slider-thumb {
             -webkit-appearance: none; /* Override default look */
             appearance: none;
@@ -249,7 +240,7 @@
         /*******/
 
         /* Bouton d'activation du stream */
-        
+
         /* The switch - the box around the slider */
         #config_stream .switch {
             position: relative;
@@ -324,14 +315,9 @@
 			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 		@endif
 	@endauth
-    <script>
-        if(!location.hash.replace('#', '').length) {
-            location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
-            location.reload();
-        }
-    </script>
+
 	<script>
-		$(function(){		
+		$(function(){
 
 			//Texte du slider
 			$('.sliderText').click(function(){
@@ -344,19 +330,19 @@
 				if($(this).val()==1){
 					$('.sliderText[data-value="1"]').addClass('font-weight-bold');
 					$('.sliderText[data-value="2"]').removeClass('font-weight-bold');
-					
+
 					$('#messages').addClass('d-12').removeClass('d-none');
 					$('#infos').addClass('d-none').removeClass('d-12');
 				}//Description
 				else{
 					$('.sliderText[data-value="1"]').removeClass('font-weight-bold');
 					$('.sliderText[data-value="2"]').addClass('font-weight-bold');
-					
+
 					$('#messages').addClass('d-none').removeClass('d-12');
 					$('#infos').addClass('d-12').removeClass('d-none');
 				}
 			});
-			
+
 			/* Buttons stream (viewer) */
 			function followingStream(){
 				var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
@@ -398,11 +384,11 @@
 					case "title":
 						value = $("#stream_title").val();break;
 					case "status":
-						value = $("#stream_status").is(":checked");break;
+						value = $("#setup-new-broadcast").is(":checked");break;
 					case "type":
 						value = $("#stream_type").val();break;
 				}
-				
+
 				$.ajax({
 					url: "/updateStream",
 					type: 'POST',
@@ -418,18 +404,18 @@
 					console.log(data);
 				});
 			}
-			$(".update_stream").change(updateStream);	
-			
+			$(".update_stream").change(updateStream);
+
 			/* Paypal Button */
 			if($("#paymentModal").length > 0){
 				paypal.Button.render({
 					env: 'sandbox', // Or 'production',
-					
+
 					client: {
 						sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
 						//production: 'xxxxxxxxx'
 					},
-					
+
 					commit: true, // Show a 'Pay Now' button
 
 					style: {
@@ -443,8 +429,8 @@
 							payment: {
 								transactions: [
 									{
-										amount: { 
-											total: $('#giveaway_change').val(), 
+										amount: {
+											total: $('#giveaway_change').val(),
 											currency: 'EUR'
 										}
 									}
@@ -492,7 +478,7 @@
             openSocket: function(config) {
                 var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
-                config.channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g, '');
+                config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}"
                 var sender = Math.round(Math.random() * 999999999) + 999999999;
 
                 io.connect(SIGNALING_SERVER).emit('new-channel', {
@@ -517,36 +503,23 @@
             },
             onRemoteStream: function(htmlElement) {
                 videosContainer.appendChild(htmlElement);
-                rotateInCircle(htmlElement);
+                document.title = "{{ $streamer->stream->title }}";
             },
             onRoomFound: function(room) {
                 var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
                 if (alreadyExist) return;
-
                 if (typeof roomsList === 'undefined') roomsList = document.body;
 
-                var tr = document.createElement('tr');
-                tr.innerHTML = '<td><strong>' + room.roomName + '</strong> is broadcasting his media!</td>' +
-                    '<td><button class="join">Join</button></td>';
-                roomsList.appendChild(tr);
+                broadcastUI.joinRoom({
+                    roomToken: room.roomToken,
+                    joinUser: room.broadcaster
+                });
+                document.getElementById('stream-info').hidden = true;
 
-                var joinRoomButton = tr.querySelector('.join');
-                joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
-                joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
-                joinRoomButton.onclick = function() {
-                    this.disabled = true;
-
-                    var broadcaster = this.getAttribute('data-broadcaster');
-                    var roomToken = this.getAttribute('data-roomToken');
-                    broadcastUI.joinRoom({
-                        roomToken: roomToken,
-                        joinUser: broadcaster
-                    });
-                    hideUnnecessaryStuff();
-                };
             },
             onNewParticipant: function(numberOfViewers) {
-                document.title = 'Viewers: ' + numberOfViewers;
+                document.getElementById('visitorStream').innerHTML = "";
+                document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
             },
             onReady: function() {
                 console.log('now you can open or join rooms');
@@ -554,32 +527,38 @@
         };
 
         function setupNewBroadcastButtonClickHandler() {
-            document.getElementById('broadcast-name').disabled = true;
-            document.getElementById('setup-new-broadcast').disabled = true;
 
-            DetectRTC.load(function() {
-                captureUserMedia(function() {
-                    var shared = 'video';
-                    if (window.option == 'Only Audio') {
-                        shared = 'audio';
-                    }
-                    if (window.option == 'Screen') {
-                        shared = 'screen';
-                    }
-
-                    broadcastUI.createRoom({
-                        roomName: (document.getElementById('broadcast-name') || { }).value || 'Anonymous',
-                        isAudio: shared === 'audio'
+            if (document.getElementById('setup-new-broadcast').value === "Off") {
+                document.getElementById('videos-container').innerHTML = "";
+                config.attachStream.getTracks().forEach(function (track) {
+                    track.stop();
+                    document.getElementById("setup-new-broadcast").value = "On";
+                    document.getElementById('stream_title').disabled = false;
+                    document.getElementById('stream-info').hidden = false;
+                });}
+            else {
+                document.getElementById("setup-new-broadcast").value = "Off";
+                document.getElementById('stream_title').disabled = true;
+                DetectRTC.load(function () {
+                    captureUserMedia(function () {
+                        var shared = 'video';
+                        if (window.option == 'Stream audio') {
+                            shared = 'audio';
+                        }
+                        broadcastUI.createRoom({
+                            roomName: (document.getElementById('stream_title') || {}).value || 'Anonymous',
+                            isAudio: shared === 'audio'
+                        });
                     });
+                    document.getElementById('stream-info').hidden = true;
                 });
-                hideUnnecessaryStuff();
-            });
+            }
         }
 
         function captureUserMedia(callback) {
             var constraints = null;
             window.option = broadcastingOption ? broadcastingOption.value : '';
-            if (option === 'Only Audio') {
+            if (option === 'Stream audio') {
                 constraints = {
                     audio: true,
                     video: false
@@ -589,10 +568,10 @@
                     alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
                 }
             }
-            if (option === 'Screen') {
+            if (option === 'Stream caméra') {
                 var video_constraints = {
                     mandatory: {
-                        chromeMediaSource: 'screen'
+                        chromeMediaSource: 'Stream caméra'
                     },
                     optional: []
                 };
@@ -602,15 +581,15 @@
                 };
 
                 if(DetectRTC.isScreenCapturingSupported !== true) {
-                    alert('DetectRTC library is unable to find screen capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-screen-capturing"');
+                    alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
                 }
             }
 
-            if (option != 'Only Audio' && option != 'Screen' && DetectRTC.hasWebcam !== true) {
+            if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
                 alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
             }
 
-            var htmlElement = document.createElement(option === 'Only Audio' ? 'audio' : 'video');
+            var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
 
             htmlElement.muted = true;
             htmlElement.volume = 0;
@@ -631,15 +610,13 @@
                     config.attachStream = stream;
 
                     videosContainer.appendChild(htmlElement);
-                    rotateInCircle(htmlElement);
-
                     callback && callback();
                 },
                 onerror: function() {
-                    if (option === 'Only Audio') alert('unable to get access to your microphone');
-                    else if (option === 'Screen') {
+                    if (option === 'Stream audio') alert('unable to get access to your microphone');
+                    else if (option === 'Stream caméra') {
                         if (location.protocol === 'http:') alert('Please test this WebRTC experiment on HTTPS.');
-                        else alert('Screen capturing is either denied or not supported. Are you enabled flag: "Enable screen capture support in getUserMedia"?');
+                        else alert('Stream caméra capturing is either denied or not supported. Are you enabled flag: "Enable Stream caméra capture support in getUserMedia"?');
                     } else alert('unable to get access to your webcam');
                 }
             };
@@ -657,21 +634,6 @@
         var broadcastingOption = document.getElementById('broadcasting-option');
 
         if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
-
-        function hideUnnecessaryStuff() {
-            var visibleElements = document.getElementsByClassName('visible'),
-                length = visibleElements.length;
-            for (var i = 0; i < length; i++) {
-                visibleElements[i].style.display = 'none';
-            }
-        }
-
-        function rotateInCircle(video) {
-            video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
-            setTimeout(function() {
-                video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
-            }, 1000);
-        }
 
 	</script>
 
