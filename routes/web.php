@@ -17,13 +17,8 @@
  * php artisan route:list
  */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-Route::get('/', 'HomeController@index');
-//Routes basiques d'inscription/connexion/déconnexion
-//Auth::routes();
 
+Route::get('/', 'HomeController@index');
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
@@ -73,15 +68,11 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/fans/{pseudo}', 'AccountController@fans')->name('home.fans');
         Route::get('/follows/{pseudo}', 'AccountController@follows')->name('home.follows');
 
-    
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
-
-    /* Support technique pour utilisateur */
-        Route::post('/support', 'HomeController@support');
-        Route::get('/support', 'HomeController@support');
 });
 
+/* Interface d'administration Voyager */
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
@@ -97,3 +88,7 @@ Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete
 
 //Accord d'utilisation des cookies
 Route::post('/valid_cookie', 'HomeController@valid_cookie');
+
+/* Support technique pour utilisateur */
+Route::post('/support', 'HomeController@support');
+Route::get('/support', 'HomeController@support');

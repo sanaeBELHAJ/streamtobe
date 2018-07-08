@@ -63,7 +63,7 @@ class HomeController extends Controller
      */
     public function support(SupportRequest $request){
         $datas = [
-            "from" => Auth::user()->email,
+            "from" => (Auth::user()) ? Auth::user()->email : $request->input('exped'),
             "content" => $request->input('opinion')
         ];
         Mail::send('account.support', $datas, function($message){
