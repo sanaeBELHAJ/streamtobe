@@ -51,9 +51,8 @@
                 </center>
             </div>
     </div>
-    <div class="col-sm-10 pull-right top bottom">
-        <p>Mes chaines suivies</p
-        <hr>
+    <div class="col-sm-10 pull-right top-2 bottom">
+        <p>Mes chaines suivies</p>
         <hr>
         <br>
         @if(count($channels) > 0)
