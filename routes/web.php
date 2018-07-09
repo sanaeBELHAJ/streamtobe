@@ -40,7 +40,7 @@ Route::middleware(['guest'])->group(function(){
     Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
 
-/*Routes accessibles uniquement aux membres loggés */
+/* Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     
@@ -61,7 +61,6 @@ Route::group(['middleware' => 'auth'], function(){
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
-        Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
         Route::resource('home', 'AccountController', ['only' => ['index','destroy','show']]);
         
         Route::get('/stats/{pseudo}', 'AccountController@stats')->name('home.stats');

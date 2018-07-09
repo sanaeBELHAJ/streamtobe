@@ -36,142 +36,65 @@ class AccountController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $pseudo = null) {
-        if ($pseudo != null) {
-            $streamer = User::where('pseudo', $pseudo)
-                    ->first();
-        } else {
-            $streamer = Auth::user();
-            $user = Auth::user();
-        }
-
-        $stream = $streamer->stream; //Chaine de l'utilisateur
-        $viewers = $stream->viewers; //Followers de l'utilisateur
-        $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
-        //Mes followers
-        $subscribers = [];
-        foreach ($viewers as $viewer)
-            $subscribers[] = $viewer->subscribes->where('viewer_id', $viewer->id)->first();
-
-        //Mes dons reçus 
-        $donations = [];
-        foreach ($viewers as $viewer) {
-            foreach ($viewer->donations as $donation)
-                $donations[] = $donation;
-        }
-
-        //Mes streams favoris 
-        $donations = [];
-        foreach ($channels as $channel) {
-            foreach ($channel->donations as $donation)
-                $donations[] = $donation;
-        }
+    public function index(Request $request) {
+        $streamer = Auth::user();
+        $user = Auth::user();
 
         return view('account.index')
-                        ->with(compact(
-                                        'user', 'streamer','stream', 'viewers', 'subscribers', 'donations', 'channels'
-        ));
+                ->with(compact('user', 'streamer'));
     }
 
     /**
-     * Show the account form.
+     * Show the donations list.
      *
      * @return \Illuminate\Http\Response
      */
     public function stats(Request $request, $pseudo = null) {
-        if ($pseudo != null) {
-            $streamer = User::where('pseudo', $pseudo)
-                    ->first();
-        } else {
-            $streamer = Auth::user();
-        }
+
+        $streamer = ($pseudo != null) ? User::where('pseudo', $pseudo)->where('status', '>', 0)->first() : Auth::user();
         $user = Auth::user();
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
-        $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
-        //Mes followers
-        $subscribers = [];
-        foreach ($viewers as $viewer)
-            $subscribers[] = $viewer->subscribes->where('viewer_id', $viewer->id)->first();
 
         //Mes dons reçus 
         $donations = [];
         foreach ($viewers as $viewer) {
             foreach ($viewer->donations as $donation)
-                $donations[] = $donation;
-        }
-
-        //Mes streams favoris 
-        $donations = [];
-        foreach ($channels as $channel) {
-            foreach ($channel->donations as $donation)
                 $donations[] = $donation;
         }
 
         return view('account.stats')
-                        ->with(compact(
-                                        'user', 'streamer', 'stream', 'viewers', 'subscribers', 'donations', 'channels'
-        ));
+                        ->with(compact('user', 'streamer', 'stream', 'viewers', 'donations'));
     }
 
     /**
-     * Show the account form.
+     * Show the followers list.
      *
      * @return \Illuminate\Http\Response
      */
     public function fans(Request $request, $pseudo = null) {
-        if ($pseudo != null) {
-            $streamer = User::where('pseudo', $pseudo)
-                    ->first();
-        } else {
-            $streamer = Auth::user();
-        }
+        $streamer = ($pseudo != null) ? User::where('pseudo', $pseudo)->where('status', '>', 0)->first() : Auth::user();
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
 
         return view('account.fans')
-                        ->with(compact(
-                                        'streamer', 'stream', 'viewers'
-        ));
+                        ->with(compact('streamer', 'stream', 'viewers'));
     }
 
     /**
-     * Show the account form.
+     * Show the other streamers list.
      * @param string $pseudo
      * @return \Illuminate\Http\Response
      */
     public function follows(Request $request, $pseudo = null) {
-        if ($pseudo != null) {
-            $streamer = User::where('pseudo', $pseudo)
-                    ->first();
-        } else {
-            $streamer = Auth::user();
-        }
+        $streamer = ($pseudo != null) ? User::where('pseudo', $pseudo)->where('status', '>', 0)->first() : Auth::user();
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
         $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
-        //Mes followers
-        $subscribers = [];
-        foreach ($viewers as $viewer)
-            $subscribers[] = $viewer->subscribes->where('viewer_id', $viewer->id)->first();
-
-        //Mes dons reçus 
-        $donations = [];
-        foreach ($viewers as $viewer) {
-            foreach ($viewer->donations as $donation)
-                $donations[] = $donation;
-        }
-
-        //Mes streams favoris 
-        $donations = [];
-        foreach ($channels as $channel) {
-            foreach ($channel->donations as $donation)
-                $donations[] = $donation;
-        }
 
         return view('account.follows')
                         ->with(compact(
-                                        'streamer', 'stream', 'viewers', 'subscribers', 'donations', 'channels'
+                                        'streamer', 'stream', 'viewers', 'channels'
         ));
     }
 
@@ -199,18 +122,6 @@ class AccountController extends Controller {
 
         $user->update($request->all());
         $user->save();
-        Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
-        Session::flash('alert-class', 'alert-success');
-        return redirect('home');
-    }
-
-    /**
-     * Update the specified account in storage
-     * 
-     * @param \Illuminate\http\Request $request
-     * @return \Illuminate\http\Response
-     */
-    public function updateStats(Request $request) {
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success');
         return redirect('home');

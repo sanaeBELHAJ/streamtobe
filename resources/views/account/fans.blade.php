@@ -43,18 +43,16 @@
                     </li>
                 </ul>
                 <br>
-                @if( Auth::user()->pseudo == $streamer->pseudo)
-                <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
                     <i style="font-size: 50px;margin-top: 10px" class="material-icons">
                         videocam
                     </i>
                 </a>
-                @endif
             </center>
         </div>
     </div>
     <div class="col-sm-10 pull-right top-2 bottom">
-        <p>Utilisateurs qui me suivent</p>
+        <p>Utilisateurs qui suivent la chaine</p>
         <hr>
         <br>
         @foreach($viewers as $viewer)
