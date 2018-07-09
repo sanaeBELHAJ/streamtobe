@@ -70,8 +70,8 @@
                              </li>
                             <!-- Authentication Links -->
                             @guest
-                                <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                                <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                                <li><a class="nav-link btn_register" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                                <li><a class="nav-link btn_register" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                             @else
                                 <li class="mx-3 d-flex align-items-center">
                                     <a href="/messages" class="d-flex align-start nav-link p-0">
