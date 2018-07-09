@@ -58,9 +58,11 @@
         <br>
         @if(count($channels) > 0)
             @foreach($channels as $channel)
-                @if($channel->is_follower == 1)
+                {{-- Chaines des autres streamers suivies par l'utilisateur --}}
+                @if($channel->is_follower == 1 && $channel->stream->user->id != $channel->user->id)
                     <div class='col-6 div-f'>
-                        <img class='avatar_follower' src="<?php echo asset('storage/' . $channel->user->avatar); ?>"><a class=""  href="/home/{{$channel->user->pseudo}}">{{$channel->user->pseudo}}</a></td>
+                        <img class='avatar_follower' src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>">
+                        <a class="" href="/home/{{$channel->stream->user->pseudo}}">{{$channel->stream->user->pseudo}}</a>
                         {{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}
                         <span class="anciennete" data-date="{{$channel->created_at}}"></span>
                         <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
@@ -68,7 +70,7 @@
                 @endif
             @endforeach
         @else
-            <i>Vous n'avez consulté aucune chaine de stream pour l'instant.</i>
+            <i>Vous ne suivez aucune chaine de stream pour l'instant.</i>
         @endif
     </div>
 </div>
