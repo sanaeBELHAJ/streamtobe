@@ -356,3 +356,27 @@ label, select, input {
 .broadcastname{
     color: black;
 }
+
+#cookies{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 13px 0;
+    background-color: cornflowerblue;
+    bottom: 20px;
+}
+
+ul.ui-autocomplete{
+    z-index: 1050;
+}
+
+footer #support_user textarea{
+    height: 100px;
+}

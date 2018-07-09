@@ -16,13 +16,6 @@
                     </p>
                     <textarea id="giveaway_message" placeholder="Message personnalisé à destination du streamer"></textarea>
                     <div id="paypal-button"></div>
-                    {{-- 
-                        <p>Express checkout</p> Pay $20 via:
-                        <a href="{{ route('paypal.express-checkout', ['stream' => $streamer->pseudo]) }}" class='btn-info btn'>PayPal</a>
-                        <p>Recurring payments</p>
-                        Pay $20/month:
-                        <a href="{{ route('paypal.express-checkout', ['stream' => $streamer->pseudo, 'recurring' => true]) }}" class='btn-info btn'>PayPal</a> 
-                    --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

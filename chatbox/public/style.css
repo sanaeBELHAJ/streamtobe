@@ -1,0 +1,148 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#responsive_slider{
+    height: 10%;
+}
+
+#zone_chat, #zone_users{
+    width: 100%;
+    background: #330033;
+    height: 70%;
+    padding: 5px 5px 0;
+    font-size: 12px;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
+}
+
+#zone_chat p:first-of-type {
+    text-align: center;
+}
+
+.white{
+    color: white;
+}
+
+.red{
+    color: red;
+}
+
+.green{
+    color: green;
+}
+
+.yellow{
+    color: yellow;
+}
+
+#zone_users a:hover {
+    color: inherit;
+}
+
+form#formulaire_chat{
+    height: 20%;
+    position: relative;
+}
+
+.chat_user{
+    font-size: 13px;
+    padding: 0 5px;
+    margin: 0 10px;
+    color: white;
+}
+
+.chat_avatar{
+    width: 20px;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 0px;
+}
+
+.streamer{
+    color: white;
+}
+
+.mod{
+    background-color: #0ccebc;
+    color: black;
+}
+
+.chat_message{
+    font-size: 15px;
+}
+
+textarea{
+    height: 100%;
+    padding: 0;
+    min-width:50%;
+    width: 80%;
+    max-width: 80%;
+    vertical-align: middle;
+}
+
+.delete{
+    padding: 10px;
+    vertical-align: middle;
+    color: white;
+}
+
+.delete:hover{
+    cursor: pointer;
+}
+.send {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 75px;
+    height: 29px;
+    transform: translateY(-50%);
+    background: #7e27ff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-top: 5px;
+    color: #fff;
+    border: 0 none;
+    outline: 0 none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* The slider itself */
+#responsive_slider .slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    padding: 0;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+#responsive_slider .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+#responsive_slider .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: rgb(86, 27, 141); /* Violet background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+#responsive_slider .slider::-moz-range-thumb {
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: rgb(86, 27, 141); /* Violet background */
+    cursor: pointer; /* Cursor on hover */
+}
