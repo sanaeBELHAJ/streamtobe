@@ -1,0 +1,102 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #faf9fa;
+}
+
+#conversation{
+    /*height: 100vh;*/
+}
+
+#zone_chat{
+    width: 100%;
+    background: #330033;
+    color: #fff;
+    height: 80%;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
+}
+
+#zone_chat p{
+    padding: 0 20px;
+    display: flex;
+}
+
+#zone_chat span {
+    padding: 5px;
+    margin: 5px;
+}
+
+#zone_chat span.message{
+    background-color: white;
+    color: black;
+}
+
+#zone_chat span.date{
+    
+}
+
+form#formulaire_chat{
+    height: 15%;
+}
+
+#listContacts a.nav-link{
+    margin: 5px 0;
+}
+
+textarea{
+    padding: 0;
+    width: 80%;
+    vertical-align: middle;
+}
+
+#envoi_message{
+    width: 75px;
+    height: 29px;
+    background: #7e27ff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #fff;
+    border: 0 none;
+    outline: 0 none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* The slider itself */
+#responsive_slider .slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    padding: 0;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+#responsive_slider .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#responsive_slider .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+#responsive_slider .slider::-moz-range-thumb {
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}

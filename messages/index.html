@@ -5,110 +5,44 @@
         <title>Super Chat temps réel !</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
-        <style>
-            html, body{
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            
-            #conversation{
-                height: 100vh;
-            }
-
-            #zone_chat{
-                width: 100%;
-                background: green;
-                color: #fff;
-                height: 80%;
-                font-size: 1.2em;
-                overflow-wrap: break-word;
-                overflow-y: scroll;
-            }
-
-            #zone_chat p{
-                padding: 0 20px;
-            }
-
-            form#formulaire_chat{
-                height: 15%;
-            }
-            
-            #listContacts a.nav-link{
-                margin: 5px 0;
-            }
-
-            .chat_user{
-                font-size: 20px;
-                padding: 0 5px;
-                margin: 0 10px;
-            }
-
-            .chat_avatar{
-                width: 40px;
-                vertical-align: middle;
-                padding-left: 10px;
-            }
-
-            .streamer{
-                background-color: #caa908;
-                color: black;
-            }
-
-            .mod{
-                background-color: #0ccebc;
-                color: black;
-            }
-
-            .chat_message{
-                font-size: 15px;
-            }
-
-            textarea{
-                padding: 0;
-                width: 80%;
-                vertical-align: middle;
-            }
-
-            .delete{
-                padding: 10px;
-                vertical-align: middle;
-                color: white;
-            }
-
-            .delete:hover{
-                cursor: pointer;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
         <div class="container h-100"> 
-            <div class="row">
-                <div class="nav flex-column nav-pills col-4 col-md-2" role="tablist" aria-orientation="vertical">
-                    <input type="text" id="search_contact" class="form-control" placeholder="Rechercher">
+            <div class="row h-100">
+                <div class="container d-block d-sm-none" style="height:10%;">
+                    <div id="responsive_slider" class="d-flexjustify-content-around pb-1 pt-1 row">
+                        <p class="sliderText col text-center font-weight-bold m-0" data-value="1">Utilisateurs</p>
+                            <input id="myRange" type="range" min="1" max="2" value="1" class="btn slider col"> 
+                        <p class="sliderText col text-center m-0" data-value="2">Discussion</p>
+                    </div>	
+                </div>
+                <div class="nav flex-column nav-pills d-block d-sm-block col-12 col-sm-4 col-md-2" 
+                    id="searchContacts" role="tablist" aria-orientation="vertical" style="height:90%;">
+                    <input type="text" id="search_contact" class="form-control mb-3" placeholder="Rechercher">
                     <span id="listContacts">
-
+                        
                     </span>
                 </div>
-                <div class="col-8 col-md-10">
-                    <div class="row">
+                <div id="user_section" class="d-none d-sm-block col-12 col-sm-8 col-md-10" style="height:90%">
+                    <div class="row h-100">
                         <div id="infos_user" class="d-none d-md-flex col-3">
                             <div id="none" class="d-flex flex-column justify-content-center w-100">
                                 <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
                                 <br>
-                                <small>Vous devez suivre mutuellement vos chaines respectives.</small>
+                                <small><b>Vous devez vous abonner mutuellement à vos chaines respectives.</b></small>
                             </div>
                             <div id="profile" class="d-none flex-column justify-content-around w-100">
                                 <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
-                                <a href="#" id="profile_pseudo">
+                                <a href="#" target="_blank" id="profile_pseudo">
                                     <button id="profile_follow" class="btn btn-primary col-12">
                                         Profil de <span></span>
                                     </button>
                                 </a>
                             </div>
                         </div>
-                        <div id="conversation" class="col-12 col-md-9">
+                        <div id="conversation" class="d-block col-12 col-sm-12 col-md-9 h-100">
                             <section id="zone_chat">
             
                             </section>
@@ -130,109 +64,7 @@
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            /* ENVOI */
-
-            // Connexion à socket.io
-            var socket = io.connect('http://'+window.location.hostname+':3001');
-            var token = getUrlParameter('token');
-            
-            // Affichage de la liste des contacts mutuels
-            socket.emit('bringFriends', token);
-            socket.on('bringFriends', function(data) {
-                var text = "";
-                $.each(data, function(index, value){
-                    text += "<a class='nav-link text-center' data-pseudo='"+value+"' data-toggle='pill' href='#' role='tab' aria-selected='false'>";
-                        text += value;
-                    text += "</a>";
-                });
-                $('#listContacts').html(text);
-            });
-
-            //Changement de conversation
-            $('#listContacts').on("click", ".nav-link", function(){
-                $(".nav-link").removeClass("active show").prop("aria-selected", false);
-                var friend = $(this).data('pseudo');
-                socket.emit('join', friend);
-            });
-            socket.on('join', function(data) {
-                var infos = data.infos;
-                var port = (window.location.hostname == "localhost") ? ":8000" : "";
-                $("#profile_img").prop("src", "http://"+window.location.hostname+"/storage/"+infos.friend_avatar);
-                $("#profile_pseudo").prop("href", "http://"+window.location.hostname+port+"/stream/"+infos.friend_pseudo);
-                $("#profile_pseudo span").html(infos.friend_pseudo);
-
-                var conversations = data.conversations;
-                var text = "";
-                $.each(conversations, function(index, element){
-                    var message = "<p ";
-                        message += (element.user_exped == "me") ? "class='text-right'" : "class='text-left'";
-                        message += ">";
-                        message += element.message; 
-                    message += "</p>";
-                    text += message;
-                });
-                $("#zone_chat").html(text);
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
-
-                $("#none").removeClass("d-flex").addClass("d-none");
-                $("#profile").removeClass("d-none").addClass("d-flex");
-                $("#formulaire_chat input").prop("disabled", false);
-                $("#formulaire_chat textarea").prop("disabled", false).prop("placeholder", "Saisissez ici votre message");
-            });
-            
-            // Quand on reçoit un message, on l'insère dans la page
-            $('#formulaire_chat').submit(function (event) {
-                event.preventDefault();
-                var message = $('#message').val();
-    
-                if(message != ""){
-                    var content = "<p class='text-right'>"+message+"</p>";
-                    $("#zone_chat").append(content);
-                    socket.emit('message', message); // Publie le message
-                }
-
-                $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
-                return false; // Permet de bloquer l'envoi "classique" du formulaire
-            });
-
-            socket.on('message', function(message) {
-                if(message){
-                    var content = "<p class='text-left'>"+message+"</p>";
-                    $("#zone_chat").append(content);
-                }
-                $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
-            });
-            
-            //Recherche et affichage d'un membre parmi la liste de contact disponible
-            $("#search_contact").keyup(function(){
-                if($(this).val() == "")
-                    $("#listContacts a.nav-link").show();
-                else{
-                    $("#listContacts a.nav-link").hide();
-                    $("#listContacts a.nav-link[data-pseudo*='"+$(this).val()+"']").show();
-                }
-            });
-
-            /* FONCTIONS */
-            
-            //Recupère les paramètres fournies dans l'URL
-            function getUrlParameter(sParam) {
-                var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-                    sURLVariables = sPageURL.split('&'),
-                    sParameterName,
-                    i;
-            
-                for (i = 0; i < sURLVariables.length; i++) {
-                    sParameterName = sURLVariables[i].split('=');
-            
-                    if (sParameterName[0] === sParam) {
-                        return sParameterName[1] === undefined ? true : sParameterName[1];
-                    }
-                }
-            };
-        </script>
+        <script src="script.js"></script>
     </body>
 </html>
 

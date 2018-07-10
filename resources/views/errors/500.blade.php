@@ -5,7 +5,7 @@
 		<div class="col-sm-offset-4 col-sm-4">
 			<div class="panel panel-danger">
 				<div class="panel-heading">
-					<h3 class="panel-title">{{ __('Huh...we got a problem') }}</h3>
+					<h3 class="panel-title">{{ __('Something is broken :/') }}</h3>
 				</div>
 				<div class="panel-body"> 
 					<p>{{ __("The page you were looking for doesn't exist or is unavailable...") }}</p>

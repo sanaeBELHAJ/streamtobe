@@ -17,13 +17,8 @@
  * php artisan route:list
  */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-Route::get('/', 'HomeController@index');
-//Routes basiques d'inscription/connexion/déconnexion
-//Auth::routes();
 
+Route::get('/', 'HomeController@index');
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
@@ -45,7 +40,7 @@ Route::middleware(['guest'])->group(function(){
     Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
 
-/*Routes accessibles uniquement aux membres loggés */
+/* Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     
@@ -66,22 +61,17 @@ Route::group(['middleware' => 'auth'], function(){
     /* Actions sur le compte */
         Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
         Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
-        Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
         Route::resource('home', 'AccountController', ['only' => ['index','destroy','show']]);
         
         Route::get('/stats/{pseudo}', 'AccountController@stats')->name('home.stats');
         Route::get('/fans/{pseudo}', 'AccountController@fans')->name('home.fans');
         Route::get('/follows/{pseudo}', 'AccountController@follows')->name('home.follows');
 
-    
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
-
-    /* Support technique pour utilisateur */
-        Route::post('/support', 'HomeController@support');
-        Route::get('/support', 'HomeController@support');
 });
 
+/* Interface d'administration Voyager */
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
@@ -97,3 +87,7 @@ Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete
 
 //Accord d'utilisation des cookies
 Route::post('/valid_cookie', 'HomeController@valid_cookie');
+
+/* Support technique pour utilisateur */
+Route::post('/support', 'HomeController@support');
+Route::get('/support', 'HomeController@support');

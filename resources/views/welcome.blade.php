@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid p-0">
+<div class="container-fluid @guest p-0 @endguest">
     @auth
 
     <div class="row">
@@ -89,19 +89,35 @@
         <header>
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+
+                    @foreach($listSlider as $picture)
+                        <li data-target="#carouselExampleIndicators" 
+                            data-slide-to="{{$loop->index}}" 
+                            @if($loop->first) class="active" @endif></li>
+                    @endforeach
+
                 </ol>
                 <div class="carousel-inner" role="listbox">
-                    <div class="carousel-item active" style="background-image: url('img/kitchen-ready-for-cooking_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block ">
+
+                    @foreach($listSlider as $picture)
+
+                        <div class="carousel-item @if ($loop->first) active @endif" style="background-image: url('{{$picture}}')">
+                            <div class="carousel-caption d-none d-sm-block ">
+                                <div class="visible">
+                                    <h3>{{setting('site.image-'.$loop->index)}}</h3>
+                                    <p>{{ __("Let's show your skill on your stream") }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    @endforeach
+                    
+                    {{--<div class="carousel-item active" style="background-image: url('img/kitchen-ready-for-cooking_4460x4460.jpg')">
+                        <div class="carousel-caption d-none d-sm-block ">
                             <div class="visible">
                                 <h3>Vous aimez la cuisine!</h3>
                                 <p>Venez montrer vos talents chef sur votre chaine.</p>
                             </div>
-                            <a href="{{ route('stream.index') }}"  class="btn btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
                         </div>
                     </div>
                     <div class="carousel-item" style="background-image: url('img/woman-playing-guitar_4460x4460.jpg')">
@@ -110,8 +126,6 @@
                                 <h3>Vous aimez chanter? Vous savez jouer sur un instrument musical!</h3>
                                 <p>Vous pouvez vous montrer en public!</p>
                             </div>
-                            <a href="{{ route('stream.index') }}"  class="btn  btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
                         </div>
                     </div>
                     <div class="carousel-item" style="background-image: url('img/casual-and-creative-at-home_4460x4460.jpg')">
@@ -120,10 +134,12 @@
                                 <h3>Quelque soit vos talents! Votre place est chez nous!</h3>
                                 <p>Chaine, fun, amis...</p>
                             </div>
-                            <a href="{{ route('stream.index') }}"  class="btn  btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
                         </div>
-                    </div>
+                    </div> --}}
+                </div>
+                <div class="row btn-slider">
+                    <a href="{{ route('stream.index') }}"  class="btn btn-lg gold mt-4">{{ __('Watch our current streams') }}</a>
+                    <a href="{{ route('register') }}"  class="btn btn-lg gold mt-4">{{ __('Create your own stream') }}</a>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -139,12 +155,32 @@
         <!-- Page Content -->
         <section class="py-5">
         <div class="container">
-            <h1>Streamtobe est là pour vous!</h1>
-            <p>Si vous avez du talents et vous n'avez pas peur de caméra, créez votre chaine et montrez vous! On vous attend :p
+            {{-- Streamtobe est là pour vous ! --}}
+            <h1>{{ setting('site.welcome-title') }}</h1>
+            {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
+            <p>{{ setting('site.welcome-text') }}</p>
         </div>
         </section>
     @endauth
 
 
 </div>
+@endsection
+
+@section('css')
+<style>
+    .carousel-caption{
+        bottom: 50%;
+        transform: translateY(50%);
+    }
+    .btn-slider{
+        display:flex;
+        width:50%;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>
 @endsection

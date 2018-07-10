@@ -1,4 +1,10 @@
+html, body{
+    height: 100%;
+}
+
 body{
+    display: flex;
+    flex-direction: column;
     background-color: #faf9fa;
 }
 header #navbarDropdown.nav-link{
@@ -71,7 +77,7 @@ header .dropdown-menu{
     color: white;
 }
 .visible{
-    background: rgb(75, 54, 124,.2)!important;
+    background: rgb(75, 54, 124,.4)!important;
 }
 .img-thumbnail{
   height: 250px;
@@ -347,6 +353,31 @@ label, select, input {
 .broadcastname{
     color: black;
 }
+
+#cookies{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 13px 0;
+    background-color: cornflowerblue;
+    bottom: 20px;
+}
+
+ul.ui-autocomplete{
+    z-index: 1050;
+}
+
+footer #support_user textarea{
+    height: 100px;
+}
+
 .btn_register{
     border: 0.5px solid #ffbf27;
     padding-top:1px;
