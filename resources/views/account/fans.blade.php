@@ -52,11 +52,11 @@
         </div>
     </div>
     <div class="col-sm-10 pull-right top-2 bottom">
-        <p>Utilisateurs qui suivent la chaine</p>
+        <p>Utilisateurs qui suivent la chaine de {{$streamer->pseudo}}</p>
         <hr>
         <br>
         @foreach($viewers as $viewer)
-            @if($viewer->user->id != Auth::user()->id)
+            @if($viewer->user->id != $streamer->id)
                 <div class='col-6 div-f'>
                     <img class='avatar_follower' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
                     <a class=""  href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>
