@@ -39,9 +39,10 @@ class AccountController extends Controller {
     public function index(Request $request) {
         $streamer = Auth::user();
         $user = Auth::user();
-
+        $countries = Countries::all();
+        
         return view('account.index')
-                ->with(compact('user', 'streamer'));
+                ->with(compact('user', 'streamer', 'countries'));
     }
 
     /**
@@ -119,7 +120,9 @@ class AccountController extends Controller {
             $path = $request->file('pictureAccount')->store('public/avatars/' . $user->pseudo);
             $user->avatar = $user->setPathAvatar($path);
         }
+        $country = Countries::where('id', $request->input('country'))->first();
 
+        $user->id_countries = $country->id;
         $user->update($request->all());
         $user->save();
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');

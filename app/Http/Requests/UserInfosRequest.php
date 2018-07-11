@@ -29,7 +29,8 @@ class UserInfosRequest extends FormRequest
             'email' => 'required|email',
             'name' => 'string',
             'password' => 'confirmed',
-            'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000'
+            'pictureAccount' => 'image|mimes:jpg,png,jpeg,gif|max:2000',
+            'country' => 'required|exists:stb_countries,id'
         ];
     }
 }
