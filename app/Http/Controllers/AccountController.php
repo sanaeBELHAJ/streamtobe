@@ -140,20 +140,14 @@ class AccountController extends Controller {
         $streamer = User::where('pseudo', $pseudo)
                 ->where('status', 1)
                 ->first();
+
         if (!$streamer)
             abort(404);
 
         $themes = Theme::all();
         $user = Auth::user();
-        if ($user) {
-            $user->token = $request->session()->get('_token');
-            $reportCat = ReportCat::all();
-            $report = Report::where('victim_id', '=', $user->id)
-                    ->where('guilty_id', '=', $streamer->id)
-                    ->where('status', '=', 1)
-                    ->first();
-        }
-        return view('account.profil', compact('themes', 'streamer', 'user', 'reportCat', 'report'));
+
+        return view('account.profil', compact('themes', 'streamer', 'user'));
     }
 
     /**

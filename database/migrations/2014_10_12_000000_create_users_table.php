@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             
             $table->integer('id_countries')->unsigned()
                                            ->nullable();
-;
+
             $table->foreign('id_countries')
                     ->references('id')
                     ->on('stb_countries')
@@ -47,6 +47,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function(Blueprint $table) {
+			$table->dropForeign('id_countries');
+		});
         Schema::dropIfExists('users');
     }
 }
