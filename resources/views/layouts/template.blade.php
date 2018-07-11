@@ -11,7 +11,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
+        <link rel="icon" href="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}" />
 
         <!-- CSS -->
          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -39,7 +39,7 @@
             <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class=" container-fluid">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
+                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}">
                         <span class="logo-text">{{ setting('site.title') }}</span>
                     </a>
                     <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" 
