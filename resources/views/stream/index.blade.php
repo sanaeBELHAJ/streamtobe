@@ -16,11 +16,13 @@
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
                         <option> Séléctionner une catégorie</option>
                         @foreach($themes as $theme)
-                            @foreach($theme->types as $type)
-                                <option value="{{$type->id}}">{{$type->name}}</option>
-                            @endforeach
+                            <optgroup label="{{$theme->name}}">
+                                @foreach($theme->types as $type)
+                                    <option value="{{$type->name}}">{{$type->name}}</option>
+                                @endforeach
+                            </optgroup>
                         @endforeach
-                    </select>        
+                    </select>
                 </div>
                 <div class="form-group mb-2">
                     <label for="countries">Pays </label>

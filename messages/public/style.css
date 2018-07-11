@@ -5,9 +5,6 @@ html, body{
     background-color: #faf9fa;
 }
 
-#conversation{
-    /*height: 100vh;*/
-}
 
 #zone_chat{
     width: 100%;
@@ -33,9 +30,7 @@ html, body{
     color: black;
 }
 
-#zone_chat span.date{
-    
-}
+
 
 form#formulaire_chat{
     height: 15%;
