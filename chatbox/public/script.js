@@ -1,5 +1,8 @@
 /* Connexion à socket.io */
-var socket = io.connect('http://'+window.location.hostname+':3000');
+var environment = (window.location.hostname == "localhost") ? "http://localhost:8000" : "https://streamtobe.com";
+var environmentSocket = (window.location.hostname == "localhost") ? "http://localhost:3000" : "https://io.streamtobe.com";
+
+var socket = io.connect(environmentSocket);
 var token = getUrlParameter('token');
 var stream = getUrlParameter('stream');
 socket.emit('join', token, stream);
@@ -35,8 +38,7 @@ socket.on('welcome', function() {
 socket.on('message', function(data) {
     var text = "<p data-message='"+data.message_id+"'>";
         text += (data.admin && data.viewer_rank==0) ? "<i class='fas fa-ban delete'></i>" : "";
-        var port = (window.location.hostname == "localhost") ? ":8000" : "";
-        text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+data.avatar+"'>";
+        text += "<img class='chat_avatar' src='"+environment+"/storage/"+data.avatar+"'>";
         switch(data.viewer_rank){
             case 1: //modérateur
                 text += "<span class='chat_user mod'>";
@@ -93,7 +95,6 @@ socket.on('error', function(error) {
 // Affichage de la liste des viewers
 socket.on('updateList', function(data) {
     var text = "";
-    var port = (window.location.hostname == "localhost") ? ":8000" : "";
     
     $.each(data, function(index, user){
         var color = "white";
@@ -118,8 +119,8 @@ socket.on('updateList', function(data) {
                 }
                 text += ban+mod;
             }
-            text += "<a href='http://localhost:8000/home/"+user.pseudo+"' target='_blank' class='btn "+color+"'>";
-                text += "<img class='chat_avatar' src='http://"+window.location.hostname+port+"/storage/"+user.avatar+"'> ";
+            text += "<a href='"+environment+"/home/"+user.pseudo+"' target='_blank' class='btn "+color+"'>";
+                text += "<img class='chat_avatar' src='"+environment+"/storage/"+user.avatar+"'> ";
                 text += user.pseudo;
             text += "</a>";
         text += "</p>";

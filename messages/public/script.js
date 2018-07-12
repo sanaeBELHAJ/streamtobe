@@ -1,3 +1,6 @@
+var environment = (window.location.hostname == "localhost") ? "http://localhost:8000" : "https://streamtobe.com";
+var environmentSocket = (window.location.hostname == "localhost") ? "http://localhost:3001" : "https://io.streamtobe.com";
+
 var options = {
     year: 'numeric', 
     month: 'numeric', 
@@ -10,7 +13,7 @@ var currentDate = new Date();
 /* ENVOI */
 
 // Connexion à socket.io
-var socket = io.connect('http://'+window.location.hostname+':3001');
+var socket = io.connect(environmentSocket);
 var token = getUrlParameter('token');
 
 // Affichage de la liste des contacts mutuels
@@ -35,9 +38,8 @@ $('#listContacts').on("click", ".nav-link", function(){
 });
 socket.on('join', function(data) {
     var infos = data.infos;
-    var port = (window.location.hostname == "localhost") ? ":8000" : "";
-    $("#profile_img").prop("src", "http://"+window.location.hostname+port+"/storage/"+infos.friend_avatar);
-    $("#profile_pseudo").prop("href", "http://"+window.location.hostname+port+"/stream/"+infos.friend_pseudo);
+    $("#profile_img").prop("src", environment+"/storage/"+infos.friend_avatar);
+    $("#profile_pseudo").prop("href", environment+"/stream/"+infos.friend_pseudo);
     $("#profile_pseudo span").html(infos.friend_pseudo);
 
     var conversations = data.conversations;

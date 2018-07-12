@@ -34,7 +34,11 @@
                             Connectez-vous pour rédiger un message.
                         </p>
                     @else
-                        <iframe src="<?php echo str_replace(":8000", "", Request::root()); ?>:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @if(env('APP_ENV') != "production")
+                            <iframe src="http://localhost:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @else
+                        <iframe src="https://io.streamtobe.com/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @endif
                     @endguest
                 </div>
             </div>
