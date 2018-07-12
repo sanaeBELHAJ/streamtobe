@@ -106,41 +106,18 @@
                             {{-- Report --}}
                             <p class="col text-center">
                                 @if($report)
-                                    <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
-                                    data-placement="top" title="Vous avez déjà signalé cet utilisateur"></i>
+                                    <button class="btn-follow w-100 float-none btn" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
-                                    <a class="btn" data-toggle="modal" data-target="#reportModal">
-                                        <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
-                                        data-placement="top" title="Signaler cet utilisateur"></i>
-                                    </a>
+                                    <button class="btn-follow w-100 float-none btn" 
+                                            data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur</button>
                                     @include('stream.modal.report')
                                 @endif
                             </p>
 
-                            {{-- Private Message --}}
-                            <p class="col text-center">
-                                @foreach($user->viewers as $viewer)
-                                    @if($streamer->stream->id == $viewer->stream_id)
-                                        @foreach($viewer->subscribes as $subscription)
-                                            @if($subscription->status == 1)
-                                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-                                                data-placement="top" title="Envoyer un message au streamer"></i>	
-                                                @break
-                                            @else
-                                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
-                                                data-placement="top" title="Communication privée reservée aux abonnés"></i>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            </p>
-
                             {{-- Giveaway --}}
                             <p class="col text-center">
-                                <a class="btn" data-toggle="modal" data-target="#paymentModal">
-                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip"
-                                    data-placement="top" title="Faire un don / S'abonner"></i>
-                                </a>
+                                <button class="btn-follow w-100 float-none btn" data-toggle="modal" 
+                                    data-target="#paymentModal">Faire un don</button>
                             </p>
                             @include('stream.modal.payment')
 
@@ -148,13 +125,12 @@
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
-                                        @if($viewer->is_follower == 1)
-                                            <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                            data-placement="top" title="Ne plus suivre cette chaine"></i>
-                                        @else
-                                            <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                            data-placement="top" title="Suivre cette chaine"></i>
-                                        @endif
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
+                                                data-toggle="tooltip" data-placement="top" 
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
+                                                data-toggle="tooltip" data-placement="top" 
+                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                     @endif
                                 @endforeach
                             </p>
@@ -303,8 +279,8 @@
 			});
 
 			/* Buttons stream (viewer) */
-			function followingStream(){
-				var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
+            $(".follow_stream").click(function(){
+				var following = $(this).data('value');
 				var stream = "{{$streamer->pseudo}}";
 				$.ajax({
 					url: "/followStream",
@@ -316,23 +292,18 @@
 				})
 				.done(function(data){
 					if(data == 0){
-						$("#follow_stream").removeClass("fas")
-											.addClass("far")
-											.attr('data-original-title', 'Suivre cette chaine')
-											.tooltip("show");
+						$(".follow_stream[data-value='1']").removeClass("d-none");
+						$(".follow_stream[data-value='0']").addClass("d-none");
 					}
 					else{
-						$("#follow_stream").removeClass("far")
-											.addClass("fas")
-											.attr('data-original-title', 'Ne plus suivre cette chaine')
-											.tooltip("show");
+						$(".follow_stream[data-value='0']").removeClass("d-none");
+						$(".follow_stream[data-value='1']").addClass("d-none");
 					}
 				})
 				.fail(function(data){
 					console.log(data);
 				});
-			}
-			$("#follow_stream").click(followingStream);
+			});
 
 			/* Config stream (owner) */
 			function updateStream(){
