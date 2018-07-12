@@ -133,4 +133,31 @@ $(function () {
         });
         return false;
     });
+
+    /* Buttons de follow de stream (pour viewer) */
+    $(".follow_stream").click(function(){
+        var following = $(this).data('value');
+        var streamer = $(this).data('streamer');
+        $.ajax({
+            url: "/followStream",
+            type: 'POST',
+            data: {
+                stream: streamer,
+                is_following: following
+            }
+        })
+        .done(function(data){
+            if(data == 0){
+                $(".follow_stream[data-value='1']").removeClass("d-none");
+                $(".follow_stream[data-value='0']").addClass("d-none");
+            }
+            else{
+                $(".follow_stream[data-value='0']").removeClass("d-none");
+                $(".follow_stream[data-value='1']").addClass("d-none");
+            }
+        })
+        .fail(function(data){
+            console.log(data);
+        });
+    });
 });

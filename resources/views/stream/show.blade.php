@@ -126,10 +126,10 @@
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
-                                                data-toggle="tooltip" data-placement="top" 
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
-                                                data-toggle="tooltip" data-placement="top" 
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                     @endif
                                 @endforeach
@@ -278,32 +278,7 @@
 				}
 			});
 
-			/* Buttons stream (viewer) */
-            $(".follow_stream").click(function(){
-				var following = $(this).data('value');
-				var stream = "{{$streamer->pseudo}}";
-				$.ajax({
-					url: "/followStream",
-					type: 'POST',
-					data: {
-						stream: stream,
-						is_following: following
-					}
-				})
-				.done(function(data){
-					if(data == 0){
-						$(".follow_stream[data-value='1']").removeClass("d-none");
-						$(".follow_stream[data-value='0']").addClass("d-none");
-					}
-					else{
-						$(".follow_stream[data-value='0']").removeClass("d-none");
-						$(".follow_stream[data-value='1']").addClass("d-none");
-					}
-				})
-				.fail(function(data){
-					console.log(data);
-				});
-			});
+			
 
 			/* Config stream (owner) */
 			function updateStream(){

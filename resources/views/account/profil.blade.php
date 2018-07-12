@@ -55,81 +55,36 @@
         </div>
         <div class="col-sm-10 pull-right top-1 bottom">
             <hr>
-            <div class="row">
-                 <div class='col-sm-12'>
-                @foreach($user->viewers as $viewer)
-                @if($streamer->stream->id == $viewer->stream_id)
-                @if($viewer->is_follower == 1)
-                <center>
-                    <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
-                </center>
-                <center>
-                    <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
-                </center>
-                @break
-                @endif
-
-                @if($loop->last)
-                <center>
-                    <button class="btn btn-follow" id="abo" href="#" disabled>S'abonner</button>
-                </center>
-                <center>
-                    <button class="btn btn-follow" id="desabo" href="#">Désabonner</button>
-                </center>
-                @endif
-                @endif
-                @endforeach
-            </div>
-            <div class='col-sm-12'>
-            <hr>
-            </div>
-            <div class="col-sm-12">
-
-                <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
-                <div>
-                    <center>
-                        <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
-                            <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                                play_circle_filled
-                            </i>
-                        </a>
-                    </center>
+            <div class="row d-flex flex-row-reverse">
+                <div class='col-sm-3'>
+                    @foreach($user->viewers as $viewer)
+                        @if($streamer->stream->id == $viewer->stream_id)
+                            <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
+                                    data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                    title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                            <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
+                                    data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                    title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                        @endif
+                    @endforeach
                 </div>
-            </div>
-
-        </div>  
+                <div class='col-sm-12'>
+                    <hr>
+                </div>
+                <div class="col-sm-12">
+                    <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
+                    <div>
+                        <center>
+                            <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
+                                <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                                    play_circle_filled
+                                </i>
+                            </a>
+                        </center>
+                    </div>
+                </div>
+            </div>  
         </div>
-         
     </div>
 </div>
-    @endsection
-
-    @section('js')	
-    <script>
-        $(function () {
-            /* Buttons stream (viewer) */
-            function followingStream() {
-                var following = ($(this).is("#abo")) ? 1 : 0;
-                var stream = "{{$streamer->pseudo}}";
-
-                $.ajax({
-                    url: "/followStream",
-                    type: 'POST',
-                    data: {
-                        stream: stream,
-                        is_following: following
-                    }
-                })
-                        .done(function (data) {
-                            $(".btn-follow").prop('disabled', function (i, v) {
-                                return !v;
-                            });
-                        })
-                        .fail(function (data) {
-                            console.log(data);
-                        });
-            }
-            $(".btn-follow").click(followingStream);
-        });
-    </script>
     @endsection
