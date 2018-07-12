@@ -169,7 +169,7 @@ io.sockets.on('connection', function (socket) {
 
     //Modification de la liste d'amis
     async function checkFriends(socket){
-        await queryDB( //Recherche des utilisateurs followers au stream
+        await queryDB( //Recherche des utilisateurs followers au streamer
             `SELECT u_follower.id
                 FROM users u_streamer
                 LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
@@ -233,22 +233,31 @@ io.sockets.on('connection', function (socket) {
         socket.contactList = [];
         if(typeof results !== 'undefined' && results.length > 0){
             await queryDB( //Liste des streamers followés par l'utilisateur
-                "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
+                "SELECT u.pseudo, u.avatar FROM users u WHERE u.id IN (?)",
                 [results])
                 .then(function(row){
                     if(typeof row !== 'undefined' && Array.isArray(row)){
                         if(row.length > 0){
                             if(row.length > 1){
                                 row.forEach(function(element){
-                                    socket.contactList.push(element.pseudo);
+                                    socket.contactList.push({
+                                        pseudo: element.pseudo,
+                                        avatar: element.avatar
+                                    });
                                 });
                             }
                             else
-                                socket.contactList = [row.pseudo];
+                                socket.contactList = [{
+                                    pseudo: row.pseudo,
+                                    avatar: row.avatar
+                                }];
                         }
                     }
                     else
-                        socket.contactList = [row.pseudo];
+                        socket.contactList = [{
+                            pseudo: row.pseudo,
+                            avatar: row.avatar
+                        }];
                 });
         }
 
@@ -266,8 +275,14 @@ io.sockets.on('connection', function (socket) {
             }
         }
 
-        if(!previousList || (previousList && oldList))
-            socket.emit('bringFriends', socket.contactList);
+        if(!previousList || (previousList && oldList)){
+            var content = {
+                contactList: socket.contactList,
+                user_pseudo: socket.user_pseudo,
+                user_avatar: socket.user_avatar
+            };
+            socket.emit('bringFriends', content);
+        }
     }
 });
 

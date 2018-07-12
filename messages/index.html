@@ -6,67 +6,64 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
         <link rel="stylesheet" href="style.css">
+
+        <!-- Snippet -->
+        <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+        <!-- /Snippet -->
     </head>
 
     <body>
-        <div class="container h-100"> 
-            <div class="row h-100">
-                <div class="container d-block d-sm-none" style="height:10%;">
-                    <div id="responsive_slider" class="d-flexjustify-content-around pb-1 pt-1 row">
-                        <p class="sliderText col text-center font-weight-bold m-0" data-value="1">Utilisateurs</p>
-                            <input id="myRange" type="range" min="1" max="2" value="1" class="btn slider col"> 
-                        <p class="sliderText col text-center m-0" data-value="2">Discussion</p>
-                    </div>	
-                </div>
-                <div class="nav flex-column nav-pills d-block d-sm-block col-12 col-sm-4 col-md-2" 
-                    id="searchContacts" role="tablist" aria-orientation="vertical" style="height:90%;">
-                    <p class="col-12">
-                        <input type="text" id="search_contact" class="form-control mb-3" placeholder="Saisir un pseudo">
-                    </p>
-                    <span id="listContacts">
-                        
-                    </span>
-                </div>
-                <div id="user_section" class="d-none d-sm-block col-12 col-sm-8 col-md-10" style="height:90%">
-                    <div class="row h-100">
-                        <div id="infos_user" class="d-none d-md-flex col-3">
-                            <div id="none" class="d-flex flex-column justify-content-center w-100">
-                                <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
-                                <br>
-                                <small><b>Vous devez vous abonner mutuellement à vos chaines respectives.</b></small>
-                            </div>
-                            <div id="profile" class="d-none flex-column justify-content-around w-100">
-                                <img src="#" id="profile_img" class="img-fluid mx-auto" style="width:100px;">
-                                <a href="#" target="_blank" id="profile_pseudo">
-                                    <button id="profile_follow" class="btn btn-primary col-12">
-                                        Profil de <span></span>
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div id="conversation" class="d-block col-12 col-sm-12 col-md-9 h-100">
-                            <section id="zone_chat">
-            
-                            </section>
-                
-                            <form action="/" id="formulaire_chat" class="m-0">
-                                <textarea name="message" id="message" 
-                                            placeholder="Veuillez sélectionner une conversation pour envoyer un message" 
-                                            autofocus disabled></textarea>
-                                <input type="submit" id="envoi_message" value="Envoyer" disabled>
-                            </form>
-                        </div>
+        <p class="text-center" style="height: 10%;">
+            <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
+            <br>
+            <small><b>Vous devez vous abonner mutuellement à vos chaines respectives.</b></small>
+        </p>
+
+        <div id="frame" style="height: 90%;">
+            <div id="sidepanel">
+                <div id="profile">
+                    <div class="wrap">
+                        <img id="profile-img" src="-------" alt="" />
+                        <p>----</p>
                     </div>
-                </div> 
+                </div>
+                <div id="search">
+                    <label for="">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </label>
+                    <input type="text" id="search_contact" placeholder="Search contacts..." />
+                </div>
+                <div id="contacts">
+                    <ul>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="contact-profile">
+                    <img src="-----------" alt="" />
+                    <p>------</p>
+                </div>
+                <div class="messages">
+                    <ul>
+
+                    </ul>
+                </div>
+                <div class="message-input">
+                    <div class="wrap">
+                        <input type="text" placeholder="Write your message..." />
+                        <button class="submit">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <script src="jquery-1.10.1.min.js"></script>
         <script src="bootstrap/js/popper.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
-        <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="script.js"></script>
     </body>
 </html>
-

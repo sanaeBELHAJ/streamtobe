@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="col-sm-10 pull-right top-2 bottom">
-        <p>Dons reçus</p>
+        <p>Dons reçus par {{$streamer->pseudo}}</p>
         <table class="table">
             <thead>
                 <tr>
