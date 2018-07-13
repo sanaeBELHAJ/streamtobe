@@ -65,30 +65,7 @@
                                     title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                         @endif
                     @endforeach
-            <div class="row">
-                 <div class='col-sm-12'>
-                @foreach($user->viewers as $viewer)
-                @if($streamer->stream->id == $viewer->stream_id)
-                @if($viewer->is_follower == 1)
-                <center>
-                    <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
-                </center>
-                <center>
-                    <button class="btn btn-follow" id="desabo" href="#" disabled>Désabonner</button>
-                </center>
-                @break
-                @endif
-
-                @if($loop->last)
-                <center>
-                    <button class="btn btn-follow" id="abo" href="#" disabled>S'abonner</button>
-                </center>
-                <center>
-                    <button class="btn btn-follow" id="desabo" href="#">Désabonner</button>
-                </center>
-                @endif
-                @endif
-                @endforeach
+                </div>
             </div>
             <div class='col-sm-12'>
             <hr>
@@ -105,22 +82,8 @@
                         </a>
                     </center>
                 </div>
-                <div class='col-sm-12'>
-                    <hr>
-                </div>
-                <div class="col-sm-12">
-                    <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
-                    <div>
-                        <center>
-                            <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
-                                <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                                    play_circle_filled
-                                </i>
-                            </a>
-                        </center>
-                    </div>
-                </div>
-            </div>  
+            </div> 
+        </div>
         </div>
     </div>
 </div>
