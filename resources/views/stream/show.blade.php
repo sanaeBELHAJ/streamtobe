@@ -5,10 +5,111 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-2 profil-panel">
-            <div class="top bottom"></div>
+            <div class="top bottom">
+                <div class="cadre-style">
+                    <center>
+                        <img class="resize-img" src="<?php echo asset('storage/' .  Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
+                    </center> 
+                </div>
+                <p>
+                <center>{{ Auth::user()->pseudo }}</center>
+                <center>
+                    @if( Auth::user()->country != null)
+                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
+                    <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                    @else
+                    <i class="material-icons" style="font-size: 16px;">location_on</i>
+                    Inconnu
+                    @endif
+                </center>
+                </p>
+                <center>
+                    <ul class="navbar-nav">
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">Suivi</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">Fans</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}">Revenus</a>
+                        </li>
+                    </ul>
+                    <br>
+
+                    <a class="btn-contacter" href="/messages">                  
+                      Contacter
+                    </a>
+                </center>
+            </div>
         </div>
-        <div class="col-sm-10 pull-right top bottom">
-            <div class="row">
+        <div class="col-sm-10 pull-right top-2 bottom">
+            <div class="container-fluid row">
+                <div class="col-sm-12" style="margin: 10px;padding:3px;border: 1px solid gray;background: white;">
+                    <button type="button" class="btn pull-right" data-toggle="modal" data-target="#myModal">Config</button>
+                </div>
+                
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Configuration</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="mt-4" id="config_stream">
+                            <div class="row">                                    
+                                <section class="experiment col-12 col-md-6">
+                                        Type de diffusion : &nbsp;
+                                        <select id="broadcasting-option" class="form-control d-inline w-50">
+                                            <option>Stream classique</option>
+                                            <option>Stream audio</option>
+                                        </select>
+                                </section>
+                                <p class="col-12 col-md-6">
+                                    Catégorie :
+                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
+                                        @foreach($themes as $theme)
+                                        <optgroup label="{{$theme->name}}">
+                                            @foreach($theme->types as $type)
+                                            <option value="{{$type->name}}">{{$type->name}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                        @endforeach
+                                    </select>
+                                </p>
+                                <p class="col-12 col-md-6">
+                                    Nom de la chaine : &nbsp;
+                                    <input id="stream_title" class="form-control d-inline w-50 update_stream" 
+                                            data-config="title" type="text" placeholder="Titre du stream" 
+                                            value="{{$streamer->stream->title}}">
+                                </p>
+                                <label class="col-12 col-md-6">
+                                    <label class="switch align-middle m-0">
+                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                                @if($streamer->stream->status == 0)
+                                                    value="On"
+                                                @else
+                                                    value="Off"
+                                                    checked
+                                                @endif >
+                                        <span class="slider round"></span>
+                                    </label>
+                                    Activer / Interrompre la diffusion
+                                </label>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
                         <div class="bodyDiv">
