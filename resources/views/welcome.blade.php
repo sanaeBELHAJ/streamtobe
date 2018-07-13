@@ -111,31 +111,6 @@
                         </div>
 
                     @endforeach
-                    
-                    {{--<div class="carousel-item active" style="background-image: url('img/kitchen-ready-for-cooking_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-sm-block ">
-                            <div class="visible">
-                                <h3>Vous aimez la cuisine!</h3>
-                                <p>Venez montrer vos talents chef sur votre chaine.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item" style="background-image: url('img/woman-playing-guitar_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block">
-                            <div class="visible">
-                                <h3>Vous aimez chanter? Vous savez jouer sur un instrument musical!</h3>
-                                <p>Vous pouvez vous montrer en public!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item" style="background-image: url('img/casual-and-creative-at-home_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block">
-                            <div class="visible">
-                                <h3>Quelque soit vos talents! Votre place est chez nous!</h3>
-                                <p>Chaine, fun, amis...</p>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
                 <div class="row btn-slider">
                     <a href="{{ route('stream.index') }}"  class="btn btn-lg gold mt-4">{{ __('Watch our current streams') }}</a>

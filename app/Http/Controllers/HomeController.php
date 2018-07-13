@@ -31,8 +31,6 @@ class HomeController extends Controller
      */
     public function index(){
         $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
-        unset($listSlider[array_search(".DS_store", $listSlider)]);//Exclusion de fichiers masqués sur les Mac
-
         $streams = Stream::where('status', 1)->get();
         if(Auth::user()){
             $favorites = Viewer::where('user_id', Auth::user()->id)
