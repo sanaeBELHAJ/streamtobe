@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-<div class="row">
+    <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">
                 @if( Auth::user()->pseudo == $streamer->pseudo)
@@ -50,12 +50,11 @@
                     </a>
                 </center>
             </div>
-      
+        </div>
+        <div class="col-sm-10 pull-right top bottom">
+            @include('account.infos')
+        </div>
     </div>
-    <div class="col-sm-10 pull-right top bottom">
-        @include('account.infos')
-    </div>
-</div>
 </div>
 @endsection
 

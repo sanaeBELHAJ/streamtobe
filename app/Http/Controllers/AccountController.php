@@ -39,9 +39,10 @@ class AccountController extends Controller {
     public function index(Request $request) {
         $streamer = Auth::user();
         $user = Auth::user();
-
+        $countries = Countries::all();
+        
         return view('account.index')
-                ->with(compact('user', 'streamer'));
+                ->with(compact('user', 'streamer', 'countries'));
     }
 
     /**
@@ -119,7 +120,9 @@ class AccountController extends Controller {
             $path = $request->file('pictureAccount')->store('public/avatars/' . $user->pseudo);
             $user->avatar = $user->setPathAvatar($path);
         }
+        $country = Countries::where('id', $request->input('country'))->first();
 
+        $user->id_countries = $country->id;
         $user->update($request->all());
         $user->save();
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
@@ -137,20 +140,14 @@ class AccountController extends Controller {
         $streamer = User::where('pseudo', $pseudo)
                 ->where('status', 1)
                 ->first();
+
         if (!$streamer)
             abort(404);
 
         $themes = Theme::all();
         $user = Auth::user();
-        if ($user) {
-            $user->token = $request->session()->get('_token');
-            $reportCat = ReportCat::all();
-            $report = Report::where('victim_id', '=', $user->id)
-                    ->where('guilty_id', '=', $streamer->id)
-                    ->where('status', '=', 1)
-                    ->first();
-        }
-        return view('account.profil', compact('themes', 'streamer', 'user', 'reportCat', 'report'));
+
+        return view('account.profil', compact('themes', 'streamer', 'user'));
     }
 
     /**

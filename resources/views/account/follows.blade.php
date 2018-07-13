@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="col-sm-10 pull-right top-2 bottom">
-        <p>Chaines suivies</p>
+        <p>Chaines suivies par {{$streamer->pseudo}}</p>
         <hr>
         <br>
         @if(count($channels) > 0)

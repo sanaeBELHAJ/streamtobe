@@ -11,7 +11,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ setting('site.title') }}</title>
         <meta name="description" content="{{setting('site.description')}}">
-        <link rel="icon" href="<?php echo asset('img/logo1.jpg'); ?>" />
+        <link rel="icon" href="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}" />
 
         <!-- CSS -->
          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -33,13 +33,25 @@
 
             gtag('config', 'UA-65526992-2');
         </script>
+
+        <!-- Hotjar Tracking Code for www.streamtobe.com -->
+        <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:946123,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        </script>
     </head>
     <body>
         <header style="font-size:13px">
             <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div class=" container-fluid">
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('img/logo1.jpg'); ?>">
+                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}">
                         <span class="logo-text">{{ setting('site.title') }}</span>
                     </a>
                     <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" 

@@ -34,12 +34,16 @@
                             Connectez-vous pour rédiger un message.
                         </p>
                     @else
-                        <iframe src="<?php echo str_replace(":8000", "", Request::root()); ?>:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @if(env('APP_ENV') != "production")
+                            <iframe src="http://localhost:3000/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @else
+                        <iframe src="https://io.streamtobe.com/?stream={{$streamer->pseudo}}&token={{$user->token}}" class="h-100 w-100"></iframe>
+                        @endif
                     @endguest
                 </div>
             </div>
 
-            <div id="infos" class="col-12 d-none d-sm-block mt-4">
+            <div id="infos" class="d-none d-sm-block mt-4">
                 @if(Session::has('message'))
                     <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -52,23 +56,20 @@
                 @auth
                     {{-- Configuration du stream par le propriétaire --}}
                     @if($streamer->id == Auth::user()->id)
-                        <div class="col-12 mt-4" id="config_stream">
-                            <h3 class="mb-5">Configurer mon stream</h3>
-                            <div class="row">
-
-                                    Stream : &nbsp;<section class="experiment">
-                                        <section>
-                                            <select id="broadcasting-option">
-                                                <option>Stream classique</option>
-                                                <option>Stream audio</option>
-                                            </select>
-                                            Titre :
-                                            <input id="stream_title" class="update_stream" data-config="title" type="text" value="{{$streamer->stream->title}}">
-                                        </section>
-                                    </section>
-                                    <p class="col-12 col-md-6">
+                        
+                        <div class="mt-4" id="config_stream">
+                            <h3 class="h3 mb-5">Configurer mon stream</h3>
+                            <div class="row">                                    
+                                <section class="experiment col-12 col-md-6">
+                                        Type de diffusion : &nbsp;
+                                        <select id="broadcasting-option" class="form-control d-inline w-50">
+                                            <option>Stream classique</option>
+                                            <option>Stream audio</option>
+                                        </select>
+                                </section>
+                                <p class="col-12 col-md-6">
                                     Catégorie :
-                                    <select id="stream_type" class="update_stream" data-config="type">
+                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
                                         @foreach($themes as $theme)
                                         <optgroup label="{{$theme->name}}">
                                             @foreach($theme->types as $type)
@@ -78,22 +79,26 @@
                                         @endforeach
                                     </select>
                                 </p>
-                            </div>
-
-                            <label>
-                                <label class="switch align-middle m-0">
-                                    <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
-                                           @if($streamer->stream->status == 0)
-                                                value="On"
-                                            @else
-                                                value="Off"
-                                                checked
-                                            @endif >
-                                    <span class="slider round"></span>
+                                <p class="col-12 col-md-6">
+                                    Nom de la chaine : &nbsp;
+                                    <input id="stream_title" class="form-control d-inline w-50 update_stream" 
+                                            data-config="title" type="text" placeholder="Titre du stream" 
+                                            value="{{$streamer->stream->title}}">
+                                </p>
+                                <label class="col-12 col-md-6">
+                                    <label class="switch align-middle m-0">
+                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                                @if($streamer->stream->status == 0)
+                                                    value="On"
+                                                @else
+                                                    value="Off"
+                                                    checked
+                                                @endif >
+                                        <span class="slider round"></span>
+                                    </label>
+                                    Activer / Interrompre la diffusion
                                 </label>
-                                Activer / Interrompre la diffusion
-                            </label>
-
+                            </div>
                         </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
@@ -101,41 +106,18 @@
                             {{-- Report --}}
                             <p class="col text-center">
                                 @if($report)
-                                    <i class="fas fa-2x fa-exclamation" data-toggle="tooltip" 
-                                    data-placement="top" title="Vous avez déjà signalé cette chaine"></i>
+                                    <button class="btn-follow w-100 float-none btn" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
-                                    <a class="btn" data-toggle="modal" data-target="#reportModal">
-                                        <i class="fas fa-2x fa-exclamation-triangle" data-toggle="tooltip" 
-                                        data-placement="top" title="Signaler cette chaine"></i>
-                                    </a>
+                                    <button class="btn-follow w-100 float-none btn" 
+                                            data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur</button>
                                     @include('stream.modal.report')
                                 @endif
                             </p>
 
-                            {{-- Private Message --}}
-                            <p class="col text-center">
-                                @foreach($user->viewers as $viewer)
-                                    @if($streamer->stream->id == $viewer->stream_id)
-                                        @foreach($viewer->subscribes as $subscription)
-                                            @if($subscription->status == 1)
-                                                <i class="btn fas fa-2x fa-comment" data-toggle="tooltip" 
-                                                data-placement="top" title="Envoyer un message au streamer"></i>	
-                                                @break
-                                            @else
-                                                <i class="far fa-2x fa-comment" data-toggle="tooltip" 
-                                                data-placement="top" title="Communication privée reservée aux abonnés"></i>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            </p>
-
                             {{-- Giveaway --}}
                             <p class="col text-center">
-                                <a class="btn" data-toggle="modal" data-target="#paymentModal">
-                                    <i class="btn fas fa-2x fa-gift" data-toggle="tooltip"
-                                    data-placement="top" title="Faire un don / S'abonner"></i>
-                                </a>
+                                <button class="btn-follow w-100 float-none btn" data-toggle="modal" 
+                                    data-target="#paymentModal">Faire un don</button>
                             </p>
                             @include('stream.modal.payment')
 
@@ -143,13 +125,12 @@
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
-                                        @if($viewer->is_follower == 1)
-                                            <i class="btn fas fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                            data-placement="top" title="Ne plus suivre cette chaine"></i>
-                                        @else
-                                            <i class="btn far fa-2x fa-star" id="follow_stream" data-toggle="tooltip" 
-                                            data-placement="top" title="Suivre cette chaine"></i>
-                                        @endif
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                     @endif
                                 @endforeach
                             </p>
@@ -178,7 +159,82 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="stream.show.css">
+    <style>
+        video{
+            background-color:black;
+            width:100%;
+            height:100%;
+        }
+
+        @media(max-width: 768px){
+            #messages, #infos{
+                height: 400px;
+            }
+        }
+
+        /*******/
+
+        /* Bouton d'activation du stream */
+
+        /* The switch - the box around the slider */
+        #config_stream .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        #config_stream .switch input {display:none;}
+
+        /* The slider */
+        #config_stream .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        #config_stream .slider:before {
+            position: absolute;
+            content: "";
+            height: 90%;
+            width: 26px;
+            left: 4px;
+            bottom: 5%;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        #config_stream input:checked + .slider {
+            background-color: #39ca0c;
+        }
+
+        #config_stream input:focus + .slider {
+            box-shadow: 0 0 1px #39ca0c;
+        }
+
+        #config_stream input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        #config_stream .slider.round {
+            border-radius: 34px;
+        }
+
+        #config_stream .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 @endsection
 
 @section('js')
@@ -222,37 +278,7 @@
 				}
 			});
 
-			/* Buttons stream (viewer) */
-			function followingStream(){
-				var following = ($("#follow_stream").hasClass("fas")) ? 0 : 1;
-				var stream = "{{$streamer->pseudo}}";
-				$.ajax({
-					url: "/followStream",
-					type: 'POST',
-					data: {
-						stream: stream,
-						is_following: following
-					}
-				})
-				.done(function(data){
-					if(data == 0){
-						$("#follow_stream").removeClass("fas")
-											.addClass("far")
-											.attr('data-original-title', 'Suivre cette chaine')
-											.tooltip("show");
-					}
-					else{
-						$("#follow_stream").removeClass("far")
-											.addClass("fas")
-											.attr('data-original-title', 'Ne plus suivre cette chaine')
-											.tooltip("show");
-					}
-				})
-				.fail(function(data){
-					console.log(data);
-				});
-			}
-			$("#follow_stream").click(followingStream);
+			
 
 			/* Config stream (owner) */
 			function updateStream(){

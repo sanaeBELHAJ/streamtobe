@@ -62,7 +62,7 @@ class User extends \TCG\Voyager\Models\User
      */
     public function country() 
     {
-        return $this->hasOne('App\Countries','id');
+        return $this->belongsTo('App\Countries', 'id_countries');
     }
     /**
      * Get his chat message
