@@ -45,71 +45,6 @@
         </div>
         <div class="col-sm-10 pull-right top-2 bottom">
             <div class="container-fluid row">
-                <div class="col-sm-12" style="margin: 10px;padding:3px;border: 1px solid gray;background: white;">
-                    <button type="button" class="btn pull-right" data-toggle="modal" data-target="#myModal">Config</button>
-                </div>
-                
-                <!-- Modal -->
-                <div id="myModal" class="modal fade" role="dialog">
-                  <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Configuration</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      </div>
-                      <div class="modal-body">
-                          <div class="mt-4" id="config_stream">
-                            <div class="row">                                    
-                                <section class="experiment col-12 col-md-6">
-                                        Type de diffusion : &nbsp;
-                                        <select id="broadcasting-option" class="form-control d-inline w-50">
-                                            <option>Stream classique</option>
-                                            <option>Stream audio</option>
-                                        </select>
-                                </section>
-                                <p class="col-12 col-md-6">
-                                    Catégorie :
-                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
-                                        @foreach($themes as $theme)
-                                        <optgroup label="{{$theme->name}}">
-                                            @foreach($theme->types as $type)
-                                            <option value="{{$type->name}}">{{$type->name}}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        @endforeach
-                                    </select>
-                                </p>
-                                <p class="col-12 col-md-6">
-                                    Nom de la chaine : &nbsp;
-                                    <input id="stream_title" class="form-control d-inline w-50 update_stream" 
-                                            data-config="title" type="text" placeholder="Titre du stream" 
-                                            value="{{$streamer->stream->title}}">
-                                </p>
-                                <label class="col-12 col-md-6">
-                                    <label class="switch align-middle m-0">
-                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
-                                                @if($streamer->stream->status == 0)
-                                                    value="On"
-                                                @else
-                                                    value="Off"
-                                                    checked
-                                                @endif >
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Activer / Interrompre la diffusion
-                                </label>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
                         <div class="bodyDiv">
@@ -252,7 +187,7 @@
             <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
                 <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
                 <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                <p class="sliderText col-3 text-center m-0" data-value="2">Description</p>
+                <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
             </div>
         </div>
     </div>
