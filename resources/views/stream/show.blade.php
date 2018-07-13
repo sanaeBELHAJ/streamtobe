@@ -187,7 +187,7 @@
             <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
                 <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
                 <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                <p class="sliderText col-3 text-center m-0" data-value="2">Description</p>
+                <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
             </div>
         </div>
     </div>

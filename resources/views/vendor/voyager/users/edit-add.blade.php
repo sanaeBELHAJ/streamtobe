@@ -69,7 +69,7 @@
                                     <option value="1" {{ ($dataTypeContent->activated == "1" ? 'selected' : '') }}>Actif</option>
                                     <option value="0" {{ ($dataTypeContent->activated == "0" ? 'selected' : '') }}>Non confirmé</option>
                                     <option value="-1" {{ ($dataTypeContent->activated == "-1" ? 'selected' : '') }}>Banni</option>
-                                    <option value="-2" {{ ($dataTypeContent->activated == "-2" ? 'selected' : '') }}>Clôturé (vider champs EMAIL + NOM)</option>
+                                    <option value="-2" {{ ($dataTypeContent->activated == "-2" ? 'selected' : '') }}>Clôturé (vider manuellement le champ EMAIL)</option>
                                 </select>
                             </div>
 
@@ -79,7 +79,7 @@
                                     <br>
                                     <small>{{ __('voyager::profile.password_hint') }}</small>
                                 @endif
-                                <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
+                                <input type="password" class="form-control" id="password" name="password" value="{{$dataTypeContent->password}}" autocomplete="new-password">
                             </div>
 
                             @can('editRoles', $dataTypeContent)
