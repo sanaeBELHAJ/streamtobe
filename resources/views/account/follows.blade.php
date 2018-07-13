@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-sm-2  profil-panel">
         <div class="top bottom">
-            @if( Auth::user()->pseudo == $streamer->pseudo)
+            @if(Auth::check() && Auth::user()->pseudo == $streamer->pseudo)
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
                     <i class="material-icons">
                     edit
@@ -58,13 +58,15 @@
         @if(count($channels) > 0)
             @foreach($channels as $channel)
                 {{-- Chaines des autres streamers suivies par l'utilisateur --}}
-                @if($channel->is_follower == 1 && $channel->stream->user->id != $channel->user->id)
+                @if($channel->is_follower == 1 && $channel->stream->user->id != $channel->user->id && $channel->stream->user->status > 0)
                     <div class='col-6 div-f'>
                         <img class='avatar_follower' src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>">
                         <a class="" href="/home/{{$channel->stream->user->pseudo}}">{{$channel->stream->user->pseudo}}</a>
                         {{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}
                         <span class="anciennete" data-date="{{$channel->created_at}}"></span>
-                        <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                        @auth
+                            <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                        @endauth
                     </div>
                 @endif
             @endforeach

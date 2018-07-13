@@ -28,11 +28,11 @@ class AccountController extends Controller {
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
-     * Show the account form.
+     * Show the user account form.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,8 +41,26 @@ class AccountController extends Controller {
         $user = Auth::user();
         $countries = Countries::all();
         
-        return view('account.index')
-                ->with(compact('user', 'streamer', 'countries'));
+        return view('account.index')->with(compact('user', 'streamer', 'countries'));
+    }
+
+    /**
+     * Display a user account
+     * 
+     * @param string $pseudo
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $pseudo) {
+        $streamer = User::where('pseudo', $pseudo)
+                ->where('status', 1)
+                ->first();
+
+        if (!$streamer)
+            abort(404);
+
+        $themes = Theme::all();
+
+        return view('account.profil', compact('themes', 'streamer'));
     }
 
     /**
@@ -53,7 +71,6 @@ class AccountController extends Controller {
     public function stats(Request $request, $pseudo = null) {
 
         $streamer = ($pseudo != null) ? User::where('pseudo', $pseudo)->where('status', '>', 0)->first() : Auth::user();
-        $user = Auth::user();
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
 
@@ -64,8 +81,7 @@ class AccountController extends Controller {
                 $donations[] = $donation;
         }
 
-        return view('account.stats')
-                        ->with(compact('user', 'streamer', 'stream', 'viewers', 'donations'));
+        return view('account.stats')->with(compact('streamer', 'stream', 'viewers', 'donations'));
     }
 
     /**
@@ -78,12 +94,11 @@ class AccountController extends Controller {
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
 
-        return view('account.fans')
-                        ->with(compact('streamer', 'stream', 'viewers'));
+        return view('account.fans')->with(compact('streamer', 'stream', 'viewers'));
     }
 
     /**
-     * Show the other streamers list.
+     * Show the users list followed by the streamer.
      * @param string $pseudo
      * @return \Illuminate\Http\Response
      */
@@ -93,10 +108,7 @@ class AccountController extends Controller {
         $viewers = $stream->viewers; //Followers de l'utilisateur
         $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
 
-        return view('account.follows')
-                        ->with(compact(
-                                        'streamer', 'stream', 'viewers', 'channels'
-        ));
+        return view('account.follows')->with(compact('streamer', 'stream', 'viewers', 'channels'));
     }
 
     /**
@@ -128,26 +140,6 @@ class AccountController extends Controller {
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
         Session::flash('alert-class', 'alert-success');
         return redirect('home');
-    }
-
-    /**
-     * Display the specified resource
-     * 
-     * @param string $pseudo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $pseudo) {
-        $streamer = User::where('pseudo', $pseudo)
-                ->where('status', 1)
-                ->first();
-
-        if (!$streamer)
-            abort(404);
-
-        $themes = Theme::all();
-        $user = Auth::user();
-
-        return view('account.profil', compact('themes', 'streamer', 'user'));
     }
 
     /**

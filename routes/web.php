@@ -59,14 +59,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/updateViewer', 'ViewerController@updateViewer');
 
     /* Actions sur le compte */
-        Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
-        Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
-        Route::resource('home', 'AccountController', ['only' => ['index','destroy','show']]);
+        Route::get('/home', 'AccountController@index')->name('home.index');    
+        Route::patch('/updateInfos', 'AccountController@updateInfos')->name('home.updateInfos');
+        Route::delete('/destroy', 'AccountController@destroy')->name('home.destroy');
         
-        Route::get('/stats/{pseudo}', 'AccountController@stats')->name('home.stats');
-        Route::get('/fans/{pseudo}', 'AccountController@fans')->name('home.fans');
-        Route::get('/follows/{pseudo}', 'AccountController@follows')->name('home.follows');
-
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
 });
@@ -84,6 +80,12 @@ Route::post('stream', 'StreamController@index')->name('index');
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
+
+//Informations d'un utilisateur
+Route::get('/home/{pseudo}', 'AccountController@show')->name('home.show');
+Route::get('/stats/{pseudo}', 'AccountController@stats')->name('home.stats');
+Route::get('/fans/{pseudo}', 'AccountController@fans')->name('home.fans');
+Route::get('/follows/{pseudo}', 'AccountController@follows')->name('home.follows');
 
 //Accord d'utilisation des cookies
 Route::post('/valid_cookie', 'HomeController@valid_cookie');

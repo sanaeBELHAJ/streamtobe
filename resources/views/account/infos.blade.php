@@ -125,7 +125,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    {!! Form::submit('Supprimer', ['class' => 'btn btn-danger btn-block', 'onclick' => 'return confirm(\'Attention : cette décision est définitive !\')']) !!}
+                    {!! Form::submit('Supprimer', ['class' => 'btn btn-danger btn-block']) !!}
                 </div>
             {!! Form::close() !!}
         </div>
