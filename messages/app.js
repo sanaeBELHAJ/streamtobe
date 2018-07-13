@@ -61,9 +61,9 @@ io.sockets.on('connection', function (socket) {
                 );
                 console.log(allClients);
                 checkFriends(socket);
-                setInterval(function(){
+                /*setInterval(function(){
                     checkFriends(socket);
-                }, 1000);
+                }, 1000);*/
             });
     });
 
@@ -167,6 +167,11 @@ io.sockets.on('connection', function (socket) {
         return element.socket_id == socket.id;
     }
 
+    socket.on('refresh', function(){
+        if(socket.user_id)
+            checkFriends(socket);
+    });
+
     //Modification de la liste d'amis
     async function checkFriends(socket){
         await queryDB( //Recherche des utilisateurs followers au streamer
@@ -227,9 +232,6 @@ io.sockets.on('connection', function (socket) {
             }
         }
 
-        if(socket.contactList)
-            var previousList = socket.contactList;
-
         socket.contactList = [];
         if(typeof results !== 'undefined' && results.length > 0){
             await queryDB( //Liste des streamers followés par l'utilisateur
@@ -260,29 +262,13 @@ io.sockets.on('connection', function (socket) {
                         }];
                 });
         }
-
-        var oldList = false;
-
-        if(previousList){
-            for(i in previousList){
-                if(socket.contactList.indexOf(previousList[i]) === -1)
-                    oldList = true;
-            }
-
-            for(i in socket.contactList){
-                if(previousList.indexOf(socket.contactList[i]) === -1)
-                    oldList = true;
-            }
-        }
-
-        if(!previousList || (previousList && oldList)){
-            var content = {
-                contactList: socket.contactList,
-                user_pseudo: socket.user_pseudo,
-                user_avatar: socket.user_avatar
-            };
-            socket.emit('bringFriends', content);
-        }
+        
+        var content = {
+            contactList: socket.contactList,
+            user_pseudo: socket.user_pseudo,
+            user_avatar: socket.user_avatar
+        };
+        socket.emit('bringFriends', content);
     }
 });
 

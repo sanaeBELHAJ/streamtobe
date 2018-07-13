@@ -5,12 +5,12 @@
     <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">
-                @if( Auth::user()->pseudo == $streamer->pseudo)
-                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                    <i class="material-icons">
-                        edit
-                    </i>
-                </a>
+                @if(Auth::check() && Auth::user()->pseudo == $streamer->pseudo)
+                    <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
+                        <i class="material-icons">
+                            edit
+                        </i>
+                    </a>
                 @endif
                 <br>
                 <div class="cadre-style">
@@ -43,10 +43,11 @@
                         </li>
                     </ul>
                     <br>
-
-                    <a class="btn-contacter" href="/messages">                  
-                      Contacter
-                    </a>
+                    @auth
+                        <a class="btn-contacter" href="/messages">                  
+                        Contacter
+                        </a>
+                    @endauth
                 </center>
             </div>
 
@@ -54,25 +55,30 @@
         <div class="col-sm-10 pull-right top-1 bottom">
             <hr>
             <div class="row d-flex flex-row-reverse">
-                <div class='col-sm-3'>
-                    @foreach($user->viewers as $viewer)
-                        @if($streamer->stream->id == $viewer->stream_id)
-                            <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
-                                    data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                    title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
-                            <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
-                                    data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                    title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
-                        @endif
-                    @endforeach
-                </div>
+                @auth
+                    <div class='col-sm-3'>
+                        @foreach(Auth::user()->viewers as $viewer)
+                            @if($streamer->stream->id == $viewer->stream_id)
+                                <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
+                                        data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                        title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                                <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
+                                        data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                        title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                            @endif
+                        @endforeach
+                    </div>
+                @endauth
             </div>
             <div class='col-sm-12'>
-            <hr>
+                <hr>
             </div>
             <div class="col-sm-12">
-
-                <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
+                @if($streamer->stream->status == 1)
+                    <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
+                @else
+                    <p>{{ $streamer->pseudo }} n'est pas en ligne pour l'instant.</p>
+                @endif
                 <div class="col-sm-12">
                     <center>
                         <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  

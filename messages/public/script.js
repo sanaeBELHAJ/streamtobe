@@ -1,3 +1,4 @@
+$('[data-toggle="tooltip"]').tooltip();
 var environment = (window.location.hostname == "localhost") ? "http://localhost:8000" : "https://streamtobe.com";
 var environmentSocket = (window.location.hostname == "localhost") ? "http://localhost:3001" : "https://io.streamtobe.com";
 
@@ -25,13 +26,16 @@ socket.on('bringFriends', function(data) {
 
     var text = "";
     $.each(data.contactList, function(index, value){
-        text += "<li class='contact   ";
-                text += (index==0) ? "active'" : "'";
-                text += "data-pseudo='"+value.pseudo+"'>";
+        text += "<li data-pseudo='"+value.pseudo+"' ";
+            if($("#search_contact").val()!="" && value.pseudo.toLowerCase().indexOf($("#search_contact").val()) == -1)
+                text += " style='display:none;' ";
+            
+            text += (index==0) ? "class='contact active'>" : "class='contact'>";
+            
             text += "<div class='wrap'>";
                 text += "<img src='"+environment+"/storage/"+value.avatar+"' alt='' />";
                 text += "<p class='name'>"+value.pseudo+"</p>";
-                text += "<p class='preview'>Lorem Ipsum</p>";
+                //text += "<p class='preview'>Lorem Ipsum</p>";
             text += "</div>";
         text += "</li>";
     });
@@ -39,7 +43,7 @@ socket.on('bringFriends', function(data) {
     if(text==""){
         text += "<li class='contact'>";
             text += "<div class='wrap'>";
-                text += "<p class='name'>Aucun contact de joignable</p>";
+                text += "<p class='name'>Aucun contact joignable</p>";
             text += "</div>";
         text += "</li>";
     }
@@ -52,6 +56,8 @@ $('#contacts').on("click", "li.contact", function(){
     socket.emit('join', friend);
 });
 socket.on('join', function(data) {
+    $(".message-input input").prop("disabled", false);
+    
     //Informations
     var infos = data.infos;
     $("#profile #profile-img").prop("src", environment+"/storage/"+infos.user_avatar);
@@ -71,7 +77,11 @@ socket.on('join', function(data) {
             message += "<img src='"+environment+"/storage/";
                 message += (element.user_exped == "me") ? infos.user_avatar : infos.friend_avatar;
             message += "' alt='' />";
-            message += "<p>"+element.message+"</p>";
+            
+            var messageDate = new Date(element.created_at);
+            var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
+
+            message += "<p>"+element.message+date_emit+"</p>";
         message += "</li>";
         text += message;
     });
@@ -85,17 +95,20 @@ function newMessage() {
 	var message = $(".message-input input").val();
 	if($.trim(message) == '')
 		return false;
-	
+
+    var messageDate = new Date();
+    var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
+
     var content = "<li class='replies'>";
             content += "<img src='"+$("#profile-img").prop("src")+"' alt='' />";
-            content += "<p>"+message+"</p>";
+            content += "<p>"+message+date_emit+"</p>";
     content += "</li>";
     $(".messages ul").append(content);
     socket.emit('message', message); // Publie le message
     
     $('.message-input input').val(null);
-	$('.contact.active .preview').html(message);
-	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    $('.contact.active .preview').html(message);
+    $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, 100);
 };
 
 $('.submit').click(function() { newMessage(); });
@@ -110,15 +123,22 @@ $(window).on('keydown', function(e) {
 
 // Quand on recoit un message, on l'insère dans la page
 socket.on('message', function(message) {
-    console.log(message);
     if(message){
+        var messageDate = new Date();
+        var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
+
         var content = "<li class='sent'>";
             content += "<img src='"+$("#contacts li.contact.active img").prop("src")+"' alt='' />";
-            content += "<p>"+message+"</p>";
+            content += "<p>"+message+date_emit+"</p>";
         content += "</li>";
         $(".messages ul").append(content);
     }
-    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, 100);
+});
+
+//Mise à jour de la liste d'ami
+$("#refresh_list").click(function(){
+    socket.emit('refresh');
 });
 
 //Recherche et affichage d'un membre parmi la liste de contact disponible

@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-sm-2  profil-panel">
         <div class="top bottom">
-            @if( Auth::user()->pseudo == $streamer->pseudo)
+            @if(Auth::check() && Auth::user()->pseudo == $streamer->pseudo)
             <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
                 <i class="material-icons">
                     edit
@@ -22,11 +22,11 @@
             <center>{{ $streamer->pseudo }}</center>
             <center>
                 @if($streamer->country != null)
-                <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
-                <img style="width:10%" src="{{ $streamer->country->svg }}">
+                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
+                    <img style="width:10%" src="{{ $streamer->country->svg }}">
                 @else
-                <i class="material-icons" style="font-size: 16px;">location_on</i>
-                Inconnu
+                    <i class="material-icons" style="font-size: 16px;">location_on</i>
+                    Inconnu
                 @endif
             </center>
             </p>
@@ -56,7 +56,7 @@
         <hr>
         <br>
         @foreach($viewers as $viewer)
-            @if($viewer->user->id != $streamer->id)
+            @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
                 <div class='col-6 div-f'>
                     <img class='avatar_follower' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
                     <a class=""  href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>

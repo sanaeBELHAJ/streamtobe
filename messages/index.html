@@ -3,27 +3,21 @@
     <head>
         <meta charset="utf-8" />
         <title>Super Chat temps réel !</title>
+        
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
         <link rel="stylesheet" href="style.css">
-
         <!-- Snippet -->
         <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
         <!-- /Snippet -->
     </head>
 
     <body>
-        <p class="text-center" style="height: 10%;">
-            <small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
-            <br>
-            <small><b>Vous devez vous abonner mutuellement à vos chaines respectives.</b></small>
-        </p>
-
-        <div id="frame" style="height: 90%;">
+        <div id="frame">
             <div id="sidepanel">
                 <div id="profile">
                     <div class="wrap">
-                        <img id="profile-img" src="-------" alt="" />
+                        <img id="profile-img" src="#" alt="" />
                         <p>----</p>
                     </div>
                 </div>
@@ -31,7 +25,8 @@
                     <label for="">
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </label>
-                    <input type="text" id="search_contact" placeholder="Search contacts..." />
+                    <input type="text" id="search_contact" placeholder="Rechercher un utilisateur..." />                    
+                    <i class="fas fa-sync btn" id="refresh_list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Mettre à jour les contacts"></i>
                 </div>
                 <div id="contacts">
                     <ul>
@@ -41,8 +36,8 @@
             </div>
             <div class="content">
                 <div class="contact-profile">
-                    <img src="-----------" alt="" />
-                    <p>------</p>
+                    <img src="#" alt="" />
+                    <p>Selectionnez un utilisateur dans la liste à gauche</p>
                 </div>
                 <div class="messages">
                     <ul>
@@ -51,7 +46,7 @@
                 </div>
                 <div class="message-input">
                     <div class="wrap">
-                        <input type="text" placeholder="Write your message..." />
+                        <input type="text" placeholder="Rédigez votre message ici..." disabled/>
                         <button class="submit">
                             <i class="fa fa-paper-plane" aria-hidden="true"></i>
                         </button>
