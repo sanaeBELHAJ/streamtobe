@@ -44,10 +44,8 @@
                     </ul>
                     <br>
 
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
-                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                            videocam
-                        </i>
+                    <a class="btn-contacter" href="/messages">                  
+                      Contacter
                     </a>
                 </center>
             </div>
@@ -68,22 +66,24 @@
                         @endif
                     @endforeach
                 </div>
-                <div class='col-sm-12'>
-                    <hr>
-                </div>
+            </div>
+            <div class='col-sm-12'>
+            <hr>
+            </div>
+            <div class="col-sm-12">
+
+                <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
                 <div class="col-sm-12">
-                    <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
-                    <div>
-                        <center>
-                            <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
-                                <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                                    play_circle_filled
-                                </i>
-                            </a>
-                        </center>
-                    </div>
+                    <center>
+                        <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
+                            <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                                play_circle_filled
+                            </i>
+                        </a>
+                    </center>
                 </div>
-            </div>  
+            </div> 
+        </div>
         </div>
     </div>
 </div>
