@@ -44,10 +44,8 @@
                     </ul>
                     <br>
 
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
-                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                            videocam
-                        </i>
+                    <a class="btn-contacter" href="/messages">                  
+                      Contacter
                     </a>
                 </center>
             </div>
@@ -86,7 +84,7 @@
             <div class="col-sm-12">
 
                 <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
-                <div>
+                <div class="col-sm-12">
                     <center>
                         <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
                             <i style="font-size: 50px;margin-top: 10px" class="material-icons">
