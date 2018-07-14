@@ -54,12 +54,14 @@ io.sockets.on('connection', function (socket) {
                         user_id: socket.user_id
                     }
                 );
+                
                 console.log(allClients);
                 checkFriends(socket);
-                /*setInterval(function(){
-                    checkFriends(socket);
-                }, 1000);*/
             });
+            
+        //Nouveau message recus pour l'utilisateur
+        await queryDB('UPDATE stb_messages SET status = 1 WHERE status = 2 AND user_receiv = ?', socket.user_id);
+            
     });
 
     //Récupération d'une autre conversation
@@ -82,7 +84,7 @@ io.sockets.on('connection', function (socket) {
         await queryDB( //Recherche des messages entre les 2 utilisateurs
             `SELECT message, user_exped, user_receiv, created_at
                 FROM stb_messages
-                WHERE status = 1
+                WHERE status >= 1
                 AND (user_exped = ? OR user_receiv = ?)
                 AND (user_exped = ? OR user_receiv = ?)`, 
                 [socket.user_id, socket.user_id, socket.friend_id, socket.friend_id])
@@ -111,7 +113,6 @@ io.sockets.on('connection', function (socket) {
                 }
             });
 
-
         var infos = {
             friend_pseudo: socket.friend_pseudo,
             friend_avatar: socket.friend_avatar,
@@ -123,7 +124,6 @@ io.sockets.on('connection', function (socket) {
             infos: infos,
             conversations: conversations
         }
-        //console.log(datas);
         socket.emit('join', datas);
         console.log("---- WELCOME ------");
     });
@@ -136,15 +136,14 @@ io.sockets.on('connection', function (socket) {
             user_exped: socket.user_id, 
             user_receiv: socket.friend_id, 
             message: message, 
-            status: 1
+            status: 2
         };
-        console.log(content);
+
         var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
-        console.log(allClients);
+        content.user_exped_pseudo = socket.user_pseudo; //Ajout du pseudo de l'ami
         allClients.forEach(function(client, index) { //Diffusion du message à l'utilisateur regardant les messages
             if(client.user_id == socket.friend_id){
-                console.log(client);
-                io.to(client.socket_id).emit('message', content.message);
+                io.to(client.socket_id).emit('message', content);
             }
         });
     }); 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use DB;
 use Mail;
 use Session;
 use Response;
@@ -71,4 +72,17 @@ class HomeController extends Controller
         return response()->json(['ok' => 'ok']);
     }
     
+    /**
+     * Check new message
+     */
+    public function checkMessage(Request $request){
+        if(Auth::user()){
+            return DB::table('stb_messages')
+                    ->select('id')
+                    ->where('status', '=', 2)
+                    ->where('user_receiv', '=', Auth::user()->id)
+                    ->get();
+        }
+        return null;
+    }
 }
