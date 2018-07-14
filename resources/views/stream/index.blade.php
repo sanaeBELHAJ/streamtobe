@@ -10,30 +10,45 @@
                 <div class="form-group mb-2">
                     <label for="name">Titre  </label>
                     <input id="email"  type="text" class="form-control" name="name">
+                    {!! $errors->first('name', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
                 </div>
                 <div class="form-group mb-2">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
-                        <option> Séléctionner une catégorie</option>
+                        <option value="">Sélectionner une catégorie</option>
                         @foreach($themes as $theme)
                             <optgroup label="{{$theme->name}}">
                                 @foreach($theme->types as $type)
-                                    <option value="{{$type->name}}">{{$type->name}}</option>
+                                    <option value="{{$type->id}}">{{$type->name}}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
                     </select>
+                    {!! $errors->first('theme', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}
                 </div>
                 <div class="form-group mb-2">
                     <label for="countries">Pays </label>
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
-                        <option> Séléctionner un pays</option>
+                        <option value="">Sélectionner un pays</option>
                         @if($countries)
                             @foreach($countries as $country)
                                 <option value="{{$country->id}}">{{$country->name}}</option>
                             @endforeach
                         @endif
-                    </select>        
+                    </select> 
+                    {!! $errors->first('country', 
+                                '<small class="form-text alert alert-danger">:message
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></small>') !!}       
                 </div>
                 <div class="form-group mb-2">
                     <button type="submit" class="btn btn-primary btn-filter">
@@ -64,15 +79,22 @@
                                 @endif
                             </a>
                             <div class="row">
-                                <div class="col-sm-6">
-                                    @if($stream->status==1)
+                                <div class="col-sm-12">
                                     <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                            {{ $stream->user->pseudo}}
+                                        {{ $stream->title }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <small>
+                                        <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                            {{ $stream->user->pseudo }}
                                         </a>
-                                    @endif
+                                    </small>
                                 </div>
                                 <div class="col-sm-6">
-                                    <img class="right" style="width:20%; padding-top: 4px" src="@auth @if(Auth::user()->country){{ Auth::user()->country->svg }}@endif @endauth">
+                                    <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
                                 </div>
                             </div>
                         </div>
