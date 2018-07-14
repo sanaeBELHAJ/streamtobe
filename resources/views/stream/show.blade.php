@@ -45,71 +45,6 @@
         </div>
         <div class="col-sm-10 pull-right top-2 bottom">
             <div class="container-fluid row">
-                <div class="col-sm-12" style="margin: 10px;padding:3px;border: 1px solid gray;background: white;">
-                    <button type="button" class="btn pull-right" data-toggle="modal" data-target="#myModal">Config</button>
-                </div>
-                
-                <!-- Modal -->
-                <div id="myModal" class="modal fade" role="dialog">
-                  <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Configuration</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      </div>
-                      <div class="modal-body">
-                          <div class="mt-4" id="config_stream">
-                            <div class="row">                                    
-                                <section class="experiment col-12 col-md-6">
-                                        Type de diffusion : &nbsp;
-                                        <select id="broadcasting-option" class="form-control d-inline w-50">
-                                            <option>Stream classique</option>
-                                            <option>Stream audio</option>
-                                        </select>
-                                </section>
-                                <p class="col-12 col-md-6">
-                                    Catégorie :
-                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
-                                        @foreach($themes as $theme)
-                                        <optgroup label="{{$theme->name}}">
-                                            @foreach($theme->types as $type)
-                                            <option value="{{$type->name}}">{{$type->name}}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        @endforeach
-                                    </select>
-                                </p>
-                                <p class="col-12 col-md-6">
-                                    Nom de la chaine : &nbsp;
-                                    <input id="stream_title" class="form-control d-inline w-50 update_stream" 
-                                            data-config="title" type="text" placeholder="Titre du stream" 
-                                            value="{{$streamer->stream->title}}">
-                                </p>
-                                <label class="col-12 col-md-6">
-                                    <label class="switch align-middle m-0">
-                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
-                                                @if($streamer->stream->status == 0)
-                                                    value="On"
-                                                @else
-                                                    value="Off"
-                                                    checked
-                                                @endif >
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Activer / Interrompre la diffusion
-                                </label>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
                 <div id="player" class="col-12 col-md-8 mt-8">
                     @auth
                         <div class="bodyDiv">
@@ -157,10 +92,10 @@
                 @auth
                     {{-- Configuration du stream par le propriétaire --}}
                     @if($streamer->id == Auth::user()->id)
-                        
+
                         <div class="mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
-                            <div class="row">                                    
+                            <div class="row">
                                 <section class="experiment col-12 col-md-6">
                                         Type de diffusion : &nbsp;
                                         <select id="broadcasting-option" class="form-control d-inline w-50">
@@ -182,8 +117,8 @@
                                 </p>
                                 <p class="col-12 col-md-6">
                                     Nom de la chaine : &nbsp;
-                                    <input id="stream_title" class="form-control d-inline w-50 update_stream" 
-                                            data-config="title" type="text" placeholder="Titre du stream" 
+                                    <input id="stream_title" class="form-control d-inline w-50 update_stream"
+                                            data-config="title" type="text" placeholder="Titre du stream"
                                             value="{{$streamer->stream->title}}">
                                 </p>
                                 <label class="col-12 col-md-6">
@@ -209,7 +144,7 @@
                                 @if($report)
                                     <button class="btn-follow w-100 float-none btn" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
-                                    <button class="btn-follow w-100 float-none btn" 
+                                    <button class="btn-follow w-100 float-none btn"
                                             data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur</button>
                                     @include('stream.modal.report')
                                 @endif
@@ -217,7 +152,7 @@
 
                             {{-- Giveaway --}}
                             <p class="col text-center">
-                                <button class="btn-follow w-100 float-none btn" data-toggle="modal" 
+                                <button class="btn-follow w-100 float-none btn" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don</button>
                             </p>
                             @include('stream.modal.payment')
@@ -226,10 +161,10 @@
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
-                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif" 
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
-                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif" 
+                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                     @endif
@@ -353,6 +288,7 @@
 	@endauth
 
 	<script>
+
 		$(function(){
 
 			//Texte du slider
@@ -402,13 +338,14 @@
 					}
 				})
 				.done(function(data){
-					console.log(data);
+					console.log(data + "YES");
 				})
 				.fail(function(data){
 					console.log(data);
 				});
 			}
-			$(".update_stream").change(updateStream);
+
+            $(".update_stream").change(updateStream);
 
 			/* Paypal Button */
 			if($("#paymentModal").length > 0){
@@ -476,7 +413,7 @@
 					}
 				}, '#paypal-button');
             }
-            
+
             //Edit modération/bannissement
             function statusViewer(pseudo, rank, set){
                 $.ajax({
@@ -497,7 +434,7 @@
                     console.log(data);
                 });
             }
-            
+
             //Detection du click() sur les boutons générés par les appels Ajax
             if($("#config_stream").length > 0){
                 $("#config_stream").on("click", ".rmvRankUser", function(){
@@ -527,7 +464,7 @@
                             else if(element.rank == -1)
                                 text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
 
-                            text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>"; 
+                            text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>";
                         text += "</tr>";
 
                         if(element.rank == 1)
@@ -540,14 +477,13 @@
                     console.log(data);
                 });
             }
-		});
 
         /* Stream WEBRTC */
         var config = {
             openSocket: function(config) {
                 var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
-                config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}"
+                config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
                 var sender = Math.round(Math.random() * 999999999) + 999999999;
 
                 io.connect(SIGNALING_SERVER).emit('new-channel', {
@@ -575,39 +511,43 @@
                 document.title = "{{ $streamer->stream->title }}";
             },
             onRoomFound: function(room) {
-                var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-                if (alreadyExist) return;
-                if (typeof roomsList === 'undefined') roomsList = document.body;
-
-                broadcastUI.joinRoom({
-                    roomToken: room.roomToken,
-                    joinUser: room.broadcaster
-                });
-                document.getElementById('stream-info').hidden = true;
-
+                console.log(<?php echo $streamer->stream->status ;?>);
+                @if ($streamer->stream->status == 1)
+                    var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                    if (alreadyExist) return;
+                    if (typeof roomsList === 'undefined') roomsList = document.body;
+                    broadcastUI.joinRoom({
+                        roomToken: room.roomToken,
+                        joinUser: room.broadcaster
+                    });
+                    document.getElementById('stream-info').hidden = true;
+                @endif
             },
             onNewParticipant: function(numberOfViewers) {
                 document.getElementById('visitorStream').innerHTML = "";
                 document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
             },
             onReady: function() {
-                console.log('now you can open or join rooms');
             }
+
         };
 
-        function setupNewBroadcastButtonClickHandler() {
-
+        function setupNewBroadcastButtonClickHandler(onload) {
+            if (onload == 1) return 0;
             if (document.getElementById('setup-new-broadcast').value === "Off") {
-                document.getElementById('videos-container').innerHTML = "";
+                <?php $streamer->stream->status = 0;?>
                 config.attachStream.getTracks().forEach(function (track) {
                     track.stop();
-                    document.getElementById("setup-new-broadcast").value = "On";
-                    document.getElementById('stream_title').disabled = false;
-                    document.getElementById('stream-info').hidden = false;
-                });}
-            else {
+                });
+                document.getElementById('videos-container').innerHTML = "";
+                document.getElementById("setup-new-broadcast").value = "On";
+                document.getElementById('stream_title').disabled = false;
+                document.getElementById('stream-info').hidden = false;
+            }else {
+                <?php $streamer->stream->status = 1;?>
                 document.getElementById("setup-new-broadcast").value = "Off";
                 document.getElementById('stream_title').disabled = true;
+                @if($streamer->id == Auth::user()->id)
                 DetectRTC.load(function () {
                     captureUserMedia(function () {
                         var shared = 'video';
@@ -621,6 +561,8 @@
                     });
                     document.getElementById('stream-info').hidden = true;
                 });
+                @endif
+
             }
         }
 
@@ -682,11 +624,11 @@
                     callback && callback();
                 },
                 onerror: function() {
-                    if (option === 'Stream audio') alert('unable to get access to your microphone');
+                    if (option === 'Stream audio') alert('Impossible d\'avoir accès à votre microphone');
                     else if (option === 'Stream caméra') {
-                        if (location.protocol === 'http:') alert('Please test this WebRTC experiment on HTTPS.');
-                        else alert('Stream caméra capturing is either denied or not supported. Are you enabled flag: "Enable Stream caméra capture support in getUserMedia"?');
-                    } else alert('unable to get access to your webcam');
+                        if (location.protocol === 'http:') alert('Activez HTTPS.');
+                        else alert('Capture vidéo est desactivé ou non authorisé. L\'avez-vous autorisé dans votre navigateur "?');
+                    } else alert('Impossible d\'accéder à votre webcam');
                 }
             };
             if (constraints) mediaConfig.constraints = constraints;
@@ -694,16 +636,29 @@
         }
 
         var broadcastUI = broadcast(config);
-
-        /* UI specific */
         var videosContainer = document.getElementById('videos-container') || document.body;
         var setupNewBroadcast = document.getElementById('setup-new-broadcast');
-        var roomsList = document.getElementById('rooms-list');
-
         var broadcastingOption = document.getElementById('broadcasting-option');
+        var roomsList = document.getElementById('rooms-list');
 
         if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
 
-	</script>
+        window.onload = function start() {
+            @if($streamer->id != Auth::user()->id)
+                    document.getElementById('videos-container').innerHTML = "";
+                    document.getElementById('stream-info').hidden = false;
+            @elseif($streamer->id == Auth::user()->id)
+                if (setupNewBroadcast.value === "Off") {
+                    setupNewBroadcast.click();
+                    document.getElementById('videos-container').innerHTML = "";
+                    document.getElementById("setup-new-broadcast").value = "On";
+                    document.getElementById('stream_title').disabled = false;
+                    document.getElementById('stream-info').hidden = false;
+                }
+                @endif
+            };
+        });
+
+    </script>
 
 @endsection
