@@ -188,8 +188,8 @@ header .dropdown-menu{
    /* border: 1px solid #b19dd8;*/
     color: #6441a4;
     padding: .3rem .3rem;
-    padding-right: 55px; 
-    padding-left: 55px; 
+    padding-right: 20%; 
+    padding-left: 20%; 
 }
 .btn-contacter:hover{
     cursor: pointer;
