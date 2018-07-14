@@ -133,8 +133,9 @@ class AccountController extends Controller {
             $user->avatar = $user->setPathAvatar($path);
         }
         $country = Countries::where('id', $request->input('country'))->first();
-
-        $user->id_countries = $country->id;
+        if($country)
+            $user->id_countries = $country->id;
+    
         $user->update($request->all());
         $user->save();
         Session::flash('message', 'La mise à jour des informations a bien été effectuée.');
