@@ -4,16 +4,10 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     ent = require('ent'); // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
-    
-
 const mysql = require('mysql');
 
-const config = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'streamtobe'
-};
+var bddLog = require('./bdd');
+const config = bddLog.config;
 const connection = mysql.createConnection(config);
 
 const allClients = [];

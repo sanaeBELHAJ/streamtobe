@@ -180,7 +180,7 @@
                                             placeholder="Un suivi sera établi afin de vous fournir les renseignements les plus pertinents possible."></textarea>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                                         <button type="submit" class="btn btn-primary">Envoyer le message</button>
                                     </div>
                                 </form>
