@@ -64,12 +64,20 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="activated">Activated</label>
+                                <label for="activated">Confirmation Email</label>
                                 <select class="form-control select2" id="activated" name="activated">
-                                    <option value="1" {{ ($dataTypeContent->activated == "1" ? 'selected' : '') }}>Actif</option>
-                                    <option value="0" {{ ($dataTypeContent->activated == "0" ? 'selected' : '') }}>Non confirmé</option>
-                                    <option value="-1" {{ ($dataTypeContent->activated == "-1" ? 'selected' : '') }}>Banni</option>
-                                    <option value="-2" {{ ($dataTypeContent->activated == "-2" ? 'selected' : '') }}>Clôturé (vider manuellement le champ EMAIL)</option>
+                                    <option value="1" {{ ($dataTypeContent->activated == "1" ? 'selected' : '') }}>Compte certifié</option>
+                                    <option value="0" {{ ($dataTypeContent->activated == "0" ? 'selected' : '') }}>Compte non certifié</option>
+                                </select>
+                            </div>                                
+                            
+                            <div class="form-group">
+                                <label for="status">Statut</label>
+                                <select class="form-control select2" id="activated" name="status">
+                                    <option value="1" {{ ($dataTypeContent->status == "1" ? 'selected' : '') }}>Actif</option>
+                                    <option value="0" {{ ($dataTypeContent->status == "0" ? 'selected' : '') }}>Non confirmé</option>
+                                    <option value="-1" {{ ($dataTypeContent->status == "-1" ? 'selected' : '') }}>Banni</option>
+                                    <option value="-2" {{ ($dataTypeContent->status == "-2" ? 'selected' : '') }}>Clôturé (vider manuellement le champ EMAIL)</option>
                                 </select>
                             </div>
 
