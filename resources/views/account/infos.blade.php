@@ -7,6 +7,7 @@
             </label>
             {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 
                                                 'class' => 'd-none',
+                                                'onchange' => "readURL(this);",
                                                 'accept' => '.jpg, .jpeg, .png, .gif'
                                             ]) !!}
             {!! $errors->first('pictureAccount', 
