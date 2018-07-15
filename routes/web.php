@@ -60,8 +60,6 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/getStreamViewer', 'ViewerController@getStreamViewer');
         //Bannissement / Modérateur du chatbox
         Route::post('/updateViewer', 'ViewerController@updateViewer');
-        // Recuperation du status
-        Route::get('/getStreamStatusInfo', 'ViewerController@getStreamStatusInfo');
 
     /* Actions sur le compte */
         Route::get('/home', 'AccountController@index')->name('home.index');    
@@ -71,6 +69,7 @@ Route::group(['middleware' => 'auth'], function(){
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
 });
+
 
 /* Interface d'administration Voyager */
 Route::group(['prefix' => 'admin'], function () {
@@ -82,6 +81,9 @@ Route::group(['prefix' => 'admin'], function () {
 //Informations des streams
 Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 Route::post('stream', 'StreamController@index')->name('index');
+
+// Recuperation du status
+Route::get('/getStreamStatusInfo', 'ViewerController@getStreamStatusInfo');
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');

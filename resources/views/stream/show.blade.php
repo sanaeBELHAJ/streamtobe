@@ -4,6 +4,7 @@
 
 <div class ="container-fluid">
     <div class="row">
+        @auth
         <div class="col-sm-2 profil-panel">
             <div class="top bottom">
                 <div class="cadre-style">
@@ -43,10 +44,10 @@
                 </center>
             </div>
         </div>
+        @endauth
         <div class="col-sm-10 pull-right top-2 bottom">
             <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
-                    @auth
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
                                 <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
@@ -55,12 +56,16 @@
                             <div id="videos-container"></div>
                                 {{-- Nombre de viewers --}}
                             <i class="fas fa-eye"></i><span id="visitorStream"></span>
+                            @auth
                             @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
                             <!-- list of all available broadcasting rooms -->
                                 <table style="width: 100%;" id="rooms-list"></table>
                             @endif
+                            @endauth
+                            @guest
+                                <table style="width: 100%;" id="rooms-list"></table>
+                            @endguest
                         </div>
-                    @endauth
                 </div>
 
                 {{-- Chatbox --}}
@@ -157,6 +162,7 @@
                             </p>
                             @include('stream.modal.payment')
 
+                            @auth
                             {{-- Following --}}
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
@@ -170,6 +176,7 @@
                                     @endif
                                 @endforeach
                             </p>
+                                @endauth
                         </div>
 
                         {{-- Description du streamer --}}
@@ -274,7 +281,7 @@
 @endsection
 
 @section('js')
-    @auth
+
         <script src="/js/broadcast.js"></script>
         <script src="/js/rtc-connection.js"></script>
         <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
@@ -282,10 +289,11 @@
         <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
         <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+        @auth
 		@if($streamer->id != Auth::user()->id)
 			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 		@endif
-	@endauth
+        @endauth
 
 	<script>
 
@@ -443,6 +451,7 @@
                 });
             }
 
+            @auth
             //Liste modérateurs / bannis
             updateList();
             function updateList(){
@@ -476,7 +485,7 @@
                     console.log(data);
                 });
             }
-
+        @endauth
         /* Stream WEBRTC */
         var config = {
             openSocket: function(config) {
@@ -549,6 +558,29 @@
                     track.stop();
                 });
 
+                 function start() {
+                    @auth
+                    @if($streamer->id != Auth::user()->id)
+                        videosContainer.innerHTML = "";
+                    document.getElementById('stream-info').hidden = false;
+                    @elseif($streamer->id == Auth::user()->id)
+                    if (setupNewBroadcast.value === "Off") {
+                        setupNewBroadcast.click();
+                        videosContainer.innerHTML = "";
+                        document.getElementById("setup-new-broadcast").value = "On";
+                        document.getElementById('stream_title').disabled = false;
+                        document.getElementById('stream-info').hidden = false;
+                    }
+                    @endauth
+                    @endif
+                     @guest
+                        videosContainer.innerHTML = "";
+                        document.getElementById('stream-info').hidden = false;
+                    @endguest
+                 };
+
+                start();
+
                 document.getElementById('videos-container').innerHTML = "";
                 document.getElementById("setup-new-broadcast").value = "On";
                 document.getElementById('stream_title').disabled = false;
@@ -557,6 +589,7 @@
                 <?php $streamer->stream->status = 1;?>
                 document.getElementById("setup-new-broadcast").value = "Off";
                 document.getElementById('stream_title').disabled = true;
+                @auth
                 @if($streamer->id == Auth::user()->id)
                 DetectRTC.load(function () {
                     captureUserMedia(function () {
@@ -572,7 +605,7 @@
                     document.getElementById('stream-info').hidden = true;
                 });
                 @endif
-
+                @endauth
             }
         }
             var broadcastUI = broadcast(config);
@@ -670,22 +703,10 @@
                         callback = function() {};
                     }, false);
                 });
+
             }
 
-        window.onload = function start() {
-            @if($streamer->id != Auth::user()->id)
-                    videosContainer.innerHTML = "";
-                    document.getElementById('stream-info').hidden = false;
-            @elseif($streamer->id == Auth::user()->id)
-                if (setupNewBroadcast.value === "Off") {
-                    setupNewBroadcast.click();
-                    videosContainer.innerHTML = "";
-                    document.getElementById("setup-new-broadcast").value = "On";
-                    document.getElementById('stream_title').disabled = false;
-                    document.getElementById('stream-info').hidden = false;
-                }
-                @endif
-            };
+
         });
 
     </script>
