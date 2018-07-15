@@ -290,7 +290,6 @@
 	<script>
 
 		$(function(){
-
 			//Texte du slider
 			$('.sliderText').click(function(){
 				$('#myRange').val($(this).data('value')).change();
@@ -481,6 +480,7 @@
         /* Stream WEBRTC */
         var config = {
             openSocket: function(config) {
+
                 var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
                 config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
@@ -511,23 +511,29 @@
                 document.title = "{{ $streamer->stream->title }}";
             },
             onRoomFound: function(room) {
-                console.log(<?php echo $streamer->stream->status ;?>);
-                @if ($streamer->stream->status == 1)
-                    var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-                    if (alreadyExist) return;
-                    if (typeof roomsList === 'undefined') roomsList = document.body;
-                    broadcastUI.joinRoom({
-                        roomToken: room.roomToken,
-                        joinUser: room.broadcaster
-                    });
-                    document.getElementById('stream-info').hidden = true;
-                @endif
+                $.ajax({
+                    url: "/getStreamStatusInfo",
+                    type: 'GET',
+                    dataType: "JSON",
+                    data: {
+                        streamerId: '<?php echo $streamer->id;?>'
+                    }
+                }).done(function (data) {
+                    if (data[0].status === 1) {
+                        var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                        if (alreadyExist) return;
+                        if (typeof roomsList === 'undefined') roomsList = document.body;
+                        broadcastUI.joinRoom({
+                            roomToken: room.roomToken,
+                            joinUser: room.broadcaster
+                        });
+                        document.getElementById('stream-info').hidden = true;
+                    }
+                });
             },
             onNewParticipant: function(numberOfViewers) {
                 document.getElementById('visitorStream').innerHTML = "";
                 document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
-            },
-            onReady: function() {
             }
 
         };
@@ -537,8 +543,12 @@
             if (document.getElementById('setup-new-broadcast').value === "Off") {
                 <?php $streamer->stream->status = 0;?>
                 config.attachStream.getTracks().forEach(function (track) {
+                    track.addEventListener('ended', function() {
+                        alert('Stream is stopped.');
+                    }, false);
                     track.stop();
                 });
+
                 document.getElementById('videos-container').innerHTML = "";
                 document.getElementById("setup-new-broadcast").value = "On";
                 document.getElementById('stream_title').disabled = false;
@@ -565,6 +575,13 @@
 
             }
         }
+            var broadcastUI = broadcast(config);
+            var videosContainer = document.getElementById('videos-container') || document.body;
+            var setupNewBroadcast = document.getElementById('setup-new-broadcast');
+            var broadcastingOption = document.getElementById('broadcasting-option');
+            var roomsList = document.getElementById('rooms-list');
+
+            if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
 
         function captureUserMedia(callback) {
             var constraints = null;
@@ -619,6 +636,9 @@
                 video: htmlElement,
                 onsuccess: function(stream) {
                     config.attachStream = stream;
+                    addStreamStopListener(stream,  function() {
+                        alert('screen sharing is ended.');
+                    });
 
                     videosContainer.appendChild(htmlElement);
                     callback && callback();
@@ -629,28 +649,37 @@
                         if (location.protocol === 'http:') alert('Activez HTTPS.');
                         else alert('Capture vidéo est desactivé ou non authorisé. L\'avez-vous autorisé dans votre navigateur "?');
                     } else alert('Impossible d\'accéder à votre webcam');
-                }
+                },
             };
             if (constraints) mediaConfig.constraints = constraints;
             getUserMedia(mediaConfig);
         }
 
-        var broadcastUI = broadcast(config);
-        var videosContainer = document.getElementById('videos-container') || document.body;
-        var setupNewBroadcast = document.getElementById('setup-new-broadcast');
-        var broadcastingOption = document.getElementById('broadcasting-option');
-        var roomsList = document.getElementById('rooms-list');
-
-        if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
+            function addStreamStopListener(stream, callback) {
+                var streamEndedEvent = 'ended';
+                if ('oninactive' in stream) {
+                    streamEndedEvent = 'inactive';
+                }
+                stream.addEventListener(streamEndedEvent, function() {
+                    callback();
+                    callback = function() {};
+                }, false);
+                stream.getVideoTracks().forEach(function(track) {
+                    track.addEventListener(streamEndedEvent, function() {
+                        callback();
+                        callback = function() {};
+                    }, false);
+                });
+            }
 
         window.onload = function start() {
             @if($streamer->id != Auth::user()->id)
-                    document.getElementById('videos-container').innerHTML = "";
+                    videosContainer.innerHTML = "";
                     document.getElementById('stream-info').hidden = false;
             @elseif($streamer->id == Auth::user()->id)
                 if (setupNewBroadcast.value === "Off") {
                     setupNewBroadcast.click();
-                    document.getElementById('videos-container').innerHTML = "";
+                    videosContainer.innerHTML = "";
                     document.getElementById("setup-new-broadcast").value = "On";
                     document.getElementById('stream_title').disabled = false;
                     document.getElementById('stream-info').hidden = false;
