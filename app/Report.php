@@ -30,4 +30,12 @@ class Report extends Model
     {
         return $this->belongsTo('App\ReportCat');
     }
+
+    /**
+     * User
+     */
+    public function user() 
+    {
+        return $this->belongsTo('App\User');
+    }
 }

@@ -48,13 +48,4 @@ class Viewer extends Model
     {
         return $this->hasMany('App\Invoice');
     }
-
-    /**
-     * Get his chat message
-     * 
-     */
-    public function subscribes() 
-    {
-        return $this->hasMany('App\Subscriber');
-    }
 }

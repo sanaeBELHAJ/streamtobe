@@ -26,10 +26,10 @@
                         <div class="form-group row">
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">{{ __('Countries') }}</label>
                             <div class="col-sm-3">
-                                <select id="stream_type" class="update_stream" data-config="type">
+                                <select id="stream_type" class="update_stream" data-config="type" name="country">
                                     @if($countries)
                                         @foreach($countries as $country)
-                                            <option value="{{$country->code}}">{{$country->name}}</option>
+                                            <option value="{{$country->id}}">{{$country->name}}</option>
                                         @endforeach
                                     @endif
                                 </select>        
@@ -37,7 +37,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">
+                                {{ __('E-Mail Address') }}
+                                <br>
+                                <small>{{ __('You will receive a confirmation email') }}</small>
+                            </label>
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
                                 @if ($errors->has('email'))
@@ -49,7 +53,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">
+                                {{ __('Password') }}
+                                <br>
+                                <small>{{ __('At least :number characters', ['number' => 6]) }}</small>
+                            </label>
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
                                 @if ($errors->has('password'))

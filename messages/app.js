@@ -4,15 +4,10 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     ent = require('ent'); // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
-
 const mysql = require('mysql');
 
-const config = {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'streamtobe'
-};
+var bddLog = require('./bdd');
+const config = bddLog.config;
 const connection = mysql.createConnection(config);
 
 const allClients = [];
@@ -23,7 +18,8 @@ app.use(express.static(__dirname + "/public"));
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    //res.sendFile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 //DB Connection
@@ -60,9 +56,9 @@ io.sockets.on('connection', function (socket) {
                 );
                 console.log(allClients);
                 checkFriends(socket);
-                setInterval(function(){
+                /*setInterval(function(){
                     checkFriends(socket);
-                }, 1000);
+                }, 1000);*/
             });
     });
 
@@ -166,9 +162,14 @@ io.sockets.on('connection', function (socket) {
         return element.socket_id == socket.id;
     }
 
+    socket.on('refresh', function(){
+        if(socket.user_id)
+            checkFriends(socket);
+    });
+
     //Modification de la liste d'amis
     async function checkFriends(socket){
-        await queryDB( //Recherche des utilisateurs followers au stream
+        await queryDB( //Recherche des utilisateurs followers au streamer
             `SELECT u_follower.id
                 FROM users u_streamer
                 LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
@@ -226,47 +227,43 @@ io.sockets.on('connection', function (socket) {
             }
         }
 
-        if(socket.contactList)
-            var previousList = socket.contactList;
-
         socket.contactList = [];
         if(typeof results !== 'undefined' && results.length > 0){
             await queryDB( //Liste des streamers followés par l'utilisateur
-                "SELECT u.pseudo FROM users u WHERE u.id IN (?)",
+                "SELECT u.pseudo, u.avatar FROM users u WHERE u.id IN (?)",
                 [results])
                 .then(function(row){
                     if(typeof row !== 'undefined' && Array.isArray(row)){
                         if(row.length > 0){
                             if(row.length > 1){
                                 row.forEach(function(element){
-                                    socket.contactList.push(element.pseudo);
+                                    socket.contactList.push({
+                                        pseudo: element.pseudo,
+                                        avatar: element.avatar
+                                    });
                                 });
                             }
                             else
-                                socket.contactList = [row.pseudo];
+                                socket.contactList = [{
+                                    pseudo: row.pseudo,
+                                    avatar: row.avatar
+                                }];
                         }
                     }
                     else
-                        socket.contactList = [row.pseudo];
+                        socket.contactList = [{
+                            pseudo: row.pseudo,
+                            avatar: row.avatar
+                        }];
                 });
         }
-
-        var oldList = false;
-
-        if(previousList){
-            for(i in previousList){
-                if(socket.contactList.indexOf(previousList[i]) === -1)
-                    oldList = true;
-            }
-
-            for(i in socket.contactList){
-                if(previousList.indexOf(socket.contactList[i]) === -1)
-                    oldList = true;
-            }
-        }
-
-        if(!previousList || (previousList && oldList))
-            socket.emit('bringFriends', socket.contactList);
+        
+        var content = {
+            contactList: socket.contactList,
+            user_pseudo: socket.user_pseudo,
+            user_avatar: socket.user_avatar
+        };
+        socket.emit('bringFriends', content);
     }
 });
 

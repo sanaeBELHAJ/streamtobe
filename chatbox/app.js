@@ -4,18 +4,11 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     ent = require('ent'); // Permet de bloquer les caractères HTML (sécurité équivalente à htmlentities en PHP)
-    
-
 const mysql = require('mysql');
 
-const config = {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'streamtobe'
-};
+var bddLog = require('./bdd');
+const config = bddLog.config;
 const connection = mysql.createConnection(config);
-
 
 const allClients = [];
 
@@ -25,7 +18,8 @@ app.use(express.static(__dirname + "/public"));
 
 // Chargement de la page index.html
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    //res.sendFile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index.html');
 });
 
 //DB Connection
@@ -111,48 +105,63 @@ io.sockets.on('connection', function (socket, pseudo) {
                 socket_id: socket.id,
                 stream_id: socket.stream_id,
                 user_id: socket.user_id,
+                user_pseudo: socket.user_pseudo,
+                user_avatar: socket.user_avatar,
                 viewer_rank: socket.viewer_rank
             }
         );
-        socket.emit('welcome');
+
         console.log("---- WELCOME ------");
         console.log(allClients); 
+        socket.emit('welcome');
+        
+        checkViewers(socket);
+        setInterval(function(){
+            checkViewers(socket);
+        }, 2000);
     });
         
-    // Réception d'un message
+    // Envoi d'un message
     socket.on('message', async function (message) {
-        message = ent.encode(message);
-        content = { 
-            viewer_id: socket.viewer_id, 
-            message: message, 
-            status: 1
-        };
-        
-        var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
+        updateViewer(socket, allClients);
+        if(socket.viewer_rank >= 0){ //Vérification du statut
+            message = ent.encode(message);
+            content = { 
+                viewer_id: socket.viewer_id, 
+                message: message, 
+                status: 1
+            };
+            
+            var message = await queryDB('INSERT INTO stb_chats SET ?', content); //Sauvegarde en BDD
 
-        
-        allClients.forEach(function(client, index) { //Diffusion du message
-            if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
-                var datas = {
-                    pseudo: socket.user_pseudo, 
-                    avatar: socket.user_avatar,
-                    message: content.message, 
-                    status: content.status,
-                    viewer_rank: socket.viewer_rank,
-                    message_id: message.insertId,
-                };
-                console.log(datas);
-                if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
-                    datas.admin = 1;
+            
+            allClients.forEach(function(client, index) { //Diffusion du message
+                if(client.stream_id == socket.stream_id){ // aux utilisateurs visionnant le stream
+                    var datas = {
+                        pseudo: socket.user_pseudo, 
+                        avatar: socket.user_avatar,
+                        message: content.message, 
+                        status: content.status,
+                        viewer_rank: socket.viewer_rank,
+                        message_id: message.insertId,
+                    };
+                    console.log(datas);
+                    if(client.viewer_rank!=0) //Indicateur supplémentaire pour les modos/admin
+                        datas.admin = 1;
 
-                io.to(client.socket_id).emit('message', datas);
-            }
-        });
+                    io.to(client.socket_id).emit('message', datas);
+                }
+            });
+        }
+        else{//Bannissement
+            io.to(socket.id).emit('ban');
+        }
     }); 
 
     //Modération d'un message
     socket.on('delete', function(message_id){
-        if(socket.viewer_rank > 0){ //Vérification du statut
+        updateViewer(socket, allClients);
+        if(socket.viewer_rank >= 1){ //Vérification du statut
             queryDB('UPDATE stb_chats SET status = 0 WHERE id = ?', message_id);
 
             //Envoi du message aux utilisateurs connectés sur le même stream
@@ -161,6 +170,26 @@ io.sockets.on('connection', function (socket, pseudo) {
                     io.to(client.socket_id).emit('delete', message_id);
             });
         }
+        else{//Bannissement
+            io.to(socket.id).emit('demod');
+        }
+    });
+
+    //Changement du statut
+    socket.on('editRank', function(status, pseudo){
+        updateViewer(socket, allClients);
+        if(status !== false && socket.viewer_rank>=1){ //Vérification du statut du staff
+            allClients.forEach(function(element){
+                if(element.user_pseudo == pseudo){
+                    queryDB(
+                        'UPDATE stb_viewers SET rank = ? WHERE user_id = ? AND stream_id = ?', 
+                        [status, element.user_id, element.stream_id]
+                    );
+                    element.viewer_rank = status;
+                }
+            });
+        }
+        updateViewer(socket, allClients);
     });
 
     //Déconnexion d'un utilisateur
@@ -207,6 +236,51 @@ io.sockets.on('connection', function (socket, pseudo) {
     }
     setInterval(function(){checkDonations(socket)}, 1000);
 
+    //Modification de la liste de viewers
+    async function checkViewers(socket){
+        updateViewer(socket, allClients);
+        var tab = allClients.sort(function(a,b){
+            if(a.user_pseudo < b.user_pseudo) return -1;
+            if(a.user_pseudo > b.user_pseudo) return 1;
+            return 0;
+        });
+
+        var viewers = [];
+
+        tab.forEach(function(element){
+            if(element.stream_id == socket.stream_id){
+                //Si le viewer est un modo / streamer
+                var staff = (socket.viewer_rank>=1);
+                viewers.push({
+                    pseudo: element.user_pseudo,
+                    rank: element.viewer_rank,
+                    avatar: element.user_avatar,
+                    is_staff: staff
+                });
+            }
+        });
+
+        socket.emit('updateList', viewers);
+    }
+
+    function updateViewer(socket, allClients){
+        /*
+            {
+                socket_id: socket.id,
+                stream_id: socket.stream_id,
+                user_id: socket.user_id,
+                user_pseudo: socket.user_pseudo,
+                user_avatar: socket.user_avatar,
+                viewer_rank: socket.viewer_rank
+            }
+        */
+        allClients.forEach(function(element){
+            if(socket.user_id == element.user_id){
+                socket.stream_id = element.stream_id;
+                socket.viewer_rank = element.viewer_rank;
+            }
+        });
+    }
 });
 
 

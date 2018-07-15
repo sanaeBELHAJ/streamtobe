@@ -1,4 +1,12 @@
+html, body{
+    height: 100%;
+}
 
+body{
+    display: flex;
+    flex-direction: column;
+    background-color: #faf9fa;
+}
 header #navbarDropdown.nav-link{
     padding: 0 1rem;
 }
@@ -9,16 +17,18 @@ header .dropdown-menu{
 }
 
 .pictureAccountTemplate{
-    width: 50px;
+    width: 30px;
     display: inline-block;
-    height: 50px;
+    height: 30px;
     border: 1px solid;
     border-radius: 50%;
     vertical-align: bottom;
     cursor: pointer;
     vertical-align: middle;
 }
-
+.logo-text{
+    font-size: 12px;
+}
 .ui-state-active{
     background-color: transparent !important;
     border: 0 !important;
@@ -41,33 +51,33 @@ header .dropdown-menu{
 .top{
     margin-top: 102px;
 }
+.top-2{
+    margin-top: 50px;
+}
 .bottom{
     margin-bottom: 102px;
 }
-
+.profil-panel
+{
+    color: white;
+    padding: 10px;
+    background-color: #17141f;
+}
 .gold
 {
     color: white;
-    font-weight: bold;
     padding: 15px;
-    background-color: #FFEEB5;
-    /* For WebKit (Safari, Chrome, etc) */
-    background: #FFEEB5 -webkit-gradient(linear, left top, left bottom, from(#AE8913), to(#FFEEB5)) no-repeat;
-    /* Mozilla,Firefox/Gecko */
-    background: #FFEEB5 -moz-linear-gradient(top, #AE8913, #FFEEB5) no-repeat;
-    /* IE 5.5 - 7 */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#FFEEB5) no-repeat;
-    /* IE 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#AE8913, endColorstr=#AE8913)" no-repeat;
+    background-color: #ffbf27;
 }
 .gold-text{
     color: #FFEEB5;
 }
 .gold:hover{
-    color: #4b367c;
+    background: #ffc94d;
+    color: white;
 }
 .visible{
-    background: rgb(75, 54, 124,.2)!important;
+    background: rgb(75, 54, 124,.4)!important;
 }
 .img-thumbnail{
   height: 250px;
@@ -81,7 +91,6 @@ header .dropdown-menu{
     border: 1px solid #4b367c;
     border-radius: 50%;
     vertical-align: bottom;
-    cursor: pointer;
     vertical-align: middle;
 }
 .right{
@@ -91,21 +100,27 @@ header .dropdown-menu{
     float: left;
 }
 
+/*@media(min-width:576px){
+    .container-fluid{
+        height: 85%;
+    }
+}*/
 
 .machaine{
-display:block;
-width:150px;
-line-height:50px;
-text-align:center;
-vertical-align:middle;
-background: #4b367c;
-color:white;
-text-decoration:none;
+    display:block;
+    width:100%;
+    padding: 16%;
+    line-height:100%;
+    text-align:center;
+    vertical-align:middle;
+    background: black;
+    color:white;
+    text-decoration:none;
+    border-radius: 0%;
 }
 .machaine:hover {
-    color:white;
+    color:#ff66b3;
     text-decoration:none; 
-
 }
 .watch{
     position: absolute;
@@ -132,7 +147,6 @@ text-decoration:none;
     position: relative;
 }
 .material-icons {
-    font-size: 13px;
     padding-top: 3px;
     color: white;
     padding-left: 3px;
@@ -148,5 +162,302 @@ text-decoration:none;
 }
 
 .avatar_follower{
+    width: 80px;
+}
+.btn-follow {
+    background: transparent;
+    border: 1px solid #b19dd8;
+    color: #6441a4;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    margin-right: 0px;
+    margin-top: 26px;
+    width: 100px;;
+    float: right; 
+}
+
+.btn-follow:hover{
+    cursor: pointer;
+}
+
+.btn-follow:disabled{
+    cursor: not-allowed;
+}
+.btn-contacter{
+    background: yellow;
+   /* border: 1px solid #b19dd8;*/
+    color: #6441a4;
+    padding: .3rem .3rem;
+    padding-right: 20%; 
+    padding-left: 20%; 
+}
+.btn-contacter:hover{
+    cursor: pointer;
+}
+
+.btn-contacter:disabled{
+    cursor: not-allowed;
+}
+.send {
+    position: absolute;
+    right: 10px;
+    bottom: 9px;
     width: 50px;
+    height: 29px;
+    background: #7e27ff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-top: 5px;
+    color: #fff;
+    border: 0 none;
+    outline: 0 none;
+    font-size: 13px;
+    cursor: pointer;
+}
+.icon{
+  position: absolute;
+  top: 50%;
+  margin-left: 17px;
+  margin-top: 17px;
+  z-index: 1;
+  color: #4f5b66;
+}
+.container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
+    outline:none;
+    background: #ffffff;
+}
+.watch .material-icons {
+    font-size: 12px;
+}
+.profil-panel .top{
+    margin-top: 50px;
+}
+.profil-panel hr{
+  border: 0.5px solid;
+  background: #4b367c;
+  color: #4b367c;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.profil-panel .btn{
+  border-top: 1.5px solid #17141f;
+  background: #17141f;
+  width:100%;
+}
+.profil-panel li a{
+  background:#17141f;
+  width:100%;
+  -webkit-appearance: button-bevel;
+    line-height: 1.8;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 5px;
+  box-shadow:0 -3px 3px -3px #4b367c; 
+}
+.profil-panel li a:hover{
+  background:black;
+  text-decoration: none;
+}
+.profil-panel .active{
+    background:black;
+}
+.search input[type=text] {
+    border: 1px solid grey;
+    border-left: none;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+.searchUser:focus , .search input[type=text]:focus {
+  border-color: inherit;
+  -webkit-box-shadow: inherit;
+  box-shadow: inherit;
+  outline-style: none;
+}
+.searchUser:active {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.search button {
+    float: left;
+    width: 20%;
+    background: #f1f1f1;
+    color: grey;
+    border:  1px solid grey;
+    border-right: none;
+    cursor: pointer;
+}
+
+.search button:hover {
+  background: #f1f1f1;
+}
+.search button:focus {
+  border-color: inherit;
+  -webkit-box-shadow: inherit;
+  box-shadow: inherit;
+  background: #f1f1f1;
+  outline-style: none;
+}
+
+.search::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.search .material-icons{
+    padding:0px;
+    font-size: 12px;
+    color: grey;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    
+     height: calc(1.60rem + 2px); 
+}
+.div-filter{
+    font-size: 11px;
+    background: white;
+    border: 0.5px solid #dad8de;
+    margin: 0;
+    padding: 20px;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+.form-control{
+    outline: 0;
+    font-family: inherit;
+    appearance: none;
+    border: 1px solid #b19dd8;
+    background: #fff;
+    color: #433f4a;
+    transition: box-shadow .12s ease-in,border .12s ease-in;
+    line-height: 1.5;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    line-height: 1.5;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+.form-control:focus, .form-control:active{
+    outline: 0;
+    outline-style: none;
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+    border: none;
+    box-shadow: 0 0 6px #6441a4; 
+}
+.btn-filter{
+    background: transparent;
+    border: 1px solid #b19dd8;
+    color: #6441a4;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    margin-right: 0px;
+    margin-left: 180px;
+    width: 130px;;
+    float: right;        
+}
+.btn-filter:hover{
+    background: #faf9fa;
+    color: black;
+    border: 1px solid #b19dd8;
+    border-radius: .1rem;
+}
+label, select, input {
+    font-size: 14px;
+}
+.broadcastname{
+    color: black;
+}
+
+#cookies{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 13px 0;
+    background-color: cornflowerblue;
+    bottom: 20px;
+}
+
+ul.ui-autocomplete{
+    z-index: 1050;
+}
+
+footer #support_user textarea{
+    height: 100px;
+}
+
+.btn_register{
+    border: 0.5px solid #ffbf27;
+    padding-top:1px;
+    padding-bottom:1px;
+    margin-right: 5px;
+}
+.div-f{
+    border: 1px solid #e9ebee;
+    display: inline-block;
+    margin: 0 0 13px 13px;
+    padding: 0 10px 0 0;
+    position: relative;
+    vertical-align: top;
+    width: 390px;
+}
+.player {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    font-family: Helvetica Neue,Arial,sans-serif;
+    font-size: 10px;
+    color: #fff;
+    background: #000;
+    overflow: hidden;
+}
+
+/* The slider itself */
+#responsive_slider .slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    padding: 0;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+#responsive_slider .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#responsive_slider .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+#responsive_slider .slider::-moz-range-thumb {
+    width: 50%; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
 }

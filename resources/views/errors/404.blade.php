@@ -8,7 +8,7 @@
 					<h3 class="panel-title">{{ __('Huh...we got a problem') }}</h3>
 				</div>
 				<div class="panel-body"> 
-					<p>{{ __("The page you were looking for doesn't exist...") }}</p>
+					<p>{{ __("The page you were looking for doesn't exist or is unavailable...") }}</p>
 				</div>
 			</div>
 		</div>

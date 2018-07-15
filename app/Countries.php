@@ -23,4 +23,12 @@ class Countries extends Model
         'svg',
     ];
 
+    /**
+     * Get the users
+     * 
+     */
+    public function users() 
+    {
+        return $this->hasMany('App\User');
+    }
 }

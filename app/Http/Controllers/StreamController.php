@@ -16,6 +16,7 @@ use App\Viewer;
 use App\ReportCat;
 use App\Report;
 use App\Countries;
+use App\Http\Requests\SearchStreamRequest;
 use Illuminate\Support\Facades\Auth;
 
 class StreamController extends Controller
@@ -29,20 +30,28 @@ class StreamController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request){
-        if($request->all()){
-           if(strlen($request->input("country"))>0 && strlen($request->input("name"))>0 && strlen($request->input("theme"))>0){
-                $streamer = User::where('pseudo','=',$request->input("name"))
-                            ->where('id_countries','=',$request->input("country"))
-                            ->first();
-                $streams = Stream::where('streamer_id','=',$streamer->id)
-                            ->where('type_id','=',$request->input("theme"))
-                            ->where('status','=',1);
-                dd($streams);
-           }
-            
-        }else{
-            $streams = Stream::where('status', 1)->get();
+    public function index(SearchStreamRequest $request){
+        //Liste des streams actifs
+        $streams = Stream::where('status', 1)->get();
+
+        if(!empty($request->all())){
+            $streams = $streams->filter(function($stream, $key) use($request){
+                $return = true;
+
+                //Pays
+                if($request->input("country") && $stream->user->id_countries != $request->input("country"))
+                    $return = false;
+
+                //Titre du stream
+                if($request->input("name") && stristr($stream->title, $request->input("name")) === FALSE)
+                    $return = false;
+
+                //Thème du stream
+                if($request->input("theme") && $stream->type->id != $request->input("theme"))
+                    $return = false;
+
+                return $return;
+            });
         }
         
         if(Auth::user()){
@@ -125,7 +134,10 @@ class StreamController extends Controller
         $term = Input::get('term');
         $results = array();
         
-        $queries = User::where('pseudo', 'LIKE', '%'.$term.'%')->take(5)->get();
+        $queries = User::where('pseudo', 'LIKE', '%'.$term.'%')
+                        ->where("status",'>=', 1)
+                        ->take(5)
+                        ->get();
         
         foreach ($queries as $query)
             $results[] = [ 

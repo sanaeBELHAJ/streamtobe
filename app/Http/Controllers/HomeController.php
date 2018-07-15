@@ -9,6 +9,7 @@ use Session;
 use Response;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Theme;
 use App\Type;
@@ -29,8 +30,8 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
         $streams = Stream::where('status', 1)->get();
-        
         if(Auth::user()){
             $favorites = Viewer::where('user_id', Auth::user()->id)
                                 ->where('is_follower',1)
@@ -41,7 +42,7 @@ class HomeController extends Controller
         }
         $themes = Theme::all();
 
-        return view('welcome', compact('streams', 'followed', 'themes'));
+        return view('welcome', compact('streams', 'followed', 'themes', 'listSlider'));
     }
     
     /**
@@ -60,7 +61,7 @@ class HomeController extends Controller
      */
     public function support(SupportRequest $request){
         $datas = [
-            "from" => Auth::user()->email,
+            "from" => (Auth::user()) ? Auth::user()->email : $request->input('exped'),
             "content" => $request->input('opinion')
         ];
         Mail::send('account.support', $datas, function($message){

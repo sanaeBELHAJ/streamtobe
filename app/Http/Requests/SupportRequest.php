@@ -14,7 +14,8 @@ class SupportRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check();
+        return true;
+        //return Auth::check();
     }
 
     /**
@@ -25,6 +26,7 @@ class SupportRequest extends FormRequest
     public function rules()
     {
         return [
+            'exped' => 'email',
             'opinion' => 'string|required'
         ];
     }

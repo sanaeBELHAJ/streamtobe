@@ -1,14 +1,16 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid @guest p-0 @endguest">
     @auth
 
     <div class="row">
-        <div class="col-sm-3 gold">
+        <div class="col-sm-2 profil-panel">
             <div class="top bottom">
                 <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                    <i class="far fa-edit text-white"></i>
+                   <i class="material-icons">
+                    edit
+                   </i>
                 </a>
                 <br>
                 <div class="cadre-style">
@@ -24,21 +26,30 @@
                         <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
                     </center>
                 </p>
-                <center>
+                 <center>
                     <ul class="navbar-nav">
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes abonnés</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes revenus</a></li>
-                        <li  class="nav-item"><a class="text-white"  href="#">Mes activités</a></li>
+                        <li  class="nav-item">
+                            <a class="text-white" href="{{ route('home.follows', ['pseudo' =>  Auth::user()->pseudo ])}}">Suivi</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.fans', ['pseudo' =>  Auth::user()->pseudo ])}}">Fans</a>
+                        </li>
+                        <li  class="nav-item">
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' =>  Auth::user()->pseudo ]) }}">Revenus</a>
+                        </li>
                     </ul>
-                    <a class="machaine active" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">Ma chaine                    
-                                        <i class="far fa-play-circle text-white"></i>
+                    <br>
+                    <a class="machaine" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
+                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
+                            videocam
+                        </i>
                     </a>
-
                 </center>
             </div>
         </div>
-        <div class="col-sm-9 pull-right top bottom">
-                            les stream les plus populaires actives: 
+        <div class="col-sm-10 pull-right bottom" style="margin-top: 50px;">
+            <p> Les chaines que vous suivez :</p>
+            <hr>
                             <div class="col-12">
         @if(session()->has('ok'))
             <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
@@ -49,7 +60,7 @@
                                 <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
                                     <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
                                     <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                        <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
+                                    <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
                                     @if($stream->user->avatar!="users/default.png")
                                             <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
                                     @else
@@ -78,41 +89,32 @@
         <header>
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+
+                    @foreach($listSlider as $picture)
+                        <li data-target="#carouselExampleIndicators" 
+                            data-slide-to="{{$loop->index}}" 
+                            @if($loop->first) class="active" @endif></li>
+                    @endforeach
+
                 </ol>
                 <div class="carousel-inner" role="listbox">
-                    <div class="carousel-item active" style="background-image: url('img/kitchen-ready-for-cooking_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block ">
-                            <div class="visible">
-                                <h3>Vous aimez la cuisine!</h3>
-                                <p>Venez montrer vos talents chef sur votre chaine.</p>
+
+                    @foreach($listSlider as $picture)
+
+                        <div class="carousel-item @if ($loop->first) active @endif" style="background-image: url('{{$picture}}')">
+                            <div class="carousel-caption d-none d-sm-block ">
+                                <div class="visible">
+                                    <h3>{{setting('site.image-'.$loop->index)}}</h3>
+                                    <p>{{ __("Let's show your skill on your stream") }}</p>
+                                </div>
                             </div>
-                            <a href="{{ route('stream.index') }}"  class="btn btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
                         </div>
-                    </div>
-                    <div class="carousel-item" style="background-image: url('img/woman-playing-guitar_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block">
-                            <div class="visible">
-                                <h3>Vous aimez chanter? Vous savez jouer sur un instrument musical!</h3>
-                                <p>Vous pouvez vous montrer en public!</p>
-                            </div>
-                            <a href="{{ route('stream.index') }}"  class="btn  btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
-                        </div>
-                    </div>
-                    <div class="carousel-item" style="background-image: url('img/casual-and-creative-at-home_4460x4460.jpg')">
-                        <div class="carousel-caption d-none d-md-block">
-                            <div class="visible">
-                                <h3>Quelque soit vos talents! Votre place est chez nous!</h3>
-                                <p>Chaine, fun, amis...</p>
-                            </div>
-                            <a href="{{ route('stream.index') }}"  class="btn  btn-lg gold">Regarder nos chaines </a>
-                            <a href="{{ route('register') }}"  class="btn  btn-lg gold">Créer votre chaine</a>
-                        </div>
-                    </div>
+
+                    @endforeach
+                </div>
+                <div class="row btn-slider">
+                    <a href="{{ route('stream.index') }}"  class="btn btn-lg gold mt-4">{{ __('Watch our current streams') }}</a>
+                    <a href="{{ route('register') }}"  class="btn btn-lg gold mt-4">{{ __('Create your own stream') }}</a>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -128,12 +130,32 @@
         <!-- Page Content -->
         <section class="py-5">
         <div class="container">
-            <h1>Streamtobe est là pour vous!</h1>
-            <p>Si vous avez du talents et vous n'avez pas peur de caméra, créez votre chaine et montrez vous! On vous attend :p
+            {{-- Streamtobe est là pour vous ! --}}
+            <h1>{{ setting('site.welcome-title') }}</h1>
+            {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
+            <p>{{ setting('site.welcome-text') }}</p>
         </div>
         </section>
     @endauth
 
 
 </div>
+@endsection
+
+@section('css')
+<style>
+    .carousel-caption{
+        bottom: 50%;
+        transform: translateY(50%);
+    }
+    .btn-slider{
+        display:flex;
+        width:50%;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>
 @endsection

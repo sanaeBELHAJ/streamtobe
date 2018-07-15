@@ -10,19 +10,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>
-                        <input id="giveaway_change" type="number" min="0" max="10000" value="1" placeholder="Montant du don"> €
-                        <input id="pseudo" type="text" value="{{$streamer->pseudo}}">
-                    </p>
-                    <textarea id="giveaway_message" placeholder="Message personnalisé à destination du streamer"></textarea>
+                    <p>Faire un don de <input id="giveaway_change" type="number" min="0" max="10000" value="1" placeholder="Montant du don"> €</p>
+                    <p>De la part de : <input id="pseudo" type="text" value="{{$streamer->pseudo}}"></p>
+                    <textarea id="giveaway_message" class="w-100 mb-4" placeholder="Message personnalisé à destination du streamer"></textarea>
                     <div id="paypal-button"></div>
-                    {{-- 
-                        <p>Express checkout</p> Pay $20 via:
-                        <a href="{{ route('paypal.express-checkout', ['stream' => $streamer->pseudo]) }}" class='btn-info btn'>PayPal</a>
-                        <p>Recurring payments</p>
-                        Pay $20/month:
-                        <a href="{{ route('paypal.express-checkout', ['stream' => $streamer->pseudo, 'recurring' => true]) }}" class='btn-info btn'>PayPal</a> 
-                    --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

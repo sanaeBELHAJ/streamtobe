@@ -17,37 +17,36 @@
  * php artisan route:list
  */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+if(env('APP_ENV') === 'production') {
+    URL::forceScheme('https');
+}
+
 Route::get('/', 'HomeController@index');
-//Routes basiques d'inscription/connexion/déconnexion
-//Auth::routes();
-
-// Authentication Routes...
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-
-// Registration Routes...
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
-
-// Password Reset Routes...
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
+    // Authentication Routes...
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
+
+    // Registration Routes...
+    Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+    Route::post('register', 'Auth\RegisterController@register');
+
+    // Password Reset Routes...
+    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
     //Confirmation de l'email d'inscription
     Route::get('/user/verify/{confirmation_code}', 'Auth\RegisterController@confirmAccount')->name('verify');
 });
 
-/*Routes accessibles uniquement aux membres loggés */
+/* Routes accessibles uniquement aux membres loggés */
 Route::group(['middleware' => 'auth'], function(){
-
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    
     /* Actions sur le stream */
         //Edit stream
         Route::post('/updateStream', 'StreamController@updateStream');
@@ -63,24 +62,15 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/updateViewer', 'ViewerController@updateViewer');
 
     /* Actions sur le compte */
-        Route::patch('/home/infos/', 'AccountController@updateInfos')->name('home.updateInfos');
-        Route::patch('/home/stream/', 'AccountController@updateStream')->name('home.updateStream');
-        Route::patch('/home/stats/', 'AccountController@updateStats')->name('home.updateStats');
-        Route::resource('home', 'AccountController', ['only' => ['index','destroy','show']]);
+        Route::get('/home', 'AccountController@index')->name('home.index');    
+        Route::patch('/updateInfos', 'AccountController@updateInfos')->name('home.updateInfos');
+        Route::delete('/destroy', 'AccountController@destroy')->name('home.destroy');
         
-        Route::get('/stats', 'AccountController@stats');
-        Route::get('/fans', 'AccountController@fans');
-        Route::get('/follows', 'AccountController@follows');
-
-    
     /*Messages privées entre utilisateurs */
         Route::get('/messages', 'MessageController@index');
-
-    /* Support technique pour utilisateur */
-        Route::post('/support', 'HomeController@support');
-        Route::get('/support', 'HomeController@support');
 });
 
+/* Interface d'administration Voyager */
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
@@ -94,5 +84,15 @@ Route::post('stream', 'StreamController@index')->name('index');
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
 
+//Informations d'un utilisateur
+Route::get('/home/{pseudo}', 'AccountController@show')->name('home.show');
+Route::get('/stats/{pseudo}', 'AccountController@stats')->name('home.stats');
+Route::get('/fans/{pseudo}', 'AccountController@fans')->name('home.fans');
+Route::get('/follows/{pseudo}', 'AccountController@follows')->name('home.follows');
+
 //Accord d'utilisation des cookies
 Route::post('/valid_cookie', 'HomeController@valid_cookie');
+
+/* Support technique pour utilisateur */
+Route::post('/support', 'HomeController@support');
+Route::get('/support', 'HomeController@support');
