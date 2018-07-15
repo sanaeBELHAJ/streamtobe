@@ -326,6 +326,18 @@ select.form-control:not([size]):not([multiple]) {
     font: inherit;
     vertical-align: baseline;
 }
+.div-stream{
+    font-size: 11px;
+    background: white;
+    border: 0.5px solid #dad8de;
+    margin-right:46px;
+    margin-left:15px;
+    margin-bottom:10px;
+    padding: 10px;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
 .form-control{
     outline: 0;
     font-family: inherit;

@@ -46,6 +46,7 @@
         </div>
         @endauth
         <div class="col-sm-10 pull-right top-2 bottom">
+            <div class="div-stream"><i class="fas fa-eye"></i><span id="visitorStream"></span></div>
             <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
@@ -55,7 +56,7 @@
                             {{-- Vidéo --}}
                             <div id="videos-container"></div>
                                 {{-- Nombre de viewers --}}
-                            <i class="fas fa-eye"></i><span id="visitorStream"></span>
+                           
                             @auth
                             @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
                             <!-- list of all available broadcasting rooms -->
