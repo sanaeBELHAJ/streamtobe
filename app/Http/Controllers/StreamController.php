@@ -64,8 +64,14 @@ class StreamController extends Controller
         }
         $themes = Theme::all();
         $countries = Countries::all();
+        
+        $inputs = [
+            "name" => $request->input('name') ?? null,
+            "theme" => $request->input('theme') ?? null,
+            "country" => $request->input('country') ?? null
+        ];;
 
-        return view('stream.index', compact('streams', 'followed', 'themes','countries'));
+        return view('stream.index', compact('streams', 'followed', 'themes','countries', 'inputs'));
     }
 
     /**

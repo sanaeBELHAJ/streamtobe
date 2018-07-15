@@ -9,7 +9,8 @@
                 <input type="hidden" id="_token" value="{{ csrf_token() }}">
                 <div class="form-group mb-2">
                     <label for="name">Titre  </label>
-                    <input id="email"  type="text" class="form-control" name="name">
+  
+                    <input id="email"  type="text" class="form-control" name="name" value="{{ $inputs['name'] }}">
                     {!! $errors->first('name', 
                                 '<small class="form-text alert alert-danger">:message
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -19,11 +20,11 @@
                 <div class="form-group mb-2">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
-                        <option value="">Sélectionner une catégorie</option>
+                        <option value="">Toutes les catégorie</option>
                         @foreach($themes as $theme)
                             <optgroup label="{{$theme->name}}">
                                 @foreach($theme->types as $type)
-                                    <option value="{{$type->id}}">{{$type->name}}</option>
+                                    <option value="{{$type->id}}" @if($inputs['theme'] == $type->id) selected @endif>{{$type->name}}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -37,10 +38,10 @@
                 <div class="form-group mb-2">
                     <label for="countries">Pays </label>
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
-                        <option value="">Sélectionner un pays</option>
+                        <option value="">Tous les pays</option>
                         @if($countries)
                             @foreach($countries as $country)
-                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                <option value="{{$country->id}}" @if($inputs['country'] == $country->id) selected @endif>{{$country->name}}</option>
                             @endforeach
                         @endif
                     </select> 
@@ -71,11 +72,15 @@
                         <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
                             <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
                                 <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
+                                <span class="watch">
+                                    <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
+                                    {{-- <i class="material-icons">remove_red_eye</i>    --}}
+                                    {{ $stream->type->name }}
+                                </span>
                                 @if($stream->user->avatar!="users/default.png")
-                                <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
+                                    <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
                                 @else
-                                <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                                    <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
                                 @endif
                             </a>
                             <div class="row">
