@@ -9,15 +9,15 @@
             <div class="top bottom">
                 <div class="cadre-style">
                     <center>
-                        <img class="resize-img" src="<?php echo asset('storage/' .  Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
+                        <img class="resize-img" src="<?php echo asset('storage/' .  $streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
                     </center> 
                 </div>
                 <p>
-                <center>{{ Auth::user()->pseudo }}</center>
+                <center>{{ $streamer->pseudo }}</center>
                 <center>
-                    @if( Auth::user()->country != null)
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ Auth::user()->country->name }}
-                    <img style="width:10%" src="{{ Auth::user()->country->svg }}">
+                    @if( $streamer->country != null)
+                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
+                    <img style="width:10%" src="{{ $streamer->country->svg }}">
                     @else
                     <i class="material-icons" style="font-size: 16px;">location_on</i>
                     Inconnu
@@ -27,20 +27,21 @@
                 <center>
                     <ul class="navbar-nav">
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">Suivi</a>
+                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">Fans</a>
+                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
                         </li>
                         <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}">Revenus</a>
+                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
                         </li>
                     </ul>
                     <br>
-
-                    <a class="btn-contacter" href="/messages">                  
-                      Contacter
-                    </a>
+                    @auth
+                        <a class="btn-contacter" href="/messages">                  
+                        Contacter
+                        </a>
+                    @endauth
                 </center>
             </div>
         </div>
@@ -57,10 +58,10 @@
                                 {{-- Nombre de viewers --}}
                             <i class="fas fa-eye"></i><span id="visitorStream"></span>
                             @auth
-                            @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
-                            <!-- list of all available broadcasting rooms -->
-                                <table style="width: 100%;" id="rooms-list"></table>
-                            @endif
+                                @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
+                                    <!-- list of all available broadcasting rooms -->
+                                    <table style="width: 100%;" id="rooms-list"></table>
+                                @endif
                             @endauth
                             @guest
                                 <table style="width: 100%;" id="rooms-list"></table>
@@ -96,7 +97,7 @@
 
                 @auth
                     {{-- Configuration du stream par le propriétaire --}}
-                    @if($streamer->id == Auth::user()->id)
+                    @if(Auth::check() && $streamer->id == Auth::user()->id)
 
                         <div class="mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
@@ -289,10 +290,11 @@
         <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
         <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+
         @auth
-		@if($streamer->id != Auth::user()->id)
-			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-		@endif
+    		@if($streamer->id != Auth::user()->id)
+	    		<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		    @endif
         @endauth
 
 	<script>
@@ -589,22 +591,24 @@
                 <?php $streamer->stream->status = 1;?>
                 document.getElementById("setup-new-broadcast").value = "Off";
                 document.getElementById('stream_title').disabled = true;
+
                 @auth
-                @if($streamer->id == Auth::user()->id)
-                DetectRTC.load(function () {
-                    captureUserMedia(function () {
-                        var shared = 'video';
-                        if (window.option == 'Stream audio') {
-                            shared = 'audio';
-                        }
-                        broadcastUI.createRoom({
-                            roomName: (document.getElementById('stream_title') || {}).value || 'Anonymous',
-                            isAudio: shared === 'audio'
+                    @if($streamer->id == Auth::user()->id)
+
+                    DetectRTC.load(function () {
+                        captureUserMedia(function () {
+                            var shared = 'video';
+                            if (window.option == 'Stream audio') {
+                                shared = 'audio';
+                            }
+                            broadcastUI.createRoom({
+                                roomName: (document.getElementById('stream_title') || {}).value || 'Anonymous',
+                                isAudio: shared === 'audio'
+                            });
                         });
+                        document.getElementById('stream-info').hidden = true;
                     });
-                    document.getElementById('stream-info').hidden = true;
-                });
-                @endif
+                    @endif
                 @endauth
             }
         }
@@ -705,8 +709,6 @@
                 });
 
             }
-
-
         });
 
     </script>
