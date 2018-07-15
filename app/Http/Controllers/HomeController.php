@@ -31,19 +31,36 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
-        $streams = Stream::where('status', 1)->get();
+        $themes = Theme::all();
+
         if(Auth::user()){
             $favorites = Viewer::where('user_id', Auth::user()->id)
                                 ->where('is_follower',1)
                                 ->get();
             $followed = [];
-            foreach($favorites as $favorite)
-                $followed[] = $favorite->stream;
-        }
-        $themes = Theme::all();
+            foreach($favorites as $favorite){
+                if($favorite->stream->status==1)
+                    $followed[] = $favorite->stream;
+            }
 
-        return view('welcome', compact('streams', 'followed', 'themes', 'listSlider'));
+            $viewers = Auth::user()->stream->viewers; //Viewers(/Followers) de l'utilisateur
+            //Mes dons reçus du mois
+            $donations = 0;
+            $followers = [];
+            foreach ($viewers as $viewer) {
+                if($viewer->rank >= 0 && $viewer->is_follower == 1)
+                    $followers[] = $viewer;
+
+                foreach ($viewer->donations as $donation){
+                    if(date('Ym', strtotime($donation->created_at)) == date('Ym'))
+                        $donations += $donation->amount;
+                }
+            }
+        }
+        else
+            $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
+
+        return view('welcome', compact('followed', 'themes', 'listSlider', 'viewers', 'followers', 'donations'));
     }
     
     /**

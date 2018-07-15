@@ -48,77 +48,88 @@
             </div>
         </div>
         <div class="col-sm-10 pull-right bottom" style="margin-top: 50px;">
-            <p> Les chaines que vous suivez :</p>
+            <p>Bienvenue {{ Auth::user()->pseudo }},</p>
             <hr>
-            <div class="col-12">
+            <p> Les chaines en live que vous suivez :</p>
+            
+            <div class="row col-12">
                 @if(session()->has('ok'))
                     <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
                 @endif
 
-                @if(count($streams) > 0)
+                @if(count($followed) > 0)
                     <div class="row text-center text-lg-left">
-                            @foreach ($streams as $stream)
-                                <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
-                                    <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                        @foreach ($followed as $stream)
+                            <div class="col-12 col-sm-6 col-md-4" style="box-sizing: border-box;">
+                                <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
                                     <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                    <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
+                                    <span class="watch">
+                                        <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
+                                        {{ $stream->type->name }}
+                                    </span>
                                     @if($stream->user->avatar!="users/default.png")
-                                            <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
+                                        <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
                                     @else
-                                            <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
                                     @endif
-                                    </a>
-                                    @if($stream->status==1)
-                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
-                                    @else
-                                        {!! link_to_route('stream.show', $stream->user->pseudo, [$stream->user->pseudo], ['class' => 'pull-right']) !!}
-                                    @endif
-                                    <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
+                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                            {{ $stream->title }}
+                                        </a>
+                                    </div>
                                 </div>
-                            @endforeach
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <small>
+                                            <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                                {{ $stream->user->pseudo }}
+                                            </a>
+                                        </small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 @else
                     <i>Vous ne suivez actuellement aucun stream.</i>
                 @endif
             </div>
+            <hr>
+            <p>Vos dernières statistiques : </p>
             <div class="row">
-                <div class="card text-center col-12 col-md-4">
-                    <div class="card-header">
-                        Featured
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
+                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Valeur des dons obtenus ce mois-ci
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title">&asymp;{{ $donations }} €</h2>
+                        </div>
                     </div>
                 </div>
-                <div class="card text-center col-12 col-md-4">
-                    <div class="card-header">
-                        Featured
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
+                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Nombre total de followers
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title"><?php echo count($followers); ?></h2>
+                        </div>
                     </div>
                 </div>
-                <div class="card text-center col-12 col-md-4">
-                    <div class="card-header">
-                        Featured
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
+                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Nombre total de visiteur
+                        </div>
+                        <div class="card-body">
+                            <h2 class="card-title">{{ $viewers->count() }}</h2>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@
             <form class="pull-right form-inline" method="POST" action="{{ route('stream.index') }}">
                 @csrf
                 <input type="hidden" id="_token" value="{{ csrf_token() }}">
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="name">Titre  </label>
   
                     <input id="email"  type="text" class="form-control" name="name" value="{{ $inputs['name'] }}">
@@ -17,7 +17,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
                         <option value="">Toutes les catégorie</option>
@@ -35,7 +35,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="countries">Pays </label>
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
                         <option value="">Tous les pays</option>
@@ -65,50 +65,48 @@
             @if(session()->has('ok'))
                 <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
             @endif
-            @auth
-                @if(count($streams) > 0)
-                    <div class="row text-center text-lg-left">
-                        @foreach ($streams as $stream)
-                        <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
-                            <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                <span class="watch">
-                                    <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
-                                    {{-- <i class="material-icons">remove_red_eye</i>    --}}
-                                    {{ $stream->type->name }}
-                                </span>
-                                @if($stream->user->avatar!="users/default.png")
-                                    <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
-                                @else
-                                    <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                                @endif
-                            </a>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                        {{ $stream->title }}
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <small>
-                                        <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                            {{ $stream->user->pseudo }}
-                                        </a>
-                                    </small>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
-                                </div>
+
+            @if(count($streams) > 0)
+                <div class="row text-center text-lg-left">
+                    @foreach ($streams as $stream)
+                    <div class="col-12 col-6 col-md-3 mb-4" style="box-sizing: border-box;">
+                        <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                            <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
+                            <span class="watch">
+                                <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
+                                {{ $stream->type->name }}
+                            </span>
+                            @if($stream->user->avatar!="users/default.png")
+                                <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
+                            @else
+                                <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                            @endif
+                        </a>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                    {{ $stream->title }}
+                                </a>
                             </div>
                         </div>
-                        @endforeach
+                        <div class="row">
+                            <div class="col-6">
+                                <small>
+                                    <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                        {{ $stream->user->pseudo }}
+                                    </a>
+                                </small>
+                            </div>
+                            <div class="col-6">
+                                <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
+                            </div>
+                        </div>
                     </div>
-                @else
-                    <i>Vous ne suivez actuellement aucun stream.</i>
-                @endif
-            @endauth
+                    @endforeach
+                </div>
+            @else
+                <i>Aucun stream n'est actuellement en cours de diffusion.</i>
+            @endif
         </div>
     </div>
 </div>
