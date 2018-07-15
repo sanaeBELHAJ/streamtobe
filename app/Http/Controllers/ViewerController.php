@@ -25,7 +25,7 @@ class ViewerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => ['getStreamStatusInfo']]);
     }
 
     /**
@@ -53,7 +53,18 @@ class ViewerController extends Controller
                     ->where('stream_id', '=', Auth::user()->stream->id)
                     ->get();
     }
-    
+
+    /**
+     * Get the streamer info
+     */
+    public function getStreamStatusInfo(Request $request){
+        return DB::table('stb_streams')
+            ->select('stb_streams.status')
+            ->where('streamer_id', '=', $request->get('streamerId'))
+            ->get();
+    }
+
+
     /**
      * Edit the chatbox status of the viewer
      */

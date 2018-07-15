@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/messages', 'MessageController@index');
 });
 
+
 /* Interface d'administration Voyager */
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
@@ -80,6 +81,9 @@ Route::group(['prefix' => 'admin'], function () {
 //Informations des streams
 Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 Route::post('stream', 'StreamController@index')->name('index');
+
+// Recuperation du status
+Route::get('/getStreamStatusInfo', 'ViewerController@getStreamStatusInfo');
 
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');

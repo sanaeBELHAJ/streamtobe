@@ -4,6 +4,7 @@
 
 <div class ="container-fluid">
     <div class="row">
+        @auth
         <div class="col-sm-2 profil-panel">
             <div class="top bottom">
                 <div class="cadre-style">
@@ -43,10 +44,10 @@
                 </center>
             </div>
         </div>
+        @endauth
         <div class="col-sm-10 pull-right top-2 bottom">
             <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
-                    @auth
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
                                 <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
@@ -55,12 +56,16 @@
                             <div id="videos-container"></div>
                                 {{-- Nombre de viewers --}}
                             <i class="fas fa-eye"></i><span id="visitorStream"></span>
+                            @auth
                             @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
                             <!-- list of all available broadcasting rooms -->
                                 <table style="width: 100%;" id="rooms-list"></table>
                             @endif
+                            @endauth
+                            @guest
+                                <table style="width: 100%;" id="rooms-list"></table>
+                            @endguest
                         </div>
-                    @endauth
                 </div>
 
                 {{-- Chatbox --}}
@@ -157,6 +162,7 @@
                             </p>
                             @include('stream.modal.payment')
 
+                            @auth
                             {{-- Following --}}
                             <p class="col text-center">
                                 @foreach($user->viewers as $viewer)
@@ -170,6 +176,7 @@
                                     @endif
                                 @endforeach
                             </p>
+                                @endauth
                         </div>
 
                         {{-- Description du streamer --}}
@@ -274,7 +281,7 @@
 @endsection
 
 @section('js')
-    @auth
+
         <script src="/js/broadcast.js"></script>
         <script src="/js/rtc-connection.js"></script>
         <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
@@ -282,15 +289,15 @@
         <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
         <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
         <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+        @auth
 		@if($streamer->id != Auth::user()->id)
 			<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 		@endif
-	@endauth
+        @endauth
 
 	<script>
 
 		$(function(){
-
 			//Texte du slider
 			$('.sliderText').click(function(){
 				$('#myRange').val($(this).data('value')).change();
@@ -444,6 +451,7 @@
                 });
             }
 
+            @auth
             //Liste modérateurs / bannis
             updateList();
             function updateList(){
@@ -477,10 +485,11 @@
                     console.log(data);
                 });
             }
-
+        @endauth
         /* Stream WEBRTC */
         var config = {
             openSocket: function(config) {
+
                 var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
                 config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
@@ -511,23 +520,29 @@
                 document.title = "{{ $streamer->stream->title }}";
             },
             onRoomFound: function(room) {
-                console.log(<?php echo $streamer->stream->status ;?>);
-                @if ($streamer->stream->status == 1)
-                    var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-                    if (alreadyExist) return;
-                    if (typeof roomsList === 'undefined') roomsList = document.body;
-                    broadcastUI.joinRoom({
-                        roomToken: room.roomToken,
-                        joinUser: room.broadcaster
-                    });
-                    document.getElementById('stream-info').hidden = true;
-                @endif
+                $.ajax({
+                    url: "/getStreamStatusInfo",
+                    type: 'GET',
+                    dataType: "JSON",
+                    data: {
+                        streamerId: '<?php echo $streamer->id;?>'
+                    }
+                }).done(function (data) {
+                    if (data[0].status === 1) {
+                        var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                        if (alreadyExist) return;
+                        if (typeof roomsList === 'undefined') roomsList = document.body;
+                        broadcastUI.joinRoom({
+                            roomToken: room.roomToken,
+                            joinUser: room.broadcaster
+                        });
+                        document.getElementById('stream-info').hidden = true;
+                    }
+                });
             },
             onNewParticipant: function(numberOfViewers) {
                 document.getElementById('visitorStream').innerHTML = "";
                 document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
-            },
-            onReady: function() {
             }
 
         };
@@ -537,8 +552,35 @@
             if (document.getElementById('setup-new-broadcast').value === "Off") {
                 <?php $streamer->stream->status = 0;?>
                 config.attachStream.getTracks().forEach(function (track) {
+                    track.addEventListener('ended', function() {
+                        alert('Stream is stopped.');
+                    }, false);
                     track.stop();
                 });
+
+                 function start() {
+                    @auth
+                    @if($streamer->id != Auth::user()->id)
+                        videosContainer.innerHTML = "";
+                    document.getElementById('stream-info').hidden = false;
+                    @elseif($streamer->id == Auth::user()->id)
+                    if (setupNewBroadcast.value === "Off") {
+                        setupNewBroadcast.click();
+                        videosContainer.innerHTML = "";
+                        document.getElementById("setup-new-broadcast").value = "On";
+                        document.getElementById('stream_title').disabled = false;
+                        document.getElementById('stream-info').hidden = false;
+                    }
+                    @endauth
+                    @endif
+                     @guest
+                        videosContainer.innerHTML = "";
+                        document.getElementById('stream-info').hidden = false;
+                    @endguest
+                 };
+
+                start();
+
                 document.getElementById('videos-container').innerHTML = "";
                 document.getElementById("setup-new-broadcast").value = "On";
                 document.getElementById('stream_title').disabled = false;
@@ -547,6 +589,7 @@
                 <?php $streamer->stream->status = 1;?>
                 document.getElementById("setup-new-broadcast").value = "Off";
                 document.getElementById('stream_title').disabled = true;
+                @auth
                 @if($streamer->id == Auth::user()->id)
                 DetectRTC.load(function () {
                     captureUserMedia(function () {
@@ -562,9 +605,16 @@
                     document.getElementById('stream-info').hidden = true;
                 });
                 @endif
-
+                @endauth
             }
         }
+            var broadcastUI = broadcast(config);
+            var videosContainer = document.getElementById('videos-container') || document.body;
+            var setupNewBroadcast = document.getElementById('setup-new-broadcast');
+            var broadcastingOption = document.getElementById('broadcasting-option');
+            var roomsList = document.getElementById('rooms-list');
+
+            if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
 
         function captureUserMedia(callback) {
             var constraints = null;
@@ -619,6 +669,9 @@
                 video: htmlElement,
                 onsuccess: function(stream) {
                     config.attachStream = stream;
+                    addStreamStopListener(stream,  function() {
+                        alert('screen sharing is ended.');
+                    });
 
                     videosContainer.appendChild(htmlElement);
                     callback && callback();
@@ -629,34 +682,31 @@
                         if (location.protocol === 'http:') alert('Activez HTTPS.');
                         else alert('Capture vidéo est desactivé ou non authorisé. L\'avez-vous autorisé dans votre navigateur "?');
                     } else alert('Impossible d\'accéder à votre webcam');
-                }
+                },
             };
             if (constraints) mediaConfig.constraints = constraints;
             getUserMedia(mediaConfig);
         }
 
-        var broadcastUI = broadcast(config);
-        var videosContainer = document.getElementById('videos-container') || document.body;
-        var setupNewBroadcast = document.getElementById('setup-new-broadcast');
-        var broadcastingOption = document.getElementById('broadcasting-option');
-        var roomsList = document.getElementById('rooms-list');
-
-        if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
-
-        window.onload = function start() {
-            @if($streamer->id != Auth::user()->id)
-                    document.getElementById('videos-container').innerHTML = "";
-                    document.getElementById('stream-info').hidden = false;
-            @elseif($streamer->id == Auth::user()->id)
-                if (setupNewBroadcast.value === "Off") {
-                    setupNewBroadcast.click();
-                    document.getElementById('videos-container').innerHTML = "";
-                    document.getElementById("setup-new-broadcast").value = "On";
-                    document.getElementById('stream_title').disabled = false;
-                    document.getElementById('stream-info').hidden = false;
+            function addStreamStopListener(stream, callback) {
+                var streamEndedEvent = 'ended';
+                if ('oninactive' in stream) {
+                    streamEndedEvent = 'inactive';
                 }
-                @endif
-            };
+                stream.addEventListener(streamEndedEvent, function() {
+                    callback();
+                    callback = function() {};
+                }, false);
+                stream.getVideoTracks().forEach(function(track) {
+                    track.addEventListener(streamEndedEvent, function() {
+                        callback();
+                        callback = function() {};
+                    }, false);
+                });
+
+            }
+
+
         });
 
     </script>
