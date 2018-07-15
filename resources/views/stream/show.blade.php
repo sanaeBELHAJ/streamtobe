@@ -163,9 +163,9 @@
                             </p>
                             @include('stream.modal.payment')
 
-                            @auth
                             {{-- Following --}}
                             <p class="col text-center">
+                                @php ($viewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
@@ -174,10 +174,19 @@
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                        @php ($viewer = 1)
                                     @endif
                                 @endforeach
+
+                                @if($viewer == 0)
+                                    <button class="follow_stream w-100 float-none btn btn-follow d-none"
+                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                                    <button class="follow_stream w-100 float-none btn btn-follow"
+                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                            title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                @endif
                             </p>
-                                @endauth
                         </div>
 
                         {{-- Description du streamer --}}
