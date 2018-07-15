@@ -53,7 +53,6 @@
 
         </div>
         <div class="col-sm-10 pull-right top-1 bottom">
-            <hr>
             <div class="row d-flex flex-row-reverse">
                 @auth
                     <div class='col-sm-3'>
@@ -76,18 +75,17 @@
             <div class="col-sm-12">
                 @if($streamer->stream->status == 1)
                     <p>{{ $streamer->pseudo }} est actuellement en direct, vous pouvez rejoindre sa chaine.</p>
+                     <div class="col-sm-2">
+                    <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
+                        <i style="font-size: 50px;" class="material-icons">
+                            videocam
+                        </i>
+                    </a>
+                </div>
                 @else
                     <p>{{ $streamer->pseudo }} n'est pas en ligne pour l'instant.</p>
                 @endif
-                <div class="col-sm-12">
-                    <center>
-                        <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
-                            <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                                play_circle_filled
-                            </i>
-                        </a>
-                    </center>
-                </div>
+               
             </div> 
         </div>
         </div>

@@ -47,7 +47,60 @@
         </div>
         @endauth
         <div class="col-sm-10 pull-right top-2 bottom">
-            <div class="div-stream"><i class="fas fa-eye"></i><span id="visitorStream"></span></div>
+            <div class="div-stream">
+                  @if(Auth::check() && $streamer->id == Auth::user()->id)
+
+                        <div class="mt-4" id="config_stream">
+                            <div class="row">
+                                <section class="experiment col-12 col-md-6">
+                                        Type de diffusion : &nbsp;
+                                        <select id="broadcasting-option" class="form-control d-inline w-50">
+                                            <option>Stream classique</option>
+                                            <option>Stream audio</option>
+                                        </select>
+                                </section>
+                                <p class="col-12 col-md-6">
+                                    Catégorie :
+                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
+                                        @foreach($themes as $theme)
+                                        <optgroup label="{{$theme->name}}">
+                                            @foreach($theme->types as $type)
+                                            <option value="{{$type->name}}">{{$type->name}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                        @endforeach
+                                    </select>
+                                </p>
+                                <p class="col-12 col-md-6">
+                                    Nom de la chaine : &nbsp;
+                                    <input id="stream_title" class="form-control d-inline w-50 update_stream"
+                                            data-config="title" type="text" placeholder="Titre du stream"
+                                            value="{{$streamer->stream->title}}">
+                                </p>
+                                <label class="col-12 col-md-6">
+                                    <label class="switch align-middle m-0">
+                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                                @if($streamer->stream->status == 0)
+                                                    value="On"
+                                                @else
+                                                    value="Off"
+                                                    checked
+                                                @endif >
+                                        <span class="slider round"></span>
+                                    </label>
+                                    Activer / Interrompre la diffusion
+                                </label>
+                            </div>
+                        </div>
+                  @endif
+                <div class="col-sm-1 div-viewers">
+                    <span id="visitorStream"></span>
+                    <i class="material-icons">
+                    visibility
+                    </i>
+                </div>
+                
+            </div>
             <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
@@ -100,7 +153,7 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                        <div class="mt-4" id="config_stream">
+                       <!-- <div class="mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
                             <div class="row">
                                 <section class="experiment col-12 col-md-6">
@@ -142,7 +195,7 @@
                                     Activer / Interrompre la diffusion
                                 </label>
                             </div>
-                        </div>
+                        </div>-->
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
 

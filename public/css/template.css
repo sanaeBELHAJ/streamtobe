@@ -111,12 +111,13 @@ header .dropdown-menu{
 
 .machaine{
     display:block;
-    width:100%;
-    padding: 16%;
+    /*width:100%;*/
+    /*padding: 16%;*/
+    width: 100px;
     line-height:100%;
     text-align:center;
     vertical-align:middle;
-    background: black;
+    background: #563d7c;
     color:white;
     text-decoration:none;
     border-radius: 0%;
@@ -124,6 +125,9 @@ header .dropdown-menu{
 .machaine:hover {
     color:#ff66b3;
     text-decoration:none; 
+}
+.machaine .material-icons{
+    margin-top: 10px;margin-bottom: 10px
 }
 .watch{
     position: absolute;
@@ -187,15 +191,19 @@ header .dropdown-menu{
     cursor: not-allowed;
 }
 .btn-contacter{
-    background: yellow;
+    background: #ffc94d;
    /* border: 1px solid #b19dd8;*/
     color: #6441a4;
     padding: .3rem .3rem;
     padding-right: 20%; 
     padding-left: 20%; 
+    color: white;
 }
 .btn-contacter:hover{
     cursor: pointer;
+    color: white;
+    
+ 
 }
 
 .btn-contacter:disabled{
@@ -364,6 +372,15 @@ select.form-control:not([size]):not([multiple]) {
     box-shadow: inherit;
     border: none;
     box-shadow: 0 0 6px #6441a4; 
+}
+.div-viewers{
+    background: transparent;
+    border: 1px solid #b19dd8;
+    color: #6441a4; 
+    width: 10%;
+}
+.div-viewers .material-icons{
+    color: black;
 }
 .btn-filter{
     background: transparent;
