@@ -103,3 +103,10 @@ Route::get('/support', 'HomeController@support');
 
 //Vérification de nouveaux messages
 Route::get('/checkMessage', 'HomeController@checkMessage');
+
+
+
+/* SI AUCUNE ROUTE N'EST CORRECTE */
+Route::any('{all}', function(){
+    return view('errors.404');
+})->where('all', '.*');
