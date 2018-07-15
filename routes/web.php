@@ -100,3 +100,6 @@ Route::post('/valid_cookie', 'HomeController@valid_cookie');
 /* Support technique pour utilisateur */
 Route::post('/support', 'HomeController@support');
 Route::get('/support', 'HomeController@support');
+
+//Vérification de nouveaux messages
+Route::get('/checkMessage', 'HomeController@checkMessage');

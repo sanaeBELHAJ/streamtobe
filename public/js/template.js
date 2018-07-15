@@ -96,4 +96,20 @@ $(function () {
             console.log(data);
         });
     });
+
+    //Check de nouveaux messages
+    setInterval(checkMessage, 3000);
+    function checkMessage() {
+        $.ajax({
+            url: "/checkMessage",
+            type: 'GET'
+        })
+        .done(function(data){
+            if(data && data.length>0)
+                $("#navbarSupportedContent .material-icons").addClass("text-danger");
+        })
+        .fail(function(data){
+            console.log(data);
+        });
+    }
 });

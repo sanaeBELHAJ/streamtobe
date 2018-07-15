@@ -17,3 +17,4 @@ Thumbs.db
 /tests
 /tests/*
 /chatbox/node_modules
+bdd.js

@@ -50,11 +50,12 @@
         <div class="col-sm-10 pull-right bottom" style="margin-top: 50px;">
             <p> Les chaines que vous suivez :</p>
             <hr>
-                            <div class="col-12">
-        @if(session()->has('ok'))
-            <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
-        @endif
-                    @if(count($streams) > 0)
+            <div class="col-12">
+                @if(session()->has('ok'))
+                    <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
+                @endif
+
+                @if(count($streams) > 0)
                     <div class="row text-center text-lg-left">
                             @foreach ($streams as $stream)
                                 <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
@@ -76,10 +77,51 @@
                                 </div>
                             @endforeach
                     </div>
-            @else
-                <i>Vous ne suivez actuellement aucun stream.</i>
-            @endif
-        </div>
+                @else
+                    <i>Vous ne suivez actuellement aucun stream.</i>
+                @endif
+            </div>
+            <div class="row">
+                <div class="card text-center col-12 col-md-4">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        2 days ago
+                    </div>
+                </div>
+                <div class="card text-center col-12 col-md-4">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        2 days ago
+                    </div>
+                </div>
+                <div class="card text-center col-12 col-md-4">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        2 days ago
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

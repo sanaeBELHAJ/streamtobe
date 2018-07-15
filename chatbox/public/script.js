@@ -7,8 +7,7 @@ var token = getUrlParameter('token');
 var stream = getUrlParameter('stream');
 socket.emit('join', token, stream);
 
-// Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
-$('#formulaire_chat').submit(function (event) {
+function sendMessage(){
     event.preventDefault();
     var message = $('#message').val();
 
@@ -17,7 +16,19 @@ $('#formulaire_chat').submit(function (event) {
 
     $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
     $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
+}
+
+// Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+$('#formulaire_chat').submit(function (event) {
+    sendMessage();
     return false; // Permet de bloquer l'envoi "classique" du formulaire
+});
+
+$(window).on('keydown', function(e) {
+    if (e.which == 13) { 
+        sendMessage();
+        return false;
+    }
 });
 
 //Lorsqu'on souhaite modérer un message, on envoie son ID
