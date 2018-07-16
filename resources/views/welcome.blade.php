@@ -123,8 +123,8 @@
         <div class="container-fluid" style="text-align: center">
             {{-- Streamtobe est là pour vous ! --}}
             <h1>{{ setting('site.welcome-title') }}</h1>
-            <div class="row">
-
+            <p>{{ setting('site.welcome-text') }}</p>
+            <div class="row" style="margin-top:100px;">
             {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
                 <div class="col-sm-12 col-md-4"><br/>
                     <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('register') }}" data-lightbox role="button">{{ __('Create your own stream') }}</a><br/><br/>
