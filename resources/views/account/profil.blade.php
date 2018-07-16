@@ -70,9 +70,14 @@
     <h3>Statistiques</h3>
     <div class="row">
         <p class="col-12">Vous pouvez consulter des informations complémentaires à propos de la chaine de {{ $streamer->pseudo }} :</p>
-        <a class="btn col-12 col-md-4 text-center" href="/follows/{{$streamer->pseudo}}">Les fans de cette chaine</a>
-        <a class="btn col-12 col-md-4 text-center" href="/fans/{{$streamer->pseudo}}">Les chaines que {{ $streamer->pseudo }} suit</a>
-        <a class="btn col-12 col-md-4 text-center" href="/stats/{{$streamer->pseudo}}">Les dons reçus par {{ $streamer->pseudo }}</a>
+        @if($streamer->pseudo == Auth::user()->pseudo)
+            <a class="btn col-12 col-md-4 text-center" href="/follows/{{$streamer->pseudo}}">Les fans de cette chaine</a>
+            <a class="btn col-12 col-md-4 text-center" href="/fans/{{$streamer->pseudo}}">Les chaines que {{ $streamer->pseudo }} suit</a>
+            <a class="btn col-12 col-md-4 text-center" href="/stats/{{$streamer->pseudo}}">Les dons reçus par {{ $streamer->pseudo }}</a>
+        @else
+            <a class="btn col-12 col-md-6 text-center" href="/follows/{{$streamer->pseudo}}">Les fans de cette chaine</a>
+            <a class="btn col-12 col-md-6 text-center" href="/fans/{{$streamer->pseudo}}">Les chaines que {{ $streamer->pseudo }} suit</a>
+        @endif
     </div>
 </div>
 @endsection
