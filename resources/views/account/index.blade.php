@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid"²>
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top bottom">
             @include('account.infos')

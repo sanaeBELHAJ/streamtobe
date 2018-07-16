@@ -12,7 +12,7 @@
                                 <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
                             </div>
                             {{-- Vidéo --}}
-                            <div id="videos-container"></div>
+                            <div style="height: 400px;" id="videos-container"></div>
                                 {{-- Nombre de viewers --}}
                             <i class="fa fa-eye"></i><span id="visitorStream"></span>
                             @auth
