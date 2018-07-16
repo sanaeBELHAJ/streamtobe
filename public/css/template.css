@@ -166,15 +166,7 @@ header .dropdown-menu{
 }
 
 .btn-follow {
-    background: transparent;
-    border: 1px solid #1BBC9B;
-    color: #1BBC9B;
-    border-radius: .1rem;
-    padding: .1rem .3rem;
-    margin-right: 0px;
-    margin-top: 26px;
-    width: 100px;;
-    float: right; 
+
 }
 
 .btn-follow:hover{
@@ -552,4 +544,10 @@ footer #support_user textarea{
     border-color: #1BBC9B !important;
     outline-style: none;
     box-shadow: none;
+}
+.follow_stream {
+    color: #fff;
+    background-color: #3b5999;
+    font-weight: 500;
+    border-radius: 30px;
 }
