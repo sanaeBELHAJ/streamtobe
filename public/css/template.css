@@ -110,16 +110,13 @@ header .dropdown-menu{
 }*/
 
 .machaine{
-    display:block;
-    /*width:100%;*/
-    /*padding: 16%;*/
-    width: 100px;
-    line-height:100%;
-    text-align:center;
-    vertical-align:middle;
-    background: #563d7c;
-    color:white;
-    text-decoration:none;
+    display: block;
+    width: 250px;
+    height: 100px;
+    text-align: center;
+    background: black;
+    color: white;
+    text-decoration: none;
     border-radius: 0%;
 }
 .machaine:hover {
@@ -168,9 +165,6 @@ header .dropdown-menu{
     cursor: pointer;
 }
 
-.avatar_follower{
-    width: 80px;
-}
 .btn-follow {
     background: transparent;
     border: 1px solid #b19dd8;
@@ -442,12 +436,10 @@ footer #support_user textarea{
 }
 .div-f{
     border: 1px solid #e9ebee;
-    display: inline-block;
     margin: 0 0 13px 13px;
     padding: 0 10px 0 0;
     position: relative;
     vertical-align: top;
-    width: 390px;
 }
 .player {
     position: absolute;

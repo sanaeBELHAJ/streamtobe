@@ -133,10 +133,11 @@
                                     <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
                                 </li>
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                                    <a href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">Suivi</a>
-                                </li>
-                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                                    <a  href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">Fans</a>
+                                    <a href="/messages">
+                                        <i class="fa fa-envelope">
+                                        </i>
+                                        Message
+                                    </a>
                                 </li>
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
                                     @if(Auth::user()->role_id == 1)
@@ -150,12 +151,15 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
-                                        <a href="/messages" class="dropdown-item">
-                                            <i class="fa fa-envelope-open">
-                                            </i>
-                                            Message
+                                        <a class="dropdown-item" href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">
+                                            <i class="fa fa-window-restore"></i> Les chaines suivies
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar"></i> Revenus</a>
+                                        <a class="dropdown-item" href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">
+                                            <i class="fa fa-users"></i> Mes fans
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}">
+                                            <i class="fa fa-dollar"></i> 
+                                            Revenus</a>
                                         <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-cog"></i> {{ __('Settings') }}</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ route('logout') }}"

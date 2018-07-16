@@ -1,24 +1,35 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid" >
-<div class="row">
-    <div class="col-sm-12 pull-right top-2 bottom">
-        <p>Utilisateurs qui suivent la chaine de {{$streamer->pseudo}}</p>
+<div class="container-fluid top-2 bottom">
+    <div class="row">
+        <p class="col-12">Utilisateurs qui suivent la chaine de {{ $streamer->pseudo }}</p>
         <hr>
-        <br>
         @foreach($viewers as $viewer)
             @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
-                <div class='col-6 div-f'>
-                    <img class='avatar_follower' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
-                    <a class=""  href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>
-                    {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
-                    <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
-                    <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card card-lg">
+                        <div class="card-img">
+                            <a href="/home/{{$viewer->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $viewer->stream->user->avatar); ?>" class="card-img-top"></a>
+                            @if ($viewer->stream->status == 1)
+                                <div class="badge badge-xbox-one">En ligne</div>
+                                <div class="badge badge-skype" style="left:150px;">{{$viewer->stream->type->name}}</div>
+                            @else
+                                <div class="badge badge-steam">Hors ligne</div>
+                            @endif
+                            <div class="card-likes">
+                                <a href="#"><img src="{{ $viewer->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
+                            </div>
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title"><a href="/home/{{$viewer->stream->user->pseudo}}">{{$viewer->stream->user->pseudo}}</a></h4>
+                            <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}</span></div>
+                            <p class="card-text">{{$viewer->stream->title}}</p>
+                        </div>
+                    </div>
                 </div>
             @endif
         @endforeach
     </div>
-</div>
 </div>
 @endsection
