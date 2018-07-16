@@ -12,7 +12,7 @@
                                 <img class="w-100" src="http://anthillonline.com/wp-content/uploads/2013/07/videoPlaceholder.jpg"/>
                             </div>
                             {{-- Vidéo --}}
-                            <div style="height: 400px;" id="videos-container"></div>
+                            <div style="height: 529px;" id="videos-container" hidden="true"></div>
                                 {{-- Nombre de viewers --}}
                             <i class="fa fa-eye"></i><span id="visitorStream"></span>
                             @auth
@@ -463,6 +463,7 @@
                                 joinUser: room.broadcaster
                             });
                             document.getElementById('stream-info').hidden = true;
+                            document.getElementById('videos-container').hidden = false
                         }
                     });
                 },
@@ -486,6 +487,7 @@
                     document.getElementById('videos-container').innerHTML = "";
                     document.getElementById("setup-new-broadcast").value = "On";
                     document.getElementById('stream_title').disabled = false;
+                    document.getElementById('videos-container').hidden = true;
                     document.getElementById('stream-info').hidden = false;
                 }else {
                     <?php $streamer->stream->status = 1;?>
@@ -504,6 +506,7 @@
                                 isAudio: shared === 'audio'
                             });
                         });
+                        document.getElementById('videos-container').hidden = false;
                         document.getElementById('stream-info').hidden = true;
                     });
                     @endif
@@ -606,12 +609,14 @@
                     document.getElementById("setup-new-broadcast").value = "On";
                     document.getElementById('stream_title').disabled = false;
                     document.getElementById('stream-info').hidden = false;
+                    document.getElementById('videos-container').hidden = true;
                 }
                 @endauth
                         @endif
                         @guest
                     videosContainer.innerHTML = "";
                 document.getElementById('stream-info').hidden = false;
+                document.getElementById('videos-container').hidden = true;
                 @endguest
             };
             start();
