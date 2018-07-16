@@ -10,7 +10,9 @@
                 <div class='col-6 col-sm-4 col-md-3'>
                     <div class="div-f w-100">
                         <p class="d-flex w-100 justify-content-between align-items-center">
-                            <img class='pictureAccount' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
+                            <a class="" href="/home/{{$viewer->user->pseudo}}">
+                                <img class='pictureAccount' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
+                            </a>
                             <a class="" href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>
                         </p>
                         <div class="d-flex w-100 justify-content-between">
