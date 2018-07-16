@@ -347,7 +347,7 @@ select.form-control:not([size]):not([multiple]) {
     outline: 0;
     font-family: inherit;
     appearance: none;
-    border: 1px solid #1BBC9B;
+    border: 0.5px solid #1BBC9B;
     background: #fff;
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
