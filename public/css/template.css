@@ -503,10 +503,10 @@ footer #support_user textarea{
     border: 1px solid #dad8de !important;
 }
 #header{
-    background: #a38de6;
+    background: #2D3E50;
 }
 .navbar{
-    background: #a38de6;
+    background: #2D3E50;
     color: white;
 }
 #header .nav>ul>li>a, #header .nav>ul>li>a{
@@ -515,28 +515,29 @@ footer #support_user textarea{
 
 
 #footer{
-    background-color: #a38de6 !important;
+    background-color: #2D3E50 !important;
 }
 .btn-primary{
-    background-color: #e6c48d  !important;
-    border: 1px solid #e6c48d ;
+    background-color: #1BBC9B  !important;
+    border: 1px solid #1BBC9B ;
+    color:white!important;
 }
 .btn-primary:hover{
-    background-color: #f8a726c9 !important;
-    border: 1px solid #f8a726c9;
+    background-color: #2c7a72 !important;
+    border: 1px solid #2c7a72;
 }
 .btn-primary:active, .btn-primary:focus{
-    background-color: #f8a726c9 !important;
-    border: 1px solid #f8a726c9;
+    background-color: #2c7a72 !important;
+    border: 1px solid #2c7a72;
 }
 .card-border{
-   border: 0.5px solid #e6c48d;
+   border: 0.5px solid #1BBC9B;
 }
 .card-header{
    color: white;
-   background-color: #e6c48d !important;
+   background-color: #1BBC9B !important;
 }
 .navbar-search{
-    background-color: #a38de6 !important;
+    background-color: #2D3E50 !important;
 }
 
