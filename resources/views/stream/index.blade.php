@@ -59,8 +59,9 @@
             </form>
         </div>
     </div>
-
-    <div class="row mt-5">
+</div>
+<div class="container-fluid top bottom">
+    <div class="row">
         <div class="col-12">
             @if(session()->has('ok'))
                 <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
