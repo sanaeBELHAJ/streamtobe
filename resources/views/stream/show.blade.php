@@ -73,7 +73,7 @@
                                         @foreach($themes as $theme)
                                         <optgroup label="{{$theme->name}}">
                                             @foreach($theme->types as $type)
-                                            <option value="{{$type->name}}">{{$type->name}}</option>
+                                            <option value="{{$type->name}}" @if($type->name == $streamer->stream->type->name) selected @endif>{{$type->name}}</option>
                                             @endforeach
                                         </optgroup>descriptionAccount
                                         @endforeach
