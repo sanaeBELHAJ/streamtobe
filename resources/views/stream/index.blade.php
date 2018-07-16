@@ -69,39 +69,24 @@
             @if(count($streams) > 0)
                 <div class="row text-center text-lg-left">
                     @foreach ($streams as $stream)
-                    <div class="col-12 col-6 col-md-3 mb-4" style="box-sizing: border-box;">
-                        <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                            <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                            <span class="watch">
-                                <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
-                                {{ $stream->type->name }}
-                            </span>
-                            @if($stream->user->avatar!="users/default.png")
-                                <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
-                            @else
-                                <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                            @endif
-                        </a>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <a class="broadcastname"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                    <b>{{ $stream->title }}</b>
-                                </a>
+                        <div class="col-6 col-sm-4 col-md-3">
+                            <div class="card card-lg">
+                                <div class="card-img">
+                                    <a href="/home/{{$stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $stream->user->avatar); ?>" class="card-img-top"></a>
+                                        <div class="badge badge-xbox-one">En ligne</div>
+                                        <div class="badge badge-ps4" style="left:150px;">{{$stream->type->name}}</div>
+                                    <div class="card-likes">
+                                        <a href="#"><img src="{{ $stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <h4 class="card-title"><a href="/home/{{$stream->user->pseudo}}">{{$stream->user->pseudo}}</a></h4>
+                                    <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($stream->created_at)->format('d/m/Y') }}</span></div>
+                                    <p class="card-text">{{$stream->title}}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <small>
-                                    <a class="broadcastname"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                        {{ $stream->user->pseudo }}
-                                    </a>
-                                </small>
-                            </div>
-                            <div class="col-6">
-                                <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
-                            </div>
-                        </div>
-                    </div>
+
                     @endforeach
                 </div>
             @else

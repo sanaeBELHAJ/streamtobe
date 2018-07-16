@@ -15,7 +15,7 @@
                             <a href="/home/{{$channel->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>" class="card-img-top"></a>
                             @if ($channel->stream->status == 1)
                             <div class="badge badge-xbox-one">En ligne</div>
-                                <div class="badge badge-skype" style="left:150px;">{{$channel->stream->type->name}}</div>
+                                <div class="badge badge-ps4" style="left:150px;">{{$channel->stream->type->name}}</div>
                             @else
                             <div class="badge badge-steam">Hors ligne</div>
                             @endif
