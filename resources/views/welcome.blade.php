@@ -132,21 +132,3 @@
 
 </div>
 @endsection
-
-@section('css')
-<style>
-    .carousel-caption{
-        bottom: 50%;
-        transform: translateY(50%);
-    }
-    .btn-slider{
-        display:flex;
-        width:50%;
-        justify-content: space-around;
-        position: absolute;
-        bottom: 15%;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-</style>
-@endsection
