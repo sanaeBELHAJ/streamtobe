@@ -19,8 +19,8 @@
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
-        {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
+        {!! HTML::style('css/font-awesome.min.css') !!}
         {!! HTML::style('css/custom.css') !!}
         {!! HTML::style('css/theme.min.css') !!}
         {!! HTML::style('css/style.css') !!}
@@ -148,13 +148,12 @@
                                        </i>
                                        Message
                                    </a>
-                                   <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar-sign"></i> Revenus</a>
+                                   <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar"></i> Revenus</a>
                                    <div class="dropdown-divider"></div>
                                    <a class="dropdown-item" href="{{ route('logout') }}"
                                       onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">
-                                       {{ __('Logout') }}
-                                   <i class="fa fa-sign-out"></i></a>
+                                       <i class="fa fa-sign-out"></i>   {{ __('Logout') }}</a>
                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                        @csrf
                                    </form>
