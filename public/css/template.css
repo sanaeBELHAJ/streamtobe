@@ -167,7 +167,7 @@ header .dropdown-menu{
 
 .btn-follow {
     background: transparent;
-    border: 1px solid #b19dd8;
+    border: 1px solid #1BBC9B;
     color: #6441a4;
     border-radius: .1rem;
     padding: .1rem .3rem;
@@ -347,7 +347,7 @@ select.form-control:not([size]):not([multiple]) {
     outline: 0;
     font-family: inherit;
     appearance: none;
-    border: 1px solid #b19dd8;
+    border: 0.5px solid #1BBC9B;
     background: #fff;
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
@@ -365,11 +365,11 @@ select.form-control:not([size]):not([multiple]) {
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
     border: none;
-    box-shadow: 0 0 6px #6441a4; 
+    box-shadow: 0 0 6px #1BBC9B; 
 }
 .div-viewers{
     background: transparent;
-    border: 1px solid #b19dd8;
+    border: 1px solid #1BBC9B ;
     color: #6441a4; 
     width: 10%;
 }
@@ -378,7 +378,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .btn-filter{
     background: transparent;
-    border: 1px solid #b19dd8;
+    border: 1px solid #1BBC9B;
     color: #6441a4;
     border-radius: .1rem;
     padding: .1rem .3rem;
@@ -390,7 +390,7 @@ select.form-control:not([size]):not([multiple]) {
 .btn-filter:hover{
     background: #faf9fa;
     color: black;
-    border: 1px solid #b19dd8;
+    border: 1px solid #1BBC9B ;
     border-radius: .1rem;
 }
 label, select, input {
@@ -500,7 +500,7 @@ footer #support_user textarea{
 }
 
 .form-control:focus{
-    border: 1px solid #dad8de !important;
+    border: 1px solid #1BBC9B  !important;
 }
 #header{
     background: #2D3E50;

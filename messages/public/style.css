@@ -188,8 +188,8 @@ textarea{
 
 
   #frame #sidepanel #search {
-    border-top: 1px solid #563d7c4a;
-    border-bottom: 1px solid #563d7c4a;
+    border-top: 1px solid #1bbc9b1f;
+    border-bottom: 1px solid #1bbc9b1f;
     font-weight: 300;
   }
   @media screen and (max-width: 735px) {
@@ -206,7 +206,7 @@ textarea{
     padding: 10px 0 10px 46px;
     width: calc(100% - 50px);
     border: none;
-    background: #563d7c4a;
+    background: #1bbc9b1f;
     color: #f5f5f5;
   }
   #frame #sidepanel #search input:focus {
@@ -245,7 +245,7 @@ textarea{
   }
   #frame #sidepanel #contacts::-webkit-scrollbar {
     width: 8px;
-    background: #563d7c4a;
+    background: #1bbc9b1f;
   }
   #frame #sidepanel #contacts::-webkit-scrollbar-thumb {
     background-color: #243140;
@@ -262,10 +262,10 @@ textarea{
     }
   }
   #frame #sidepanel #contacts ul li.contact:hover {
-    background: #563d7c4a;
+    background: #1bbc9b1f;
   }
   #frame #sidepanel #contacts ul li.contact.active {
-    background: #563d7c4a;
+    background: #1bbc9b1f;
     border-right: 5px solid #563d7c;
   }
   #frame #sidepanel #contacts ul li.contact .wrap {
@@ -458,10 +458,10 @@ textarea{
   #frame .content .message-input .wrap button {
     /*float: right;*/
     border: none;
-    width: 50px;
+    width: 90px;
     padding: 12px 0;
     cursor: pointer;
-    background: #563d7c; 
+    background: #1BBC9B; 
     color: #f5f5f5;
   }
   @media screen and (max-width: 735px) {

@@ -57,7 +57,7 @@ class RegisterController extends Controller
     */
     public function showRegistrationForm()
     {
-       $countries = Countries::all();
+       $countries = Countries::orderBy('name')->get();
        return view('auth.register', compact('countries'));
     }
     
