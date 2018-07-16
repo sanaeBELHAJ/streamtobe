@@ -105,9 +105,11 @@
                         <div class="carousel-overlay"></div>
                         <div class="carousel-caption">
                             <div>
-                                <h3 class="carousel-title">The Witcher 3: Blood and Wine</h3>
-                                <p>The world is in chaos. The air is thick with tension and the smoke of burnt villages.</p>
-                                <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="https://www.youtube.com/watch?v=c0i88t0Kacs" data-lightbox role="button">Watch Gameplay</a>
+                                <h3 class="carousel-title">{{setting('site.image-'.$loop->index)}}</h3>
+                                <p>{{ __("Let's show your skill on your stream") }}</p>
+                                <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('stream.index') }}" data-lightbox role="button">{{ __('Watch our current streams') }}</a>
+                                <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('register') }}" data-lightbox role="button">{{ __('Create your own stream') }}</a>
+
                             </div>
                         </div>
                     </div>
