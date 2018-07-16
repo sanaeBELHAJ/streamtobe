@@ -116,10 +116,10 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 5%;
-    top: 50%;
-    width: 25px;
-    height: 25px;
+    right: 1%;
+    top: 23%;
+    width: 70px;
+    height: 40px;
     transform: translateY(-50%);
     background: #7e27ff;
     -webkit-border-radius: 4px;
@@ -175,5 +175,5 @@ textarea{
     outline-style: none;
     border: 0.2 solid gray;
     box-shadow: none;
-    height: 50px;
+    height: 40px;
 }
