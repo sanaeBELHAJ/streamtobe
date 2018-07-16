@@ -4,49 +4,7 @@
 
 <div class ="container-fluid">
     <div class="row">
-        @auth
-        <div class="col-sm-2 profil-panel">
-            <div class="top bottom">
-                <div class="cadre-style">
-                    <center>
-                        <img class="resize-img" src="<?php echo asset('storage/' .  $streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
-                    </center> 
-                </div>
-                <p>
-                <center>{{ $streamer->pseudo }}</center>
-                <center>
-                    @if( $streamer->country != null)
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
-                    <img style="width:10%" src="{{ $streamer->country->svg }}">
-                    @else
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>
-                    Inconnu
-                    @endif
-                </center>
-                </p>
-                <center>
-                    <ul class="navbar-nav">
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
-                        </li>
-                    </ul>
-                    <br>
-                    @auth
-                        <a class="btn-contacter" href="/messages">                  
-                        Contacter
-                        </a>
-                    @endauth
-                </center>
-            </div>
-        </div>
-        @endauth
-        <div class="col-sm-10 pull-right top-2 bottom">
+        <div class="col-sm-12 pull-right top-2 bottom">
             <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">

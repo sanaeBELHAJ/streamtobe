@@ -5,49 +5,7 @@
     @auth
 
     <div class="row">
-        <div class="col-sm-2 profil-panel">
-            <div class="top bottom">
-                <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                   <i class="material-icons">
-                    edit
-                   </i>
-                </a>
-                <br>
-                <div class="cadre-style">
-                    <center>
-                        <img class="resize-img" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
-                    </center> 
-                </div>
-                <p>
-                    <center>{{ Auth::user()->pseudo }}</center>
-                    <center>
-                        <i class="material-icons" style="font-size: 16px;">location_on</i>
-                        @if(Auth::user()->country){{ Auth::user()->country->name }}@endif
-                        <img style="width:10%" src="@if(Auth::user()->country){{ Auth::user()->country->svg }}@endif">
-                    </center>
-                </p>
-                 <center>
-                    <ul class="navbar-nav">
-                        <li  class="nav-item">
-                            <a class="text-white" href="{{ route('home.follows', ['pseudo' =>  Auth::user()->pseudo ])}}">Suivi</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans', ['pseudo' =>  Auth::user()->pseudo ])}}">Fans</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' =>  Auth::user()->pseudo ]) }}">Revenus</a>
-                        </li>
-                    </ul>
-                    <br>
-                    <a class="machaine" href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}">                  
-                        <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                            videocam
-                        </i>
-                    </a>
-                </center>
-            </div>
-        </div>
-        <div class="col-sm-10 pull-right bottom" style="margin-top: 50px;">
+        <div class="col-sm-12 pull-right bottom" style="margin-top: 50px;">
             <p>Bienvenue {{ Auth::user()->pseudo }},</p>
             <hr>
             <p> Les chaines en live que vous suivez :</p>
