@@ -510,3 +510,25 @@ footer #support_user textarea{
 .form-control:focus{
     border: 1px solid #dad8de !important;
 }
+#header{
+    background: #46188d;
+}
+.navbar{
+    background: #46188d;
+}
+#footer{
+    background: #46188d; 
+}
+.btn-primary{
+    background: #f39c12;
+    border: 1px solid #f39c12;
+}
+.btn-primary:hover{
+    background: #f8a726c9;
+    border: 1px solid #f8a726c9;
+}
+.btn-primary:active{
+    background: #f8a726c9;
+    border: 1px solid #f8a726c9;
+}
+

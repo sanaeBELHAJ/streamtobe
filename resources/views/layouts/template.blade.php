@@ -19,13 +19,13 @@
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
-        {!! HTML::style('css/template.css') !!}
         {!! HTML::style('css/font-awesome.min.css') !!}
         {!! HTML::style('css/custom.css') !!}
         {!! HTML::style('css/theme.min.css') !!}
         {!! HTML::style('css/owl.carousel.min.css') !!}
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
+        {!! HTML::style('css/template.css') !!}
         @yield('css')
         @if(env('APP_ENV') == "production")
             <!-- Global site tag (gtag.js) - Google Analytics -->

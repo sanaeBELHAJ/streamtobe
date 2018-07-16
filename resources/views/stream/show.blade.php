@@ -4,104 +4,8 @@
 
 <div class ="container-fluid">
     <div class="row">
-        @auth
-        <div class="col-sm-2 profil-panel">
-            <div class="top bottom">
-                <div class="cadre-style">
-                    <center>
-                        <img class="resize-img" src="<?php echo asset('storage/' .  $streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
-                    </center> 
-                </div>
-                <p>
-                <center>{{ $streamer->pseudo }}</center>
-                <center>
-                    @if( $streamer->country != null)
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
-                    <img style="width:10%" src="{{ $streamer->country->svg }}">
-                    @else
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>
-                    Inconnu
-                    @endif
-                </center>
-                </p>
-                <center>
-                    <ul class="navbar-nav">
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
-                        </li>
-                        <li  class="nav-item">
-                            <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
-                        </li>
-                    </ul>
-                    <br>
-                    @auth
-                        <a class="btn-contacter" href="/messages">                  
-                        Contacter
-                        </a>
-                    @endauth
-                </center>
-            </div>
-        </div>
-        @endauth
-        <div class="col-sm-10 pull-right top-2 bottom">
-            <div class="div-stream">
-                  @if(Auth::check() && $streamer->id == Auth::user()->id)
-
-                        <div class="mt-4" id="config_stream">
-                            <div class="row">
-                                <section class="experiment col-12 col-md-6">
-                                        Type de diffusion : &nbsp;
-                                        <select id="broadcasting-option" class="form-control d-inline w-50">
-                                            <option>Stream classique</option>
-                                            <option>Stream audio</option>
-                                        </select>
-                                </section>
-                                <p class="col-12 col-md-6">
-                                    Catégorie :
-                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
-                                        @foreach($themes as $theme)
-                                        <optgroup label="{{$theme->name}}">
-                                            @foreach($theme->types as $type)
-                                            <option value="{{$type->name}}">{{$type->name}}</option>
-                                            @endforeach
-                                        </optgroup>
-                                        @endforeach
-                                    </select>
-                                </p>
-                                <p class="col-12 col-md-6">
-                                    Nom de la chaine : &nbsp;
-                                    <input id="stream_title" class="form-control d-inline w-50 update_stream"
-                                            data-config="title" type="text" placeholder="Titre du stream"
-                                            value="{{$streamer->stream->title}}">
-                                </p>
-                                <label class="col-12 col-md-6">
-                                    <label class="switch align-middle m-0">
-                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
-                                                @if($streamer->stream->status == 0)
-                                                    value="On"
-                                                @else
-                                                    value="Off"
-                                                    checked
-                                                @endif >
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Activer / Interrompre la diffusion
-                                </label>
-                            </div>
-                        </div>
-                  @endif
-                <div class="col-sm-1 div-viewers">
-                    <span id="visitorStream"></span>
-                    <i class="material-icons">
-                    visibility
-                    </i>
-                </div>
-                
-            </div>
-            <div class="container-fluid row">
+        <div class="col-sm-12 pull-right top-2 bottom">
+            <div class="container-fluid row" >
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -110,7 +14,7 @@
                             {{-- Vidéo --}}
                             <div id="videos-container"></div>
                                 {{-- Nombre de viewers --}}
-                           
+                            <i class="fa fa-eye"></i><span id="visitorStream"></span>
                             @auth
                                 @if($streamer->stream->status == 1 && $streamer->id != Auth::user()->id)
                                     <!-- list of all available broadcasting rooms -->
@@ -153,7 +57,7 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                       <!-- <div class="mt-4" id="config_stream">
+                        <div class="mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
                             <div class="form-row">
                                 <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
@@ -195,7 +99,7 @@
                                     Activer / Interrompre la diffusion
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
 
@@ -219,7 +123,7 @@
 
                             {{-- Following --}}
                             <p class="col text-center">
-                                @php ($IsCurrentViewer = 0)
+                                @php ($viewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
@@ -228,10 +132,10 @@
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
-                                        @php ($IsCurrentViewer = 1)
+                                        @php ($viewer = 1)
                                     @endif
-                                @endforeach
-                                @if($IsCurrentViewer == 0)
+
+                                @if($viewer->status == 0)
                                     <button class="follow_stream w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
@@ -239,6 +143,8 @@
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                 @endif
+                                @endforeach
+
                             </p>
                         </div>
 
@@ -271,17 +177,13 @@
             width:100%;
             height:100%;
         }
-
         @media(max-width: 768px){
             #messages, #infos{
                 height: 400px;
             }
         }
-
         /*******/
-
         /* Bouton d'activation du stream */
-
         /* The switch - the box around the slider */
         #config_stream .switch {
             position: relative;
@@ -289,10 +191,8 @@
             width: 60px;
             height: 34px;
         }
-
         /* Hide default HTML checkbox */
         #config_stream .switch input {display:none;}
-
         /* The slider */
         #config_stream .slider {
             position: absolute;
@@ -305,7 +205,6 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
         #config_stream .slider:before {
             position: absolute;
             content: "";
@@ -317,26 +216,21 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
         #config_stream input:checked + .slider {
             background-color: #39ca0c;
         }
-
         #config_stream input:focus + .slider {
             box-shadow: 0 0 1px #39ca0c;
         }
-
         #config_stream input:checked + .slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
-
         /* Rounded sliders */
         #config_stream .slider.round {
             border-radius: 34px;
         }
-
         #config_stream .slider.round:before {
             border-radius: 50%;
         }
@@ -358,37 +252,31 @@
     @endauth
 
     <script>
-
         $(function(){
             //Texte du slider
             $('.sliderText').click(function(){
                 $('#myRange').val($(this).data('value')).change();
             });
-
             //Slider en vue responsive
             $('#myRange').change(function(){
                 //Chat
                 if($(this).val()==1){
                     $('.sliderText[data-value="1"]').addClass('font-weight-bold');
                     $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
-
                     $('#messages').addClass('d-12').removeClass('d-none');
                     $('#infos').addClass('d-none').removeClass('d-12');
                 }//Description
                 else{
                     $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
                     $('.sliderText[data-value="2"]').addClass('font-weight-bold');
-
                     $('#messages').addClass('d-none').removeClass('d-12');
                     $('#infos').addClass('d-12').removeClass('d-none');
                 }
             });
-
             /* Config stream (owner) */
             function updateStream(){
                 var key = $(this).data('config');
                 var value = "";
-
                 switch(key){
                     case "title":
                         value = $("#stream_title").val();break;
@@ -397,7 +285,6 @@
                     case "type":
                         value = $("#stream_type").val();break;
                 }
-
                 $.ajax({
                     url: "/updateStream",
                     type: 'POST',
@@ -413,26 +300,20 @@
                         console.log(data);
                     });
             }
-
             $(".update_stream").change(updateStream);
-
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
                     env: 'sandbox', // Or 'production',
-
                     client: {
                         sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
                         //production: 'xxxxxxxxx'
                     },
-
                     commit: true, // Show a 'Pay Now' button
-
                     style: {
                         color: 'gold',
                         size: 'small'
                     },
-
                     payment: function(data, actions) {
                         //Set up the payment here
                         return actions.payment.create({
@@ -448,7 +329,6 @@
                             }
                         });
                     },
-
                     onAuthorize: function(data, actions) {
                         //Execute the payment here
                         return actions.payment.execute().then(function(payment) {
@@ -472,17 +352,14 @@
                                 });
                         });
                     },
-
                     onCancel: function(data, actions) {
                         //Buyer cancelled the payment
                     },
-
                     onError: function(err) {
                         //An error occurred during the transaction
                     }
                 }, '#paypal-button');
             }
-
             //Edit modération/bannissement
             function statusViewer(pseudo, rank, set){
                 $.ajax({
@@ -503,7 +380,6 @@
                         console.log(data);
                     });
             }
-
             //Detection du click() sur les boutons générés par les appels Ajax
             if($("#config_stream").length > 0){
                 $("#config_stream").on("click", ".rmvRankUser", function(){
@@ -512,7 +388,6 @@
                     statusViewer(pseudo, action, 0);
                 });
             }
-
             //Liste modérateurs / bannis
             updateList();
             function updateList(){
@@ -527,15 +402,12 @@
                             var text = "";
                             text +='<tr class="d-flex justify-content-between">';
                             text += '<td>'+element.pseudo+'</td>';
-
                             if(element.rank == 1)
                                 text += "<td><button data-action='mod' data-pseudo='"+element.pseudo+"' ";
                             else if(element.rank == -1)
                                 text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
-
                             text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>";
                             text += "</tr>";
-
                             if(element.rank == 1)
                                 $("#listMods").append(text);
                             else if(element.rank == -1)
@@ -546,34 +418,27 @@
                         console.log(data);
                     });
             }
-
             /* Stream WEBRTC */
             var config = {
                 openSocket: function(config) {
-
                     var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
-
                     config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
                     var sender = Math.round(Math.random() * 999999999) + 999999999;
-
                     io.connect(SIGNALING_SERVER).emit('new-channel', {
                         channel: config.channel,
                         sender: sender
                     });
-
                     var socket = io.connect(SIGNALING_SERVER + config.channel);
                     socket.channel = config.channel;
                     socket.on('connect', function () {
                         if (config.callback) config.callback(socket);
                     });
-
                     socket.send = function (message) {
                         socket.emit('message', {
                             sender: sender,
                             data: message
                         });
                     };
-
                     socket.on('message', config.onmessage);
                 },
                 onRemoteStream: function(htmlElement) {
@@ -605,9 +470,7 @@
                     document.getElementById('visitorStream').innerHTML = "";
                     document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
                 }
-
             };
-
             function setupNewBroadcastButtonClickHandler(onload) {
                 if (onload == 1) return 0;
                 if (document.getElementById('setup-new-broadcast').value === "Off") {
@@ -620,7 +483,6 @@
                                     });
                                 }
                     }
-
                     document.getElementById('videos-container').innerHTML = "";
                     document.getElementById("setup-new-broadcast").value = "On";
                     document.getElementById('stream_title').disabled = false;
@@ -653,9 +515,7 @@
             var setupNewBroadcast = document.getElementById('setup-new-broadcast');
             var broadcastingOption = document.getElementById('broadcasting-option');
             var roomsList = document.getElementById('rooms-list');
-
             if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
-
             function captureUserMedia(callback) {
                 var constraints = null;
                 window.option = broadcastingOption ? broadcastingOption.value : '';
@@ -664,7 +524,6 @@
                         audio: true,
                         video: false
                     };
-
                     if(DetectRTC.hasMicrophone !== true) {
                         alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
                     }
@@ -680,21 +539,16 @@
                         audio: false,
                         video: video_constraints
                     };
-
                     if(DetectRTC.isScreenCapturingSupported !== true) {
                         alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
                     }
                 }
-
                 if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
                     alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
                 }
-
                 var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
-
                 htmlElement.muted = true;
                 htmlElement.volume = 0;
-
                 try {
                     htmlElement.setAttributeNode(document.createAttribute('autoplay'));
                     htmlElement.setAttributeNode(document.createAttribute('playsinline'));
@@ -704,14 +558,12 @@
                     htmlElement.setAttribute('playsinline', true);
                     htmlElement.setAttribute('controls', true);
                 }
-
                 var mediaConfig = {
                     video: htmlElement,
                     onsuccess: function(stream) {
                         config.attachStream = stream;
                         addStreamStopListener(stream,  function() {
                         });
-
                         videosContainer.appendChild(htmlElement);
                         callback && callback();
                     },
@@ -726,7 +578,6 @@
                 if (constraints) mediaConfig.constraints = constraints;
                 getUserMedia(mediaConfig);
             }
-
             function addStreamStopListener(stream, callback) {
                 var streamEndedEvent = 'ended';
                 if ('oninactive' in stream) {
@@ -742,9 +593,7 @@
                         callback = function() {};
                     }, false);
                 });
-
             }
-
             function start() {
                 @auth
                         @if($streamer->id != Auth::user()->id)
@@ -765,10 +614,7 @@
                 document.getElementById('stream-info').hidden = false;
                 @endguest
             };
-
             start();
         });
-
     </script>
-
 @endsection

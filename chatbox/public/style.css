@@ -175,4 +175,5 @@ textarea{
     outline-style: none;
     border: 0.2 solid gray;
     box-shadow: none;
+    height: 50px;
 }
