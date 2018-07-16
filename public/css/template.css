@@ -168,7 +168,7 @@ header .dropdown-menu{
 .btn-follow {
     background: transparent;
     border: 1px solid #1BBC9B;
-    color: #6441a4;
+    color: #1BBC9B;
     border-radius: .1rem;
     padding: .1rem .3rem;
     margin-right: 0px;
@@ -479,7 +479,7 @@ footer #support_user textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #1BBC9B; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
@@ -540,4 +540,16 @@ footer #support_user textarea{
 .navbar-search{
     background-color: #2D3E50 !important;
 }
-
+.pagination .active>a:hover{
+    background-color: #1BBC9B;
+}
+.pagination .active>a {
+    background-color: #1BBC9B !important;
+    border-color: #1BBC9B !important;
+}
+.pagination .active>a:hover {
+    background-color: #1BBC9B !important;
+    border-color: #1BBC9B !important;
+    outline-style: none;
+    box-shadow: none;
+}
