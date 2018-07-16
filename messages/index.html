@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css"> 
         <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Snippet -->
         <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
         <!-- /Snippet -->
@@ -23,10 +24,13 @@
                 </div>
                 <div id="search">
                     <label for="">
-                        <i class="fa fa-search" aria-hidden="true"></i>
+                       <i class="material-icons">
+                        search
+                        </i>
                     </label>
                     <input type="text" id="search_contact" placeholder="Rechercher un utilisateur..." />                    
-                    <i class="fas fa-sync btn" id="refresh_list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Mettre à jour les contacts"></i>
+                    <i class="material-icons text-center" id="refresh_list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Mettre à jour les contacts">refresh</i>
+
                 </div>
                 <div id="contacts">
                     <ul>
@@ -35,6 +39,16 @@
                 </div>
             </div>
             <div class="content">
+                <div class="col-sm-12" style="background: #ffbf27">
+                    <p class="test-center" style="padding: 3px;">
+                        <i class="material-icons" style="font-size: 17px">
+                        info
+                        </i>
+                        <span> Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</span>
+                        <br>
+                        <span> Vous devez vous abonner mutuellement à vos chaines respectives.</span>
+                    </p>
+                </div>
                 <div class="contact-profile">
                     <img src="#" alt="" />
                     <p>Selectionnez un utilisateur dans la liste à gauche</p>
@@ -48,7 +62,9 @@
                     <div class="wrap">
                         <input type="text" placeholder="Rédigez votre message ici..." disabled/>
                         <button class="submit">
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            <i class="material-icons">
+                            send
+                            </i>
                         </button>
                     </div>
                 </div>
