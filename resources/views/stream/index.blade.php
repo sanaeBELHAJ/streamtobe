@@ -52,8 +52,8 @@
                                     </button></small>') !!}       
                 </div>
                 <div class="form-group mb-2">
-                    <button type="submit" class="btn btn-primary btn-filter">
-                        chercher
+                    <button type="submit" class="btn btn-primary btn-rounded btn-shadow btn-lg">
+                        Rechercher
                     </button>
                 </div>
             </form>

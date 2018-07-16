@@ -193,7 +193,7 @@
                     <h4 class="footer-title">Nous contacter</h4>
                     <p>Nous sommes disponibles 7/7j</p>
                     <div class="input-group m-t-25">
-                     <button class="btn btn-primary" type="button"><a href="#" class="text-light" data-toggle="modal" data-target="#supportModal">Contactez-nous</a></button>
+                     <button class="btn btn-primary btn-rounded btn-shadow btn-lg" type="button"><a href="#" class="text-light" data-toggle="modal" data-target="#supportModal">Contactez-nous</a></button>
                      </span>
                         <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="supportModalLabel" aria-hidden="true" style="color: black;">
                             <div class="modal-dialog modal-lg" role="document">
