@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <?php if(strpos(Request::root(), "localhost") === false): ?>
             <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
         <?php endif; ?>
@@ -15,11 +15,14 @@
 
         <!-- CSS -->
          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         {!! Html::style('jquery-ui-1.12.1/jquery-ui.css') !!}
         {!! Html::style('bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('css/half-slider.css') !!}
         {!! HTML::style('fontawesome-5.0.8/web-fonts-with-css/css/fontawesome-all.min.css') !!}
         {!! HTML::style('css/template.css') !!}
+        {!! HTML::style('css/custom.css') !!}
+        {!! HTML::style('css/theme.min.css') !!}
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
         @yield('css')
@@ -47,85 +50,121 @@
             </script>
         @endif
     </head>
-    <body>
-        <header style="font-size:13px">
-            <nav style="padding-top:0px;padding-bottom:0px; " class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class=" container-fluid">
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}">
-                        <span class="logo-text">{{ setting('site.title') }}</span>
-                    </a>
-                    <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" 
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-    
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
-                        <ul class="d-flex justify-content-around  navbar-nav mr-auto">
-                            <li class="mx-3">
-                                <a href="{{ route('stream.index') }}" class="nav-link">{{ __('Streams') }}</a>
-                            </li>
-                        </ul>
-    
-
-                        <ul class="d-flex justify-content-around  navbar-nav ml-auto">
-                             <li class="mx-3 d-flex align-items-center">
-                                 <div class="search">
-                                     <button type="submit">
-                                        <i class="material-icons">
-                                            search
-                                        </i>
-                                     </button>
-                                    {{ Form::text('q', '', [ 'class' =>  'searchUser', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
-                                 </div>
-                             </li>
-                            <!-- Authentication Links -->
-                            @guest
-                                <li><a class="nav-link btn_register" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                                <li><a class="nav-link btn_register" href="{{ route('register') }}">{{ __('Register') }}</a></li>
-                            @else
-                                <li class="mx-3 d-flex align-items-center">
-                                    <a href="/messages" class="d-flex align-start nav-link p-0">
-                                        <i class="material-icons">
-                                        mail_outline
-                                        </i>      
-                                        {{-- <i class="fas fa-envelope fa-2x text-white"></i>
-                                        <span class="h-50 badge badge-pill badge-danger">5</span> --}}
-                                    </a>
+    <body class="fixed-header">
+    <header id="header">
+        <div class="container">
+            <div class="navbar-backdrop">
+                <div class="navbar">
+                    <div class="navbar-left">
+                        <a class="navbar-toggle"><i class="fa fa-bars"></i></a>
+                        <a href="{{ url('/') }}" class="logo"><img src="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}" alt="Streamtobe"></a>
+                        <nav class="nav">
+                            <ul>
+                                <li class="hidden-xs-down  hidden-sm-down hidden-md-down ">
+                                    <a href="{{ route('stream.index') }}">{{ __('Streams') }}</a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                            <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>" alt="Image de profil" title="Image de profil">
-                                        {{ Auth::user()->pseudo }} <span class="caret"></span>
-                                    </a>
-    
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="dropdown-item">{{ __('My stream') }}</a>
-                                        <a href="{{ route('home.index') }}" class="dropdown-item">{{ __('Settings') }}</a>
-                                        <hr>
-                                        @if(Auth::user()->role_id == 1)
-                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">{{ __('Administration') }}</a>
-                                            <hr>
-                                        @endif
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
+                                <li class="hidden-xl-up  hidden-lg-up">
+                                    <a href="{{ route('stream.index') }}">{{ __('Streams') }}</a>
+                                </li>
+                                @guest
+                                    <li class="hidden-xl-up  hidden-lg-up">
+                                        <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    </li>
+                                    <li class="hidden-xl-up  hidden-lg-up"><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                                @endguest
+                                @auth
+                                    <li class="hidden-xl-up  hidden-lg-up ">
+                                        <a href="/messages" class="">
+                                            <i class="material-icons" style="vertical-align: middle;">
+                                                mail_outline
+                                            </i>
                                         </a>
-    
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            @csrf
-                                        </form>
-                                    </div>
-                                </li>
-                            @endguest
-                        </ul>
+                                    </li>
+                                        <li class="hidden-xl-up  hidden-lg-up">
+                                            <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
+                                        </li>
+                                        <li class="hidden-xl-up  hidden-lg-up">
+                                            <a href="{{ route('home.index') }}" class="">{{ __('Settings') }}</a>
+                                        </li>
+                                        <li class="hidden-xl-up  hidden-lg-up">
+                                            @if(Auth::user()->role_id == 1)
+                                                <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
+                                            @endif
+                                        </li>
+                                        <li class="hidden-xl-up  hidden-lg-up">
+                                            <a class="" href="{{ route('logout') }}"
+                                               onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                                                {{ __('Logout') }}
+                                            </a>
+                                        </li>
+                                        <li class="hidden-xl-up  hidden-lg-up">
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                @endauth
+                                    <li class="hidden-xs-down  hidden-sm-down hidden-md-down "><a data-toggle="search">Recherche</a></li>
+                            </ul>
+                        </nav>
                     </div>
+                    <li class="nav navbar-right">
+                            <ul>
+                                @guest
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down"><a href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down"><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                                @else
+                                    <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                        <a href="/messages" class="">
+                                            <i class="material-icons" style="vertical-align: middle;">
+                                                mail_outline
+                                            </i>
+                                        </a>
+                                    </li>
+                        <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                            <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
+                        </li>
+                         <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                            <a href="{{ route('home.index') }}" class="">{{ __('Settings') }}</a>
+                         </li>
+                          <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                            @if(Auth::user()->role_id == 1)
+                                <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
+                            @endif
+                          </li>
+                           <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                        <a>
+                                            <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>">
+                                            {{ Auth::user()->pseudo }} <span class="caret"></span>
+                                        </a>
+                                    </li>
+                           <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                            <a class="" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+                           </li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                                </li>
+                                    <li class="hidden-xl-up  hidden-lg-up"><a data-toggle="search"><i class="material-icons" style="vertical-align: middle;">
+                                                search
+                                            </i></a></li>
+
+                            </ul>
+                    @endguest
                 </div>
-            </nav>
-        </header>
+            </div>
+        </div>
+        <div class="navbar-search">
+            <div class="container">
+                {{ Form::text('q', '', [ 'class' =>  'searchUser form-control', 'data-action' => 'redirect', 'placeholder' =>  'Rechercher un stream'])}}
+            </div>
+        </div>
+    </header>
 
         @yield('content')
 
@@ -199,6 +238,7 @@
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
         {{-- {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!} --}}
         {!! HTML::script('js/template.js') !!}
+        {!! HTML::script('js/theme.min.js') !!}
         @yield('js')
     </body>
 </html>
