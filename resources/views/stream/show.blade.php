@@ -134,9 +134,8 @@
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                         @php ($viewer = 1)
                                     @endif
-                                @endforeach
 
-                                @if($viewer == 0)
+                                @if($viewer->status == 0)
                                     <button class="follow_stream w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
@@ -144,6 +143,8 @@
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
                                 @endif
+                                @endforeach
+
                             </p>
                         </div>
 
