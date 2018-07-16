@@ -511,17 +511,23 @@ footer #support_user textarea{
     border: 1px solid #dad8de !important;
 }
 #header{
-    background: #46188d;
+    background: #a38de6;
 }
 .navbar{
-    background: #46188d;
+    background: #a38de6;
+    color: white;
 }
+#header .nav>ul>li>a, #header .nav>ul>li>a{
+    color: white;
+}
+
+
 #footer{
-    background: #46188d; 
+    background: #a38de6; 
 }
 .btn-primary{
-    background: #f39c12;
-    border: 1px solid #f39c12;
+    background: #e6c48d ;
+    border: 1px solid #e6c48d ;
 }
 .btn-primary:hover{
     background: #f8a726c9;
@@ -530,5 +536,12 @@ footer #support_user textarea{
 .btn-primary:active{
     background: #f8a726c9;
     border: 1px solid #f8a726c9;
+}
+.card-border{
+   border: 0.5px solid #e6c48d;
+}
+.card-header{
+   color: white;
+   background: #e6c48d;
 }
 
