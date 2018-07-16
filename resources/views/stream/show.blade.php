@@ -616,7 +616,6 @@
                     onsuccess: function(stream) {
                         config.attachStream = stream;
                         addStreamStopListener(stream,  function() {
-                            alert('screen sharing is ended.');
                         });
 
                         videosContainer.appendChild(htmlElement);
