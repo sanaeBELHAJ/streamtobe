@@ -215,10 +215,10 @@
             transition: .4s;
         }
         #config_stream input:checked + .slider {
-            background-color: #39ca0c;
+            background-color: #1BBC9B;
         }
         #config_stream input:focus + .slider {
-            box-shadow: 0 0 1px #39ca0c;
+            box-shadow: 0 0 1px #1BBC9B;
         }
         #config_stream input:checked + .slider:before {
             -webkit-transform: translateX(26px);
