@@ -257,8 +257,8 @@
             </div>
             @if(!isset($_COOKIE['valid_cookie']))
                 <div id="cookies">
-                    <span>En poursuivant votre navigation sur ce site, vous acceptez l'utilisation de cookies afin d'améliorer son fonctionnement.</span>
-                    <button class="btn btn-warning" id="valid_cookie"> J'accepte </button>
+                    <div style="margin-top: 15px;">En poursuivant votre navigation sur ce site, vous acceptez l'utilisation de cookies afin d'améliorer son fonctionnement.</div>
+                    <button style="margin-bottom: 15px;" class="btn btn-primary btn-rounded" id="valid_cookie"> J'accepte </button>
                 </div>
             @endif
         </div>
