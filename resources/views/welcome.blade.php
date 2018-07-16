@@ -120,11 +120,25 @@
 
         <!-- Page Content -->
         <section class="py-5">
-        <div class="container">
+        <div class="container-fluid" style="text-align: center">
+            <div class="row">
             {{-- Streamtobe est là pour vous ! --}}
             <h1>{{ setting('site.welcome-title') }}</h1>
             {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
             <p>{{ setting('site.welcome-text') }}</p>
+                <div class="col-sm-12 col-md-4"><br/>
+                    <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('register') }}" data-lightbox role="button">{{ __('Create your own stream') }}</a><br/><br/>
+                    Creez votre compte ! Pour cela, rien de plus simple, rejoignez-nous en 1 click !
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <i class="fa fa-camera fa-5x" aria-hidden="true"></i><br/><br/>
+                    Lancez votre propre chaine ou suivez vos streamers favoris !
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <i class="fa fa-dollar fa-5x" aria-hidden="true"></i><br/><br/>
+                    Encouragez vos streamers favoris en leur faisant une donation ou bien recoltez vos propres revenus !
+                </div>
+            </div>
         </div>
         </section>
     @endauth
