@@ -7,15 +7,24 @@
         <hr>
         @foreach($viewers as $viewer)
             @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
-                <div class='col-6 col-sm-4 col-md-3'>
-                    <div class="div-f w-100">
-                        <p class="d-flex w-100 justify-content-between align-items-center">
-                            <img class='pictureAccount' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
-                            <a class="" href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>
-                        </p>
-                        <div class="d-flex w-100 justify-content-between">
-                            <p>Inscrit le {{ Carbon\Carbon::parse($viewer->created_att)->format('d/m/Y') }}</p>
-                            <p><img src="{{ $viewer->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></p>
+                <div class="col-6 col-sm-4 col-md-3">
+                    <div class="card card-lg">
+                        <div class="card-img">
+                            <a href="/home/{{$viewer->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $viewer->stream->user->avatar); ?>" class="card-img-top"></a>
+                            @if ($viewer->stream->status == 1)
+                                <div class="badge badge-xbox-one">En ligne</div>
+                                <div class="badge badge-skype" style="left:150px;">{{$viewer->stream->type->name}}</div>
+                            @else
+                                <div class="badge badge-steam">Hors ligne</div>
+                            @endif
+                            <div class="card-likes">
+                                <a href="#"><img src="{{ $viewer->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
+                            </div>
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title"><a href="/home/{{$viewer->stream->user->pseudo}}">{{$viewer->stream->user->pseudo}}</a></h4>
+                            <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}</span></div>
+                            <p class="card-text">{{$viewer->stream->title}}</p>
                         </div>
                     </div>
                 </div>
