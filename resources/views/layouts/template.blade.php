@@ -95,7 +95,11 @@
                                     <li class="hidden-xl-up hidden-lg-up">
                                         <a  href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"> Revenus</a>
                                     </li>
-                                        <li class="hidden-xl-up  hidden-lg-up">
+                                    <li class="hidden-xl-up hidden-lg-up">
+                                        <a  href="{{ route('home.index') }}">{{ __('Settings') }}</a>
+                                    </li>
+
+                                    <li class="hidden-xl-up  hidden-lg-up">
                                             @if(Auth::user()->role_id == 1)
                                                 <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
                                             @endif
@@ -143,13 +147,14 @@
                                             <span  {{ Auth::user()->pseudo }} ></span>
                                         </a>
                                <div class="dropdown-menu dropdown-menu-right">
-                                   <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-user"></i> Profil</a>
+                                   <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
                                    <a href="/messages" class="dropdown-item">
                                        <i class="fa fa-envelope-open">
                                        </i>
                                        Message
                                    </a>
                                    <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar"></i> Revenus</a>
+                                   <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-cog"></i> {{ __('Settings') }}</a>
                                    <div class="dropdown-divider"></div>
                                    <a class="dropdown-item" href="{{ route('logout') }}"
                                       onclick="event.preventDefault();
