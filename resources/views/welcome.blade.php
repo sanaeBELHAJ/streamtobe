@@ -127,16 +127,16 @@
             <div class="row" style="margin-top:100px;">
             {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
                 <div class="col-sm-12 col-md-4"><br/>
-                    <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('register') }}" data-lightbox role="button">{{ __('Create your own stream') }}</a><br/><br/>
-                    Creez votre compte ! Pour cela, rien de plus simple, rejoignez-nous en 1 click !
+                    <a style="margin-bottom: 20px;"class="btn btn-primary btn-rounded btn-shadow btn-lg" href="{{ route('register') }}" data-lightbox role="button">{{ __('Create your own stream') }}</a>
+                    <p> Creez votre compte ! Pour cela, rien de plus simple, rejoignez-nous en 1 click !</p>
                 </div>
                 <div class="col-sm-12 col-md-4">
-                    <i class="fa fa-camera fa-5x" aria-hidden="true"></i><br/><br/>
-                    Lancez votre propre chaine ou suivez vos streamers favoris !
+                    <i class="fa fa-camera fa-5x" style="margin-bottom: 20px;" aria-hidden="true"></i>
+                    <p> Lancez votre propre chaine ou suivez vos streamers favoris !</p>
                 </div>
                 <div class="col-sm-12 col-md-4">
-                    <i class="fa fa-dollar fa-5x" aria-hidden="true"></i><br/><br/>
-                    Encouragez vos streamers favoris en leur faisant une donation ou bien recoltez vos propres revenus !
+                    <i class="fa fa-dollar fa-5x" style="margin-bottom: 20px;" aria-hidden="true"></i>
+                    <p> Encouragez vos streamers favoris en leur faisant une donation ou bien recoltez vos propres revenus !</p>
                 </div>
             </div>
         </div>
