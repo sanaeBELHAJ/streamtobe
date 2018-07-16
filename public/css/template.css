@@ -479,7 +479,7 @@ footer #support_user textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #1BBC9B; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
