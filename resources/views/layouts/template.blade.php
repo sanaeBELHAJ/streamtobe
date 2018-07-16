@@ -23,6 +23,7 @@
         {!! HTML::style('css/font-awesome.min.css') !!}
         {!! HTML::style('css/custom.css') !!}
         {!! HTML::style('css/theme.min.css') !!}
+        {!! HTML::style('css/owl.carousel.min.css') !!}
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
         @yield('css')
@@ -263,9 +264,45 @@
         {!! HTML::script('jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::script('bootstrap/js/popper.min.js') !!}
         {!! HTML::script('bootstrap/js/bootstrap.min.js') !!}
+        {!! HTML::script('js/owl.carousel.min.js') !!}
         {{-- {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!} --}}
         {!! HTML::script('js/template.js') !!}
         {!! HTML::script('js/theme.min.js') !!}
+    <script>
+        (function($) {
+            "use strict";
+
+            // Full Width Carousel
+            $('.owl-slide').owlCarousel({
+                nav: true,
+                loop: true,
+                autoplay: true,
+                items: 1
+            });
+
+            // Recent Reviews
+            $('.owl-list').owlCarousel({
+                margin: 25,
+                nav: true,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    500: {
+                        items: 2
+                    },
+                    701: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 4
+                    }
+                }
+            });
+
+        })(jQuery);
+    </script>
         @yield('js')
     </body>
 </html>

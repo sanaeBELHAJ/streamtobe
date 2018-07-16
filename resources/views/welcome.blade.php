@@ -98,44 +98,22 @@
 
     @else
         <header>
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-
+            <section class="bg-inverse p-y-0">
+                <div class="owl-carousel owl-slide full-height">
                     @foreach($listSlider as $picture)
-                        <li data-target="#carouselExampleIndicators" 
-                            data-slide-to="{{$loop->index}}" 
-                            @if($loop->first) class="active" @endif></li>
-                    @endforeach
-
-                </ol>
-                <div class="carousel-inner" role="listbox">
-
-                    @foreach($listSlider as $picture)
-
-                        <div class="carousel-item @if ($loop->first) active @endif" style="background-image: url('{{$picture}}')">
-                            <div class="carousel-caption d-none d-sm-block ">
-                                <div class="visible">
-                                    <h3>{{setting('site.image-'.$loop->index)}}</h3>
-                                    <p>{{ __("Let's show your skill on your stream") }}</p>
-                                </div>
+                    <div class="carousel-item" style="background-image: url('{{$picture}}')">
+                        <div class="carousel-overlay"></div>
+                        <div class="carousel-caption">
+                            <div>
+                                <h3 class="carousel-title">The Witcher 3: Blood and Wine</h3>
+                                <p>The world is in chaos. The air is thick with tension and the smoke of burnt villages.</p>
+                                <a class="btn btn-primary btn-rounded btn-shadow btn-lg" href="https://www.youtube.com/watch?v=c0i88t0Kacs" data-lightbox role="button">Watch Gameplay</a>
                             </div>
                         </div>
-
+                    </div>
                     @endforeach
                 </div>
-                <div class="row btn-slider">
-                    <a href="{{ route('stream.index') }}"  class="btn btn-lg gold mt-4">{{ __('Watch our current streams') }}</a>
-                    <a href="{{ route('register') }}"  class="btn btn-lg gold mt-4">{{ __('Create your own stream') }}</a>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+            </section>
         </header>
 
         <!-- Page Content -->
