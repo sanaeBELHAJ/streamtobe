@@ -273,6 +273,7 @@
         {{-- {!! HTML::script('bootstrap/js/bootstrap.bundle.min.js') !!} --}}
         {!! HTML::script('js/template.js') !!}
         {!! HTML::script('js/theme.min.js') !!}
+
     <script>
         (function($) {
             "use strict";

@@ -5,7 +5,7 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row">
+            <div class="container-fluid row" >
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>

@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid" style="height:100%;">
     <div class="row">
         <div class="col-sm-12 pull-right top-1 bottom">
             <hr>
