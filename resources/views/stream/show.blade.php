@@ -387,6 +387,7 @@
                 });
             }
             //Liste modérateurs / bannis
+@auth
             updateList();
             function updateList(){
                 $.ajax({
@@ -416,6 +417,7 @@
                         console.log(data);
                     });
             }
+            @endauth
             /* Stream WEBRTC */
             var config = {
                 openSocket: function(config) {
