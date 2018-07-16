@@ -175,17 +175,13 @@
             width:100%;
             height:100%;
         }
-
         @media(max-width: 768px){
             #messages, #infos{
                 height: 400px;
             }
         }
-
         /*******/
-
         /* Bouton d'activation du stream */
-
         /* The switch - the box around the slider */
         #config_stream .switch {
             position: relative;
@@ -193,10 +189,8 @@
             width: 60px;
             height: 34px;
         }
-
         /* Hide default HTML checkbox */
         #config_stream .switch input {display:none;}
-
         /* The slider */
         #config_stream .slider {
             position: absolute;
@@ -209,7 +203,6 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
         #config_stream .slider:before {
             position: absolute;
             content: "";
@@ -221,26 +214,21 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
         #config_stream input:checked + .slider {
             background-color: #39ca0c;
         }
-
         #config_stream input:focus + .slider {
             box-shadow: 0 0 1px #39ca0c;
         }
-
         #config_stream input:checked + .slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
-
         /* Rounded sliders */
         #config_stream .slider.round {
             border-radius: 34px;
         }
-
         #config_stream .slider.round:before {
             border-radius: 50%;
         }
@@ -262,37 +250,31 @@
     @endauth
 
     <script>
-
         $(function(){
             //Texte du slider
             $('.sliderText').click(function(){
                 $('#myRange').val($(this).data('value')).change();
             });
-
             //Slider en vue responsive
             $('#myRange').change(function(){
                 //Chat
                 if($(this).val()==1){
                     $('.sliderText[data-value="1"]').addClass('font-weight-bold');
                     $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
-
                     $('#messages').addClass('d-12').removeClass('d-none');
                     $('#infos').addClass('d-none').removeClass('d-12');
                 }//Description
                 else{
                     $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
                     $('.sliderText[data-value="2"]').addClass('font-weight-bold');
-
                     $('#messages').addClass('d-none').removeClass('d-12');
                     $('#infos').addClass('d-12').removeClass('d-none');
                 }
             });
-
             /* Config stream (owner) */
             function updateStream(){
                 var key = $(this).data('config');
                 var value = "";
-
                 switch(key){
                     case "title":
                         value = $("#stream_title").val();break;
@@ -301,7 +283,6 @@
                     case "type":
                         value = $("#stream_type").val();break;
                 }
-
                 $.ajax({
                     url: "/updateStream",
                     type: 'POST',
@@ -317,26 +298,20 @@
                         console.log(data);
                     });
             }
-
             $(".update_stream").change(updateStream);
-
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
                     env: 'sandbox', // Or 'production',
-
                     client: {
                         sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
                         //production: 'xxxxxxxxx'
                     },
-
                     commit: true, // Show a 'Pay Now' button
-
                     style: {
                         color: 'gold',
                         size: 'small'
                     },
-
                     payment: function(data, actions) {
                         //Set up the payment here
                         return actions.payment.create({
@@ -352,7 +327,6 @@
                             }
                         });
                     },
-
                     onAuthorize: function(data, actions) {
                         //Execute the payment here
                         return actions.payment.execute().then(function(payment) {
@@ -376,17 +350,14 @@
                                 });
                         });
                     },
-
                     onCancel: function(data, actions) {
                         //Buyer cancelled the payment
                     },
-
                     onError: function(err) {
                         //An error occurred during the transaction
                     }
                 }, '#paypal-button');
             }
-
             //Edit modération/bannissement
             function statusViewer(pseudo, rank, set){
                 $.ajax({
@@ -407,7 +378,6 @@
                         console.log(data);
                     });
             }
-
             //Detection du click() sur les boutons générés par les appels Ajax
             if($("#config_stream").length > 0){
                 $("#config_stream").on("click", ".rmvRankUser", function(){
@@ -416,7 +386,6 @@
                     statusViewer(pseudo, action, 0);
                 });
             }
-
             //Liste modérateurs / bannis
             updateList();
             function updateList(){
@@ -431,15 +400,12 @@
                             var text = "";
                             text +='<tr class="d-flex justify-content-between">';
                             text += '<td>'+element.pseudo+'</td>';
-
                             if(element.rank == 1)
                                 text += "<td><button data-action='mod' data-pseudo='"+element.pseudo+"' ";
                             else if(element.rank == -1)
                                 text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
-
                             text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>";
                             text += "</tr>";
-
                             if(element.rank == 1)
                                 $("#listMods").append(text);
                             else if(element.rank == -1)
@@ -450,34 +416,27 @@
                         console.log(data);
                     });
             }
-
             /* Stream WEBRTC */
             var config = {
                 openSocket: function(config) {
-
                     var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
-
                     config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
                     var sender = Math.round(Math.random() * 999999999) + 999999999;
-
                     io.connect(SIGNALING_SERVER).emit('new-channel', {
                         channel: config.channel,
                         sender: sender
                     });
-
                     var socket = io.connect(SIGNALING_SERVER + config.channel);
                     socket.channel = config.channel;
                     socket.on('connect', function () {
                         if (config.callback) config.callback(socket);
                     });
-
                     socket.send = function (message) {
                         socket.emit('message', {
                             sender: sender,
                             data: message
                         });
                     };
-
                     socket.on('message', config.onmessage);
                 },
                 onRemoteStream: function(htmlElement) {
@@ -509,9 +468,7 @@
                     document.getElementById('visitorStream').innerHTML = "";
                     document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
                 }
-
             };
-
             function setupNewBroadcastButtonClickHandler(onload) {
                 if (onload == 1) return 0;
                 if (document.getElementById('setup-new-broadcast').value === "Off") {
@@ -524,7 +481,6 @@
                                     });
                                 }
                     }
-
                     document.getElementById('videos-container').innerHTML = "";
                     document.getElementById("setup-new-broadcast").value = "On";
                     document.getElementById('stream_title').disabled = false;
@@ -557,9 +513,7 @@
             var setupNewBroadcast = document.getElementById('setup-new-broadcast');
             var broadcastingOption = document.getElementById('broadcasting-option');
             var roomsList = document.getElementById('rooms-list');
-
             if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
-
             function captureUserMedia(callback) {
                 var constraints = null;
                 window.option = broadcastingOption ? broadcastingOption.value : '';
@@ -568,7 +522,6 @@
                         audio: true,
                         video: false
                     };
-
                     if(DetectRTC.hasMicrophone !== true) {
                         alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
                     }
@@ -584,21 +537,16 @@
                         audio: false,
                         video: video_constraints
                     };
-
                     if(DetectRTC.isScreenCapturingSupported !== true) {
                         alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
                     }
                 }
-
                 if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
                     alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
                 }
-
                 var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
-
                 htmlElement.muted = true;
                 htmlElement.volume = 0;
-
                 try {
                     htmlElement.setAttributeNode(document.createAttribute('autoplay'));
                     htmlElement.setAttributeNode(document.createAttribute('playsinline'));
@@ -608,14 +556,12 @@
                     htmlElement.setAttribute('playsinline', true);
                     htmlElement.setAttribute('controls', true);
                 }
-
                 var mediaConfig = {
                     video: htmlElement,
                     onsuccess: function(stream) {
                         config.attachStream = stream;
                         addStreamStopListener(stream,  function() {
                         });
-
                         videosContainer.appendChild(htmlElement);
                         callback && callback();
                     },
@@ -630,7 +576,6 @@
                 if (constraints) mediaConfig.constraints = constraints;
                 getUserMedia(mediaConfig);
             }
-
             function addStreamStopListener(stream, callback) {
                 var streamEndedEvent = 'ended';
                 if ('oninactive' in stream) {
@@ -646,9 +591,7 @@
                         callback = function() {};
                     }, false);
                 });
-
             }
-
             function start() {
                 @auth
                         @if($streamer->id != Auth::user()->id)
@@ -669,10 +612,7 @@
                 document.getElementById('stream-info').hidden = false;
                 @endguest
             };
-
             start();
         });
-
     </script>
-
 @endsection

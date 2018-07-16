@@ -11,57 +11,59 @@
             <p> Les chaines en live que vous suivez :</p>
             
             <div class="row col-12">
-                @if(session()->has('ok'))
-                    <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
-                @endif
+                <div class="">
+                    @if(session()->has('ok'))
+                        <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
+                    @endif
 
-                @if(count($followed) > 0)
-                    <div class="row text-center text-lg-left">
-                        @foreach ($followed as $stream)
-                            <div class="col-12 col-sm-6 col-md-4" style="box-sizing: border-box;">
-                                <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                    <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                    <span class="watch">
-                                        <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
-                                        {{ $stream->type->name }}
-                                    </span>
-                                    @if($stream->user->avatar!="users/default.png")
-                                        <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
-                                    @else
-                                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                                    @endif
-                                </a>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                            {{ $stream->title }}
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <small>
+                    @if(count($followed) > 0)
+                        <div class="row text-center text-lg-left">
+                            @foreach ($followed as $stream)
+                                <div class="col-12 col-sm-6 col-md-4" style="box-sizing: border-box;">
+                                    <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                        <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
+                                        <span class="watch">
+                                            <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
+                                            {{ $stream->type->name }}
+                                        </span>
+                                        @if($stream->user->avatar!="users/default.png")
+                                            <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
+                                        @else
+                                            <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
+                                        @endif
+                                    </a>
+                                    <div class="row">
+                                        <div class="col-sm-12">
                                             <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                                {{ $stream->user->pseudo }}
+                                                {{ $stream->title }}
                                             </a>
-                                        </small>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <small>
+                                                <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                                    {{ $stream->user->pseudo }}
+                                                </a>
+                                            </small>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <i>Vous ne suivez actuellement aucun stream.</i>
-                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        <i>Vous ne suivez actuellement aucun stream.</i>
+                    @endif
+                </div>
             </div>
             <hr>
             <p>Vos dernières statistiques : </p>
             <div class="row">
                 <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
+                    <div class="card-border card text-center">
                         <div class="card-header">
                             Valeur des dons obtenus ce mois-ci
                         </div>
@@ -71,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
+                    <div class="card-border card text-center">
                         <div class="card-header">
                             Nombre total de followers
                         </div>
@@ -81,7 +83,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
+                    <div class="card-border card text-center">
                         <div class="card-header">
                             Nombre total de visiteur
                         </div>

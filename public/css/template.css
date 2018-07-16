@@ -51,6 +51,9 @@ header .dropdown-menu{
 .top{
     margin-top: 102px;
 }
+.top-1{
+    margin-top: 42px;
+}
 .top-2{
     margin-top: 50px;
 }
@@ -120,6 +123,9 @@ header .dropdown-menu{
     color:#ff66b3;
     text-decoration:none; 
 }
+.machaine .material-icons{
+    margin-top: 10px;margin-bottom: 10px
+}
 .watch{
     position: absolute;
     top: 15px;
@@ -179,15 +185,19 @@ header .dropdown-menu{
     cursor: not-allowed;
 }
 .btn-contacter{
-    background: yellow;
+    background: #ffc94d;
    /* border: 1px solid #b19dd8;*/
     color: #6441a4;
     padding: .3rem .3rem;
     padding-right: 20%; 
     padding-left: 20%; 
+    color: white;
 }
 .btn-contacter:hover{
     cursor: pointer;
+    color: white;
+    
+ 
 }
 
 .btn-contacter:disabled{
@@ -321,6 +331,18 @@ select.form-control:not([size]):not([multiple]) {
     font: inherit;
     vertical-align: baseline;
 }
+.div-stream{
+    font-size: 11px;
+    background: white;
+    border: 0.5px solid #dad8de;
+    margin-right:46px;
+    margin-left:15px;
+    margin-bottom:10px;
+    padding: 10px;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
 .form-control{
     outline: 0;
     font-family: inherit;
@@ -344,6 +366,15 @@ select.form-control:not([size]):not([multiple]) {
     box-shadow: inherit;
     border: none;
     box-shadow: 0 0 6px #6441a4; 
+}
+.div-viewers{
+    background: transparent;
+    border: 1px solid #b19dd8;
+    color: #6441a4; 
+    width: 10%;
+}
+.div-viewers .material-icons{
+    color: black;
 }
 .btn-filter{
     background: transparent;
@@ -471,3 +502,41 @@ footer #support_user textarea{
 .form-control:focus{
     border: 1px solid #dad8de !important;
 }
+#header{
+    background: #a38de6;
+}
+.navbar{
+    background: #a38de6;
+    color: white;
+}
+#header .nav>ul>li>a, #header .nav>ul>li>a{
+    color: white;
+}
+
+
+#footer{
+    background-color: #a38de6 !important;
+}
+.btn-primary{
+    background-color: #e6c48d  !important;
+    border: 1px solid #e6c48d ;
+}
+.btn-primary:hover{
+    background-color: #f8a726c9 !important;
+    border: 1px solid #f8a726c9;
+}
+.btn-primary:active, .btn-primary:focus{
+    background-color: #f8a726c9 !important;
+    border: 1px solid #f8a726c9;
+}
+.card-border{
+   border: 0.5px solid #e6c48d;
+}
+.card-header{
+   color: white;
+   background-color: #e6c48d !important;
+}
+.navbar-search{
+    background-color: #a38de6 !important;
+}
+

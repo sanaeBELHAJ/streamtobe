@@ -10,7 +10,8 @@ html, body{
 
 #zone_chat, #zone_users{
     width: 100%;
-    background: #E6EAEA;
+    background: #c2c1c240;
+    color: #6e6779;
     height: 70%;
     padding: 5px 5px 0;
     font-size: 12px;
@@ -24,6 +25,9 @@ html, body{
 
 .white{
     color: white;
+}
+.orange{
+    color: #ba9b0c;
 }
 
 .black{
@@ -112,10 +116,10 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 5%;
-    top: 50%;
-    width: 25px;
-    height: 25px;
+    right: 1%;
+    top: 23%;
+    width: 70px;
+    height: 40px;
     transform: translateY(-50%);
     background: #7e27ff;
     -webkit-border-radius: 4px;
@@ -165,4 +169,11 @@ textarea{
     background: rgb(86, 27, 141); /* Violet background */
     cursor: pointer; /* Cursor on hover */
     border-radius: 0.25rem;
+}
+textarea{
+    outline: none;
+    outline-style: none;
+    border: 0.2 solid gray;
+    box-shadow: none;
+    height: 40px;
 }
