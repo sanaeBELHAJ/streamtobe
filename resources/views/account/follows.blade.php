@@ -1,24 +1,25 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid" >
+<div class="container-fluid top-2 bottom">
 <div class="row">
-    <div class="col-sm-12 pull-right top-2 bottom">
-        <p>Chaines suivies par {{$streamer->pseudo}}</p>
+        <p class="col-12">Chaines suivies par {{$streamer->pseudo}}</p>
         <hr>
-        <br>
         @if(count($channels) > 0)
             @foreach($channels as $channel)
                 {{-- Chaines des autres streamers suivies par l'utilisateur --}}
                 @if($channel->is_follower == 1 && $channel->stream->user->id != $channel->user->id && $channel->stream->user->status > 0)
-                    <div class='col-6 div-f'>
-                        <img class='avatar_follower' src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>">
-                        <a class="" href="/home/{{$channel->stream->user->pseudo}}">{{$channel->stream->user->pseudo}}</a>
-                        {{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}
-                        <span class="anciennete" data-date="{{$channel->created_at}}"></span>
-                        @auth
-                            <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
-                        @endauth
+                    <div class='col-6 col-sm-4 col-md-3'>
+                        <div class="div-f w-100">
+                            <p class="d-flex w-100 justify-content-between align-items-center">
+                                <img class='pictureAccount' src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>">
+                                <a class="" href="/home/{{$channel->stream->user->pseudo}}">{{$channel->stream->user->pseudo}}</a>
+                            </p>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p>Inscrit le {{ Carbon\Carbon::parse($channel->created_at)->format('d/m/Y') }}</p>
+                                <p><img src="{{ $channel->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></p>
+                            </div>
+                        </div>
                     </div>
                 @endif
             @endforeach
