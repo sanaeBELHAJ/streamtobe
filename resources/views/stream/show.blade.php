@@ -102,50 +102,52 @@
                         </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
-
+                        <div class="row col-12">
                             {{-- Report --}}
-                            <p class="col text-center">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @if($report)
-                                    <button class="btn-follow w-100 float-none btn" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
+                                    <button class="btn btn-danger btn-lg btn-rounded m-l-10" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
-                                    <button class="btn-follow w-100 float-none btn"
-                                            data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur</button>
+                                    <button class="btn btn-danger btn-lg btn-rounded m-l-10"
+                                            data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur <i class="fa fa-warning"></i></button>
                                     @include('stream.modal.report')
                                 @endif
                             </p>
 
                             {{-- Giveaway --}}
-                            <p class="col text-center">
-                                <button class="btn-follow w-100 float-none btn" data-toggle="modal"
-                                    data-target="#paymentModal">Faire un don</button>
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
+                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" data-toggle="modal"
+                                    data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
                             @include('stream.modal.payment')
 
                             {{-- Following --}}
-                            <p class="col text-center">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
-                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
+                                        <button class="follow_stream btn-lg btn-rounded  w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
-                                        <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
+                                        <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                                         @php ($IsCurrentViewer = 1)
                                     @endif
                                 @endforeach
                                 @if($IsCurrentViewer == 0)
-                                    <button class="follow_stream w-100 float-none btn btn-follow d-none"
+                                    <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
-                                    <button class="follow_stream w-100 float-none btn btn-follow"
+                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
+                                    <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                            title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                            title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                                 @endif
                             </p>
                         </div>
-
+                    @endif
+                @endauth
+                </div>
                         {{-- Description du streamer --}}
                         <div class="col-12 mt-4">
                             <div id="streamer">
@@ -153,8 +155,6 @@
                                 <p>{{$streamer->description}}</p>
                             </div>
                         </div>
-                    @endif
-                @endauth
             </div>
 
             {{-- Boutons d'affichage mobile --}}
