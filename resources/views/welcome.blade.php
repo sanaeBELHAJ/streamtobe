@@ -124,9 +124,12 @@
             {{-- Streamtobe est là pour vous ! --}}
             <h1>{{ setting('site.welcome-title') }}</h1>
             <p>{{ setting('site.welcome-text') }}</p>
-            <div class="row" style="margin-top:100px;">
+            <div class="row">
             {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
-                <div class="col-sm-12 pull-right bottom" style="margin-top: 50px;padding: 30px;
+                <div class="col-sm-12 pull-right bottom" style="    margin-top: 50px;
+    padding: 30px;
+    margin-bottom: 0;
+    padding-top: 0;
     padding-bottom: 0;">
                     <div class="row">
                 <div class="col-12 col-sm-6 col-md-4 mb-3">
