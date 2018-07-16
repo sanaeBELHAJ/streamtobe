@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid" style="height:100%;">
+<div class="container-fluid" >
 <div class="row">
     <div class="col-sm-12 pull-right top-2 bottom">
         <p>Dons reçus par {{$streamer->pseudo}}</p>

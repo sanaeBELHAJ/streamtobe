@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-	<div class="container-fluid top-2 bottom h-75" style="height:100%;">
+	<div class="container-fluid top-2 bottom h-75">
 		<div class="row h-100">
 			<p class="text-center mx-auto">
 					<small>Les utilisateurs à qui vous pouvez envoyer un message apparaissent dans la liste à gauche.</small>
