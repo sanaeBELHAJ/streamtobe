@@ -11,8 +11,8 @@ function sendMessage(){
     event.preventDefault();
     var message = $('#message').val();
 
-    if(message != "")
-        socket.emit('message', message); // Publie le message
+    if($.trim(message) != "")
+        socket.emit('message', $.trim(message)); // Publie le message
 
     $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
     $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
