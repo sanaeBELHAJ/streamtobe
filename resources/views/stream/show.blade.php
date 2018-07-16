@@ -249,14 +249,15 @@
     </style>
 @endsection
 @section('js')
+
+    <script src="/js/broadcast.js"></script>
+    <script src="/js/rtc-connection.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
     @auth
-        <script src="/js/broadcast.js"></script>
-        <script src="/js/rtc-connection.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
-        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
         @if($streamer->id != Auth::user()->id)
             <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         @endif
@@ -517,13 +518,14 @@
                 if (onload == 1) return 0;
                 if (document.getElementById('setup-new-broadcast').value === "Off") {
                     <?php $streamer->stream->status = 0;?>
-                    config.attachStream.getTracks().forEach(function (track) {
-                        track.addEventListener('ended', function() {
-                            alert('Stream is stopped.');
-                        }, false);
-                        addStreamStopListener(track);
-                        track.stop();
-                    });
+                            if(config) {
+                                if (config.attachStream) {
+                                    config.attachStream.getTracks().forEach(function (track) {
+                                        if (track)
+                                            track.stop();
+                                    });
+                                }
+                    }
 
                     document.getElementById('videos-container').innerHTML = "";
                     document.getElementById("setup-new-broadcast").value = "On";
@@ -533,6 +535,7 @@
                     <?php $streamer->stream->status = 1;?>
                     document.getElementById("setup-new-broadcast").value = "Off";
                     document.getElementById('stream_title').disabled = true;
+                    @auth
                     @if($streamer->id == Auth::user()->id)
                     DetectRTC.load(function () {
                         captureUserMedia(function () {
@@ -548,7 +551,7 @@
                         document.getElementById('stream-info').hidden = true;
                     });
                     @endif
-
+                    @endauth
                 }
             }
             var broadcastUI = broadcast(config);
@@ -612,7 +615,9 @@
                     video: htmlElement,
                     onsuccess: function(stream) {
                         config.attachStream = stream;
-                        addStreamStopListener(stream);
+                        addStreamStopListener(stream,  function() {
+                            alert('screen sharing is ended.');
+                        });
 
                         videosContainer.appendChild(htmlElement);
                         callback && callback();
@@ -638,22 +643,18 @@
                     callback();
                     callback = function() {};
                 }, false);
-                stream.getAudioTracks().forEach(function(track) {
-                    track.addEventListener(streamEndedEvent, function() {
-                        callback();
-                        callback = function() {};
-                    }, false);
-                });
                 stream.getVideoTracks().forEach(function(track) {
                     track.addEventListener(streamEndedEvent, function() {
                         callback();
                         callback = function() {};
                     }, false);
                 });
+
             }
 
-            window.onload = function start() {
-                @if($streamer->id != Auth::user()->id)
+            function start() {
+                @auth
+                        @if($streamer->id != Auth::user()->id)
                     videosContainer.innerHTML = "";
                 document.getElementById('stream-info').hidden = false;
                 @elseif($streamer->id == Auth::user()->id)
@@ -664,8 +665,15 @@
                     document.getElementById('stream_title').disabled = false;
                     document.getElementById('stream-info').hidden = false;
                 }
-                @endif
+                @endauth
+                        @endif
+                        @guest
+                    videosContainer.innerHTML = "";
+                document.getElementById('stream-info').hidden = false;
+                @endguest
             };
+
+            start();
         });
 
     </script>
