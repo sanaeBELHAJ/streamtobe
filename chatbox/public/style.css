@@ -30,8 +30,23 @@ html, body{
     color: black;
 }
 
-.red{
+.user_viewer{
+    color: black;
+}
+
+.user_ban{
     color: red;
+    text-decoration: line-through;
+}
+
+.user_mod{
+    color: green;
+    font-weight: bold;
+}
+
+.user_streamer{
+    color: orange;
+    font-weight: bold;    
 }
 
 .green{
@@ -47,7 +62,7 @@ html, body{
 }
 
 form#formulaire_chat{
-    height: 20%;
+    height: 15%;
     position: relative;
 }
 

@@ -185,21 +185,17 @@
         @yield('content')
 
 
-        <!-- Footer -->
-         <footer id="footer">
+    <!-- Footer -->
+    <footer id="footer">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-md-5">
-                    <h4 class="footer-title">A propos de nous</h4>
-                    <p>Nous proposons du streaming</p>
-
-                </div>
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-md-4 offset-md-4 text-center">
                     <h4 class="footer-title">Nous contacter</h4>
                     <p>Nous sommes disponibles 7/7j</p>
                     <div class="input-group m-t-25">
-                     <button class="btn btn-primary btn-rounded btn-shadow btn-lg" type="button"><a href="#" class="text-light" data-toggle="modal" data-target="#supportModal">Contactez-nous</a></button>
-                     </span>
+                        <button class="btn btn-primary btn-rounded btn-shadow btn-lg mx-auto" type="button" data-toggle="modal" data-target="#supportModal">
+                            <a href="#" class="text-light">Contactez-nous</a>
+                        </button>
                         <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="supportModalLabel" aria-hidden="true" style="color: black;">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
@@ -228,11 +224,12 @@
                                             <p>Donnez-nous notre avis et nous vous répondrons dans les meilleurs délais !</p>
                                             @guest
                                                 <label>
-                                                    <p>Votre adresse email afin qu'on puisse vous répondre : <input type="email" name="exped" required="required"></p>
+                                                    <p>Merci de nous indiquer votre adresse email : 
+                                                        <input class="form-control border" type="email" name="exped" required="required"></p>
                                                 </label>
                                             @endguest
-                                            <textarea class="w-100 small" name="opinion" required="required"
-                                                      placeholder="Un suivi sera établi afin de vous fournir les renseignements les plus pertinents possible."></textarea>
+                                            <textarea class="w-100 small form-control border" name="opinion" required="required"
+                                                        placeholder="Un suivi sera établi afin de vous fournir les renseignements les plus pertinents possible."></textarea>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -247,11 +244,9 @@
             </div>
             <div class="footer-bottom">
                 <div class="footer-social">
-                    <a href="#"  data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
-                    <a  href="#"  data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
-                    <a  href="#"  data-toggle="tooltip" title="steam"><i class="fa fa-steam"></i></a>
-                    <a  href="#"  data-toggle="tooltip" title="twitch"><i class="fa fa-twitch"></i></a>
-                    <a  href="#"  data-toggle="tooltip" title="youtube"><i class="fa fa-youtube"></i></a>
+                    <a href="{{ setting('site.socials-fb') }}"  data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
+                    <a  href="{{ setting('site.socials-twitter') }}"  data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
+                    <a  href="{{ setting('site.socials-insta') }}"  data-toggle="tooltip" title="instagram"><i class="fa fa-instagram"></i></a>
                 </div>
                 <p>{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p>
             </div>

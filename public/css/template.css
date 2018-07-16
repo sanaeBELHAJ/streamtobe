@@ -394,6 +394,10 @@ ul.ui-autocomplete{
     z-index: 1050;
 }
 
+footer#footer{
+    margin-top: auto;
+}
+
 footer #support_user textarea{
     height: 100px;
 }
@@ -460,4 +464,17 @@ footer #support_user textarea{
     height: 25px; /* Slider handle height */
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
+}
+
+.modal:before{
+    height: auto !important;
+}
+
+.modal-dialog{
+    min-width: auto !important;
+    max-width: 90%;
+}
+
+.form-control:focus{
+    border: 1px solid #dad8de !important;
 }

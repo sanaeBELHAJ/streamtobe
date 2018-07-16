@@ -20,7 +20,7 @@
                 <div class="form-group mb-2 d-flex">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
-                        <option value="">Toutes les catégorie</option>
+                        <option value="">Toutes les catégories</option>
                         @foreach($themes as $theme)
                             <optgroup label="{{$theme->name}}">
                                 @foreach($theme->types as $type)
@@ -84,15 +84,15 @@
                         </a>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                    {{ $stream->title }}
+                                <a class="broadcastname"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                    <b>{{ $stream->title }}</b>
                                 </a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6">
                                 <small>
-                                    <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
+                                    <a class="broadcastname"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
                                         {{ $stream->user->pseudo }}
                                     </a>
                                 </small>

@@ -121,49 +121,43 @@
         <!-- Page Content -->
         <section class="py-5">
         <div class="container-fluid" style="text-align: center">
-            {{-- Streamtobe est là pour vous ! --}}
             <h1>{{ setting('site.welcome-title') }}</h1>
             <p>{{ setting('site.welcome-text') }}</p>
             <div class="row">
-            {{-- Si vous avez du talent et vous n'avez pas peur de la caméra, créez votre chaine et montrez-vous ! On vous attend ! --}}
-                <div class="col-sm-12 pull-right bottom" style="    margin-top: 50px;
-    padding: 30px;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;">
+                <div class="col-sm-12 pull-right bottom" style="margin-top: 50px;padding: 30px;margin-bottom: 0;padding-top: 0;padding-bottom: 0;">
                     <div class="row">
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <i class="fa fa-user fa-5x" style="margin: auto;" aria-hidden="true"></i>
+                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                            <div class="card text-center" style="height:200px;">
+                                <div class="card-header">
+                                    <i class="fa fa-user fa-5x" style="margin: auto;" aria-hidden="true"></i>
 
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-title">  Creez votre compte !</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-title">  Creez votre compte !</p>
+                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                            <div class="card text-center" style="height:200px;">
+                                <div class="card-header">
+                                    <i class="fa fa-camera fa-5x" style="margin: auto;" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-title"> Lancez votre propre chaine ou suivez vos streamers favoris !</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                            <div class="card text-center" style="height:200px;">
+                                <div class="card-header">
+                                    <i class="fa fa-dollar fa-5x" style="margin: auto;" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-title"> Recoltez vos revenus !</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <i class="fa fa-camera fa-5x" style="margin: auto;" aria-hidden="true"></i>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title"> Lancez votre propre chaine ou suivez vos streamers favoris !</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <i class="fa fa-dollar fa-5x" style="margin: auto;" aria-hidden="true"></i>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-title"> Recoltez vos revenus !</p>
-                        </div>
-                    </div>
-                </div>
-                </div>
                 </div>
             </div>
         </div>

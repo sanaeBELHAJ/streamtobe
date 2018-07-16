@@ -123,7 +123,7 @@
 
                             {{-- Following --}}
                             <p class="col text-center">
-                                @php ($viewer = 0)
+                                @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
@@ -132,10 +132,10 @@
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
-                                        @php ($viewer = 1)
+                                        @php ($IsCurrentViewer = 1)
                                     @endif
 
-                                @if($viewer->status == 0)
+                                @if($IsCurrentViewer == 0)
                                     <button class="follow_stream w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
