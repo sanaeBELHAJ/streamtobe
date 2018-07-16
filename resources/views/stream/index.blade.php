@@ -60,7 +60,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid top bottom">
+<div class="container-fluid bottom">
     <div class="row">
         <div class="col-12">
             @if(session()->has('ok'))
