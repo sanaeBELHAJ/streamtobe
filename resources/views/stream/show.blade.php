@@ -155,15 +155,15 @@
 
                        <!-- <div class="mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
-                            <div class="row">
-                                <section class="experiment col-12 col-md-6">
+                            <div class="form-row">
+                                <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
                                         Type de diffusion : &nbsp;
                                         <select id="broadcasting-option" class="form-control d-inline w-50">
                                             <option>Stream classique</option>
                                             <option>Stream audio</option>
                                         </select>
-                                </section>
-                                <p class="col-12 col-md-6">
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                     Catégorie :
                                     <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
                                         @foreach($themes as $theme)
@@ -171,17 +171,17 @@
                                             @foreach($theme->types as $type)
                                             <option value="{{$type->name}}">{{$type->name}}</option>
                                             @endforeach
-                                        </optgroup>
+                                        </optgroup>descriptionAccount
                                         @endforeach
                                     </select>
-                                </p>
-                                <p class="col-12 col-md-6">
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                     Nom de la chaine : &nbsp;
                                     <input id="stream_title" class="form-control d-inline w-50 update_stream"
                                             data-config="title" type="text" placeholder="Titre du stream"
                                             value="{{$streamer->stream->title}}">
-                                </p>
-                                <label class="col-12 col-md-6">
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                     <label class="switch align-middle m-0">
                                         <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
                                                 @if($streamer->stream->status == 0)
@@ -193,7 +193,7 @@
                                         <span class="slider round"></span>
                                     </label>
                                     Activer / Interrompre la diffusion
-                                </label>
+                                </div>
                             </div>
                         </div>-->
                     @else {{-- Panel d'action du viewer --}}
@@ -217,9 +217,9 @@
                             </p>
                             @include('stream.modal.payment')
 
-                            @auth
                             {{-- Following --}}
                             <p class="col text-center">
+                                @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
@@ -228,10 +228,18 @@
                                         <button class="follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                        @php ($IsCurrentViewer = 1)
                                     @endif
                                 @endforeach
+                                @if($IsCurrentViewer == 0)
+                                    <button class="follow_stream w-100 float-none btn btn-follow d-none"
+                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner</button>
+                                    <button class="follow_stream w-100 float-none btn btn-follow"
+                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                            title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner</button>
+                                @endif
                             </p>
-                                @endauth
                         </div>
 
                         {{-- Description du streamer --}}
@@ -334,147 +342,145 @@
         }
     </style>
 @endsection
-
 @section('js')
 
-        <script src="/js/broadcast.js"></script>
-        <script src="/js/rtc-connection.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
-        <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
-        <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+    <script src="/js/broadcast.js"></script>
+    <script src="/js/rtc-connection.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/socket.io.js"> </script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/IceServersHandler.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/CodecsHandler.js"></script>
+    @auth
+        @if($streamer->id != Auth::user()->id)
+            <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        @endif
+    @endauth
 
-        @auth
-    		@if($streamer->id != Auth::user()->id)
-	    		<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-		    @endif
-        @endauth
+    <script>
 
-	<script>
+        $(function(){
+            //Texte du slider
+            $('.sliderText').click(function(){
+                $('#myRange').val($(this).data('value')).change();
+            });
 
-		$(function(){
-			//Texte du slider
-			$('.sliderText').click(function(){
-				$('#myRange').val($(this).data('value')).change();
-			});
+            //Slider en vue responsive
+            $('#myRange').change(function(){
+                //Chat
+                if($(this).val()==1){
+                    $('.sliderText[data-value="1"]').addClass('font-weight-bold');
+                    $('.sliderText[data-value="2"]').removeClass('font-weight-bold');
 
-			//Slider en vue responsive
-			$('#myRange').change(function(){
-				//Chat
-				if($(this).val()==1){
-					$('.sliderText[data-value="1"]').addClass('font-weight-bold');
-					$('.sliderText[data-value="2"]').removeClass('font-weight-bold');
+                    $('#messages').addClass('d-12').removeClass('d-none');
+                    $('#infos').addClass('d-none').removeClass('d-12');
+                }//Description
+                else{
+                    $('.sliderText[data-value="1"]').removeClass('font-weight-bold');
+                    $('.sliderText[data-value="2"]').addClass('font-weight-bold');
 
-					$('#messages').addClass('d-12').removeClass('d-none');
-					$('#infos').addClass('d-none').removeClass('d-12');
-				}//Description
-				else{
-					$('.sliderText[data-value="1"]').removeClass('font-weight-bold');
-					$('.sliderText[data-value="2"]').addClass('font-weight-bold');
+                    $('#messages').addClass('d-none').removeClass('d-12');
+                    $('#infos').addClass('d-12').removeClass('d-none');
+                }
+            });
 
-					$('#messages').addClass('d-none').removeClass('d-12');
-					$('#infos').addClass('d-12').removeClass('d-none');
-				}
-			});
+            /* Config stream (owner) */
+            function updateStream(){
+                var key = $(this).data('config');
+                var value = "";
 
-			/* Config stream (owner) */
-			function updateStream(){
-				var key = $(this).data('config');
-				var value = "";
+                switch(key){
+                    case "title":
+                        value = $("#stream_title").val();break;
+                    case "status":
+                        value = $("#setup-new-broadcast").is(":checked");break;
+                    case "type":
+                        value = $("#stream_type").val();break;
+                }
 
-				switch(key){
-					case "title":
-						value = $("#stream_title").val();break;
-					case "status":
-						value = $("#setup-new-broadcast").is(":checked");break;
-					case "type":
-						value = $("#stream_type").val();break;
-				}
-
-				$.ajax({
-					url: "/updateStream",
-					type: 'POST',
-					data: {
-						config: key,
-						value: value
-					}
-				})
-				.done(function(data){
-					console.log(data + "YES");
-				})
-				.fail(function(data){
-					console.log(data);
-				});
-			}
+                $.ajax({
+                    url: "/updateStream",
+                    type: 'POST',
+                    data: {
+                        config: key,
+                        value: value
+                    }
+                })
+                    .done(function(data){
+                        console.log(data + "YES");
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            }
 
             $(".update_stream").change(updateStream);
 
-			/* Paypal Button */
-			if($("#paymentModal").length > 0){
-				paypal.Button.render({
-					env: 'sandbox', // Or 'production',
+            /* Paypal Button */
+            if($("#paymentModal").length > 0){
+                paypal.Button.render({
+                    env: 'sandbox', // Or 'production',
 
-					client: {
-						sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
-						//production: 'xxxxxxxxx'
-					},
+                    client: {
+                        sandbox:    'AXHXCd6YkvkTlnMfRhC0I9jCwej0WmraIWjsDnzraah26zhzv805-1zPqv-JehHe01-T8aACfmv69ESo',
+                        //production: 'xxxxxxxxx'
+                    },
 
-					commit: true, // Show a 'Pay Now' button
+                    commit: true, // Show a 'Pay Now' button
 
-					style: {
-						color: 'gold',
-						size: 'small'
-					},
+                    style: {
+                        color: 'gold',
+                        size: 'small'
+                    },
 
-					payment: function(data, actions) {
-						//Set up the payment here
-						return actions.payment.create({
-							payment: {
-								transactions: [
-									{
-										amount: {
-											total: $('#giveaway_change').val(),
-											currency: 'EUR'
-										}
-									}
-								]
-							}
-						});
-					},
+                    payment: function(data, actions) {
+                        //Set up the payment here
+                        return actions.payment.create({
+                            payment: {
+                                transactions: [
+                                    {
+                                        amount: {
+                                            total: $('#giveaway_change').val(),
+                                            currency: 'EUR'
+                                        }
+                                    }
+                                ]
+                            }
+                        });
+                    },
 
-					onAuthorize: function(data, actions) {
-						//Execute the payment here
-						return actions.payment.execute().then(function(payment) {
-							// The payment is complete!
-							// You can now show a confirmation message to the customer
-							payment.streamer = $('#pseudo').val();
-							payment.message = $('#giveaway_message').val();
-							$.ajax({
-								url: "/validGiveaway",
-								type: 'POST',
-								dataType: "JSON",
-								data: {
-									payment: payment
-								}
-							})
-							.done(function(data){
-								console.log(data);
-							})
-							.fail(function(data){
-								console.log(data);
-							});
-						});
-					},
+                    onAuthorize: function(data, actions) {
+                        //Execute the payment here
+                        return actions.payment.execute().then(function(payment) {
+                            // The payment is complete!
+                            // You can now show a confirmation message to the customer
+                            payment.streamer = $('#pseudo').val();
+                            payment.message = $('#giveaway_message').val();
+                            $.ajax({
+                                url: "/validGiveaway",
+                                type: 'POST',
+                                dataType: "JSON",
+                                data: {
+                                    payment: payment
+                                }
+                            })
+                                .done(function(data){
+                                    console.log(data);
+                                })
+                                .fail(function(data){
+                                    console.log(data);
+                                });
+                        });
+                    },
 
-					onCancel: function(data, actions) {
-						//Buyer cancelled the payment
-					},
+                    onCancel: function(data, actions) {
+                        //Buyer cancelled the payment
+                    },
 
-					onError: function(err) {
-						//An error occurred during the transaction
-					}
-				}, '#paypal-button');
+                    onError: function(err) {
+                        //An error occurred during the transaction
+                    }
+                }, '#paypal-button');
             }
 
             //Edit modération/bannissement
@@ -489,13 +495,13 @@
                         set: set
                     }
                 })
-                .done(function(data){
-                    updateList();
-                    $(".searchUser").val("");
-                })
-                .fail(function(data){
-                    console.log(data);
-                });
+                    .done(function(data){
+                        updateList();
+                        $(".searchUser").val("");
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
             }
 
             //Detection du click() sur les boutons générés par les appels Ajax
@@ -507,7 +513,6 @@
                 });
             }
 
-            @auth
             //Liste modérateurs / bannis
             updateList();
             function updateList(){
@@ -515,12 +520,12 @@
                     url: "/getStreamViewer",
                     type: 'GET'
                 })
-                .done(function(data){
-                    $("#listMods").html('');
-                    $("#listBans").html('');
-                    $.each(data, function(index, element){
-                        var text = "";
-                        text +='<tr class="d-flex justify-content-between">';
+                    .done(function(data){
+                        $("#listMods").html('');
+                        $("#listBans").html('');
+                        $.each(data, function(index, element){
+                            var text = "";
+                            text +='<tr class="d-flex justify-content-between">';
                             text += '<td>'+element.pseudo+'</td>';
 
                             if(element.rank == 1)
@@ -529,126 +534,103 @@
                                 text += "<td><button data-action='ban' data-pseudo='"+element.pseudo+"' ";
 
                             text += "class='rmvRankUser btn btn-primary'>Retirer</button></td>";
-                        text += "</tr>";
+                            text += "</tr>";
 
-                        if(element.rank == 1)
-                            $("#listMods").append(text);
-                        else if(element.rank == -1)
-                            $("#listBans").append(text);
-                    });
-                })
-                .fail(function(data){
-                    console.log(data);
-                });
-            }
-        @endauth
-        /* Stream WEBRTC */
-        var config = {
-            openSocket: function(config) {
-
-                var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
-
-                config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
-                var sender = Math.round(Math.random() * 999999999) + 999999999;
-
-                io.connect(SIGNALING_SERVER).emit('new-channel', {
-                    channel: config.channel,
-                    sender: sender
-                });
-
-                var socket = io.connect(SIGNALING_SERVER + config.channel);
-                socket.channel = config.channel;
-                socket.on('connect', function () {
-                    if (config.callback) config.callback(socket);
-                });
-
-                socket.send = function (message) {
-                    socket.emit('message', {
-                        sender: sender,
-                        data: message
-                    });
-                };
-
-                socket.on('message', config.onmessage);
-            },
-            onRemoteStream: function(htmlElement) {
-                videosContainer.appendChild(htmlElement);
-                document.title = "{{ $streamer->stream->title }}";
-            },
-            onRoomFound: function(room) {
-                $.ajax({
-                    url: "/getStreamStatusInfo",
-                    type: 'GET',
-                    dataType: "JSON",
-                    data: {
-                        streamerId: '<?php echo $streamer->id;?>'
-                    }
-                }).done(function (data) {
-                    if (data[0].status === 1) {
-                        var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-                        if (alreadyExist) return;
-                        if (typeof roomsList === 'undefined') roomsList = document.body;
-                        broadcastUI.joinRoom({
-                            roomToken: room.roomToken,
-                            joinUser: room.broadcaster
+                            if(element.rank == 1)
+                                $("#listMods").append(text);
+                            else if(element.rank == -1)
+                                $("#listBans").append(text);
                         });
-                        document.getElementById('stream-info').hidden = true;
-                    }
-                });
-            },
-            onNewParticipant: function(numberOfViewers) {
-                document.getElementById('visitorStream').innerHTML = "";
-                document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
             }
 
-        };
+            /* Stream WEBRTC */
+            var config = {
+                openSocket: function(config) {
 
-        function setupNewBroadcastButtonClickHandler(onload) {
-            if (onload == 1) return 0;
-            if (document.getElementById('setup-new-broadcast').value === "Off") {
-                <?php $streamer->stream->status = 0;?>
-                config.attachStream.getTracks().forEach(function (track) {
-                    track.addEventListener('ended', function() {
-                        alert('Stream is stopped.');
-                    }, false);
-                    track.stop();
-                });
+                    var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
-                 function start() {
-                    @auth
-                    @if($streamer->id != Auth::user()->id)
-                        videosContainer.innerHTML = "";
-                    document.getElementById('stream-info').hidden = false;
-                    @elseif($streamer->id == Auth::user()->id)
-                    if (setupNewBroadcast.value === "Off") {
-                        setupNewBroadcast.click();
-                        videosContainer.innerHTML = "";
-                        document.getElementById("setup-new-broadcast").value = "On";
-                        document.getElementById('stream_title').disabled = false;
-                        document.getElementById('stream-info').hidden = false;
+                    config.channel = config.channel || "{{$streamer->pseudo}}-{{$streamer->id}}";
+                    var sender = Math.round(Math.random() * 999999999) + 999999999;
+
+                    io.connect(SIGNALING_SERVER).emit('new-channel', {
+                        channel: config.channel,
+                        sender: sender
+                    });
+
+                    var socket = io.connect(SIGNALING_SERVER + config.channel);
+                    socket.channel = config.channel;
+                    socket.on('connect', function () {
+                        if (config.callback) config.callback(socket);
+                    });
+
+                    socket.send = function (message) {
+                        socket.emit('message', {
+                            sender: sender,
+                            data: message
+                        });
+                    };
+
+                    socket.on('message', config.onmessage);
+                },
+                onRemoteStream: function(htmlElement) {
+                    videosContainer.appendChild(htmlElement);
+                    document.title = "{{ $streamer->stream->title }}";
+                },
+                onRoomFound: function(room) {
+                    $.ajax({
+                        url: "/getStreamStatusInfo",
+                        type: 'GET',
+                        dataType: "JSON",
+                        data: {
+                            streamerId: '<?php echo $streamer->id;?>'
+                        }
+                    }).done(function (data) {
+                        if (data[0].status === 1) {
+                            var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                            if (alreadyExist) return;
+                            if (typeof roomsList === 'undefined') roomsList = document.body;
+                            broadcastUI.joinRoom({
+                                roomToken: room.roomToken,
+                                joinUser: room.broadcaster
+                            });
+                            document.getElementById('stream-info').hidden = true;
+                        }
+                    });
+                },
+                onNewParticipant: function(numberOfViewers) {
+                    document.getElementById('visitorStream').innerHTML = "";
+                    document.getElementById('visitorStream').innerHTML = ' ' + numberOfViewers + '';
+                }
+
+            };
+
+            function setupNewBroadcastButtonClickHandler(onload) {
+                if (onload == 1) return 0;
+                if (document.getElementById('setup-new-broadcast').value === "Off") {
+                    <?php $streamer->stream->status = 0;?>
+                            if(config) {
+                                if (config.attachStream) {
+                                    config.attachStream.getTracks().forEach(function (track) {
+                                        if (track)
+                                            track.stop();
+                                    });
+                                }
                     }
-                    @endauth
-                    @endif
-                     @guest
-                        videosContainer.innerHTML = "";
-                        document.getElementById('stream-info').hidden = false;
-                    @endguest
-                 };
 
-                start();
-
-                document.getElementById('videos-container').innerHTML = "";
-                document.getElementById("setup-new-broadcast").value = "On";
-                document.getElementById('stream_title').disabled = false;
-                document.getElementById('stream-info').hidden = false;
-            }else {
-                <?php $streamer->stream->status = 1;?>
-                document.getElementById("setup-new-broadcast").value = "Off";
-                document.getElementById('stream_title').disabled = true;
-
-                @auth
+                    document.getElementById('videos-container').innerHTML = "";
+                    document.getElementById("setup-new-broadcast").value = "On";
+                    document.getElementById('stream_title').disabled = false;
+                    document.getElementById('stream-info').hidden = false;
+                }else {
+                    <?php $streamer->stream->status = 1;?>
+                    document.getElementById("setup-new-broadcast").value = "Off";
+                    document.getElementById('stream_title').disabled = true;
+                    @auth
                     @if($streamer->id == Auth::user()->id)
-
                     DetectRTC.load(function () {
                         captureUserMedia(function () {
                             var shared = 'video';
@@ -663,9 +645,9 @@
                         document.getElementById('stream-info').hidden = true;
                     });
                     @endif
-                @endauth
+                    @endauth
+                }
             }
-        }
             var broadcastUI = broadcast(config);
             var videosContainer = document.getElementById('videos-container') || document.body;
             var setupNewBroadcast = document.getElementById('setup-new-broadcast');
@@ -674,77 +656,76 @@
 
             if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
 
-        function captureUserMedia(callback) {
-            var constraints = null;
-            window.option = broadcastingOption ? broadcastingOption.value : '';
-            if (option === 'Stream audio') {
-                constraints = {
-                    audio: true,
-                    video: false
-                };
+            function captureUserMedia(callback) {
+                var constraints = null;
+                window.option = broadcastingOption ? broadcastingOption.value : '';
+                if (option === 'Stream audio') {
+                    constraints = {
+                        audio: true,
+                        video: false
+                    };
 
-                if(DetectRTC.hasMicrophone !== true) {
-                    alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
+                    if(DetectRTC.hasMicrophone !== true) {
+                        alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
+                    }
                 }
-            }
-            if (option === 'Stream caméra') {
-                var video_constraints = {
-                    mandatory: {
-                        chromeMediaSource: 'Stream caméra'
+                if (option === 'Stream caméra') {
+                    var video_constraints = {
+                        mandatory: {
+                            chromeMediaSource: 'Stream caméra'
+                        },
+                        optional: []
+                    };
+                    constraints = {
+                        audio: false,
+                        video: video_constraints
+                    };
+
+                    if(DetectRTC.isScreenCapturingSupported !== true) {
+                        alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
+                    }
+                }
+
+                if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
+                    alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
+                }
+
+                var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
+
+                htmlElement.muted = true;
+                htmlElement.volume = 0;
+
+                try {
+                    htmlElement.setAttributeNode(document.createAttribute('autoplay'));
+                    htmlElement.setAttributeNode(document.createAttribute('playsinline'));
+                    htmlElement.setAttributeNode(document.createAttribute('controls'));
+                } catch (e) {
+                    htmlElement.setAttribute('autoplay', true);
+                    htmlElement.setAttribute('playsinline', true);
+                    htmlElement.setAttribute('controls', true);
+                }
+
+                var mediaConfig = {
+                    video: htmlElement,
+                    onsuccess: function(stream) {
+                        config.attachStream = stream;
+                        addStreamStopListener(stream,  function() {
+                        });
+
+                        videosContainer.appendChild(htmlElement);
+                        callback && callback();
                     },
-                    optional: []
+                    onerror: function() {
+                        if (option === 'Stream audio') alert('Impossible d\'avoir accès à votre microphone');
+                        else if (option === 'Stream caméra') {
+                            if (location.protocol === 'http:') alert('Activez HTTPS.');
+                            else alert('Capture vidéo est desactivé ou non authorisé. L\'avez-vous autorisé dans votre navigateur "?');
+                        } else alert('Impossible d\'accéder à votre webcam');
+                    },
                 };
-                constraints = {
-                    audio: false,
-                    video: video_constraints
-                };
-
-                if(DetectRTC.isScreenCapturingSupported !== true) {
-                    alert('DetectRTC library is unable to find Stream caméra capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-Stream caméra-capturing"');
-                }
+                if (constraints) mediaConfig.constraints = constraints;
+                getUserMedia(mediaConfig);
             }
-
-            if (option != 'Stream audio' && option != 'Stream caméra' && DetectRTC.hasWebcam !== true) {
-                alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
-            }
-
-            var htmlElement = document.createElement(option === 'Stream audio' ? 'audio' : 'video');
-
-            htmlElement.muted = true;
-            htmlElement.volume = 0;
-
-            try {
-                htmlElement.setAttributeNode(document.createAttribute('autoplay'));
-                htmlElement.setAttributeNode(document.createAttribute('playsinline'));
-                htmlElement.setAttributeNode(document.createAttribute('controls'));
-            } catch (e) {
-                htmlElement.setAttribute('autoplay', true);
-                htmlElement.setAttribute('playsinline', true);
-                htmlElement.setAttribute('controls', true);
-            }
-
-            var mediaConfig = {
-                video: htmlElement,
-                onsuccess: function(stream) {
-                    config.attachStream = stream;
-                    addStreamStopListener(stream,  function() {
-                        alert('screen sharing is ended.');
-                    });
-
-                    videosContainer.appendChild(htmlElement);
-                    callback && callback();
-                },
-                onerror: function() {
-                    if (option === 'Stream audio') alert('Impossible d\'avoir accès à votre microphone');
-                    else if (option === 'Stream caméra') {
-                        if (location.protocol === 'http:') alert('Activez HTTPS.');
-                        else alert('Capture vidéo est desactivé ou non authorisé. L\'avez-vous autorisé dans votre navigateur "?');
-                    } else alert('Impossible d\'accéder à votre webcam');
-                },
-            };
-            if (constraints) mediaConfig.constraints = constraints;
-            getUserMedia(mediaConfig);
-        }
 
             function addStreamStopListener(stream, callback) {
                 var streamEndedEvent = 'ended';
@@ -763,6 +744,29 @@
                 });
 
             }
+
+            function start() {
+                @auth
+                        @if($streamer->id != Auth::user()->id)
+                    videosContainer.innerHTML = "";
+                document.getElementById('stream-info').hidden = false;
+                @elseif($streamer->id == Auth::user()->id)
+                if (setupNewBroadcast.value === "Off") {
+                    setupNewBroadcast.click();
+                    videosContainer.innerHTML = "";
+                    document.getElementById("setup-new-broadcast").value = "On";
+                    document.getElementById('stream_title').disabled = false;
+                    document.getElementById('stream-info').hidden = false;
+                }
+                @endauth
+                        @endif
+                        @guest
+                    videosContainer.innerHTML = "";
+                document.getElementById('stream-info').hidden = false;
+                @endguest
+            };
+
+            start();
         });
 
     </script>

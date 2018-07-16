@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid" >
     <div class="row">
         <div class="col-sm-2  profil-panel">
             <div class="top bottom">

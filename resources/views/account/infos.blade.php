@@ -7,6 +7,7 @@
             </label>
             {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 
                                                 'class' => 'd-none',
+                                                'onchange' => "readURL(this);",
                                                 'accept' => '.jpg, .jpeg, .png, .gif'
                                             ]) !!}
             {!! $errors->first('pictureAccount', 
@@ -15,25 +16,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
         </div>
-        <div class="form-group col-md-6 d-flex justify-content-center flex-column">
-            <label>Pays : &nbsp;
-                <select id="countryAccount" class="update_stream form-control w-50 d-inline" data-config="type" name="country">
-                    @if($countries)
-                        @foreach($countries as $country)
-                            <option value="{{$country->id}}"
-                                @if($user->id_countries == $country->id)
-                                    selected
-                                @endif>{{$country->name}}</option>
-                        @endforeach
-                    @endif
-                </select>
-            </label>
-            {!! $errors->first('country', 
-                                '<small class="form-text alert alert-danger">:message
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button></small>') !!}
-        </div>
+
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -60,6 +43,28 @@
                                     </button></small>') !!}
         </div>
     </div>
+
+<div class="form-row">
+    <div class="form-group col-lg-3 col-sm-12 col-md-6 col-mb-6">
+    <label>Pays : &nbsp;
+        <select id="countryAccount" class="update_stream form-control w-50 d-inline" data-config="type" name="country">
+            @if($countries)
+                @foreach($countries as $country)
+                    <option value="{{$country->id}}"
+                            @if($user->id_countries == $country->id)
+                            selected
+                            @endif>{{$country->name}}</option>
+                @endforeach
+            @endif
+        </select>
+    </label>
+    {!! $errors->first('country',
+                        '<small class="form-text alert alert-danger">:message
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button></small>') !!}
+</div>
+</div>
     <div class="form-row">
         <div class="form-group col-12">
             {!! Form::label('descriptionAccount','Description :') !!}
@@ -95,17 +100,16 @@
                                 </button></small>') !!}
     </div>
     <div class="form-row">
-        <div class="form-group col-12 text-right">
-            {!! Form::submit("Enregistrer les modifications", ['class' => 'btn btn-success pull-right']) !!}
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-12">
-            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#removeAccount">
+        <div class="form-group form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
+            <button type="button" class="btn btn-secondary" style="background-color:darkred; color:white;" data-toggle="modal" data-target="#removeAccount">
                 Verrouiller mon compte
             </button>
         </div>
+        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
+            {!! Form::submit("Enregistrer les modifications", ['class' => 'btn btn-success pull-right']) !!}
+        </div>
     </div>
+
 {!! Form::close() !!}
 
 

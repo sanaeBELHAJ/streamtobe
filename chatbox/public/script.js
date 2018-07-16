@@ -11,8 +11,8 @@ function sendMessage(){
     event.preventDefault();
     var message = $('#message').val();
 
-    if(message != "")
-        socket.emit('message', message); // Publie le message
+    if($.trim(message) != "")
+        socket.emit('message', $.trim(message)); // Publie le message
 
     $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
     $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
@@ -108,7 +108,7 @@ socket.on('updateList', function(data) {
     var text = "";
     
     $.each(data, function(index, user){
-        var color = "white";
+        var color = "user_viewer";
         text += "<p class='nav-link text-center' data-pseudo='"+user.pseudo+"'>";
             //Si le viewer est un modo / streamer
             if(user.is_staff){
@@ -117,16 +117,16 @@ socket.on('updateList', function(data) {
                 
                 if(user.rank<0){ //banni
                     ban = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
-                    color = "red";
+                    color = "user_ban";
                 }
                 else if(user.rank==1){ //mod
                     mod = "<i class='btn fas fa-user user' title='Remettre les droits de cet utilisateur par défaut'></i>";
-                    color = "green";
+                    color = "user_mod";
                 }
                 else if(user.rank==2){ //streamer
                     mod = "";
                     ban = "";
-                    color = "yellow";
+                    color = "user_streamer";
                 }
                 text += ban+mod;
             }

@@ -106,7 +106,7 @@ $(function () {
         })
         .done(function(data){
             if(data && data.length>0)
-                $("#navbarSupportedContent .material-icons").addClass("text-danger");
+                $("#header .fa-envelope-open").addClass("text-danger");
         })
         .fail(function(data){
             console.log(data);
