@@ -32,7 +32,7 @@
         @endforeach
     </div>
     @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
-    <div class="pagination-results m-t-0" style="display: flex;">
+    <div class="pagination-results m-t-0" style="text-align: center;">
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-angle-left"></i></span></a></li>
