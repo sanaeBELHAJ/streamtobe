@@ -128,7 +128,7 @@
                                     @if($streamer->stream->id == $viewer->stream_id)
                                         <button class="follow_stream btn-lg btn-rounded  w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fas fa-unlink"></i></button>
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
                                         <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
@@ -138,7 +138,7 @@
                                 @if($IsCurrentViewer == 0)
                                     <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fas fa-unlink"></i></button>
+                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
                                     <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
