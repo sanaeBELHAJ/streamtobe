@@ -540,4 +540,16 @@ footer #support_user textarea{
 .navbar-search{
     background-color: #2D3E50 !important;
 }
-
+.pagination .active>a:hover{
+    background-color: #1BBC9B;
+}
+.pagination .active>a {
+    background-color: #1BBC9B !important;
+    border-color: #1BBC9B !important;
+}
+.pagination .active>a:hover {
+    background-color: #1BBC9B !important;
+    border-color: #1BBC9B !important;
+    outline-style: none;
+    box-shadow: none;
+}
