@@ -102,9 +102,9 @@
                         </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
-
+                        <div class="row col-12">
                             {{-- Report --}}
-                            <p class="col text-center">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @if($report)
                                     <button class="btn btn-danger btn-lg btn-rounded m-l-10" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
@@ -115,14 +115,14 @@
                             </p>
 
                             {{-- Giveaway --}}
-                            <p class="col text-center">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 <button class="btn btn-primary btn-lg btn-rounded m-l-10" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
                             @include('stream.modal.payment')
 
                             {{-- Following --}}
-                            <p class="col text-center">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
@@ -155,6 +155,7 @@
                         </div>
                     @endif
                 @endauth
+                </div>
             </div>
 
             {{-- Boutons d'affichage mobile --}}
