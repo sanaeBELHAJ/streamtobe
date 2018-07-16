@@ -117,61 +117,62 @@
                                             </form>
                                         </li>
                                 @endauth
-                                    <li class="hidden-xs-down  hidden-sm-down hidden-md-down "><a data-toggle="search">Recherche</a></li>
+                                <li class="hidden-xs-down  hidden-sm-down hidden-md-down ">
+                                    <a data-toggle="search">Recherche</a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
-                    <li class="nav navbar-right">
-                            <ul>
-                                @guest
+                    <nav class="nav navbar-right">
+                        <ul>
+                            @guest
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down"><a href="{{ route('login') }}">{{ __('Login') }}</a></li>
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down"><a href="{{ route('register') }}">{{ __('Register') }}</a></li>
-                                @else
-                        <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                            <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
-                        </li>
-                         <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                             <a href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">Suivi</a>
-                         </li>
-                          <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                              <a  href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">Fans</a>
-                           </li>
-                          <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                            @if(Auth::user()->role_id == 1)
-                                <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
-                            @endif
-                          </li>
-                           <li class="hidden-sm-down hidden-md-down  hidden-xs-down dropdown dropdown-profile" >
-                                        <a data-toggle="dropdown">
-                                            <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>">
-                                            <span  {{ Auth::user()->pseudo }} ></span>
+                            @else
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                    <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
+                                </li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                    <a href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">Suivi</a>
+                                </li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                    <a  href="{{ route('home.fans',['pseudo' => Auth::user()->pseudo]) }}">Fans</a>
+                                </li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
+                                    @if(Auth::user()->role_id == 1)
+                                        <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
+                                    @endif
+                                </li>
+                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down dropdown dropdown-profile" >
+                                    <a data-toggle="dropdown">
+                                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>">
+                                        <span  {{ Auth::user()->pseudo }} ></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
+                                        <a href="/messages" class="dropdown-item">
+                                            <i class="fa fa-envelope-open">
+                                            </i>
+                                            Message
                                         </a>
-                               <div class="dropdown-menu dropdown-menu-right">
-                                   <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
-                                   <a href="/messages" class="dropdown-item">
-                                       <i class="fa fa-envelope-open">
-                                       </i>
-                                       Message
-                                   </a>
-                                   <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar"></i> Revenus</a>
-                                   <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-cog"></i> {{ __('Settings') }}</a>
-                                   <div class="dropdown-divider"></div>
-                                   <a class="dropdown-item" href="{{ route('logout') }}"
-                                      onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();">
-                                       <i class="fa fa-sign-out"></i>   {{ __('Logout') }}</a>
-                                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                       @csrf
-                                   </form>
-                               </div>
-                                    </li>
-                                    <li class="hidden-xl-up  hidden-lg-up"><a data-toggle="search"><i class="material-icons" style="vertical-align: middle;">
-                                                search
-                                            </i></a></li>
-
-                            </ul>
-                    </li>
-                    @endguest
+                                        <a class="dropdown-item" href="{{ route('home.stats', ['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-dollar"></i> Revenus</a>
+                                        <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-cog"></i> {{ __('Settings') }}</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                                document.getElementById('logout-form').submit();">
+                                            <i class="fa fa-sign-out"></i>   {{ __('Logout') }}</a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
+                            @endguest
+                            <li class="hidden-xl-up  hidden-lg-up">
+                                <a data-toggle="search"><i class="material-icons" style="vertical-align: middle;">search</i></a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
