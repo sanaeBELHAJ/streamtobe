@@ -145,7 +145,9 @@
                                 @endif
                             </p>
                         </div>
-
+                    @endif
+                @endauth
+                </div>
                         {{-- Description du streamer --}}
                         <div class="col-12 mt-4">
                             <div id="streamer">
@@ -153,9 +155,6 @@
                                 <p>{{$streamer->description}}</p>
                             </div>
                         </div>
-                    @endif
-                @endauth
-                </div>
             </div>
 
             {{-- Boutons d'affichage mobile --}}
