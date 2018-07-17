@@ -372,10 +372,12 @@ textarea{
     height: 70%;
     overflow-y: scroll;
     overflow-x: hidden;
+    padding-bottom: 50px;
   }
   @media screen and (max-width: 735px) {
     #frame .content .messages {
       max-height: calc(100% - 105px);
+      padding-bottom: 70px;
     }
   }
   #frame .content .messages::-webkit-scrollbar {
@@ -423,7 +425,6 @@ textarea{
     border-radius: 20px;
     max-width: 205px;
     line-height: 130%;
-    margin-bottom: 3%;
   }
   @media screen and (min-width: 735px) {
     #frame .content .messages ul li p {
