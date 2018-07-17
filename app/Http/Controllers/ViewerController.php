@@ -33,9 +33,14 @@ class ViewerController extends Controller
      */
     public function updateFollow(Request $request){
         $streamer = User::where('pseudo', '=', $request->get('stream'))->first();
-        $viewer = Viewer::where('stream_id', '=', $streamer->stream->id)
+        /*$viewer = Viewer::where('stream_id', '=', $streamer->stream->id)
                         ->where('user_id', '=', Auth::user()->id)
                         ->first();
+        */
+        $viewer = Viewer::firstOrCreate([
+            'stream_id' => $streamer->stream->id,
+            'user_id' => Auth::user()->id
+        ]);
         
         $viewer->is_follower = intval($request->get('is_following'));
         $viewer->save();
