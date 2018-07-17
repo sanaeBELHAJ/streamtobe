@@ -23,7 +23,7 @@
                                     <div class="card card-lg">
                                         <div class="card-img">
                                             <a href="/home/{{$stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $stream->user->avatar); ?>" class="card-img-top"></a>
-                                            @if ($viewer->user->stream->status == 1)
+                                            @if ($stream->status == 1)
                                                 <div class="badge badge-xbox-one">En ligne</div>
                                                 <div class="badge badge-ps4" style="left:150px;">{{$stream->type->name}}</div>
                                             @else
