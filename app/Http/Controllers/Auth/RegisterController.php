@@ -94,7 +94,7 @@ class RegisterController extends Controller
                 'password'          => Hash::make($data['password']),
                 'confirmation_code' => $data['confirmation_code']
             ]);
-        $type = Type::where('name', 'default')->firstOrFail();
+        $type = Type::all()->first();
         $stream = Stream::create([
             'title' => 'Titre',
             'streamer_id' => $user->id,
