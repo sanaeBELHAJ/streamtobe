@@ -332,8 +332,9 @@
                         return actions.payment.execute().then(function(payment) {
                             // The payment is complete!
                             // You can now show a confirmation message to the customer
-                            payment.streamer = $('#pseudo').val();
+                            payment.streamer = $("input[name='streamer']").val();
                             payment.message = $('#giveaway_message').val();
+
                             $.ajax({
                                 url: "/validGiveaway",
                                 type: 'POST',
