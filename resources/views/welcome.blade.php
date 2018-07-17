@@ -17,7 +17,7 @@
 
                     @if(count($followed) > 0)
                             @foreach ($followed as $stream)
-                                <div class="col-6 col-sm-4 col-md-3">
+                                <div class=" col-sm-6 col-lg-3 col-md-5">
                                     <div class="card card-lg">
                                         <div class="card-img">
                                             <a href="/home/{{$stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $stream->user->avatar); ?>" class="card-img-top"></a>

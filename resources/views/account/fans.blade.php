@@ -7,7 +7,7 @@
         <hr>
         @foreach($streamer->stream->viewers as $viewer)
             @if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
-                <div class="col-6 col-sm-4 col-md-3">
+                <div class=" col-sm-6 col-lg-3 col-md-5">
                     <div class="card card-lg">
                         <div class="card-img">
                             <a href="/home/{{$viewer->user->pseudo}}"><img  src="<?php echo asset('storage/' . $viewer->user->avatar); ?>" class="card-img-top"></a>
