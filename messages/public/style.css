@@ -186,8 +186,11 @@ textarea{
     }
   }
 
-
+  .mg{
+    margin-left: 10px; 
+  }
   #frame #sidepanel #search {
+    background: #1bbc9b1f;
     border-top: 1px solid #1bbc9b1f;
     border-bottom: 1px solid #1bbc9b1f;
     font-weight: 300;
