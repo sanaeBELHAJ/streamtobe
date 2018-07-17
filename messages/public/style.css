@@ -186,7 +186,9 @@ textarea{
     }
   }
 
-
+  .mg{
+    margin-left: 10px; 
+  }
   #frame #sidepanel #search {
     border-top: 1px solid #1bbc9b1f;
     border-bottom: 1px solid #1bbc9b1f;
