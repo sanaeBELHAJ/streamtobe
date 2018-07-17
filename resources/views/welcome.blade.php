@@ -26,7 +26,7 @@
                                             <i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>
                                             {{ $stream->type->name }}
                                         </span>
-                                        @if($stream->user->avatar!="users/default.png")
+                                        @if($stream->user->avatar!="users/defaullt.png")
                                             <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/'.$stream->user->avatar); ?>" alt="" title="Image de profil">
                                         @else
                                             <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
