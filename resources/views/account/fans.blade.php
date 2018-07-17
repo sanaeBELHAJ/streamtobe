@@ -5,33 +5,33 @@
     <div class="row">
         <p class="col-12">Utilisateurs qui suivent la chaine de {{ $streamer->pseudo }}</p>
         <hr>
-        @foreach($viewers as $viewer)
-            @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
+        @foreach($streamer->stream->viewers as $viewer)
+            @if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
                 <div class="col-6 col-sm-4 col-md-3">
                     <div class="card card-lg">
                         <div class="card-img">
-                            <a href="/home/{{$viewer->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $viewer->stream->user->avatar); ?>" class="card-img-top"></a>
-                            @if ($viewer->stream->status == 1)
+                            <a href="/home/{{$viewer->user->pseudo}}"><img  src="<?php echo asset('storage/' . $viewer->user->avatar); ?>" class="card-img-top"></a>
+                            @if ($viewer->user->stream->status == 1)
                                 <div class="badge badge-xbox-one">En ligne</div>
-                                <div class="badge badge-ps4" style="left:150px;">{{$viewer->stream->type->name}}</div>
+                                <div class="badge badge-ps4" style="left:150px;">{{$viewer->user->stream->type->name}}</div>
                             @else
                                 <div class="badge badge-steam">Hors ligne</div>
                             @endif
                             <div class="card-likes">
-                                <a href="#"><img src="{{ $viewer->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
+                                <a href="#"><img src="{{ $viewer->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
                             </div>
                         </div>
                         <div class="card-block">
-                            <h4 class="card-title"><a href="/home/{{$viewer->stream->user->pseudo}}">{{$viewer->stream->user->pseudo}}</a></h4>
-                            <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}</span></div>
-                            <p class="card-text">{{$viewer->stream->title}}</p>
+                            <h4 class="card-title"><a href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a></h4>
+                            <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($viewer->user->created_at)->format('d/m/Y') }}</span></div>
+                            <p class="card-text">{{$viewer->user->stream->title}}</p>
                         </div>
                     </div>
                 </div>
             @endif
         @endforeach
     </div>
-    @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
+    {@if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
     <div class="pagination-results m-t-0" style="text-align: center;">
         <nav aria-label="Page navigation">
             <ul class="pagination">
