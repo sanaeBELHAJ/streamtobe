@@ -34,7 +34,7 @@
                                             </div>
                                         </div>
                                         <div class="card-block">
-                                            <h4 class="card-title"><a href="/home/{{$viewer->user->pseudo}}">{{$stream->user->pseudo}}</a></h4>
+                                            <h4 class="card-title"><a href="/home/{{$stream->user->pseudo}}">{{$stream->user->pseudo}}</a></h4>
                                             <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($stream->user->created_at)->format('d/m/Y') }}</span></div>
                                             <p class="card-text">{{$stream->title}}</p>
                                         </div>
