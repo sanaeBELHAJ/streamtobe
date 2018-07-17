@@ -147,7 +147,7 @@
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down dropdown dropdown-profile" >
                                     <a data-toggle="dropdown">
                                         <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>">
-                                        <span  {{ Auth::user()->pseudo }} ></span>
+                                        <span data-pseudo="{{ Auth::user()->pseudo }}">{{ Auth::user()->pseudo }}</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
