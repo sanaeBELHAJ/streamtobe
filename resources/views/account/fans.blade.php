@@ -31,7 +31,7 @@
             @endif
         @endforeach
     </div>
-    {@if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
+    @if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
     <div class="pagination-results m-t-0" style="text-align: center;">
         <nav aria-label="Page navigation">
             <ul class="pagination">
