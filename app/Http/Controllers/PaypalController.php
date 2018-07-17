@@ -34,7 +34,7 @@ class PaypalController extends Controller
             "city"          => $payment['payer']['payer_info']['shipping_address']['city'],
             "message"       => $payment['message'],
             "paypal_payer_id" => $payment['payer']['payer_info']['payer_id'],
-            "viewer_id"     => $this->getViewerId($payment['streamer']),
+            "viewer_id"     => $this->getViewerId(Auth::user()->pseudo),
             "status"        => $payment['state'],
             //"created_at"    => $payment['create_time'],
         ]);
