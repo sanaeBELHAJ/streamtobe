@@ -3,7 +3,9 @@
 @section('content')
 <div class="container-fluid" >
 <div class="row">
+     
     <div class="col-sm-12 pull-right top-2 bottom">
+        @if($streamer->pseudo == Auth::user()->pseudo)
         <p>Dons reçus par {{$streamer->pseudo}}</p>
         <table class="table">
             <thead>
@@ -33,7 +35,11 @@
                 @endif
             </tbody>
         </table>
+        @else
+        <p>Vous n'avez pas accés à cette information.</p>
+         @endif
     </div>
+   
 </div>
 </div>
 @endsection
