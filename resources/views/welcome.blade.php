@@ -11,13 +11,11 @@
             <p>Les chaines en live que vous suivez :</p>
             
             <div class="row col-12">
-                <div class="">
                     @if(session()->has('ok'))
                         <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
                     @endif
 
                     @if(count($followed) > 0)
-                        <div class="row text-center text-lg-left">
                             @foreach ($followed as $stream)
                                 <div class="col-6 col-sm-4 col-md-3">
                                     <div class="card card-lg">
@@ -40,13 +38,10 @@
                                         </div>
                                     </div>
                                 </div>
-
                             @endforeach
-                        </div>
                     @else
                         <i>Vous ne suivez actuellement aucun stream.</i>
                     @endif
-                </div>
             </div>
             <hr>
             <p>Vos dernières statistiques : </p>
