@@ -5,6 +5,14 @@ html, body{
     background-color: #faf9fa;
 }
 
+body{
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #848484;
+  background-color: #fafafa;
+}
 
 #zone_chat{
     width: 100%;
