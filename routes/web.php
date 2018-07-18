@@ -61,6 +61,10 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/getStreamViewer', 'ViewerController@getStreamViewer');
         //Bannissement / Modérateur du chatbox
         Route::post('/updateViewer', 'ViewerController@updateViewer');
+        //Ajout Musiques
+        Route::post('/addMusic', 'StreamController@addMusic');
+        //Récupération des notes
+        Route::post('/getMarks', 'StreamController@getMarks');
 
     /* Actions sur le compte */
         Route::get('/home', 'AccountController@index')->name('home.index');    

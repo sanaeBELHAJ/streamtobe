@@ -5,7 +5,7 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row" >
+            <div class="container-fluid row" style="min-height: 450px;">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -98,8 +98,43 @@
                                     </label>
                                     Activer / Interrompre la diffusion
                                 </div>
+                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                    Programme de chansons : &nbsp;
+                                    <input id="" class="form-control d-inline w-50 update_stream"
+                                            data-config="title" type="text" placeholder="Titre du stream"
+                                            value="{{$streamer->stream->title}}">
+                                </div>
                             </div>
                         </div>
+
+                        {{-- Gestion des musiques --}}
+                        <div class="col-12">
+                                <h3 class="h3 mb-3">Gestion de ma playlist</h3>
+                                <p class="mb-1">
+                                    <small>Vous pouvez ci-dessous préparer les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
+                                </p>
+                                <p class="mb-1">
+                                    <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
+                                </p>
+                                <p class="mb-3">
+                                    <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
+                                </p>
+                                <div id="list" class="col-12 col-md-6">
+                                    <div class="list-item row">
+                                        <input type="text" name="" value="" class="col-4" placeholder="Nom de la chanson" />
+                                        <button type="button" class="col-4 btn list-eval">Evaluation</button>
+                                        <button type="button" class="col-4 btn list-remove">Supprimer</button>
+                                    </div>
+                                    @foreach($musics as $music)
+                                        <div class="list-item row" data-id="{{ $music->id }}">
+                                            <input type="text" name="{{ $music->title }}" value="{{ $music->title }}" class="col-4" />
+                                            <button type="button" class="col-4 btn list-eval">Evaluation</button>
+                                            <p class="col-4 text-center">Avis du chat : <span class="result"> {{ $music->mark }} </span> %
+                                        </div>
+                                    @endforeach
+                                    <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i></button>
+                                </div>
+                            </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
                         <div class="row col-12">
@@ -149,6 +184,7 @@
                     @endif
                 @endauth
                 </div>
+
                 {{-- Description du streamer --}}
                 <div class="col-12 mt-4">
                     <div id="streamer">
@@ -185,6 +221,9 @@
             display: block;
             background-size: cover;
             background-position: center;
+        }
+        #list .list-item:first-of-type{
+            display: none;
         }
         @media(max-width: 768px){
             #messages, #infos{
@@ -257,6 +296,8 @@
     @auth
         @if($streamer->id != Auth::user()->id)
             <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        @else
+            <script src="/js/jquery.dynamiclist.min.js"></script>
         @endif
     @endauth
 
@@ -310,6 +351,69 @@
                     });
             }
             $(".update_stream").change(updateStream);
+
+            /* Gestion des musiques (streamer)*/
+            $("#list").dynamiclist();
+
+            checkClickList();
+            var currentsSongs = [];
+
+            function checkClickList(){
+                $("#list").on("click", ".list-eval", function(){
+                    var button = $(this);
+                    var music = $(this).parent().find("input").val();
+                    
+                    if($.trim(music)=="" || $(this).parent().find(".result").length > 0)
+                        return false;
+
+                    $.ajax({
+                        url: "/addMusic",
+                        type: 'POST',
+                        dataType: "JSON",
+                        data: {
+                            title: music
+                        }
+                    })
+                        .done(function(data){
+                            button.parent().data('id', data.id);
+                            button.parent().find('input').prop('disabled', true);
+                            button.parent().find('.list-eval').prop('disabled', true);
+                            button.parent().find('.list-remove').remove();
+                            button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
+                            currentsSongs.push(data.id);
+                            console.log(data);
+                        })
+                        .fail(function(data){
+                            console.log(data);
+                        });
+                    //affichage chatbox dans app.js
+                    console.log($(this).parent().find("input").val());
+                });
+            }
+
+            setInterval(function(){
+                if(currentsSongs.length <= 0)
+                    return false;
+                
+                $.ajax({
+                    url: "/getMarks",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        currentsSongs: currentsSongs
+                    }
+                })
+                    .done(function(data){
+                        console.log(data);
+                        data.forEach(function(value){
+                            $("#list .list-item[data-id='"+value.id+"']").html(value.total);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            }, 2000);
+
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
@@ -401,7 +505,7 @@
                 });
             }
             //Liste modérateurs / bannis
-@auth
+            @auth
             updateList();
             function updateList(){
                 $.ajax({

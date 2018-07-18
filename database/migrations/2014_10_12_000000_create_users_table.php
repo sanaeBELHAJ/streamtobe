@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
             $table->text('description');
             $table->integer('activated')->default(0);
             $table->string('password');
-            $table->string('avatar')->default('users/defaullt.png');
+            $table->string('avatar')->default('users/default.png');
             $table->string('confirmation_code')->nullable();
             $table->rememberToken();
             $table->timestamps();
