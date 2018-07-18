@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container top" style="    margin-bottom: 40px;">
+<div class="container top-2" style="    margin-bottom: 40px;">
     <div class="row">
         <div class=" col-sm-12 div-filter">
             <form class="pull-right form-inline" method="POST" action="{{ route('stream.index') }}">
