@@ -379,10 +379,8 @@ textarea{
     float: left;
   }
   #frame .content .messages {
-    height: auto;
-    /*min-height: calc(100% - 93px);
-    max-height: calc(100% - 93px);*/
-    height: 70%;
+    height: 80%;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     padding-bottom: 50px;
@@ -404,7 +402,7 @@ textarea{
     display: inline-block;
     clear: both;
     float: left;
-    margin: 15px 15px 5px 15px;
+    margin: 5px 15px;
     width: calc(100% - 25px);
     font-size: 0.9em;
   }
