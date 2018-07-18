@@ -5,7 +5,7 @@
     @auth
 
     <div class="row">
-        <div class="col-sm-12 pull-right bottom" style="margin-top: 50px;">
+        <div class="col-sm-12 pull-right" style="margin-top: 50px;">
             <p>Bienvenue {{ Auth::user()->pseudo }},</p>
             <hr>
             <p>Les chaines en live que vous suivez :</p>
@@ -46,7 +46,7 @@
             <hr>
             <p>Vos dernières statistiques : </p>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="card-border card text-center">
                         <div class="card-header">
                             Valeur des dons obtenus ce mois-ci
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="card-border card text-center">
                         <div class="card-header">
                             Nombre total de followers
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="card-border card text-center">
                         <div class="card-header">
                             Nombre total de visiteur
@@ -110,7 +110,7 @@
             <h1>{{ setting('site.welcome-title') }}</h1>
             <p>{{ setting('site.welcome-text') }}</p>
             <div class="row">
-                <div class="col-sm-12 pull-right bottom" style="margin-top: 50px;padding: 30px;margin-bottom: 0;padding-top: 0;padding-bottom: 0;">
+                <div class="col-sm-12 pull-right mb-0 pt-0 pb-0" style="margin-top: 50px;padding: 30px;">
                     <div class="row">
                         <div class="col-12 col-sm-6 col-md-4 mb-3">
                             <div class="card text-center" style="height:200px;">

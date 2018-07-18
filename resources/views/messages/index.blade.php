@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('content')
-	<div class="container-fluid h-75">
+	<div class="container-fluid h-100" style="min-height:80vh;">
 		<div class="row h-100">
 
 			@if(env('APP_ENV') != "production")

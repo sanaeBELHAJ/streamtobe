@@ -6,6 +6,9 @@ body{
     display: flex;
     flex-direction: column;
     background-color: #faf9fa;
+    min-height: 100vh;
+    position: relative;
+    margin: 0;
 }
 header #navbarDropdown.nav-link{
     padding: 0 1rem;
@@ -423,6 +426,7 @@ ul.ui-autocomplete{
 
 footer#footer{
     margin-top: auto;
+    padding: 30px 0 20px 0;
 }
 
 footer #support_user textarea{

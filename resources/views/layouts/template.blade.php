@@ -195,67 +195,33 @@
     <footer id="footer">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-md-4 offset-md-4 text-center">
-                    <h4 class="footer-title">Nous contacter</h4>
-                    <p>Nous sommes disponibles 7/7j</p>
-                    <div class="input-group m-t-25">
+                <div class="col-12 col-md-4 text-center mb-2">
+                    <div class="input-group">
                         <button class="btn btn-primary btn-rounded btn-shadow btn-lg mx-auto" type="button" data-toggle="modal" data-target="#supportModal">
-                            <a href="#" class="text-light">Contactez-nous</a>
+                            <span class="text-light">Contactez-nous</span>
                         </button>
-                        <div class="modal fade" id="supportModal" tabindex="-1" role="dialog" aria-labelledby="supportModalLabel" aria-hidden="true" style="color: black;">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <form id="support_user" action="" method="POST">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="supportModalLabel">Support utilisateur</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body text-left">
-                                            <p class="mt-2 alert alert-success d-none" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                Message correctement envoyé.
-                                            </p>
-                                            <p class="mt-2 alert alert-danger d-none" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                Echec de l'envoi du message
-                                            </p>
-                                            <p>Bonjour @auth {{ Auth::user()->pseudo }} @endauth</p>
-                                            <p>Une question ? Une remarque ?</p>
-                                            <p>Donnez-nous notre avis et nous vous répondrons dans les meilleurs délais !</p>
-                                            @guest
-                                                <label>
-                                                    <p>Merci de nous indiquer votre adresse email : 
-                                                        <input class="form-control border" type="email" name="exped" required="required"></p>
-                                                </label>
-                                            @endguest
-                                            <textarea class="w-100 small form-control border" name="opinion" required="required"
-                                                        placeholder="Un suivi sera établi afin de vous fournir les renseignements les plus pertinents possible."></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                            <button type="submit" class="btn btn-primary">Envoyer le message</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        @include('layouts.modal.contact')
                     </div>
                 </div>
+                <div class="col-12 col-md-4 text-center mb-2">
+                    <p>{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p><a href="/cgu">Conditions générales d'utilisation</a>
+                </div>
+                <div class="col-12 col-md-4 mb-2 d-flex flex-column justify-content-center">
+                    <div class="footer-social">
+                        <a href="{{ setting('site.socials-fb') }}"  data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
+                        <a  href="{{ setting('site.socials-twitter') }}"  data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
+                        <a  href="{{ setting('site.socials-insta') }}"  data-toggle="tooltip" title="instagram"><i class="fa fa-instagram"></i></a>
+                    </div>    
+                </div>
             </div>
-            <div class="footer-bottom">
+            {{-- <div class="footer-bottom">
                 <div class="footer-social">
                     <a href="{{ setting('site.socials-fb') }}"  data-toggle="tooltip" title="facebook"><i class="fa fa-facebook"></i></a>
                     <a  href="{{ setting('site.socials-twitter') }}"  data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
                     <a  href="{{ setting('site.socials-insta') }}"  data-toggle="tooltip" title="instagram"><i class="fa fa-instagram"></i></a>
                 </div>
                 <p>{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p><a href="/cgu">Conditions générales d'utilisation</a>
-            </div>
+            </div> --}}
             @if(!isset($_COOKIE['valid_cookie']))
                 <div id="cookies">
                     <div style="margin-top: 15px;">En poursuivant votre navigation sur ce site, vous acceptez l'utilisation de cookies afin d'améliorer son fonctionnement.</div>
