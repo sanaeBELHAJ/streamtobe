@@ -176,6 +176,16 @@
             width:100%;
             height:100%;
         }
+        #paymentModal textarea{
+            padding: 10px;
+        }
+        #gift_banner{
+            width: 100%;
+            height: 150px;
+            display: block;
+            background-size: cover;
+            background-position: center;
+        }
         @media(max-width: 768px){
             #messages, #infos{
                 height: 400px;
@@ -345,6 +355,8 @@
                                 }
                             })
                                 .done(function(data){
+                                    $("#giveaway_change").val(1);
+                                    $('#giveaway_message').val("");
                                     console.log(data);
                                 })
                                 .fail(function(data){

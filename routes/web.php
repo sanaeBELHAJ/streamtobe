@@ -22,7 +22,7 @@ if(env('APP_ENV') === 'production') {
 }
 
 Route::get('/', 'HomeController@index');
-Route::get('/cgu', 'HomeController@cgu');
+Route::get('/cgu', 'HomeController@cgu')->name("cgu");
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
