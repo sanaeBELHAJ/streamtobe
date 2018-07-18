@@ -2,7 +2,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="pictureAccountInput">
-                <img class="pictureAccount" id="pictureAccount" src="<?php echo asset('storage/'.$user->avatar); ?>" alt="" title="Image de profil">
+                <img class="pictureAccount" id="pictureAccount" style="background-image:url(<?php echo asset('storage/'.$user->avatar); ?>)" alt="" title="Image de profil">
                 <small class="text-muted">(Max: 2 Mo, Types : PNG, JPG, GIF)</small>
             </label>
             {!! Form::file('pictureAccount', ['id' => 'pictureAccountInput', 

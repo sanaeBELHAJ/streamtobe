@@ -26,7 +26,7 @@ $(function () {
         .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
             return $( "<li></li>" )
                 .data( "ui-autocomplete-item", item )
-                .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
+                .append("<span class='results_picture' style='background:url("+item.avatar+") top center; background-size:cover;margin: 5px 10px;'></span> "+item.value )
                 .appendTo( ul );
         };
     });

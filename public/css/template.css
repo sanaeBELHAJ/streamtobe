@@ -25,17 +25,24 @@ header .dropdown-menu{
     vertical-align: bottom;
     cursor: pointer;
     vertical-align: middle;
+    background-size: cover;
+    background-position: top center;
 }
 .logo-text{
     font-size: 12px;
 }
 .ui-state-active{
-    background-color: transparent !important;
-    border: 0 !important;
-    margin: 0 !important;
+    background-size: cover;
 }
 .results_picture{
-    width: 60px;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    background-size: cover;
+    background-position: top center;
+    vertical-align: middle;
+    margin: 5px 10px;
+    border-radius: 50%;
 }
 
 .mh-25{
@@ -163,6 +170,8 @@ header .dropdown-menu{
     border-radius: 50%;
     vertical-align: bottom;
     cursor: pointer;
+    background-size: cover;
+    background-position: top center;
 }
 
 .btn-follow {

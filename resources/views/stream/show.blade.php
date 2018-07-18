@@ -57,13 +57,13 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                        <div class="mt-4" id="config_stream">
+                        <div class="col-12 mt-4" id="config_stream">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
                             <div class="form-row">
                                 <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
                                         Type de diffusion : &nbsp;
                                         <select id="broadcasting-option" class="form-control d-inline w-50">
-                                            <option>Stream classique</option>
+                                            <option>Stream vidéo + audio</option>
                                             <option>Stream audio</option>
                                         </select>
                                 </div>
@@ -149,13 +149,13 @@
                     @endif
                 @endauth
                 </div>
-                        {{-- Description du streamer --}}
-                        <div class="col-12 mt-4">
-                            <div id="streamer">
-                                <h3>Description du streamer</h3>
-                                <p>{{$streamer->description}}</p>
-                            </div>
-                        </div>
+                {{-- Description du streamer --}}
+                <div class="col-12 mt-4">
+                    <div id="streamer">
+                        <h3 class="h3 mb-5">Description du streamer</h3>
+                        <p>{{$streamer->description}}</p>
+                    </div>
+                </div>
             </div>
 
             {{-- Boutons d'affichage mobile --}}
