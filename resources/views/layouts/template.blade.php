@@ -253,7 +253,7 @@
                     <a  href="{{ setting('site.socials-twitter') }}"  data-toggle="tooltip" title="twitter"><i class="fa fa-twitter"></i></a>
                     <a  href="{{ setting('site.socials-insta') }}"  data-toggle="tooltip" title="instagram"><i class="fa fa-instagram"></i></a>
                 </div>
-                <p>{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p>
+                <p>{{ __('Copyright') }} &copy; {{ setting('site.title') }} 2018</p><a href="/cgu">Conditions générale d'utilisation</a>
             </div>
             @if(!isset($_COOKIE['valid_cookie']))
                 <div id="cookies">

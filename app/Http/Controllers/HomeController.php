@@ -63,6 +63,16 @@ class HomeController extends Controller
         return view('welcome', compact('followed', 'themes', 'listSlider', 'viewers', 'followers', 'donations'));
     }
     
+     /**
+     * Display a listing of the actives streams
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function cgu(){
+       
+        return view('cgu.cgu');
+    }
+    
     /**
      * Valid the cookies use
      * 
