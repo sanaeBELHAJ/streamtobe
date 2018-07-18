@@ -59,7 +59,7 @@
                 <div class="navbar">
                     <div class="navbar-left">
                         <a class="navbar-toggle"><i class="fa fa-bars"></i></a>
-                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" src="<?php echo asset('storage/'); ?>/{{setting('site.logo')}}" alt="Streamtobe"></a>
+                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'); ?>/{{setting('site.logo')}})" alt="Streamtobe"></a>
                         <nav class="nav">
                             <ul>
                                 <li class="hidden-xs-down  hidden-sm-down hidden-md-down ">
@@ -146,7 +146,7 @@
                                 </li>
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down dropdown dropdown-profile" >
                                     <a data-toggle="dropdown">
-                                        <img class="pictureAccountTemplate" src="<?php echo asset('storage/'.Auth::user()->avatar); ?>">
+                                        <img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'.Auth::user()->avatar); ?>)">
                                         <span data-pseudo="{{ Auth::user()->pseudo }}">{{ Auth::user()->pseudo }}</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">

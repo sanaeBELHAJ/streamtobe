@@ -21,7 +21,7 @@ var token = getUrlParameter('token');
 socket.emit('bringFriends', token);
 socket.on('bringFriends', function(data) {
     
-    $("#profile #profile-img").prop("src", environment+"/storage/"+data.user_avatar);
+    $("#profile #profile-img").prop("style", 'background-image:url('+environment+"/storage/"+data.user_avatar+')');
     $("#profile p").html(data.user_pseudo);
 
     var text = "";
@@ -60,7 +60,8 @@ socket.on('join', function(data) {
     
     //Informations
     var infos = data.infos;
-    $("#profile #profile-img").prop("src", environment+"/storage/"+infos.user_avatar);
+    $("#profile #profile-img").prop("style", 'background-image:url('+environment+"/storage/"+infos.user_avatar+')')
+                            .data("img", environment+"/storage/"+infos.user_avatar);
     $("#profile p").html(infos.user_pseudo);
 
     $(".contact-profile img").prop("src", environment+"/storage/"+infos.friend_avatar);
@@ -100,7 +101,7 @@ function newMessage() {
     var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
 
     var content = "<li class='replies'>";
-            content += "<img src='"+$("#profile-img").prop("src")+"' alt='' />";
+            content += "<img src='"+$("#profile-img").data("img")+"' alt='' />";
             content += "<p>"+message+date_emit+"</p>";
     content += "</li>";
     $(".messages ul").append(content);

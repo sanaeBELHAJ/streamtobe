@@ -53,7 +53,7 @@
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#pictureAccount').attr('src', e.target.result);
+                    $('#pictureAccount').css('background-image', 'url('+e.target.result+')');
                 };
 
                 reader.readAsDataURL(input.files[0]);

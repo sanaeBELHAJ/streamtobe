@@ -6,7 +6,7 @@
     <h3 class="text-left">Informations</h3>
     <div class="row">
         <div class="col-6">
-            <img class="pictureAccount" src="<?php echo asset('storage/'.$streamer->avatar); ?>">
+            <img class="pictureAccount" style="background-image:url(<?php echo asset('storage/'.$streamer->avatar); ?>)">
         </div>
         <div class="col-6 d-flex flex-row-reverse">
             <p>Compte créé le: <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
