@@ -9,7 +9,7 @@
             @foreach($channels as $channel)
                 {{-- Chaines des autres streamers suivies par l'utilisateur --}}
                 @if($channel->is_follower == 1 && $channel->stream->user->id != $channel->user->id && $channel->stream->user->status > 0)
-                    <div class="col-6 col-sm-4 col-md-3">
+                    <div class=" col-sm-6 col-lg-3 col-md-5">
                     <div class="card card-lg">
                         <div class="card-img">
                             <a href="/home/{{$channel->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>" class="card-img-top"></a>

@@ -116,6 +116,7 @@
 
                             {{-- Giveaway --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
+                                <input type="hidden" name="streamer_name" value="{{ $streamer->pseudo }}">
                                 <button class="btn btn-primary btn-lg btn-rounded m-l-10" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
@@ -332,8 +333,9 @@
                         return actions.payment.execute().then(function(payment) {
                             // The payment is complete!
                             // You can now show a confirmation message to the customer
-                            payment.streamer = $('#pseudo').val();
+                            payment.streamer = $("input[name='streamer_name']").val();
                             payment.message = $('#giveaway_message').val();
+
                             $.ajax({
                                 url: "/validGiveaway",
                                 type: 'POST',

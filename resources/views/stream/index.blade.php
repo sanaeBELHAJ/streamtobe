@@ -70,10 +70,10 @@
             @if(count($streams) > 0)
                 <div class="row text-center text-lg-left">
                     @foreach ($streams as $stream)
-                        <div class="col-6 col-sm-4 col-md-3">
+                        <div class=" col-sm-6 col-lg-3 col-md-5">
                             <div class="card card-lg">
                                 <div class="card-img">
-                                    <a href="/home/{{$stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $stream->user->avatar); ?>" class="card-img-top"></a>
+                                    <a href="/stream/{{$stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $stream->user->avatar); ?>" class="card-img-top"></a>
                                         <div class="badge badge-xbox-one">En ligne</div>
                                         <div class="badge badge-ps4" style="left:150px;">{{$stream->type->name}}</div>
                                     <div class="card-likes">
