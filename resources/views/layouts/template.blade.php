@@ -76,7 +76,7 @@
                                 @endguest
                                 @auth
                                     <li class="hidden-xl-up  hidden-lg-up">
-                                        <a href="{{ route('home.index') }}" class="">Profil</a>
+                                        <a href="{{ route('home.show',['pseudo' => Auth::user()->pseudo]) }}" class="">Mon profil</a>
                                     </li>
                                     <li class="hidden-xl-up  hidden-lg-up">
                                         <a href="{{ route('stream.show', ['user' => Auth::user()->pseudo]) }}" class="">{{ __('My stream') }}</a>
@@ -139,18 +139,13 @@
                                         Message
                                     </a>
                                 </li>
-                                <li class="hidden-sm-down hidden-md-down  hidden-xs-down">
-                                    @if(Auth::user()->role_id == 1)
-                                        <a href="{{ route('voyager.login') }}" class="">{{ __('Administration') }}</a>
-                                    @endif
-                                </li>
                                 <li class="hidden-sm-down hidden-md-down  hidden-xs-down dropdown dropdown-profile" >
                                     <a data-toggle="dropdown">
                                         <img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'.Auth::user()->avatar); ?>)">
                                         <span data-pseudo="{{ Auth::user()->pseudo }}">{{ Auth::user()->pseudo }}</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{ url('/') }}"><i class="fa fa-user"></i> Profil</a>
+                                        <a class="dropdown-item" href="{{ route('home.show',['pseudo' => Auth::user()->pseudo]) }}"><i class="fa fa-user"></i>Mon profil</a>
                                         <a class="dropdown-item" href="{{ route('home.follows',['pseudo' => Auth::user()->pseudo]) }}">
                                             <i class="fa fa-window-restore"></i> Les chaines suivies
                                         </a>
@@ -161,6 +156,12 @@
                                             <i class="fa fa-dollar"></i> 
                                             Revenus</a>
                                         <a class="dropdown-item" href="{{ route('home.index') }}"><i class="fa fa-cog"></i> {{ __('Settings') }}</a>
+                                        <div class="dropdown-divider"></div>
+                                        @if(Auth::user()->role_id == 1)
+                                            <a href="{{ route('voyager.login') }}" class="dropdown-item">
+                                                <i class="fa fa-unlock-alt"></i>{{ __('Administration') }}
+                                            </a>
+                                        @endif
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
