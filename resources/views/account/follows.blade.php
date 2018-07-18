@@ -12,16 +12,18 @@
                     <div class=" col-sm-6 col-lg-3 col-md-5">
                     <div class="card card-lg">
                         <div class="card-img">
-                            <a href="/home/{{$channel->stream->user->pseudo}}"><img  src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>" class="card-img-top"></a>
-                            @if ($channel->stream->status == 1)
-                            <div class="badge badge-xbox-one">En ligne</div>
-                                <div class="badge badge-ps4" style="left:150px;">{{$channel->stream->type->name}}</div>
-                            @else
-                            <div class="badge badge-steam">Hors ligne</div>
-                            @endif
-                            <div class="card-likes">
-                                <a href="#"><img src="{{ $channel->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;"></a>
-                            </div>
+                            <a href="/home/{{$channel->stream->user->pseudo}}">
+                                <span class=" card-img-top w-100 d-block" style="height: 200px;background-size: cover;background-position: center;background-image:url(<?php echo asset('storage/' . $channel->stream->user->avatar); ?>)"></span>
+                                @if ($channel->stream->status == 1)
+                                    <div class="badge badge-xbox-one">En ligne</div>
+                                    <div class="badge badge-ps4" style="left:150px;">{{$channel->stream->type->name}}</div>
+                                @else
+                                    <div class="badge badge-steam">Hors ligne</div>
+                                @endif
+                                <div class="card-likes">
+                                    <img src="{{ $channel->stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;">
+                                </div>
+                            </a>                           
                         </div>
                         <div class="card-block">
                             <h4 class="card-title"><a href="/home/{{$channel->stream->user->pseudo}}">{{$channel->stream->user->pseudo}}</a></h4>
