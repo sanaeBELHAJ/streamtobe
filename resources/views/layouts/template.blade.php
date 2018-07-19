@@ -27,7 +27,7 @@
         {!! HTML::style('css/normalize.css') !!}
         {!! HTML::style('css/template.css') !!}
         @yield('css')
-        @if(env('APP_ENV') == "production")
+        @if(env('APP_ENV') == "production" && isset($_COOKIE['valid_cookie']))
             <!-- Global site tag (gtag.js) - Google Analytics -->
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65526992-2"></script>
             <script>
