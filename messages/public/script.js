@@ -21,7 +21,7 @@ var token = getUrlParameter('token');
 socket.emit('bringFriends', token);
 socket.on('bringFriends', function(data) {
     
-    $("#profile #profile-img").prop("src", environment+"/storage/"+data.user_avatar);
+    $("#profile #profile-img").prop("style", 'background-image:url('+environment+"/storage/"+data.user_avatar+')');
     $("#profile p").html(data.user_pseudo);
 
     var text = "";
@@ -35,7 +35,7 @@ socket.on('bringFriends', function(data) {
             text += "<div class='wrap'>";
                 text += "<img src='"+environment+"/storage/"+value.avatar+"' alt='' />";
                 text += "<p class='name'>"+value.pseudo+"</p>";
-                //text += "<p class='preview'>Lorem Ipsum</p>";
+                text += "<small></small>";
             text += "</div>";
         text += "</li>";
     });
@@ -60,7 +60,8 @@ socket.on('join', function(data) {
     
     //Informations
     var infos = data.infos;
-    $("#profile #profile-img").prop("src", environment+"/storage/"+infos.user_avatar);
+    $("#profile #profile-img").prop("style", 'background-image:url('+environment+"/storage/"+infos.user_avatar+')')
+                            .data("img", environment+"/storage/"+infos.user_avatar);
     $("#profile p").html(infos.user_pseudo);
 
     $(".contact-profile img").prop("src", environment+"/storage/"+infos.friend_avatar);
@@ -100,7 +101,7 @@ function newMessage() {
     var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
 
     var content = "<li class='replies'>";
-            content += "<img src='"+$("#profile-img").prop("src")+"' alt='' />";
+            content += "<img src='"+$("#profile-img").data("img")+"' alt='' />";
             content += "<p>"+message+date_emit+"</p>";
     content += "</li>";
     $(".messages ul").append(content);
@@ -122,16 +123,18 @@ $(window).on('keydown', function(e) {
 
 
 // Quand on recoit un message, on l'insère dans la page
-socket.on('message', function(message) {
-    if(message){
+socket.on('message', function(content) {
+    $("#contacts ul li[data-pseudo='"+content.user_exped_pseudo+"'] small").html(content.message);
+
+    if(content.message && $(".contact-profile p").html() == content.user_exped_pseudo){
         var messageDate = new Date();
         var date_emit = "<span class='d-block'>"+messageDate.toLocaleDateString('fr-FR', options)+"</span>";
 
-        var content = "<li class='sent'>";
-            content += "<img src='"+$("#contacts li.contact.active img").prop("src")+"' alt='' />";
-            content += "<p>"+message+date_emit+"</p>";
-        content += "</li>";
-        $(".messages ul").append(content);
+        var answer = "<li class='sent'>";
+            answer += "<img src='"+$("#contacts li.contact.active img").prop("src")+"' alt='' />";
+            answer += "<p>"+content.message+" "+date_emit+"</p>";
+        answer += "</li>";
+        $(".messages ul").append(answer);
     }
     $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, 100);
 });

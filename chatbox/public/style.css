@@ -2,6 +2,12 @@ html, body{
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #848484;
+    background: #fafafa;
 }
 
 #responsive_slider{
@@ -10,7 +16,8 @@ html, body{
 
 #zone_chat, #zone_users{
     width: 100%;
-    background: #330033;
+    background: #c2c1c240;
+    color: #6e6779;
     height: 70%;
     padding: 5px 5px 0;
     font-size: 12px;
@@ -25,9 +32,31 @@ html, body{
 .white{
     color: white;
 }
+.orange{
+    color: #ba9b0c;
+}
 
-.red{
+.black{
+    color: black;
+}
+
+.user_viewer{
+    color: black;
+}
+
+.user_ban{
     color: red;
+    text-decoration: line-through;
+}
+
+.user_mod{
+    color: green;
+    font-weight: bold;
+}
+
+.user_streamer{
+    color: orange;
+    font-weight: bold;    
 }
 
 .green{
@@ -43,35 +72,40 @@ html, body{
 }
 
 form#formulaire_chat{
-    height: 20%;
+    height: 15%;
     position: relative;
 }
 
 .chat_user{
-    font-size: 13px;
+    font-size: 18px;
     padding: 0 5px;
     margin: 0 10px;
-    color: white;
+    color: darkviolet;
 }
 
 .chat_avatar{
-    width: 20px;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-size: cover;
+    background-position: top center;
     vertical-align: middle;
-    padding-left: 5px;
+    margin: 5px 10px;
+    border-radius: 50%;
     padding-right: 0px;
 }
 
 .streamer{
-    color: white;
+    color: black;
 }
 
 .mod{
     background-color: #0ccebc;
-    color: black;
+    color: green;
 }
 
 .chat_message{
-    font-size: 15px;
+    font-size: 18px;
 }
 
 textarea{
@@ -86,7 +120,7 @@ textarea{
 .delete{
     padding: 10px;
     vertical-align: middle;
-    color: white;
+    color: red;
 }
 
 .delete:hover{
@@ -94,12 +128,12 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 5%;
-    top: 50%;
-    width: 25px;
-    height: 25px;
+    right: 1%;
+    top: 23%;
+    width: 70px;
+    height: 40px;
     transform: translateY(-50%);
-    background: #7e27ff;
+    background: #1BBC9B;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -136,8 +170,9 @@ textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: rgb(86, 27, 141); /* Violet background */
+    background: #1BBC9B; /* Violet background */
     cursor: pointer; /* Cursor on hover */
+    border-radius: 0.25rem;
 }
 
 #responsive_slider .slider::-moz-range-thumb {
@@ -145,4 +180,40 @@ textarea{
     height: 25px; /* Slider handle height */
     background: rgb(86, 27, 141); /* Violet background */
     cursor: pointer; /* Cursor on hover */
+    border-radius: 0.25rem;
+}
+textarea{
+    outline: none;
+    outline-style: none;
+    border: 0.2 solid gray;
+    box-shadow: none;
+    height: 40px;
+}
+.form-control{
+    outline: 0;
+    font-family: inherit;
+    appearance: none;
+    border: 0.5px solid #1BBC9B;
+    background: #fff;
+    color: #433f4a;
+    transition: box-shadow .12s ease-in,border .12s ease-in;
+    line-height: 1.5;
+    border-radius: .1rem;
+    padding: .1rem .3rem;
+    line-height: 1.5;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+.form-control:focus, .form-control:active{
+    outline: 0;
+    outline-style: none;
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+    border: none;
+    box-shadow: 0 0 6px #1BBC9B; 
+}
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.1rem #1BBC9B;
 }

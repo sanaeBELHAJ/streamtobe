@@ -1,29 +1,30 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container top bottom">
+<div class="container top-2" style="    margin-bottom: 40px;">
     <div class="row">
         <div class=" col-sm-12 div-filter">
             <form class="pull-right form-inline" method="POST" action="{{ route('stream.index') }}">
                 @csrf
                 <input type="hidden" id="_token" value="{{ csrf_token() }}">
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="name">Titre  </label>
-                    <input id="email"  type="text" class="form-control" name="name">
+  
+                    <input id="email"  type="text" class="form-control" name="name" value="{{ $inputs['name'] }}">
                     {!! $errors->first('name', 
                                 '<small class="form-text alert alert-danger">:message
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
-                        <option value="">Sélectionner une catégorie</option>
+                        <option value="">Toutes les catégories</option>
                         @foreach($themes as $theme)
                             <optgroup label="{{$theme->name}}">
                                 @foreach($theme->types as $type)
-                                    <option value="{{$type->id}}">{{$type->name}}</option>
+                                    <option value="{{$type->id}}" @if($inputs['theme'] == $type->id) selected @endif>{{$type->name}}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -34,13 +35,13 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2">
+                <div class="form-group mb-2 d-flex">
                     <label for="countries">Pays </label>
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
-                        <option value="">Sélectionner un pays</option>
+                        <option value="">Tous les pays</option>
                         @if($countries)
                             @foreach($countries as $country)
-                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                <option value="{{$country->id}}" @if($inputs['country'] == $country->id) selected @endif>{{$country->name}}</option>
                             @endforeach
                         @endif
                     </select> 
@@ -51,61 +52,62 @@
                                     </button></small>') !!}       
                 </div>
                 <div class="form-group mb-2">
-                    <button type="submit" class="btn btn-primary btn-filter">
-                        chercher
+                    <button type="submit" class="btn btn-primary btn-rounded btn-shadow btn-lg  btn-filter">
+                        Rechercher
                     </button>
                 </div>
             </form>
         </div>
     </div>
-
-    <div class="row mt-5">
+</div>
+<div class="container-fluid bottom">
+    <div class="row">
         <div class="col-12">
             @if(session()->has('ok'))
                 <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
             @endif
-            @auth
-                @if(count($streams) > 0)
-                    <div class="row text-center text-lg-left">
-                        @foreach ($streams as $stream)
-                        <div class="col-lg-3 col-md-4 col-xs-6" style="box-sizing: border-box;">
-                            <a href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                <!--<img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">-->
-                                <span class="watch"><i class="material-icons gold-text" style="color:#f4eb19f0">settings_input_antenna</i>  <i class="material-icons">remove_red_eye</i>   123</span>
-                                @if($stream->user->avatar!="users/default.png")
-                                <img class="img-fluid img-thumbnail" src="<?php echo asset('storage/' . $stream->user->avatar); ?>" alt="" title="Image de profil">
-                                @else
-                                <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                                @endif
-                            </a>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                        {{ $stream->title }}
+
+            @if(count($streams) > 0)
+                <div class="row text-center text-lg-left">
+                    @foreach ($streams as $stream)
+                        <div class=" col-sm-6 col-lg-3 col-md-5">
+                            <div class="card card-lg">
+                                <div class="card-img">
+                                    <a href="/stream/{{$stream->user->pseudo}}">
+                                        <span class=" card-img-top w-100 d-block" style="height: 200px;background-size: cover;background-position: center;background-image:url(<?php echo asset('storage/' . $stream->user->avatar); ?>)"></span>
+                                        <div class="badge badge-xbox-one">En ligne</div>
+                                        <div class="badge badge-ps4" style="left:150px;">{{$stream->type->name}}</div>
+                                        <div class="card-likes">
+                                            <img src="{{ $stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;">
+                                        </div>
                                     </a>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <small>
-                                        <a class="broadcastname pull-right"  href="{{ route('stream.show', ['user' => $stream->user->pseudo]) }}" class="item">
-                                            {{ $stream->user->pseudo }}
-                                        </a>
-                                    </small>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img class="right" style="width:20%; padding-top: 4px" src="{{ $stream->user->country->svg }}">
+                                <div class="card-block">
+                                    <h4 class="card-title"><a href="/home/{{$stream->user->pseudo}}">{{$stream->user->pseudo}}</a></h4>
+                                    <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($stream->created_at)->format('d/m/Y') }}</span></div>
+                                    <p class="card-text">{{$stream->title}}</p>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
-                    </div>
-                @else
-                    <i>Vous ne suivez actuellement aucun stream.</i>
-                @endif
-            @endauth
+
+                    @endforeach
+                </div>
+            @else
+                <i>Aucun stream n'est actuellement en cours de diffusion.</i>
+            @endif
         </div>
     </div>
+    @if(count($streams) > 0)
+    <div class="pagination-results m-t-0" style="text-align: center;">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-angle-left"></i></span></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true"><i class="fa fa-angle-right"></i></span></a></li>
+            </ul>
+        </nav>
+    </div>
+    @endif
 </div>
 @endsection
 

@@ -13,6 +13,8 @@ class Viewer extends Model
     protected $fillable = [
         'user_id',
         'stream_id',
+        'rank',
+        'is_follower'
     ];
 
     /**

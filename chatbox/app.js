@@ -69,36 +69,31 @@ io.sockets.on('connection', function (socket, pseudo) {
                     AND user_id = ?`, 
                 [socket.stream_id, socket.user_id])
             .then(async function(viewer){ //Si nouveau viewer pour le stream, on le répertorie
-                if(!viewer){
+                if(viewer.length <= 0){
                     await queryDB(
                         `INSERT INTO stb_viewers
                             SET stream_id = ? ,
                             user_id = ?`,
                         [socket.stream_id, socket.user_id])
-                        .then(function(){
-                            socket.new_viewer = true;
-                        });                    
+                        .then(async function(){
+                            
+                            await queryDB(
+                                `SELECT id, rank, is_follower
+                                    FROM stb_viewers
+                                    WHERE stream_id = ? 
+                                        AND user_id = ?`, 
+                                    [socket.stream_id, socket.user_id])
+                                .then(async function(viewer){
+                                    socket.viewer_id = viewer.id;
+                                    socket.viewer_rank = viewer.rank;
+                                });
+                        });
                 }
                 else{
                     socket.viewer_id = viewer.id;
                     socket.viewer_rank = viewer.rank;
                 }
             });
-        
-        
-        if(socket.new_viewer){ //Si viewer récemment repertorié au stream, on récupère son ID
-            await queryDB(
-                `SELECT id, rank, is_follower
-                    FROM stb_viewers
-                    WHERE stream_id = ? 
-                        AND user_id = ?`, 
-                    [socket.stream_id, socket.user_id])
-                .then(async function(viewer){                    
-                    socket.viewer_id = viewer.id;
-                    socket.viewer_rank = viewer.rank;
-                });
-            delete socket.new_viewer;
-        }
         
         allClients.push(
             {
@@ -206,12 +201,13 @@ io.sockets.on('connection', function (socket, pseudo) {
     }
 
     //Dons
+    var date = new Date();
+    date.setHours(date.getHours()+2);
+    date = date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
     async function checkDonations(socket){
         //Recherche du stream ciblé
         if(socket && typeof socket.last_donation == "undefined")
             socket.last_donation = 0;
-
-        var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
         if(socket && typeof socket.stream_id != "undefined"){
             await queryDB( 
@@ -226,7 +222,6 @@ io.sockets.on('connection', function (socket, pseudo) {
                     LIMIT 1`, 
                     [socket.stream_id, socket.last_donation, date])
                 .then(function(row){
-
                     if(row.id != "undefined" && row.id > socket.last_donation){
                         socket.last_donation = row.id;
                         socket.emit('dons', row);

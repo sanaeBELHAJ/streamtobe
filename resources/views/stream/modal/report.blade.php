@@ -13,13 +13,16 @@
                     <div class="modal-body">
                         {{ Form::hidden('streamer', $streamer->pseudo, []) }}
                         <div class="form-row">
-                            <select name="category">
+                            {!! Form::label('categoryReport',"Type d'infraction :") !!}
+                        </div>
+                        <div class="form-row">
+                            <select name="category" id="categoryReport">
                                 @foreach($reportCat as $category)
                                     <option value="{{$category->name}}">{{$category->name}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-row">
+                        <div class="form-row mt-2">
                             {!! Form::label('descriptionReport','Description :') !!}
                             {!! Form::textarea('description',
                                                 null, 
@@ -48,10 +51,12 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button></small>') !!}
                         </div>
+                        <div class="form-row mt-2">
+                            <small>Assurez-vous que l'utilisateur ne respecte pas les <a type="link" target="_blank" href="{{ route('cgu') }}">Conditions Générales d'Utilisation</a> avant de déposer une plainte.</small>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Valider</button>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
                     </div>
                 </div>
             </div>

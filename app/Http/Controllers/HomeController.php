@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use DB;
 use Mail;
 use Session;
 use Response;
@@ -30,19 +31,46 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
-        $streams = Stream::where('status', 1)->get();
+        $themes = Theme::all();
+
         if(Auth::user()){
             $favorites = Viewer::where('user_id', Auth::user()->id)
                                 ->where('is_follower',1)
                                 ->get();
             $followed = [];
-            foreach($favorites as $favorite)
-                $followed[] = $favorite->stream;
-        }
-        $themes = Theme::all();
+            foreach($favorites as $favorite){
+                if($favorite->stream->status==1)
+                    $followed[] = $favorite->stream;
+            }
 
-        return view('welcome', compact('streams', 'followed', 'themes', 'listSlider'));
+            $viewers = Auth::user()->stream->viewers; //Viewers(/Followers) de l'utilisateur
+            //Mes dons reçus du mois
+            $donations = 0;
+            $followers = [];
+            foreach ($viewers as $viewer) {
+                if($viewer->rank >= 0 && $viewer->is_follower == 1)
+                    $followers[] = $viewer;
+
+                foreach ($viewer->donations as $donation){
+                    if(date('Ym', strtotime($donation->created_at)) == date('Ym'))
+                        $donations += $donation->amount;
+                }
+            }
+        }
+        else
+            $listSlider = str_replace("public/", "storage/", Storage::files("public/welcome"));
+
+        return view('welcome', compact('followed', 'themes', 'listSlider', 'viewers', 'followers', 'donations'));
+    }
+    
+     /**
+     * Display a listing of the actives streams
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function cgu(){
+       
+        return view('cgu.cgu');
     }
     
     /**
@@ -71,4 +99,17 @@ class HomeController extends Controller
         return response()->json(['ok' => 'ok']);
     }
     
+    /**
+     * Check new message
+     */
+    public function checkMessage(Request $request){
+        if(Auth::user()){
+            return DB::table('stb_messages')
+                    ->select('id')
+                    ->where('status', '=', 2)
+                    ->where('user_receiv', '=', Auth::user()->id)
+                    ->get();
+        }
+        return null;
+    }
 }

@@ -26,7 +26,7 @@ $(function () {
         .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
             return $( "<li></li>" )
                 .data( "ui-autocomplete-item", item )
-                .append("<img class='results_picture' src='"+item.avatar+"'> "+item.value )
+                .append("<span class='results_picture' style='background:url("+item.avatar+") top center; background-size:cover;margin: 5px 10px;'></span> "+item.value )
                 .appendTo( ul );
         };
     });
@@ -96,4 +96,20 @@ $(function () {
             console.log(data);
         });
     });
+
+    //Check de nouveaux messages
+    setInterval(checkMessage, 3000);
+    function checkMessage() {
+        $.ajax({
+            url: "/checkMessage",
+            type: 'GET'
+        })
+        .done(function(data){
+            if(data && data.length>0)
+                $("#header .fa-envelope-open").addClass("text-danger");
+        })
+        .fail(function(data){
+            console.log(data);
+        });
+    }
 });

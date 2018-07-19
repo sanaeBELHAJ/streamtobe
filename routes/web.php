@@ -22,6 +22,7 @@ if(env('APP_ENV') === 'production') {
 }
 
 Route::get('/', 'HomeController@index');
+Route::get('/cgu', 'HomeController@cgu')->name("cgu");
 
 /*Routes accessibles uniquement aux invités*/
 Route::middleware(['guest'])->group(function(){
@@ -81,6 +82,9 @@ Route::group(['prefix' => 'admin'], function () {
 Route::resource('stream', 'StreamController', ['only' => ['index', 'show']]);
 Route::post('stream', 'StreamController@index')->name('index');
 
+// Recuperation du status
+Route::get('/getStreamStatusInfo', 'ViewerController@getStreamStatusInfo');
+
 //Recherche d'une chaine
 Route::get('/autocomplete', 'StreamController@autocomplete')->name('autocomplete');
 
@@ -96,3 +100,13 @@ Route::post('/valid_cookie', 'HomeController@valid_cookie');
 /* Support technique pour utilisateur */
 Route::post('/support', 'HomeController@support');
 Route::get('/support', 'HomeController@support');
+
+//Vérification de nouveaux messages
+Route::get('/checkMessage', 'HomeController@checkMessage');
+
+
+
+/* SI AUCUNE ROUTE N'EST CORRECTE */
+Route::any('{all}', function(){
+    return view('errors.404');
+})->where('all', '.*');

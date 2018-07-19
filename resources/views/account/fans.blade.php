@@ -1,72 +1,48 @@
 @extends('layouts.template')
 
 @section('content')
-<div class="container-fluid">
-<div class="row">
-    <div class="col-sm-2  profil-panel">
-        <div class="top bottom">
-            @if(Auth::check() && Auth::user()->pseudo == $streamer->pseudo)
-            <a href="{{ route('home.index') }}" class="right" style="margin-top: 0px;"> 
-                <i class="material-icons">
-                    edit
-                </i>
-            </a>
-            @endif
-            <br>
-            <div class="cadre-style">
-                <center>
-                    <img class="resize-img" src="<?php echo asset('storage/' . $streamer->avatar); ?>" alt="Image de profil" title="Image de profil">
-                </center> 
-            </div>
-            <p>
-            <center>{{ $streamer->pseudo }}</center>
-            <center>
-                @if($streamer->country != null)
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>{{ $streamer->country->name }}
-                    <img style="width:10%" src="{{ $streamer->country->svg }}">
-                @else
-                    <i class="material-icons" style="font-size: 16px;">location_on</i>
-                    Inconnu
-                @endif
-            </center>
-            </p>
-            <center>
-                <ul class="navbar-nav">
-                    <li  class="nav-item">
-                        <a class="text-white"  href="{{ route('home.follows',['pseudo' => $streamer->pseudo]) }}">Suivi</a>
-                    </li>
-                    <li  class="nav-item">
-                        <a class="text-white"  href="{{ route('home.fans',['pseudo' => $streamer->pseudo]) }}">Fans</a>
-                    </li>
-                    <li  class="nav-item">
-                        <a class="text-white"  href="{{ route('home.stats', ['pseudo' => $streamer->pseudo]) }}">Revenus</a>
-                    </li>
-                </ul>
-                <br>
-                <a class="machaine active" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">                  
-                    <i style="font-size: 50px;margin-top: 10px" class="material-icons">
-                        videocam
-                    </i>
-                </a>
-            </center>
-        </div>
-    </div>
-    <div class="col-sm-10 pull-right top-2 bottom">
-        <p>Utilisateurs qui suivent la chaine de {{$streamer->pseudo}}</p>
+<div class="container-fluid top-2 bottom">
+    <div class="row">
+        <p class="col-12">Utilisateurs qui suivent la chaine de {{ $streamer->pseudo }}</p>
         <hr>
-        <br>
-        @foreach($viewers as $viewer)
-            @if($viewer->user->id != $streamer->id && $viewer->user->status > 0)
-                <div class='col-6 div-f'>
-                    <img class='avatar_follower' src="<?php echo asset('storage/' . $viewer->user->avatar); ?>">
-                    <a class=""  href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a>
-                    {{ Carbon\Carbon::parse($viewer->created_at)->format('d/m/Y') }}
-                    <span class="anciennete" data-date="{{$viewer->created_at}}"></span>
-                    <button class="btn btn-follow" id="abo" href="#">S'abonner</button>
+        @foreach($streamer->stream->viewers as $viewer)
+            @if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
+                <div class=" col-sm-6 col-lg-3 col-md-5">
+                    <div class="card card-lg">
+                        <div class="card-img">
+                            <a href="/home/{{$viewer->user->pseudo}}">
+                                <span class=" card-img-top w-100 d-block" style="height: 200px;background-size: cover;background-position: center;background-image:url(<?php echo asset('storage/' . $viewer->user->avatar); ?>)"></span>
+                                @if ($viewer->user->stream->status == 1)
+                                    <div class="badge badge-xbox-one">En ligne</div>
+                                    <div class="badge badge-ps4" style="left:150px;">{{$viewer->user->stream->type->name}}</div>
+                                @else
+                                    <div class="badge badge-steam">Hors ligne</div>
+                                @endif
+                                <div class="card-likes">
+                                    <img src="{{ $viewer->user->country->svg }}" style="max-width: 200px;max-height: 30px;">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-block">
+                            <h4 class="card-title"><a href="/home/{{$viewer->user->pseudo}}">{{$viewer->user->pseudo}}</a></h4>
+                            <div class="card-meta"><span>Inscrit le {{ Carbon\Carbon::parse($viewer->user->created_at)->format('d/m/Y') }}</span></div>
+                            <p class="card-text">{{$viewer->user->stream->title}}</p>
+                        </div>
+                    </div>
                 </div>
             @endif
         @endforeach
     </div>
-</div>
-</div>
+    @if($viewer->is_follower==1 && $viewer->user->id != $streamer->id && $viewer->user->status > 0)
+    <div class="pagination-results m-t-0" style="text-align: center;">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-angle-left"></i></span></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true"><i class="fa fa-angle-right"></i></span></a></li>
+            </ul>
+        </nav>
+    </div>
+    @endif
+    </div>
 @endsection

@@ -54,12 +54,14 @@ io.sockets.on('connection', function (socket) {
                         user_id: socket.user_id
                     }
                 );
+                
                 console.log(allClients);
                 checkFriends(socket);
-                /*setInterval(function(){
-                    checkFriends(socket);
-                }, 1000);*/
             });
+            
+        //Nouveau message recus pour l'utilisateur
+        await queryDB('UPDATE stb_messages SET status = 1 WHERE status = 2 AND user_receiv = ?', socket.user_id);
+            
     });
 
     //Récupération d'une autre conversation
@@ -82,7 +84,7 @@ io.sockets.on('connection', function (socket) {
         await queryDB( //Recherche des messages entre les 2 utilisateurs
             `SELECT message, user_exped, user_receiv, created_at
                 FROM stb_messages
-                WHERE status = 1
+                WHERE status >= 1
                 AND (user_exped = ? OR user_receiv = ?)
                 AND (user_exped = ? OR user_receiv = ?)`, 
                 [socket.user_id, socket.user_id, socket.friend_id, socket.friend_id])
@@ -111,7 +113,6 @@ io.sockets.on('connection', function (socket) {
                 }
             });
 
-
         var infos = {
             friend_pseudo: socket.friend_pseudo,
             friend_avatar: socket.friend_avatar,
@@ -123,7 +124,6 @@ io.sockets.on('connection', function (socket) {
             infos: infos,
             conversations: conversations
         }
-        //console.log(datas);
         socket.emit('join', datas);
         console.log("---- WELCOME ------");
     });
@@ -136,15 +136,14 @@ io.sockets.on('connection', function (socket) {
             user_exped: socket.user_id, 
             user_receiv: socket.friend_id, 
             message: message, 
-            status: 1
+            status: 2
         };
-        console.log(content);
+
         var message = await queryDB('INSERT INTO stb_messages SET ?', content); //Sauvegarde en BDD
-        console.log(allClients);
+        content.user_exped_pseudo = socket.user_pseudo; //Ajout du pseudo de l'ami
         allClients.forEach(function(client, index) { //Diffusion du message à l'utilisateur regardant les messages
             if(client.user_id == socket.friend_id){
-                console.log(client);
-                io.to(client.socket_id).emit('message', content.message);
+                io.to(client.socket_id).emit('message', content);
             }
         });
     }); 
@@ -167,96 +166,36 @@ io.sockets.on('connection', function (socket) {
             checkFriends(socket);
     });
 
-    //Modification de la liste d'amis
+    //Liste des utilisateurs
     async function checkFriends(socket){
-        await queryDB( //Recherche des utilisateurs followers au streamer
-            `SELECT u_follower.id
-                FROM users u_streamer
-                LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
-                LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
-                LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
-                WHERE v.is_follower = 1
-                AND u_follower.id <> u_streamer.id
-                AND u_streamer.id = ?`,
-                socket.user_id)
-            .then(function(row){
-                socket.list_followers = [];
-                if(typeof row !== 'undefined'){
-                    if(row.length > 1){
-                        row.forEach(function(element){
-                            socket.list_followers.push(element.id);
-                        });
-                    }
-                    else
-                        socket.list_followers = [row.id];
-                }
-            });
-            
+        socket.contactList = [];
         await queryDB( //Liste des streamers followés par l'utilisateur
-                `SELECT u_streamer.id
-                    FROM users u_streamer
-                    LEFT OUTER JOIN stb_streams s ON u_streamer.id = s.streamer_id
-                    LEFT OUTER JOIN stb_viewers v ON s.id = v.stream_id
-                    LEFT OUTER JOIN users u_follower ON v.user_id = u_follower.id
-                    WHERE v.is_follower = 1
-                    AND u_follower.id <> u_streamer.id
-                    AND u_follower.id = ?`,
-                    socket.user_id)
-                .then(function(row){
-                    socket.list_streamers = [];
-                    if(typeof row !== 'undefined'){
+            "SELECT pseudo, avatar FROM users WHERE status > 0 AND id <> ?",
+            socket.user_id)
+            .then(function(row){
+                if(typeof row !== 'undefined' && Array.isArray(row)){
+                    if(row.length > 0){
                         if(row.length > 1){
                             row.forEach(function(element){
-                                socket.list_streamers.push(element.id);
+                                socket.contactList.push({
+                                    pseudo: element.pseudo,
+                                    avatar: element.avatar
+                                });
                             });
                         }
                         else
-                            socket.list_streamers = [row.id];
+                            socket.contactList = [{
+                                pseudo: row.pseudo,
+                                avatar: row.avatar
+                            }];
                     }
-                });
-        
-        //Selection des followers et streamers suivis mutuellement
-        var list = socket.list_followers.concat(socket.list_streamers);
-        var list_ord = list.slice().sort();
-
-        var results = [];
-        for (var i = 0; i < list_ord.length - 1; i++) {
-            if (list_ord[i + 1] == list_ord[i]) {
-                results.push(list_ord[i]);
-                results.push(list_ord[i]);
-            }
-        }
-
-        socket.contactList = [];
-        if(typeof results !== 'undefined' && results.length > 0){
-            await queryDB( //Liste des streamers followés par l'utilisateur
-                "SELECT u.pseudo, u.avatar FROM users u WHERE u.id IN (?)",
-                [results])
-                .then(function(row){
-                    if(typeof row !== 'undefined' && Array.isArray(row)){
-                        if(row.length > 0){
-                            if(row.length > 1){
-                                row.forEach(function(element){
-                                    socket.contactList.push({
-                                        pseudo: element.pseudo,
-                                        avatar: element.avatar
-                                    });
-                                });
-                            }
-                            else
-                                socket.contactList = [{
-                                    pseudo: row.pseudo,
-                                    avatar: row.avatar
-                                }];
-                        }
-                    }
-                    else
-                        socket.contactList = [{
-                            pseudo: row.pseudo,
-                            avatar: row.avatar
-                        }];
-                });
-        }
+                }
+                else
+                    socket.contactList = [{
+                        pseudo: row.pseudo,
+                        avatar: row.avatar
+                    }];
+            });
         
         var content = {
             contactList: socket.contactList,

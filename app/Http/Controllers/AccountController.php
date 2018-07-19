@@ -91,10 +91,7 @@ class AccountController extends Controller {
      */
     public function fans(Request $request, $pseudo = null) {
         $streamer = ($pseudo != null) ? User::where('pseudo', $pseudo)->where('status', '>', 0)->first() : Auth::user();
-        $stream = $streamer->stream; //Chaine de l'utilisateur
-        $viewers = $stream->viewers; //Followers de l'utilisateur
-
-        return view('account.fans')->with(compact('streamer', 'stream', 'viewers'));
+        return view('account.fans')->with(compact('streamer'));
     }
 
     /**
