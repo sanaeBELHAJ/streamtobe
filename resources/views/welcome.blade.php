@@ -143,12 +143,7 @@
                                 </div>
                             </div>
                         </div>
-
-                    @endforeach
-                </div>
-                <div class="row btn-slider">
-                    <a href="{{ route('stream.index') }}"  class="btn btn-lg gold mt-4">{{ __('Watch our current streams') }}</a>
-                    <a href="{{ route('register') }}"  class="btn btn-lg gold mt-4">{{ __('Create your own stream') }}</a>
+                    </div>
                 </div>
             </div>
         </div>
