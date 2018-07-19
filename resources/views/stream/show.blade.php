@@ -111,7 +111,7 @@
                         <div class="col-12">
                                 <h3 class="h3 mb-3">Gestion de ma playlist</h3>
                                 <p class="mb-1">
-                                    <small>Vous pouvez ci-dessous préparer les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
+                                    <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
                                 </p>
                                 <p class="mb-1">
                                     <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
@@ -121,17 +121,10 @@
                                 </p>
                                 <div id="list" class="col-12 col-md-6">
                                     <div class="list-item row">
-                                        <input type="text" name="" value="" class="col-4" placeholder="Nom de la chanson" />
+                                        <input type="text" value="" class="col-4" placeholder="Nom de la chanson" />
                                         <button type="button" class="col-4 btn list-eval">Evaluation</button>
-                                        <button type="button" class="col-4 btn list-remove">Supprimer</button>
+                                        <button type="button" class="col-4 btn list-rmv">Supprimer</button>
                                     </div>
-                                    @foreach($musics as $music)
-                                        <div class="list-item row" data-id="{{ $music->id }}">
-                                            <input type="text" name="{{ $music->title }}" value="{{ $music->title }}" class="col-4" />
-                                            <button type="button" class="col-4 btn list-eval">Evaluation</button>
-                                            <p class="col-4 text-center">Avis du chat : <span class="result"> {{ $music->mark }} </span> %
-                                        </div>
-                                    @endforeach
                                     <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i></button>
                                 </div>
                             </div>
@@ -358,7 +351,8 @@
 
             checkClickList();
             var currentsSongs = [];
-
+            
+            //Enregistrement d'une musique évaluée
             function checkClickList(){
                 $("#list").on("click", ".list-eval", function(){
                     var button = $(this);
@@ -379,7 +373,7 @@
                             button.parent().attr('data-id', data.id);
                             button.parent().find('input').prop('disabled', true);
                             button.parent().find('.list-eval').prop('disabled', true);
-                            button.parent().find('.list-remove').remove();
+                            button.parent().find('.list-rmv').remove();
                             button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
                             currentsSongs.push(data.id);
                         })
@@ -388,8 +382,32 @@
                         });
                     //affichage chatbox dans app.js
                 });
+
+                //Suppression d'une musique
+                $("#list").on("click", ".list-rmv", function(){
+                    var id = $(this).parent().data('id');
+                    $(this).parent().remove();
+
+                    if(typeof id !== 'undefined'){
+                        $.ajax({
+                            url: "/rmvMusic",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                id: id
+                            }
+                        })
+                            .done(function(data){     
+                                console.log(data);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
+                    }
+                });
             }
 
+            //Récupération des notes
             setInterval(function(){
                 if(currentsSongs.length <= 0)
                     return false;
@@ -410,7 +428,37 @@
                     .fail(function(data){
                         console.log(data);
                     });
-            }, 2000);
+            }, 1000);
+
+
+            //Récupération des musiques proposées
+            var lastGift = -1;
+            setInterval(function(){
+                $.ajax({
+                    url: "/getMusicGift",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        lastGift : lastGift
+                    }
+                })
+                    .done(function(data){
+                        data.forEach(function(value){
+                            if(value == data[data.length-1])
+                                lastGift = value.id;
+
+                            var text = '<div class="list-item row" data-id="'+value.id+'">';
+                                text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
+                                text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
+                                text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
+                            text += '</div>';
+                            $("#list .list-add").before(text);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            }, 1000);
 
             /* Paypal Button */
             if($("#paymentModal").length > 0){

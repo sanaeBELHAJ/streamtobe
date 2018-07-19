@@ -90,7 +90,7 @@ class StreamController extends Controller
         
         $themes = Theme::all();
         $user = Auth::user();
-        $musics = ($user && $user->pseudo == $pseudo) ? Music::where("status", "=", 0)->get() : null;
+    
         if($user){
             $user->token = $request->session()->get('_token');
             $reportCat = ReportCat::all();
@@ -99,7 +99,7 @@ class StreamController extends Controller
                             ->where('status','=',1)
                             ->first();
         }
-        return view('stream.show', compact('themes','streamer', 'user', 'musics','reportCat','report'));
+        return view('stream.show', compact('themes','streamer', 'user','reportCat','report'));
     }
 
     /**
@@ -176,6 +176,22 @@ class StreamController extends Controller
     }
 
     /**
+     * Suppression d'une musique en BDD
+     */
+    public function rmvMusic(Request $request){
+        $id = trim($request->get('id'));
+        if($id == "") 
+            return null;
+        
+        $music = Music::where('id', '=', $id)->first();
+        if($music){
+            $music->status = -1;
+            $music->save();
+        }
+        return true;
+    }
+
+    /**
      * Liste des notes pour chaque musique
      */
     public function getMarks(Request $request){
@@ -191,6 +207,24 @@ class StreamController extends Controller
             if($music->qtty_votes)
                 $music->total = floatval($music->mark) / intval($music->qtty_votes);
         }
+        
+        return $musics;
+    }
+
+    /**
+     * Musique récemment ajoutée en BDD
+     */
+    public function getMusicGift(Request $request){
+        $lastGift = $request->get('lastGift');
+
+        $musics = Music::where('status', '=', 0)
+                        ->where('stream_id', '=', Auth::user()->stream->id)
+                        ->where(function($query) use ($lastGift){
+                            if($lastGift != -1)
+                                $query->where('id', '>', $lastGift);
+                        })
+                        ->orderBy('id', 'asc')
+                        ->get();
         
         return $musics;
     }
