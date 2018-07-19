@@ -353,7 +353,8 @@
             $(".update_stream").change(updateStream);
 
             /* Gestion des musiques (streamer)*/
-            $("#list").dynamiclist();
+            if($("#list").length > 0)
+                $("#list").dynamiclist({ maxSize : 9999 });
 
             checkClickList();
             var currentsSongs = [];
@@ -374,27 +375,25 @@
                             title: music
                         }
                     })
-                        .done(function(data){
-                            button.parent().data('id', data.id);
+                        .done(function(data){     
+                            button.parent().attr('data-id', data.id);
                             button.parent().find('input').prop('disabled', true);
                             button.parent().find('.list-eval').prop('disabled', true);
                             button.parent().find('.list-remove').remove();
                             button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
                             currentsSongs.push(data.id);
-                            console.log(data);
                         })
                         .fail(function(data){
                             console.log(data);
                         });
                     //affichage chatbox dans app.js
-                    console.log($(this).parent().find("input").val());
                 });
             }
 
             setInterval(function(){
                 if(currentsSongs.length <= 0)
                     return false;
-                
+
                 $.ajax({
                     url: "/getMarks",
                     type: 'POST',
@@ -404,9 +403,8 @@
                     }
                 })
                     .done(function(data){
-                        console.log(data);
                         data.forEach(function(value){
-                            $("#list .list-item[data-id='"+value.id+"']").html(value.total);
+                            $("#list .list-item[data-id='"+value.id+"'] .result").html(value.total);
                         });
                     })
                     .fail(function(data){

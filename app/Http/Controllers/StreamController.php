@@ -183,9 +183,9 @@ class StreamController extends Controller
 
         $musics = Music::where('status', '=', 1)
                         ->where('stream_id', '=', Auth::user()->stream->id)
-                        ->whereIn('id', [$currentsSongs])
+                        ->whereIn('id', $currentsSongs)
                         ->get();
-
+   
         foreach($musics as $music){
             $music->total = "?";
             if($music->qtty_votes)

@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::post('/addMusic', 'StreamController@addMusic');
         //Récupération des notes
         Route::post('/getMarks', 'StreamController@getMarks');
+        Route::get('/getMarks', 'StreamController@getMarks');
 
     /* Actions sur le compte */
         Route::get('/home', 'AccountController@index')->name('home.index');    
