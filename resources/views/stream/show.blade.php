@@ -5,7 +5,7 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row" style="min-height: 450px;">
+            <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -188,11 +188,13 @@
             </div>
 
             {{-- Boutons d'affichage mobile --}}
-            <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
-                <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
-            </div>
+            @auth
+                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
+                    <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
+                    <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
+                    <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
+                </div>
+            @endauth
         </div>
     </div>
 </div>
@@ -220,7 +222,7 @@
         }
         @media(max-width: 768px){
             #messages, #infos{
-                height: 400px;
+                min-height: 400px;
             }
         }
         /*******/
@@ -495,7 +497,8 @@
                             // You can now show a confirmation message to the customer
                             payment.streamer = $("input[name='streamer_name']").val();
                             payment.message = $('#giveaway_message').val();
-
+                            payment.song_title = $("#giveaway_song").val();
+                            
                             $.ajax({
                                 url: "/validGiveaway",
                                 type: 'POST',
