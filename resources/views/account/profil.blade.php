@@ -4,9 +4,12 @@
 <div class="container bottom">
     <h1 class="text-center">Profil de {{ $streamer->pseudo }}</h1>
     <h3 class="text-left">Informations</h3>
-    <div class="row">
+    <div class="row div-filter">
             <div class="col-6">
                 <img class="pictureAccount" style="background-image:url(<?php echo asset('storage/' . $streamer->avatar); ?>)">
+                <p style="font-weight:bold; margin-left: 30px;">{{ $streamer->pseudo }}</p>
+                <p>Pays : <img src="{{ $streamer->country->svg}}" style="max-width: 200px;max-height: 30px;"></p>
+                <p>Compte créé le: <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
             </div>
             <div class="col-6 d-flex flex-row-reverse">
                 <div class="row">
@@ -33,35 +36,49 @@
                                     title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                             @endif
                         @endauth
-                        <div class="col-12">
-                            <p>Compte créé le: <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
-
+                        <div class="col-12 top">
+                            <div class="row">
+                                <a class="btn btn-facebook btn-lg btn-rounded m-l-10" href="/follows/{{$streamer->pseudo}}">Ses followers  <i class="fa fa-user"></i></a>
+                                <a class="btn btn-danger btn-lg btn-rounded m-l-10" href="/fans/{{$streamer->pseudo}}">Ses chaînes <i class="fa fa-heart"></i></a>
+                                @if(Auth::check() && $streamer->pseudo == Auth::user()->pseudo)
+                                <a class="btn btn-primary btn-lg btn-rounded m-l-10" href="/stats/{{$streamer->pseudo}}">Dons <i class="fa fa-dollar"></i></a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
-        <h3>La chaine de streaming</h3>
-        <div class="row">
-            <p class="col-12">Pays : <img src="{{ $streamer->country->svg }}" style="max-width: 200px;max-height: 30px;"></p>
-
-            <p class="col-12">{{ $streamer->pseudo }} est actuellement : <?php echo ($streamer->stream->status == 0) ? "<span class='badge badge-steam'>Hors-ligne</span>" : "   <span class='badge badge-xbox-one'>En ligne</span>"; ?>.</p>
-            @if($streamer->stream->status==0 && $streamer->stream->updated_at)
-            <p class="col-12">Sa dernière diffusion remonte à <?php echo date('d/m/Y', strtotime($streamer->stream->updated_at)); ?></p>
-            @endif
-
-            <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
-            <p class="col-6 position-relative">
-                <a class="" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
-                    <i class="fa fa-camera fa-5x">
-                    </i>
-                </a>
-            </p>
-
-
+    <br>
+        <div class="row div-filter">
+           
+            <div class="col-6">
+                <h3>La chaine de streaming</h3>
+                <p>
+                    A propos : 
+                    @if($streamer->description)
+                    {{ $streamer->description }} 
+                    @else 
+                    Cet utilisateur n'a pas encore rédigé de description
+                    @endif
+                </p>
+                <p>{{ $streamer->pseudo }} est actuellement : <?php echo ($streamer->stream->status == 0) ? "<span class='badge badge-steam'>Hors-ligne</span>" : "   <span class='badge badge-xbox-one'>En ligne</span>"; ?>.</p>
+                @if($streamer->stream->status==0 && $streamer->stream->updated_at)
+                <p>Sa dernière diffusion remonte à <?php echo date('d/m/Y', strtotime($streamer->stream->updated_at)); ?></p>
+                @endif
+            </div>
+            <div class="col-6">
+                <p class="">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
+                <p class="stream text-center">
+                    <a class="btn-stream" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
+                       <i class="material-icons">
+                         videocam
+                        </i>
+                    </a>
+                </p>
+            </div>
         </div>
-        <hr>
+       <!-- <hr>
         <h3>Description de {{ $streamer->pseudo }}</h3>
         <div class="row">
             <p class="col-12">
@@ -81,7 +98,7 @@
             @if(Auth::check() && $streamer->pseudo == Auth::user()->pseudo)
             <a class="btn btn-primary btn-lg btn-rounded m-l-10" href="/stats/{{$streamer->pseudo}}">Dons <i class="fa fa-dollar"></i></a>
             @endif
-        </div>
+        </div>-->
     </div>
     @endsection
 
