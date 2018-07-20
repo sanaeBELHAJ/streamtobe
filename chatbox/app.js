@@ -114,6 +114,17 @@ io.sockets.on('connection', function (socket, pseudo) {
         setInterval(function(){
             checkViewers(socket);
         }, 2000);
+        
+        socket.last_song_id = -1;
+        checkNewSong(socket);
+        setInterval(function(){
+            checkNewSong(socket);
+        }, 2000);
+
+        getListSongs(socket);
+        setInterval(function(){
+            getListSongs(socket);
+        }, 2000);
     });
         
     // Envoi d'un message
@@ -187,6 +198,15 @@ io.sockets.on('connection', function (socket, pseudo) {
         updateViewer(socket, allClients);
     });
 
+     //Changement du statut
+     socket.on('vote', function(vote){
+        console.log(vote);
+        queryDB(
+            'UPDATE stb_musics SET mark =mark + ?, qtty_votes = qtty_votes+1 WHERE id = ?', 
+            [vote.score, vote.music]
+        );
+    });
+
     //Déconnexion d'un utilisateur
     socket.on('disconnect', function(){
         var i = allClients.findIndex(findSocket);
@@ -258,6 +278,53 @@ io.sockets.on('connection', function (socket, pseudo) {
         socket.emit('updateList', viewers);
     }
 
+    //Récupération des récentes musiques d'un stream à évaluer
+    async function checkNewSong(socket){
+        var param = (socket.last_song_id == -1) ? date : socket.last_song_id;
+        var where = (socket.last_song_id == -1) ? `AND created_at >= ?` : `AND id > ?`;
+
+        await queryDB(`SELECT * 
+                        FROM stb_musics 
+                        WHERE status = 1 
+                        AND stream_id = ? 
+                        `+where+`
+                        ORDER BY id ASC`, 
+                [socket.stream_id, param])
+            .then(function(row){
+                var list = [];
+                list = list.concat(row);
+                if(list.length > 0){
+                    list.forEach(function(element){
+                        socket.emit('eval_song', element);
+
+                        if(element.id == list[list.length-1].id)
+                            socket.last_song_id = element.id;
+                    });
+                }
+            });
+    }
+
+    //Récupération des musiques des dernières 48h d'un stream
+    async function getListSongs(socket){
+        await queryDB(`SELECT * 
+                        FROM stb_musics 
+                        WHERE status = 1 
+                        AND stream_id = ? 
+                        AND created_at > NOW() - INTERVAL 2 DAY
+                        ORDER BY id ASC`, 
+                socket.stream_id)
+            .then(function(row){
+                var list = [];
+                list = list.concat(row);
+                if(list.length > 0){
+                    list.forEach(function(element){
+                        socket.emit('result_song', element);
+                    });
+                }
+            });
+    }
+
+    //Mise à jour de la liste des utilisateurs enregistrée dans le socket
     function updateViewer(socket, allClients){
         /*
             {
@@ -276,6 +343,8 @@ io.sockets.on('connection', function (socket, pseudo) {
             }
         });
     }
+
+
 });
 
 

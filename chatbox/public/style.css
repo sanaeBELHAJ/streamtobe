@@ -217,3 +217,14 @@ textarea{
     outline: 0;
     box-shadow: 0 0 0 0.1rem #1BBC9B;
 }
+p.vote{
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0aa8c1;
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+}
+.btn_vote{
+    font-size: 30px;
+}
