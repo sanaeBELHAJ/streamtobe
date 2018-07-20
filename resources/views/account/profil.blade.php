@@ -72,7 +72,7 @@
         <p class="col-12">Vous pouvez consulter des informations complémentaires à propos de la chaine de {{ $streamer->pseudo }} :</p>
             <a class="btn btn-facebook btn-lg btn-rounded m-l-10" href="/follows/{{$streamer->pseudo}}">Ses followers  <i class="fa fa-user"></i></a>
             <a class="btn btn-danger btn-lg btn-rounded m-l-10" href="/fans/{{$streamer->pseudo}}">Ses chaînes <i class="fa fa-heart"></i></a>
-        @if($streamer->pseudo == Auth::user()->pseudo)
+        @if(Auth::check() && $streamer->pseudo == Auth::user()->pseudo)
             <a class="btn btn-primary btn-lg btn-rounded m-l-10" href="/stats/{{$streamer->pseudo}}">Dons <i class="fa fa-dollar"></i></a>
         @endif
     </div>

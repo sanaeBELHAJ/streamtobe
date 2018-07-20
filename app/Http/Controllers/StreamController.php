@@ -9,6 +9,7 @@ use Session;
 use Response;
 use Illuminate\Support\Facades\Input;
 use App\User;
+use App\Music;
 use App\Theme;
 use App\Type;
 use App\Stream;
@@ -89,6 +90,7 @@ class StreamController extends Controller
         
         $themes = Theme::all();
         $user = Auth::user();
+    
         if($user){
             $user->token = $request->session()->get('_token');
             $reportCat = ReportCat::all();
@@ -152,5 +154,78 @@ class StreamController extends Controller
                 ];
 
         return Response::json($results);
+    }
+
+    /**
+     * Ajout d'une musique en BDD
+     */
+    public function addMusic(Request $request){
+        $title = trim($request->get('title'));
+        if($title == "") 
+            return null;
+        
+        $music = Music::create([
+            'title' => $title,
+            'mark'   => 0,
+            'qtty_votes'  => 0, 
+            'status' => 1,
+            'stream_id' => Auth::user()->stream->id
+        ]);
+
+        return $music;
+    }
+
+    /**
+     * Suppression d'une musique en BDD
+     */
+    public function rmvMusic(Request $request){
+        $id = trim($request->get('id'));
+        if($id == "") 
+            return null;
+        
+        $music = Music::where('id', '=', $id)->first();
+        if($music){
+            $music->status = -1;
+            $music->save();
+        }
+        return true;
+    }
+
+    /**
+     * Liste des notes pour chaque musique
+     */
+    public function getMarks(Request $request){
+        $currentsSongs = $request->get('currentsSongs');
+
+        $musics = Music::where('status', '=', 1)
+                        ->where('stream_id', '=', Auth::user()->stream->id)
+                        ->whereIn('id', $currentsSongs)
+                        ->get();
+   
+        foreach($musics as $music){
+            $music->total = "?";
+            if($music->qtty_votes)
+                $music->total = floatval($music->mark) / intval($music->qtty_votes);
+        }
+        
+        return $musics;
+    }
+
+    /**
+     * Musique récemment ajoutée en BDD
+     */
+    public function getMusicGift(Request $request){
+        $lastGift = $request->get('lastGift');
+
+        $musics = Music::where('status', '=', 0)
+                        ->where('stream_id', '=', Auth::user()->stream->id)
+                        ->where(function($query) use ($lastGift){
+                            if($lastGift != -1)
+                                $query->where('id', '>', $lastGift);
+                        })
+                        ->orderBy('id', 'asc')
+                        ->get();
+        
+        return $musics;
     }
 }

@@ -5,7 +5,7 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row" >
+            <div class="container-fluid row">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -98,8 +98,36 @@
                                     </label>
                                     Activer / Interrompre la diffusion
                                 </div>
+                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                    Programme de chansons : &nbsp;
+                                    <input id="" class="form-control d-inline w-50 update_stream"
+                                            data-config="title" type="text" placeholder="Titre du stream"
+                                            value="{{$streamer->stream->title}}">
+                                </div>
                             </div>
                         </div>
+
+                        {{-- Gestion des musiques --}}
+                        <div class="col-12">
+                                <h3 class="h3 mb-3">Gestion de ma playlist</h3>
+                                <p class="mb-1">
+                                    <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
+                                </p>
+                                <p class="mb-1">
+                                    <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
+                                </p>
+                                <p class="mb-3">
+                                    <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
+                                </p>
+                                <div id="list" class="col-12 col-md-6">
+                                    <div class="list-item row">
+                                        <input type="text" value="" class="col-4" placeholder="Nom de la chanson" />
+                                        <button type="button" class="col-4 btn list-eval">Evaluation</button>
+                                        <button type="button" class="col-4 btn list-rmv">Supprimer</button>
+                                    </div>
+                                    <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i></button>
+                                </div>
+                            </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
                         <div class="row col-12">
@@ -149,6 +177,7 @@
                     @endif
                 @endauth
                 </div>
+
                 {{-- Description du streamer --}}
                 <div class="col-12 mt-4">
                     <div id="streamer">
@@ -159,11 +188,13 @@
             </div>
 
             {{-- Boutons d'affichage mobile --}}
-            <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
-                <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
-            </div>
+            @auth
+                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
+                    <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
+                    <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
+                    <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
+                </div>
+            @endauth
         </div>
     </div>
 </div>
@@ -186,9 +217,12 @@
             background-size: cover;
             background-position: center;
         }
+        #list .list-item:first-of-type{
+            display: none;
+        }
         @media(max-width: 768px){
             #messages, #infos{
-                height: 400px;
+                min-height: 400px;
             }
         }
         /*******/
@@ -257,6 +291,8 @@
     @auth
         @if($streamer->id != Auth::user()->id)
             <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        @else
+            <script src="/js/jquery.dynamiclist.min.js"></script>
         @endif
     @endauth
 
@@ -310,6 +346,122 @@
                     });
             }
             $(".update_stream").change(updateStream);
+
+            /* Gestion des musiques (streamer)*/
+            if($("#list").length > 0)
+                $("#list").dynamiclist({ maxSize : 9999 });
+
+            checkClickList();
+            var currentsSongs = [];
+            
+            //Enregistrement d'une musique évaluée
+            function checkClickList(){
+                $("#list").on("click", ".list-eval", function(){
+                    var button = $(this);
+                    var music = $(this).parent().find("input").val();
+                    
+                    if($.trim(music)=="" || $(this).parent().find(".result").length > 0)
+                        return false;
+
+                    $.ajax({
+                        url: "/addMusic",
+                        type: 'POST',
+                        dataType: "JSON",
+                        data: {
+                            title: music
+                        }
+                    })
+                        .done(function(data){     
+                            button.parent().attr('data-id', data.id);
+                            button.parent().find('input').prop('disabled', true);
+                            button.parent().find('.list-eval').prop('disabled', true);
+                            button.parent().find('.list-rmv').remove();
+                            button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
+                            currentsSongs.push(data.id);
+                        })
+                        .fail(function(data){
+                            console.log(data);
+                        });
+                    //affichage chatbox dans app.js
+                });
+
+                //Suppression d'une musique
+                $("#list").on("click", ".list-rmv", function(){
+                    var id = $(this).parent().data('id');
+                    $(this).parent().remove();
+
+                    if(typeof id !== 'undefined'){
+                        $.ajax({
+                            url: "/rmvMusic",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                id: id
+                            }
+                        })
+                            .done(function(data){     
+                                console.log(data);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
+                    }
+                });
+            }
+
+            //Récupération des notes
+            setInterval(function(){
+                if(currentsSongs.length <= 0)
+                    return false;
+
+                $.ajax({
+                    url: "/getMarks",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        currentsSongs: currentsSongs
+                    }
+                })
+                    .done(function(data){
+                        data.forEach(function(value){
+                            $("#list .list-item[data-id='"+value.id+"'] .result").html(value.total);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            }, 1000);
+
+
+            //Récupération des musiques proposées
+            var lastGift = -1;
+            setInterval(function(){
+                $.ajax({
+                    url: "/getMusicGift",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        lastGift : lastGift
+                    }
+                })
+                    .done(function(data){
+                        data.forEach(function(value){
+                            if(value == data[data.length-1])
+                                lastGift = value.id;
+
+                            var text = '<div class="list-item row" data-id="'+value.id+'">';
+                                text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
+                                text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
+                                text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
+                            text += '</div>';
+                            $("#list .list-add").before(text);
+                        });
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            }, 1000);
+
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
@@ -345,7 +497,8 @@
                             // You can now show a confirmation message to the customer
                             payment.streamer = $("input[name='streamer_name']").val();
                             payment.message = $('#giveaway_message').val();
-
+                            payment.song_title = $("#giveaway_song").val();
+                            
                             $.ajax({
                                 url: "/validGiveaway",
                                 type: 'POST',
@@ -401,7 +554,7 @@
                 });
             }
             //Liste modérateurs / bannis
-@auth
+            @auth
             updateList();
             function updateList(){
                 $.ajax({
