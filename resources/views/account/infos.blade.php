@@ -1,5 +1,6 @@
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
-    <div class="form-row">
+<div class="container-fluid div-filter"> 
+<div class="form-row">
         <div class="form-group col-md-6">
             <label for="pictureAccountInput">
                 <img class="pictureAccount" id="pictureAccount" style="background-image:url(<?php echo asset('storage/'.$user->avatar); ?>)" alt="" title="Image de profil">
@@ -16,10 +17,8 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
         </div>
-
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
+<div class="form-row  col-md-6">
+        <div class="form-group col-md-12">
             {!! Form::label('pseudoAccount','Pseudo :') !!}
             {!! Form::text('pseudo',null, ['id' => 'pseudoAccount',
                                             'class' => 'form-control form-control-sm', 
@@ -31,7 +30,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             {!! Form::label('emailAccount','Adresse email :') !!}
             {!! Form::email('email', $user->email, ['id' => 'emailAccount',
                                         'class' => 'form-control form-control-sm', 
@@ -43,6 +42,8 @@
                                     </button></small>') !!}
         </div>
     </div>
+    </div>
+    
 
 <div class="form-row">
     <div class="form-group col-lg-3 col-sm-12 col-md-6 col-mb-6">
@@ -134,4 +135,5 @@
             {!! Form::close() !!}
         </div>
     </div>
+</div>
 </div>

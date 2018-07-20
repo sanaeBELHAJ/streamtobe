@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12 pull-right top bottom">
+        <div class="col-sm-12 pull-right top-2 bottom">
             @include('account.infos')
         </div>
     </div>
