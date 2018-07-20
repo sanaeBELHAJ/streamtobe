@@ -180,15 +180,15 @@ class StreamController extends Controller
      */
     public function rmvMusic(Request $request){
         $id = trim($request->get('id'));
+
         if($id == "") 
-            return null;
+            return "";
         
         $music = Music::where('id', '=', $id)->first();
         if($music){
             $music->status = -1;
             $music->save();
         }
-        return true;
     }
 
     /**
