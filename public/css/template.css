@@ -189,7 +189,7 @@ header .dropdown-menu{
     cursor: not-allowed;
 }
 .btn-contacter{
-    background: #ffc94d;
+    background: #ffd23f;
    /* border: 1px solid #b19dd8;*/
     color: #6441a4;
     padding: .3rem .3rem;
@@ -351,7 +351,7 @@ select.form-control:not([size]):not([multiple]) {
     outline: 0;
     font-family: inherit;
     appearance: none;
-    border: 0.5px solid #1BBC9B;
+    border: 0.5px solid #ffd23f ;
     background: #fff;
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
@@ -369,11 +369,11 @@ select.form-control:not([size]):not([multiple]) {
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
     border: none;
-    box-shadow: 0 0 6px #1BBC9B; 
+    box-shadow: 0 0 6px #ffd23f;
 }
 .div-viewers{
     background: transparent;
-    border: 1px solid #1BBC9B ;
+    border: 1px solid #ffd23f ;
     color: #6441a4; 
     width: 10%;
 }
@@ -382,7 +382,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .btn-filter{
     background: transparent;
-    border: 1px solid #1BBC9B;
+    border: 1px solid #ffd23f;
     color: #6441a4;
     border-radius: .1rem;
     padding: .1rem .3rem;
@@ -394,7 +394,7 @@ select.form-control:not([size]):not([multiple]) {
 .btn-filter:hover{
     background: #faf9fa;
     color: black;
-    border: 1px solid #1BBC9B ;
+    border: 1px solid #ffd23f ;
     border-radius: .1rem;
 }
 label, select, input {
@@ -484,14 +484,14 @@ footer #support_user textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #1BBC9B; /* Green background */
+    background: #ffd23f; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
 #responsive_slider .slider::-moz-range-thumb {
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #ffd23f; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
@@ -505,7 +505,7 @@ footer #support_user textarea{
 }
 
 .form-control:focus{
-    border: 1px solid #1BBC9B  !important;
+    border: 1px solid #ffd23f  !important;
 }
 #header{
     background: #6e3667;
@@ -523,8 +523,8 @@ footer #support_user textarea{
     background-color: #6e3667 !important;
 }
 .btn-primary{
-    background-color: #f9cf00  !important;
-    border: 1px solid #f9cf00 ;
+    background-color: #ffd23f  !important;
+    border: 1px solid #ffd23f ;
     color:white!important;
 }
 .btn-primary:hover{
@@ -536,25 +536,25 @@ footer #support_user textarea{
     border: 1px solid #e0c22d;
 }
 .card-border{
-   border: 0.5px solid #f9cf00;
+   border: 0.5px solid #ffd23f;
 }
 .card-header{
    color: white;
-   background-color: #f9cf00 !important;
+   background-color: #ffd23f !important;
 }
 .navbar-search{
     background-color: #6e3667 !important;
 }
 .pagination .active>a:hover{
-    background-color: #1BBC9B;
+    background-color: #ffd23f;
 }
 .pagination .active>a {
-    background-color: #1BBC9B !important;
-    border-color: #1BBC9B !important;
+    background-color: #ffd23f !important;
+    border-color: #ffd23f !important;
 }
 .pagination .active>a:hover {
-    background-color: #1BBC9B !important;
-    border-color: #1BBC9B !important;
+    background-color: #ffd23f !important;
+    border-color: #ffd23f !important;
     outline-style: none;
     box-shadow: none;
 }
