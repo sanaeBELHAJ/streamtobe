@@ -109,16 +109,17 @@
 
                         {{-- Gestion des musiques --}}
                         <div class="col-12">
-                                <h3 class="h3 mb-3">Gestion de ma playlist</h3>
-                                <p class="mb-1">
-                                    <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
-                                </p>
-                                <p class="mb-1">
-                                    <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
-                                </p>
-                                <p class="mb-3">
-                                    <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
-                                </p>
+                            <h3 class="h3 mb-3">Gestion de ma playlist</h3>
+                            <p class="mb-1">
+                                <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
+                            </p>
+                            <p class="mb-1">
+                                <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
+                            </p>
+                            <p class="mb-3">
+                                <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
+                            </p>
+                            <div class="row">
                                 <div id="list" class="col-12 col-md-6">
                                     <div class="list-item row">
                                         <input type="text" value="" class="col-4" placeholder="Nom de la chanson" />
@@ -127,7 +128,38 @@
                                     </div>
                                     <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i></button>
                                 </div>
+                                <div id="lyrics" class="col-12 col-md-6">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lyricModal">
+                                        Paroles de chansons
+                                    </button> 
+                                </div>
                             </div>
+                        </div>
+                        <div class="modal fade" id="lyricModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Rechercher les paroles d'un titre</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <input name="song_name" value="">
+                                            <i class="material-icons btn" style="color:black;">search</i>
+                                        </p>
+                                        <p>
+                                            <select name="song_id" class="d-none"></select>
+                                        </p>
+                                        <div id="lyrics_content"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @else {{-- Panel d'action du viewer --}}
                         <div class="col-12 col-md-8 d-flex justify-content-between">
                         <div class="row col-12">
@@ -293,6 +325,7 @@
             <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         @else
             <script src="/js/jquery.dynamiclist.min.js"></script>
+            <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script>
         @endif
     @endauth
 
@@ -366,7 +399,7 @@
                     $.ajax({
                         url: "/addMusic",
                         type: 'POST',
-                        dataType: "JSON",
+                        dataType: "JSONG",
                         data: {
                             title: music
                         }
@@ -461,6 +494,58 @@
                         console.log(data);
                     });
             }, 1000);
+            
+            //Recherche des titres
+            $("#lyricModal .btn").click(function(){
+                if($.trim($("[name='song_name']").val()) == "")
+                    return false;
+
+                $.ajax({
+                    url: "/getTracks",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        song_name : $("[name='song_name']").val()
+                    }
+                })
+                    .done(function(data){
+                        console.log(data);
+                        var text = "<option value=''>--Selectionnez un titre--</option>";
+                        data.forEach(function(element){
+                            text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
+                        });
+                        $("[name='song_id']").removeClass("d-none");
+                        $("[name='song_id']").html(text);
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            });
+
+            //Importation des paroles
+            $("[name='song_id']").change(function(){
+                if($.trim($("[name='song_id']").val()) == "")
+                    return false;
+
+                $.ajax({
+                    url: "/getLyrics",
+                    type: 'POST',
+                    dataType: "JSON",
+                    data: {
+                        song_id : $(this).val()
+                    }
+                })
+                    .done(function(data){
+                        console.log(data);
+                        if(data.lyrics_body!="")
+                            $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
+                        else
+                            $("#lyrics_content").html(data.lyrics_copyright);
+                    })
+                    .fail(function(data){
+                        console.log(data);
+                    });
+            });
 
             /* Paypal Button */
             if($("#paymentModal").length > 0){
