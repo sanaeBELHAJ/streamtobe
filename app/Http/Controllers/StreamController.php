@@ -180,15 +180,15 @@ class StreamController extends Controller
      */
     public function rmvMusic(Request $request){
         $id = trim($request->get('id'));
+
         if($id == "") 
-            return null;
+            return "";
         
         $music = Music::where('id', '=', $id)->first();
         if($music){
             $music->status = -1;
             $music->save();
         }
-        return true;
     }
 
     /**
@@ -227,5 +227,43 @@ class StreamController extends Controller
                         ->get();
         
         return $musics;
+    }
+
+    /**
+     * Bring list of tracks with MusixMatch
+     */
+    public function getTracks(Request $request){
+        $url = "http://api.musixmatch.com/ws/1.1/track.search?";
+        $apikey = env("MUSIX_API");
+        $nameTrack =  rawurlencode($request->get('song_name'));
+
+        $request = $url."apikey=".$apikey."&q_track=".$nameTrack."&f_has_lyrics=1";
+        
+        $json = file_get_contents($request);
+        $obj = json_decode($json);
+        
+        if($obj->message->header->status_code != 200)
+            return null;
+
+        return response()->json($obj->message->body->track_list);
+    }
+
+    /**
+     * Bring lyrics of a track with MusixMatch
+     */
+    public function getLyrics(Request $request){
+        $url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?";
+        $apikey = env("MUSIX_API");
+        $idTrack = $request->get('song_id');
+
+        $request = $url."apikey=".$apikey."&track_id=".$idTrack;
+        
+        $json = file_get_contents($request);
+        $obj = json_decode($json);
+        
+        if($obj->message->header->status_code != 200)
+            return null;
+
+        return response()->json($obj->message->body->lyrics);
     }
 }

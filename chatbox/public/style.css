@@ -25,7 +25,7 @@ html, body{
     overflow-y: scroll;
 }
 
-#zone_chat p:first-of-type {
+#zone_chat>p:first-of-type {
     text-align: center;
 }
 
@@ -227,4 +227,9 @@ p.vote{
 }
 .btn_vote{
     font-size: 30px;
+}
+.gift{
+    padding: 20px;
+    background-color: #ffe66d;
+    font-weight: bold;
 }

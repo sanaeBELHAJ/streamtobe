@@ -113,7 +113,9 @@ Route::get('/support', 'HomeController@support');
 //Vérification de nouveaux messages
 Route::get('/checkMessage', 'HomeController@checkMessage');
 
-
+/* Récupération des paroles d'une chanson */
+Route::post('/getTracks', 'StreamController@getTracks');
+Route::post('/getLyrics', 'StreamController@getLyrics');
 
 /* SI AUCUNE ROUTE N'EST CORRECTE */
 Route::any('{all}', function(){

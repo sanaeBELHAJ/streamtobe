@@ -86,9 +86,14 @@ socket.on('demod', function() {
 
 //Réception de dons
 socket.on('dons', function(data) {
-    $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
-    if(data.message)
-        $('#zone_chat').append('<p>'+data.message+'</p>');
+    var text = "";
+    text += "<blockquote class='blockquote gift col-10 col-md-6 mx-auto mb-3'>";
+        if(data.message)
+            text += '<p class="mb-0 h4">'+data.message+'</p>';
+        text += '<footer class="blockquote-footer text-right">Un don de '+data.amount+data.currency+' a été réalisé par <cite>'+data.pseudo+'</cite> !</footer>';
+    text += '</div>';
+
+    $('#zone_chat').append(text);
 });
 
 //Arrivée d'un nouvel utilisateur sur le chat
@@ -160,7 +165,7 @@ $('#zone_users').on('click',".modo, .ban, .user", function(){
 //Nouvelles musiques à voter
 socket.on('eval_song', function(element){
     console.log(element);
-    var text = "<p class='col-10 col-md-6 vote' data-song='"+element.id+"'>";
+    var text = "<p class='col-10 col-md-6 vote mb-3' data-song='"+element.id+"'>";
         text += "<span class='d-block w-100 text-center m-3'> Que pensez-vous de l'interprétation de : "+element.title+" ?</span>";
         text += "<button class='col-4 btn btn-danger btn_vote bad'><i class='far fa-angry'></i></button>";
         text += "<button class='col-4 btn btn-warning btn_vote equal'><i class='far fa-grin-beam-sweat'></i></button>";
