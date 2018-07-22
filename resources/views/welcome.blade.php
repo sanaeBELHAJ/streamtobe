@@ -126,7 +126,7 @@
                         <div class="col-12 col-sm-6 col-md-4 mb-3">
                             <div class="card text-center" style="height:200px;">
                                 <div class="card-header">
-                                    <i class="fa fa-camera fa-5x" style="margin: auto;" aria-hidden="true"></i>
+                                    <i class="fa fa-microphone fa-5x" style="margin: auto;" aria-hidden="true"></i>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-title"> Lancez votre propre chaine ou suivez vos streamers favoris !</p>

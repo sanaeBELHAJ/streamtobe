@@ -59,7 +59,7 @@
                 <div class="navbar">
                     <div class="navbar-left">
                         <a class="navbar-toggle"><i class="fa fa-bars"></i></a>
-                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'); ?>/{{setting('site.logo')}})" alt="Streamtobe"></a>
+                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'); ?>/{{setting('site.logo')}})"></a>
                         <nav class="nav">
                             <ul>
                                 <li class="hidden-xs-down  hidden-sm-down hidden-md-down ">

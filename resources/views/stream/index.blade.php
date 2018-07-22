@@ -62,7 +62,7 @@
 </div>
 <div class="container-fluid bottom">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="text-align: center;">
             @if(session()->has('ok'))
                 <div class="alert alert-success alert-dismissible">{!! session('ok') !!}</div>
             @endif
@@ -76,7 +76,9 @@
                                     <a href="/stream/{{$stream->user->pseudo}}">
                                         <span class=" card-img-top w-100 d-block" style="height: 200px;background-size: cover;background-position: center;background-image:url(<?php echo asset('storage/' . $stream->user->avatar); ?>)"></span>
                                         <div class="badge badge-xbox-one">En ligne</div>
-                                        <div class="badge badge-ps4" style="left:150px;">{{$stream->type->name}}</div>
+                                        <div class="card-likes" style="top: auto;right: 118px;">
+                                        <div class="badge badge-ps4" >{{$stream->type->name}}</div>
+                                        </div>
                                         <div class="card-likes">
                                             <img src="{{ $stream->user->country->svg }}" style="max-width: 200px;max-height: 30px;">
                                         </div>

@@ -57,7 +57,22 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                        <div class="col-12 mt-4" id="config_stream">
+                        <div class="col-12 mt-4" id="config_stream" style="text-align: center;">
+                            <div class="form-group col-lg-12 col-sm-12 col-md-12 col-mb-12">
+                                <label class="switch align-middle m-0">
+                                    <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
+                                           @if($streamer->stream->status == 0)
+                                           value="On"
+                                           @else
+                                           value="Off"
+                                           checked
+                                            @endif >
+                                    <span class="slider round"></span>
+                                </label>
+                                Activer / Interrompre la diffusion
+                            </div>
+                            <div class="card card-lg">
+                            <div class="card-block">
                             <h3 class="h3 mb-5">Configurer mon stream</h3>
                             <div class="form-row">
                                 <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
@@ -86,29 +101,20 @@
                                             value="{{$streamer->stream->title}}">
                                 </div>
                                 <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
-                                    <label class="switch align-middle m-0">
-                                        <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
-                                                @if($streamer->stream->status == 0)
-                                                    value="On"
-                                                @else
-                                                    value="Off"
-                                                    checked
-                                                @endif >
-                                        <span class="slider round"></span>
-                                    </label>
-                                    Activer / Interrompre la diffusion
-                                </div>
-                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                     Programme de chansons : &nbsp;
                                     <input id="" class="form-control d-inline w-50 update_stream"
                                             data-config="title" type="text" placeholder="Titre du stream"
                                             value="{{$streamer->stream->title}}">
                                 </div>
+
                             </div>
+                            </div>
+                        </div>
                         </div>
 
                         {{-- Gestion des musiques --}}
-                        <div class="col-12">
+                        <div class="col-12 mt-4 card card-lg" style="text-align: center;">
+                            <div class="card-block">
                             <h3 class="h3 mb-3">Gestion de ma playlist</h3>
                             <p class="mb-1">
                                 <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
@@ -135,6 +141,8 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
+
                         <div class="modal fade" id="lyricModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -211,12 +219,14 @@
                 </div>
 
                 {{-- Description du streamer --}}
-                <div class="col-12 mt-4">
+                <div style="text-align: center;" class="col-12 mt-4 card card-lg">
+                    <div class="card-block">
                     <div id="streamer">
                         <h3 class="h3 mb-5">Description du streamer</h3>
                         <p>{{$streamer->description}}</p>
                     </div>
                 </div>
+            </div>
             </div>
 
             {{-- Boutons d'affichage mobile --}}
