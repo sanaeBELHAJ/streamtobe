@@ -1,4 +1,7 @@
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
+<div class="card card-lg">
+
+<div class="card-body">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="pictureAccountInput">
@@ -79,7 +82,6 @@
                                     </button></small>') !!}
         </div>
     </div>
-    <hr>
     <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('pwdAccount','Modifier votre mot de passe :') !!}
@@ -109,7 +111,8 @@
             {!! Form::submit("Enregistrer les modifications", ['class' => 'btn btn-success pull-right']) !!}
         </div>
     </div>
-
+</div>
+</div>
 {!! Form::close() !!}
 
 

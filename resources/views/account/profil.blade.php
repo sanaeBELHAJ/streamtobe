@@ -3,18 +3,16 @@
 @section('content')
 <div class="container bottom">
     <h1 class="text-center">Profil de {{ $streamer->pseudo }}</h1>
-    <h3 class="text-left">Informations</h3>
-    <div class="row">
-        <div class="col-6">
-            <img class="pictureAccount" style="background-image:url(<?php echo asset('storage/'.$streamer->avatar); ?>)">
-        </div>
-        <div class="col-6 d-flex flex-row-reverse">
-            <p>Compte créé le: <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
-        </div>
-    </div>
-    <hr>
-    <h3>La chaine de streaming</h3>
-    <div class="row">
+    <div class="row card card-lg">
+        <div class="card-block">
+            <div class="col-6">
+                <img class="pictureAccount" style="background-image:url(<?php echo asset('storage/'.$streamer->avatar); ?>)">
+            </div>
+            <div class="col-6 d-flex flex-row-reverse">
+                <p>Compte créé le: <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
+            </div>
+            <h3>La chaine de streaming</h3>
+
         <p class="col-12">Pays : <img src="{{ $streamer->country->svg }}" style="max-width: 200px;max-height: 30px;"></p>
 
         <p class="col-12">{{ $streamer->pseudo }} est actuellement : <?php echo ($streamer->stream->status==0) ? "<span class='badge badge-steam'>Hors-ligne</span>" : "   <span class='badge badge-xbox-one'>En ligne</span>"; ?>.</p>
@@ -55,10 +53,12 @@
             </div>
         @endauth
     </div>
-    <hr>
-    <h3>Description de {{ $streamer->pseudo }}</h3>
-    <div class="row">
-        <p class="col-12">
+    </div>
+    <div class="row card card-lg">
+        <div class="card-block">
+            <h3>Description de {{ $streamer->pseudo }}</h3>
+
+            <p class="col-12">
             @if($streamer->description)
                 {{ $streamer->description }} 
             @else 
@@ -66,9 +66,10 @@
             @endif
         </p>
     </div>
-    <hr>
-    <h3>Statistiques</h3>
-    <div class="row">
+    </div>
+        <div class="row card card-lg">
+            <div class="card-block">
+        <h3>Statistiques</h3>
         <p class="col-12">Vous pouvez consulter des informations complémentaires à propos de la chaine de {{ $streamer->pseudo }} :</p>
             <a class="btn btn-facebook btn-lg btn-rounded m-l-10" href="/follows/{{$streamer->pseudo}}">Ses followers  <i class="fa fa-user"></i></a>
             <a class="btn btn-danger btn-lg btn-rounded m-l-10" href="/fans/{{$streamer->pseudo}}">Ses chaînes <i class="fa fa-heart"></i></a>
@@ -76,7 +77,9 @@
             <a class="btn btn-primary btn-lg btn-rounded m-l-10" href="/stats/{{$streamer->pseudo}}">Dons <i class="fa fa-dollar"></i></a>
         @endif
     </div>
+        </div>
 </div>
+
 @endsection
 
 @section('css')

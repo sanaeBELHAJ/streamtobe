@@ -90,7 +90,7 @@ header .dropdown-menu{
     color: white;
 }
 .visible{
-    background: rgb(75, 54, 124,.4)!important;
+    background: rgb(75, 54, 124, 4)!important;
 }
 .img-thumbnail{
   height: 250px;
@@ -327,10 +327,11 @@ select.form-control:not([size]):not([multiple]) {
 }
 .div-filter{
     font-size: 11px;
-    background: white;
+    background: #ffd23f;
     border: 0.5px solid #dad8de;
     margin: 0;
     padding: 20px;
+    border-radius: 6px;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
@@ -356,7 +357,7 @@ select.form-control:not([size]):not([multiple]) {
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
     line-height: 1.5;
-    border-radius: .1rem;
+    border-radius: 6px;
     padding: .1rem .3rem;
     line-height: 1.5;
     margin-right: 10px;
@@ -382,7 +383,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .btn-filter{
     background: transparent;
-    border: 1px solid #ffd23f;
+    border: 1px solid #53dd6c;
     color: #6441a4;
     border-radius: .1rem;
     padding: .1rem .3rem;
@@ -392,9 +393,9 @@ select.form-control:not([size]):not([multiple]) {
     float: right;        
 }
 .btn-filter:hover{
-    background: #faf9fa;
+    background: #53dd6c;
     color: black;
-    border: 1px solid #ffd23f ;
+    border: 1px solid #53dd6c ;
     border-radius: .1rem;
 }
 label, select, input {
@@ -523,17 +524,17 @@ footer #support_user textarea{
     background-color: #6e3667 !important;
 }
 .btn-primary{
-    background-color: #ffd23f  !important;
-    border: 1px solid #ffd23f ;
+    background-color: #53dd6c  !important;
+    border: 1px solid #53dd6c ;
     color:white!important;
 }
 .btn-primary:hover{
-    background-color: #e0c22d !important;
-    border: 1px solid #e0c22d;
+    background-color: #33dd83 !important;
+    border: 1px solid #53dd6c;
 }
 .btn-primary:active, .btn-primary:focus{
-    background-color: #e0c22d !important;
-    border: 1px solid #e0c22d;
+    background-color: #33dd83 !important;
+    border: 1px solid #53dd6c;
 }
 .card-border{
    border: 0.5px solid #ffd23f;
