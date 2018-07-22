@@ -148,6 +148,9 @@ $(".fa-ban, .fa-check").click(function(){
 
 // Quand on recoit un message, on l'insère dans la page
 socket.on('message', function(content) {
+    if(!$(".contact-profile .fa-check").hasClass("d-none"))
+        return false;
+
     $("#contacts ul li[data-pseudo='"+content.user_exped_pseudo+"'] small").html(content.message);
 
     if(content.message && $(".contact-profile p").html() == content.user_exped_pseudo){
