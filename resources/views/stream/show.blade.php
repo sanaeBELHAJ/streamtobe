@@ -5,7 +5,17 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row">
+            
+            {{-- Boutons d'affichage mobile --}}
+            @auth
+                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row mx-auto">
+                    <p class="sliderText col-4 text-center font-weight-bold m-0" data-value="1">Discussion</p>
+                    <input type="range" min="1" max="2" value="1" class="btn slider col-4" id="myRange">
+                    <p class="sliderText col-4 text-center m-0" data-value="2">Informations</p>
+                </div>
+            @endauth
+
+            <div class="container-fluid row mx-auto">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -43,6 +53,7 @@
                 </div>
             </div>
 
+            
             <div id="infos" class="d-none d-sm-block mt-4">
                 @if(Session::has('message'))
                     <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
@@ -145,7 +156,7 @@
                                         <input name="song_name" class="form-control d-inline w-75" value="" placeholder="Nom du titre">
                                         <i class="material-icons btn" style="color:black;">search</i>
                                     </p>
-                                    <p class="col-12 col-md-6">
+                                    <p class="col-12 col-md-6 mb-3">
                                         <select name="song_id" class="d-none form-control"></select>
                                     </p>
                                 </div>
@@ -217,15 +228,6 @@
                 </div>
             </div>
             </div>
-
-            {{-- Boutons d'affichage mobile --}}
-            @auth
-                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
-                    <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                    <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                    <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
-                </div>
-            @endauth
         </div>
     </div>
 </div>
