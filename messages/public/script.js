@@ -65,8 +65,9 @@ socket.on('join', function(data) {
     $("#profile p").html(infos.user_pseudo);
 
     $(".contact-profile img").prop("src", environment+"/storage/"+infos.friend_avatar);
-    $(".contact-profile p").html(infos.friend_pseudo)
-
+    $(".contact-profile p").html(infos.friend_pseudo);
+    $(".contact-profile .ban").removeClass("d-none");
+        
     //Conversations
     var conversations = data.conversations;
     var text = "";
@@ -87,6 +88,18 @@ socket.on('join', function(data) {
         text += message;
     });
     $(".messages ul").html(text);
+
+    //Bannissement
+    if(infos.friend_is_ban == 1){
+        $(".messages ul").html("<li class='sent text-center'>Information : Vous avez bloqué cette personne, vous ne recevrez plus les messages de sa part.</li>");
+        $(".contact-profile .fa-check").removeClass("d-none");
+        $(".contact-profile .fa-ban").addClass("d-none");
+    }
+    else{
+        $(".contact-profile .fa-ban").removeClass("d-none");
+        $(".contact-profile .fa-check").addClass("d-none");
+    }
+
     $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, 100);
 });
 
@@ -121,9 +134,23 @@ $(window).on('keydown', function(e) {
   }
 });
 
+//Ban - Déban d'une conversation
+$(".fa-ban, .fa-check").click(function(){
+    var friend = $(this).parent().parent().find('p').html();
+
+    if($(this).hasClass("fa-check"))
+        socket.emit('unban', friend);
+    else
+        socket.emit('ban', friend);
+    
+        socket.emit('join', friend);
+});
 
 // Quand on recoit un message, on l'insère dans la page
 socket.on('message', function(content) {
+    if(!$(".contact-profile .fa-check").hasClass("d-none"))
+        return false;
+
     $("#contacts ul li[data-pseudo='"+content.user_exped_pseudo+"'] small").html(content.message);
 
     if(content.message && $(".contact-profile p").html() == content.user_exped_pseudo){

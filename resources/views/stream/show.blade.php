@@ -5,7 +5,17 @@
 <div class ="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
-            <div class="container-fluid row">
+            
+            {{-- Boutons d'affichage mobile --}}
+            @auth
+                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row mx-auto">
+                    <p class="sliderText col-4 text-center font-weight-bold m-0" data-value="1">Discussion</p>
+                    <input type="range" min="1" max="2" value="1" class="btn slider col-4" id="myRange">
+                    <p class="sliderText col-4 text-center m-0" data-value="2">Informations</p>
+                </div>
+            @endauth
+
+            <div class="container-fluid row mx-auto">
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -43,6 +53,7 @@
                 </div>
             </div>
 
+            
             <div id="infos" class="d-none d-sm-block mt-4">
                 @if(Session::has('message'))
                     <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
@@ -57,7 +68,7 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                        <div class="col-12 mt-4" id="config_stream" style="text-align: center;">
+                        <div id="config_stream" style="text-align: center;">
                             <div class="form-group col-lg-12 col-sm-12 col-md-12 col-mb-12">
                                 <label class="switch align-middle m-0">
                                     <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
@@ -72,99 +83,88 @@
                                 Activer / Interrompre la diffusion
                             </div>
                             <div class="card card-lg">
-                            <div class="card-block">
-                            <h3 class="h3 mb-5">Configurer mon stream</h3>
-                            <div class="form-row">
-                                <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
-                                        Type de diffusion : &nbsp;
-                                        <select id="broadcasting-option" class="form-control d-inline w-50">
-                                            <option>Stream vidéo + audio</option>
-                                            <option>Stream audio</option>
-                                        </select>
+                                <div class="card-block">
+                                    <h3 class="h3 mb-5">Configurer mon stream</h3>
+                                    <div class="form-row">
+                                        <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
+                                                Type de diffusion : &nbsp;
+                                                <select id="broadcasting-option" class="form-control d-inline w-50">
+                                                    <option>Stream vidéo + audio</option>
+                                                    <option>Stream audio</option>
+                                                </select>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                            Catégorie :
+                                            <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
+                                                @foreach($themes as $theme)
+                                                <optgroup label="{{$theme->name}}">
+                                                    @foreach($theme->types as $type)
+                                                    <option value="{{$type->name}}" @if($type->name == $streamer->stream->type->name) selected @endif>{{$type->name}}</option>
+                                                    @endforeach
+                                                </optgroup>descriptionAccount
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                            Nom de la chaine : &nbsp;
+                                            <input id="stream_title" class="form-control d-inline w-50 update_stream"
+                                                    data-config="title" type="text" placeholder="Titre du stream"
+                                                    value="{{$streamer->stream->title}}">
+                                        </div>
+                                        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                            Programme de chansons : &nbsp;
+                                            <input id="" class="form-control d-inline w-50 update_stream"
+                                                    data-config="title" type="text" placeholder="Titre du stream"
+                                                    value="{{$streamer->stream->title}}">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
-                                    Catégorie :
-                                    <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
-                                        @foreach($themes as $theme)
-                                        <optgroup label="{{$theme->name}}">
-                                            @foreach($theme->types as $type)
-                                            <option value="{{$type->name}}" @if($type->name == $streamer->stream->type->name) selected @endif>{{$type->name}}</option>
-                                            @endforeach
-                                        </optgroup>descriptionAccount
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
-                                    Nom de la chaine : &nbsp;
-                                    <input id="stream_title" class="form-control d-inline w-50 update_stream"
-                                            data-config="title" type="text" placeholder="Titre du stream"
-                                            value="{{$streamer->stream->title}}">
-                                </div>
-                                <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
-                                    Programme de chansons : &nbsp;
-                                    <input id="" class="form-control d-inline w-50 update_stream"
-                                            data-config="title" type="text" placeholder="Titre du stream"
-                                            value="{{$streamer->stream->title}}">
-                                </div>
-
                             </div>
-                            </div>
-                        </div>
                         </div>
 
                         {{-- Gestion des musiques --}}
                         <div class="col-12 mt-4 card card-lg" style="text-align: center;">
                             <div class="card-block">
-                            <h3 class="h3 mb-3">Gestion de ma playlist</h3>
-                            <p class="mb-1">
-                                <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
-                            </p>
-                            <p class="mb-1">
-                                <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
-                            </p>
-                            <p class="mb-3">
-                                <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
-                            </p>
-                            <div class="row">
-                                <div id="list" class="col-12 col-md-6">
-                                    <div class="list-item row">
-                                        <input type="text" value="" class="col-4" placeholder="Nom de la chanson" />
-                                        <button type="button" class="col-4 btn list-eval">Evaluation</button>
-                                        <button type="button" class="col-4 btn list-rmv">Supprimer</button>
+                                <h3 class="h3 mb-3">Gestion de ma playlist</h3>
+                                <p class="mb-1">
+                                    <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
+                                </p>
+                                <p class="mb-1">
+                                    <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
+                                </p>
+                                <p class="mb-3">
+                                    <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
+                                </p>
+                                <div class="row mb-3">
+                                    <div id="list" class="col-12 col-md-6">
+                                        <div class="list-item row">
+                                            <input type="text" value="" class="form-control col-4" placeholder="Nom de la chanson" />
+                                            <button type="button" class="col-4 btn list-eval">Evaluation</button>
+                                            <button type="button" class="col-4 btn list-rmv">Supprimer</button>
+                                        </div>
+                                        <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
                                     </div>
-                                    <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i></button>
-                                </div>
-                                <div id="lyrics" class="col-12 col-md-6">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#lyricModal">
-                                        Paroles de chansons
-                                    </button> 
                                 </div>
                             </div>
                         </div>
-                        </div>
 
-                        <div class="modal fade" id="lyricModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Rechercher les paroles d'un titre</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>
-                                            <input name="song_name" value="">
-                                            <i class="material-icons btn" style="color:black;">search</i>
-                                        </p>
-                                        <p>
-                                            <select name="song_id" class="d-none"></select>
-                                        </p>
-                                        <div id="lyrics_content"></div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
-                                    </div>
+                        <div class="col-12 mt-4 card card-lg" style="text-align: center;" id="lyricSearch">
+                            <div class="card-block">
+                                <h3 class="h3 mb-3">Rechercher les paroles d'une musique</h3>
+                                <div class="row">
+                                    <p class="col-12 col-md-6">
+                                        <input name="song_name" class="form-control d-inline w-75" value="" placeholder="Nom du titre">
+                                        <i class="material-icons btn" style="color:black;">search</i>
+                                    </p>
+                                    <p class="col-12 col-md-6 mb-3">
+                                        <select name="song_id" class="d-none form-control"></select>
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="card card-body" id="lyrics_content"></div>
+                                </div>
+                                <div class="modal-footer mt-4">
+                                    <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
                                 </div>
                             </div>
                         </div>
@@ -228,15 +228,6 @@
                 </div>
             </div>
             </div>
-
-            {{-- Boutons d'affichage mobile --}}
-            @auth
-                <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row">
-                    <p class="sliderText col-3 text-center font-weight-bold m-0" data-value="1">Chat</p>
-                    <input type="range" min="1" max="2" value="1" class="btn slider col-6" id="myRange">
-                    <p class="sliderText col-3 text-center m-0" data-value="2">Configuration</p>
-                </div>
-            @endauth
         </div>
     </div>
 </div>
@@ -318,6 +309,10 @@
         }
         #config_stream .slider.round:before {
             border-radius: 50%;
+        }
+        #lyrics_content{
+            height: 200px;
+            overflow-y: auto;
         }
     </style>
 @endsection
@@ -506,7 +501,7 @@
             }, 1000);
             
             //Recherche des titres
-            $("#lyricModal .btn").click(function(){
+            $("#lyricSearch .btn").click(function(){
                 if($.trim($("[name='song_name']").val()) == "")
                     return false;
 
