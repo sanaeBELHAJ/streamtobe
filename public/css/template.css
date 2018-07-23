@@ -527,17 +527,19 @@ footer #support_user textarea{
 #footer{
     background-color: #6e3667 !important;
 }
+
 .btn-primary{
     background-color: #53dd6cde  !important;
-    border: 1px solid #53dd6c!important;
+    border: 1px solid #53dd6cde !important;
     font-size: 17px;
     margin-top: 25px;
     padding: 14px 22px;
     color:#6d3666db;
 }
+
 .btn-primary:hover{
     background-color: #53dd6c !important;
-    border: 1px solid #53dd6c!important;
+    border: 1px solid #53dd6c !important;
     color:#6d3666db!important;
 }
 .btn-primary:active, .btn-primary:focus{
@@ -545,12 +547,31 @@ footer #support_user textarea{
     border: 1px solid #53dd6c!important;
     color:#6d3666db!important;
 }
+.btn-login{
+    background-color: #ffedafde  !important;
+    border: 1px solid #ffedafde !important;
+    font-size: 17px;
+    margin-top: 25px;
+    padding: 14px 22px;
+    color:#848484;
+}
+.btn-login:hover{
+    background-color: #ffedaf !important;
+    border: 1px solid #ffedaf !important;
+    color:#848484!important;
+}
+.btn-login:active, .btn-login:focus{
+    background-color: #ffedaf !important;
+    border: 1px solid #ffedaf!important;
+    color:#848484!important;
+}
 .card-border{
    border: 0.5px solid #ffd23f;
 }
 .card-header{
-   color: white;
-   background-color: #ffd23f !important;
+    color: white;
+    font-weight: bold;
+    background-color: #ffd23f !important;
 }
 .navbar-search{
     background-color: #6e3667 !important;
