@@ -59,8 +59,17 @@ class AccountController extends Controller {
             abort(404);
 
         $themes = Theme::all();
+        $stream = $streamer->stream; //Chaine de l'utilisateur
+        $viewers = $stream->viewers; //Followers de l'utilisateur
+        $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
+        //Mes dons reçus 
+        $donations = [];
+        foreach ($viewers as $viewer) {
+            foreach ($viewer->donations as $donation)
+                $donations[] = $donation;
+        }
 
-        return view('account.profil', compact('themes', 'streamer'));
+        return view('account.profil', compact('themes', 'streamer','viewers','channels','donations'));
     }
 
     /**
