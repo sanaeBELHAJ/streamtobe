@@ -3,11 +3,11 @@
 @section('content')
 <div class="container top-2" style="    margin-bottom: 40px;">
     <div class="row">
-        <div class=" col-sm-12 div-filter">
-            <form class="pull-right form-inline" method="POST" action="{{ route('stream.index') }}">
+        <div class="  col-sm-12 col-lg-12 col-md-12 div-filter">
+            <form class=" form-inline" method="POST" action="{{ route('stream.index') }}">
                 @csrf
                 <input type="hidden" id="_token" value="{{ csrf_token() }}">
-                <div class="form-group mb-2 d-flex">
+                <div class="form-group col-sm-12 col-lg-3 col-md-12 d-flex">
                     <label for="name">Titre  </label>
   
                     <input id="email"  type="text" class="form-control" name="name" value="{{ $inputs['name'] }}">
@@ -17,7 +17,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2 d-flex">
+                <div class="form-group col-sm-12 col-lg-4 col-md-12 d-flex">
                     <label for="categorie">Catégories  </label>
                     <select name="theme" id="stream_type" data-config="type" class="form-control">
                         <option value="">Toutes les catégories</option>
@@ -35,7 +35,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
                 </div>
-                <div class="form-group mb-2 d-flex">
+                <div class="form-group col-sm-12 col-lg-3 col-md-12 d-flex">
                     <label for="countries">Pays </label>
                     <select name="country" id="stream_type"  data-config="type" class="form-control">
                         <option value="">Tous les pays</option>
@@ -51,8 +51,11 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}       
                 </div>
-                <div class="form-group mb-2">
-                    <button type="submit" class="btn btn-primary btn-rounded btn-shadow btn-lg  btn-filter">
+                <div class="form-group col-sm-12 col-lg-1 col-md-12 d-flex">
+                    <button type="submit" class="btn btn-primary btn-rounded btn-shadow btn-lg" style="margin-right: 0px;
+                    float: right;
+                    margin-top: 4px;
+                    ">
                         Rechercher
                     </button>
                 </div>

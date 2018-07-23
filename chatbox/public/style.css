@@ -17,7 +17,7 @@ html, body{
 #zone_chat, #zone_users{
     width: 100%;
     background: #c2c1c240;
-    color: #6e6779;
+    color: #f3fcf0;
     height: 70%;
     padding: 5px 5px 0;
     font-size: 12px;
@@ -133,7 +133,7 @@ textarea{
     width: 70px;
     height: 40px;
     transform: translateY(-50%);
-    background: #1BBC9B;
+    background: #53dd6cde;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -170,7 +170,7 @@ textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #1BBC9B; /* Violet background */
+    background: #53dd6cde; /* Violet background */
     cursor: pointer; /* Cursor on hover */
     border-radius: 0.25rem;
 }
@@ -193,7 +193,7 @@ textarea{
     outline: 0;
     font-family: inherit;
     appearance: none;
-    border: 0.5px solid #1BBC9B;
+    border: 0.5px solid #53dd6cde;
     background: #fff;
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
@@ -211,11 +211,11 @@ textarea{
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
     border: none;
-    box-shadow: 0 0 6px #1BBC9B; 
+    box-shadow: 0 0 6px #53dd6cde;
 }
 .btn.focus, .btn:focus {
     outline: 0;
-    box-shadow: 0 0 0 0.1rem #1BBC9B;
+    box-shadow: 0 0 0 0.1rem #53dd6cde;
 }
 p.vote{
     margin: 0 auto;
