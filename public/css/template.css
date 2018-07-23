@@ -710,6 +710,7 @@ footer #support_user textarea{
 }
 .table-filter .media-photo {
 	width: 35px;
+        margin: 4px;
 }
 .table-filter .media-body {
     display: block;
