@@ -538,10 +538,12 @@ footer #support_user textarea{
 .btn-primary:hover{
     background-color: #53dd6c !important;
     border: 1px solid #53dd6c!important;
+    color:#6d3666db!important;
 }
 .btn-primary:active, .btn-primary:focus{
     background-color: #53dd6c !important;
     border: 1px solid #53dd6c!important;
+    color:#6d3666db!important;
 }
 .card-border{
    border: 0.5px solid #ffd23f;
