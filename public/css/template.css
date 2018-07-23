@@ -528,17 +528,20 @@ footer #support_user textarea{
     background-color: #6e3667 !important;
 }
 .btn-primary{
-    background-color: #53dd6c  !important;
-    border: 1px solid #53dd6c ;
-    color:white!important;
+    background-color: #53dd6cde  !important;
+    border: 1px solid #53dd6c!important;
+    font-size: 17px;
+    margin-top: 25px;
+    padding: 14px 22px;
+    color:#6d3666db;
 }
 .btn-primary:hover{
-    background-color: #33dd83 !important;
-    border: 1px solid #53dd6c;
+    background-color: #53dd6c !important;
+    border: 1px solid #53dd6c!important;
 }
 .btn-primary:active, .btn-primary:focus{
-    background-color: #33dd83 !important;
-    border: 1px solid #53dd6c;
+    background-color: #53dd6c !important;
+    border: 1px solid #53dd6c!important;
 }
 .card-border{
    border: 0.5px solid #ffd23f;
