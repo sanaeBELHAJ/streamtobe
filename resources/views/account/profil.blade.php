@@ -50,9 +50,9 @@
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade show active" id="profile">
-                            <div class="row">
-                                <div class="col-sm-12">
+                        <div role="tabpanel" class="tab-pane fade show active cardInfo card-lg" id="profile">
+                            <div class="row card-block">
+                                <div class="col-sm-12 ">
                                     <p class="col-12">Membre depuis le <?php echo date('d/m/Y', strtotime($streamer->created_at)); ?></p>
                                     <p class="col-12">Pays : <img src="{{ $streamer->country->svg }}" style="max-width: 200px;max-height: 30px;"></p>
 
@@ -209,6 +209,14 @@
             left: 50%;
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
+        }
+        .cardInfo {
+            background-color: #fff;
+            border: 1px solid #dedede;
+            -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.07);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.07);
+            margin-bottom: 30px;
+            border-radius: 6px;
         }
     </style>
 @endsection
