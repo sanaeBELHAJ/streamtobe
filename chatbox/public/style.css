@@ -132,16 +132,13 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 0%;
-    top: 16%;
-    width: 70px;
+    right: 0;
+    top: 0;
     height: 40px;
-    transform: translateY(-50%);
     background: #53dd6cde;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    margin-top: 5px;
     color: #fff;
     border: 0 none;
     outline: 0 none;
