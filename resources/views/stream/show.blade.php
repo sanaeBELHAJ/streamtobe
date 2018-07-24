@@ -105,7 +105,7 @@
                                 <div class="card-header">Paroles d'une chanson <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
-                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre ci-dessus.</div>
+                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre au dessus de la vidéo.</div>
                                     </div>
                                     <div class="modal-footer mt-4">
                                         <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
@@ -234,15 +234,14 @@
                     @endif
                 @endauth
                 </div>
-
-                {{-- Description du streamer --}}
-                <div class="row">
-                    <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
-                        <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
-                        <div class="card-block" id="desc">
-                            <div id="streamer">
-                                <p>{{$streamer->description}}</p>
-                            </div>
+            </div>
+            {{-- Description du streamer --}}
+            <div class="row">
+                <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
+                    <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
+                    <div class="card-block" id="desc">
+                        <div id="streamer">
+                            <p>{{$streamer->description}}</p>
                         </div>
                     </div>
                 </div>
@@ -476,7 +475,7 @@
                             }
                         })
                             .done(function(data){     
-                                console.log(data);
+                                //
                             })
                             .fail(function(data){
                                 console.log(data);
@@ -556,7 +555,6 @@
                     }
                 })
                     .done(function(data){
-                        console.log(data);
                         var text = "<option value=''>--Selectionnez un titre--</option>";
                         data.forEach(function(element){
                             text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
@@ -587,7 +585,6 @@
                     }
                 })
                     .done(function(data){
-                        console.log(data);
                         if(data.lyrics_body!="")
                             $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
                         else
@@ -646,7 +643,6 @@
                                 .done(function(data){
                                     $("#giveaway_change").val(1);
                                     $('#giveaway_message').val("");
-                                    console.log(data);
                                 })
                                 .fail(function(data){
                                     console.log(data);

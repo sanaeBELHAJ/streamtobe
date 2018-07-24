@@ -20,21 +20,22 @@
                     <ul class="nav nav-tabs" role="tablist">
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
+                            <a class="nav-link active text-center" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#machaine" role="tab" data-toggle="tab"><i class="fa fa-window-restore"></i>Ses chaînes</a>
+                            <a class="nav-link text-center" href="#machaine" role="tab" data-toggle="tab"><i class="fa fa-window-restore"></i>Ses abonnements</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#fans" role="tab" data-toggle="tab"><i class="fa fa-heart"></i>Ses fans</a>
+                            <a class="nav-link text-center" href="#fans" role="tab" data-toggle="tab"><i class="fa fa-heart"></i>Ses fans</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#revenus" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i>Revenus </a>
+                            <a class="nav-link text-center" href="#revenus" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i>Revenus </a>
                         </li>
                         <div class="col-sm-4"></div>
                         <div class="col-sm-2">
                             @php ($IsCurrentViewer = 0)
-                            @foreach(Auth::user()->viewers as $viewer)
+
+                            @foreach($streamer->viewers as $viewer)
                                 @if($streamer->stream->id == $viewer->stream_id)
                                     <button class="col-sm-12 pull-right right follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
@@ -60,7 +61,11 @@
                                     @if($streamer->stream->status==0 && $streamer->stream->updated_at)
                                         <p class="col-12">Sa dernière diffusion remonte à <?php echo date('d/m/Y', strtotime($streamer->stream->updated_at)); ?></p>
                                     @endif
-
+        
+                                    <p>Nombre de chansons interprétées : {{-- $streamer->pseudo --}}</p>
+                                    <p>Moyenne des notes attribuées par le public : {{-- $streamer->pseudo --}}%</p>
+                                    <p>Nombre de chansons proposées par le public : {{-- $streamer->pseudo --}}</p>
+        
                                     <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
                                     <p class="col-6 position-relative">
                                         <a class="" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
@@ -88,20 +93,21 @@
                                                                 <img src="<?php echo asset('storage/' . $channel->stream->user->avatar); ?>" class="media-photo">
                                                             </a>
                                                             <div class="media-body">
-                                                                <span class="media-meta pull-right">Inscrit le {{ Carbon\Carbon::parse($channel->stream->created_at)->format('d/m/Y') }}</span>
-                                                                <h4 class="title">
-                                                                    {{$channel->stream->user->pseudo}}
-                                                                    <span class="pull-right pagado">
-                                                        @if ($channel->stream->status == 1)
-                                                                            <div class="badge badge-xbox-one">En ligne</div>
-                                                                            <div class="badge badge-ps4" style="left:150px;">{{$channel->stream->type->name}}</div>
-                                                                        @else
-                                                                            <div class="badge badge-steam">Hors ligne</div>
-                                                                        @endif
-                                                        </span>
-                                                                </h4>
-                                                                <p class="summary">{{$channel->stream->title}}</p>
-
+                                                                <a href="/home/{{$channel->stream->user->pseudo}}" class="pull-left w-100">
+                                                                    <span class="media-meta pull-right">Inscrit le {{ Carbon\Carbon::parse($channel->stream->created_at)->format('d/m/Y') }}</span>
+                                                                    <h4 class="title">
+                                                                        {{$channel->stream->user->pseudo}}
+                                                                        <span class="pull-right pagado">
+                                                                            @if ($channel->stream->status == 1)
+                                                                                <div class="badge badge-xbox-one">En ligne</div>
+                                                                                <div class="badge badge-ps4" style="left:150px;">{{$channel->stream->type->name}}</div>
+                                                                            @else
+                                                                                <div class="badge badge-steam">Hors ligne</div>
+                                                                            @endif
+                                                                        </span>
+                                                                    </h4>
+                                                                    <p class="summary">{{$channel->stream->title}}</p>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -155,7 +161,7 @@
 
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="revenus">
-                            @if($streamer->pseudo == Auth::user()->pseudo)
+                            @if(Auth::check() && $streamer->pseudo == Auth::user()->pseudo)
                                 <table class="table">
                                     <thead>
                                     <tr>
