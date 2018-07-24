@@ -191,9 +191,9 @@
                             {{-- Report --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @if($report)
-                                    <button class="btn btn-danger btn-lg btn-rounded m-l-10" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
+                                    <button class="btn btn-danger btn-sm btn-rounded m-l-10" disabled>Vous avez déjà signalé <br>cet utilisateur.</button>
                                 @else
-                                    <button class="btn btn-danger btn-lg btn-rounded m-l-10"
+                                    <button class="btn btn-danger btn-sm btn-rounded m-l-10"
                                             data-toggle="modal" data-target="#reportModal">Signaler cet utilisateur <i class="fa fa-warning"></i></button>
                                     @include('stream.modal.report')
                                 @endif
@@ -202,7 +202,7 @@
                             {{-- Giveaway --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 <input type="hidden" name="streamer_name" value="{{ $streamer->pseudo }}">
-                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" style="margin-top: 0px;padding: 16px 27px;color:white!important;" data-toggle="modal"
+                                <button class="btn btn-sm btn-rounded m-l-10" style="margin-top: 0px;color:white!important;    background-color: #53dd6cde !important;border: 1px solid #53dd6cde !important;" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
                             @include('stream.modal.payment')
@@ -212,20 +212,20 @@
                                 @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
-                                        <button class="follow_stream btn-lg btn-rounded  w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
+                                        <button class="follow_stream btn-sm btn-rounded  w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
-                                        <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
+                                        <button class="follow_stream btn-sm btn-rounded w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                                         @php ($IsCurrentViewer = 1)
                                     @endif
                                 @endforeach
                                 @if($IsCurrentViewer == 0)
-                                    <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow d-none"
+                                    <button class="follow_stream btn-sm btn-rounded w-100 float-none btn btn-follow d-none"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
-                                    <button class="follow_stream btn-lg btn-rounded w-100 float-none btn btn-follow"
+                                    <button class="follow_stream btn-sm btn-rounded w-100 float-none btn btn-follow"
                                             data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                             title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                                 @endif
