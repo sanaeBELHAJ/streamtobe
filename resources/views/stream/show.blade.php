@@ -18,13 +18,16 @@
             <div class="container-fluid row mx-auto">
                 @if(Auth::check() && $streamer->id == Auth::user()->id)
                     <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 ">
-                            <div  id="lyricSearch">
-                                <p class="col-lg-12 col-md-6 col-sm-12">
-                                    <input name="song_name" class="form-control d-inline " style="width:90%;" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
-                                    <i class="material-icons btn" style="color:black;font-size:40px;">search</i>
-                                </p>
-                                <p class="col-lg-12 col-md-6 col-sm-12">
-                                    <select name="song_id" class="d-none form-control"></select>
+                            <div id="lyricSearch">
+                                <div class="row mb-3">
+                                    <input name="song_name" class="form-control d-inline col-10 m-0" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
+                                    <div class="col-2">
+                                        <i class="material-icons btn p-0" style="color:black;font-size:30px;">search</i>
+                                        <i class="material-icons fa-spin p-0" style="color:black;font-size:30px;display:none;">autorenew</i>
+                                    </div>
+                                </div>
+                                <p class="row">
+                                    <select name="song_id" class="col-10 m-0 d-none form-control"></select>
                                 </p>
                         </div>
                     </div>
@@ -538,6 +541,10 @@
             $("#lyricSearch .btn").click(function(){
                 if($.trim($("[name='song_name']").val()) == "")
                     return false;
+                
+                var loupe = $(this);
+                loupe.hide();
+                $("#lyricSearch .fa-spin").show();
 
                 $.ajax({
                     url: "/getTracks",
@@ -553,6 +560,10 @@
                         data.forEach(function(element){
                             text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
                         });
+                        
+                        loupe.show();
+                        $("#lyricSearch .fa-spin").hide();
+
                         $("[name='song_id']").removeClass("d-none");
                         $("[name='song_id']").html(text);
                     })
