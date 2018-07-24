@@ -434,9 +434,10 @@
             function checkClickList(){
                 $("#list").on("click", ".list-eval", function(){
                     var button = $(this);
-                    var music = $(this).parent().find("input").val();
+                    var list_item = $(this).parent().parent();
+                    var music = list_item.find("input").val();
                     
-                    if($.trim(music)=="" || $(this).parent().find(".result").length > 0)
+                    if($.trim(music)=="" || list_item.find(".result").length > 0)
                         return false;
 
                     $.ajax({
@@ -448,11 +449,11 @@
                         }
                     })
                         .done(function(data){
-                            button.parent().attr('data-id', data.id);
-                            button.parent().find('input').prop('disabled', true);
-                            button.parent().find('.list-eval').prop('disabled', true);
-                            button.parent().find('.list-rmv').remove();
-                            button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
+                            list_item.attr('data-id', data.id);
+                            list_item.find('input').prop('disabled', true);
+                            list_item.find('.list-eval').prop('disabled', true).removeClass('btn-info').addClass('btn-outline-info');
+                            list_item.find('.list-rmv').parent().remove();
+                            list_item.append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
                             currentsSongs.push(data.id);
                         })
                         .fail(function(data){
@@ -529,7 +530,7 @@
 
                                     var text = '<div class="list-item row" data-id="'+value.id+'">';
                                         text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
-                                        text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
+                                        text += '<button type="button" class="col-4 btn list-eval">Faire voter par le chat</button>';
                                         text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
                                     text += '</div>';
                                     $("#list .list-add").before(text);
