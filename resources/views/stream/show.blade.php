@@ -119,7 +119,7 @@
                                         Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.
                                     </p>
                                     <p class="mb-1">
-                                        Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.
+                                        Une fois réalisé, appuyez sur le bouton d'évaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.
                                     </p>
                                     <p class="mb-3">
                                         Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.
@@ -131,7 +131,7 @@
                                                     <input type="text" value="" class="form-control col-12 m-0" placeholder="Nom de la chanson" />
                                                 </div>
                                                 <div class="col-7 col-sm-6 col-md-4">
-                                                    <button type="button" class="col-12 btn btn-info list-eval"><!--<i class="fas fa-medal"></i>-->Faire voter par le chat</button>
+                                                    <button type="button" class="col-12 btn btn-info list-eval">Faire voter par le chat</button>
                                                 </div>
                                                 <div class="col-5 col-sm-6 col-md-4">
                                                     <button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>
@@ -173,12 +173,12 @@
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
                                         </div>
-                                        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                        {{-- <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Programme de chanson : &nbsp;
                                             <input id="" class="form-control d-inline col-12 col-md-6 update_stream"
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -528,10 +528,16 @@
                                     if(value == data[data.length-1])
                                         lastGift = value.id;
 
-                                    var text = '<div class="list-item row" data-id="'+value.id+'">';
-                                        text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
-                                        text += '<button type="button" class="col-4 btn list-eval">Faire voter par le chat</button>';
-                                        text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
+                                    var text = '<div class="list-item row" data-id="'+value.id+'" style="margin-top: 10px;">';
+                                            text += '<div class="col-12 col-md-4 mb-2" >';
+                                                text += '<input type="text" value="'+value.title+'" class="form-control col-12 m-0" disabled/>';
+                                            text += '</div>';
+                                            text += '<div class="col-7 col-sm-6 col-md-4">';
+                                                text += '<button type="button" class="col-12 btn btn-info list-eval">Faire voter par le chat</button>';
+                                            text += '</div>';
+                                            text += '<div class="col-5 col-sm-6 col-md-4">';
+                                                text += '<button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>';
+                                            text += '</div>';
                                     text += '</div>';
                                     $("#list .list-add").before(text);
                                 });
