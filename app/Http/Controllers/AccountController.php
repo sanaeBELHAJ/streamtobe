@@ -10,6 +10,7 @@ use App\Invoice;
 use App\Subscriber;
 use App\Countries;
 use App\User;
+use App\Music;
 use App\Theme;
 use App\ReportCat;
 use App\Report;
@@ -62,6 +63,24 @@ class AccountController extends Controller {
         $stream = $streamer->stream; //Chaine de l'utilisateur
         $viewers = $stream->viewers; //Followers de l'utilisateur
         $channels = Viewer::where('user_id', $streamer->id)->get(); //Chaines suivies par l'utilisateur
+        $musics = Music::where('stream_id', '=', $streamer->stream->id)->get();
+
+        $averages=[];
+        foreach ($musics as $music) {
+            if($music->qtty_votes != 0)
+                $averages[] = $music->mark/$music->qtty_votes;
+        }
+
+        $score = 0;
+        foreach ($averages as $mark) {
+            $score += $mark;
+        }
+        $medium = (count($averages)!=0) ? intval(($score/count($averages))*100)/100 : 0;
+
+        $gifts = Music::where('stream_id', '=', $streamer->stream->id)
+                        ->whereNotNull('gift_viewer')
+                        ->get();
+
         //Mes dons reçus 
         $donations = [];
         foreach ($viewers as $viewer) {
@@ -69,7 +88,7 @@ class AccountController extends Controller {
                 $donations[] = $donation;
         }
 
-        return view('account.profil', compact('themes', 'streamer','viewers','channels','donations'));
+        return view('account.profil', compact('themes', 'streamer','viewers','channels','donations','musics','medium','gifts'));
     }
 
     /**

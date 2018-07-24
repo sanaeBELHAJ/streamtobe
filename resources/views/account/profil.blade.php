@@ -19,6 +19,37 @@
             <div class="" role="group" aria-label="...">
                 <ul class="nav nav-tabs row" role="tablist">
 
+                        <li class="nav-item">
+                            <a class="nav-link active text-center" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" href="#machaine" role="tab" data-toggle="tab"><i class="fa fa-window-restore"></i>Ses abonnements</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" href="#fans" role="tab" data-toggle="tab"><i class="fa fa-heart"></i>Ses fans</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" href="#revenus" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i>Revenus </a>
+                        </li>
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">
+                            @auth
+                                @php ($IsCurrentViewer = 0)
+
+                                @foreach($streamer->viewers as $viewer)
+                                    @if($streamer->stream->id == $viewer->stream_id)
+                                        <button class="col-sm-12 pull-right right follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
+                                        <button class="col-sm-12 pull-right right  follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
+                                        @php ($IsCurrentViewer = 1)
+                                    @endif
+                                @endforeach
+                            @endauth
+                        </div>
+                    </ul>
                     <li class="nav-item">
                         <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
                     </li>
@@ -70,6 +101,18 @@
                                         </i>
                                     </a>
                                 </p>
+                                    <p class="col-12">Nombre de chansons interprétées : {{ count($musics) }}</p>
+                                    <p class="col-12">Moyenne des notes attribuées par le public : {{ $medium }}%</p>
+                                    <p class="col-12">Nombre de chansons proposées par le public : {{ count($gifts) }}</p>
+        
+                                    <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
+                                    <p class="col-6 position-relative">
+                                        <a class="" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
+                                            <i class="fa fa-camera fa-5x">
+                                            </i>
+                                        </a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -164,7 +164,6 @@ $('#zone_users').on('click',".modo, .ban, .user", function(){
 
 //Nouvelles musiques à voter
 socket.on('eval_song', function(element){
-    console.log(element);
     var text = "<p class='col-12 col-md-6 vote mb-3' data-song='"+element.id+"'>";
         text += "<span class='d-block w-100 text-center '> Que pensez-vous de l'interprétation de : "+element.title+" ?</span>";
         text += "<button class='col-4 btn btn-danger btn_vote bad'><i class='far fa-angry' style='font-size:75%;'></i></button>";

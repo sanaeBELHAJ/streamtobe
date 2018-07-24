@@ -18,13 +18,16 @@
             <div class="container-fluid row mx-auto">
                 @if(Auth::check() && $streamer->id == Auth::user()->id)
                     <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 ">
-                            <div  id="lyricSearch">
-                                <p class="col-lg-12 col-md-6 col-sm-12">
-                                    <input name="song_name" class="form-control d-inline " style="width:90%;" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
-                                    <i class="material-icons btn" style="color:black;font-size:40px;">search</i>
-                                </p>
-                                <p class="col-lg-12 col-md-6 col-sm-12">
-                                    <select name="song_id" class="d-none form-control"></select>
+                            <div id="lyricSearch">
+                                <div class="row mb-3">
+                                    <input name="song_name" class="form-control d-inline col-10 m-0" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
+                                    <div class="col-2">
+                                        <i class="material-icons btn p-0" style="color:black;font-size:30px;">search</i>
+                                        <i class="material-icons fa-spin p-0" style="color:black;font-size:30px;display:none;">autorenew</i>
+                                    </div>
+                                </div>
+                                <p class="row">
+                                    <select name="song_id" class="col-10 m-0 d-none form-control"></select>
                                 </p>
                         </div>
                     </div>
@@ -99,10 +102,10 @@
                             </div>
                         </div>
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;" >
-                                <div class="card-header">Paroles d'une chanson <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
+                                <div class="card-header">Paroles de la chanson recherchée<button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
-                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre ci-dessus.</div>
+                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre au dessus de la vidéo.</div>
                                     </div>
                                     <div class="modal-footer mt-4">
                                         <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
@@ -116,7 +119,7 @@
                                         Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.
                                     </p>
                                     <p class="mb-1">
-                                        Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.
+                                        Une fois réalisé, appuyez sur le bouton d'évaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.
                                     </p>
                                     <p class="mb-3">
                                         Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.
@@ -128,7 +131,7 @@
                                                     <input type="text" value="" class="form-control col-12 m-0" placeholder="Nom de la chanson" />
                                                 </div>
                                                 <div class="col-7 col-sm-6 col-md-4">
-                                                    <button type="button" class="col-12 btn btn-info list-eval"><!--<i class="fas fa-medal"></i>-->Faire voter par le chat</button>
+                                                    <button type="button" class="col-12 btn btn-info list-eval">Faire voter par le chat</button>
                                                 </div>
                                                 <div class="col-5 col-sm-6 col-md-4">
                                                     <button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>
@@ -170,12 +173,12 @@
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
                                         </div>
-                                        <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
+                                        {{-- <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Programme de chanson : &nbsp;
                                             <input id="" class="form-control d-inline col-12 col-md-6 update_stream"
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -231,8 +234,9 @@
                     @endif
                 @endauth
                 </div>
-
-                {{-- Description du streamer --}}
+            </div>
+            {{-- Description du streamer --}}
+            <div class="container-fluid">
                 <div class="row">
                     <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
                         <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
@@ -430,9 +434,10 @@
             function checkClickList(){
                 $("#list").on("click", ".list-eval", function(){
                     var button = $(this);
-                    var music = $(this).parent().find("input").val();
+                    var list_item = $(this).parent().parent();
+                    var music = list_item.find("input").val();
                     
-                    if($.trim(music)=="" || $(this).parent().find(".result").length > 0)
+                    if($.trim(music)=="" || list_item.find(".result").length > 0)
                         return false;
 
                     $.ajax({
@@ -444,11 +449,11 @@
                         }
                     })
                         .done(function(data){
-                            button.parent().attr('data-id', data.id);
-                            button.parent().find('input').prop('disabled', true);
-                            button.parent().find('.list-eval').prop('disabled', true);
-                            button.parent().find('.list-rmv').remove();
-                            button.parent().append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
+                            list_item.attr('data-id', data.id);
+                            list_item.find('input').prop('disabled', true);
+                            list_item.find('.list-eval').prop('disabled', true).removeClass('btn-info').addClass('btn-outline-info');
+                            list_item.find('.list-rmv').parent().remove();
+                            list_item.append('<p class="col-4 text-center">Avis du chat : <span class="result"> ? </span> %');
                             currentsSongs.push(data.id);
                         })
                         .fail(function(data){
@@ -459,8 +464,9 @@
 
                 //Suppression d'une musique
                 $("#list").on("click", ".list-rmv", function(){
-                    var id = $(this).parent().data('id');
-                    $(this).parent().remove();
+                    var list_item = $(this).parent().parent();
+                    var id = list_item.data('id');
+                    list_item.remove();
 
                     if(typeof id !== 'undefined'){
                         $.ajax({
@@ -472,7 +478,7 @@
                             }
                         })
                             .done(function(data){     
-                                console.log(data);
+                                //
                             })
                             .fail(function(data){
                                 console.log(data);
@@ -504,88 +510,102 @@
                     });
             }, 1000);
 
+            @auth
+                @if($streamer->id == Auth::user()->id)
+                    //Récupération des musiques proposées
+                    var lastGift = -1;
+                    setInterval(function(){
+                        $.ajax({
+                            url: "/getMusicGift",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                lastGift : lastGift
+                            }
+                        })
+                            .done(function(data){
+                                data.forEach(function(value){
+                                    if(value == data[data.length-1])
+                                        lastGift = value.id;
 
-            //Récupération des musiques proposées
-            var lastGift = -1;
-            setInterval(function(){
-                $.ajax({
-                    url: "/getMusicGift",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        lastGift : lastGift
-                    }
-                })
-                    .done(function(data){
-                        data.forEach(function(value){
-                            if(value == data[data.length-1])
-                                lastGift = value.id;
+                                    var text = '<div class="list-item row" data-id="'+value.id+'" style="margin-top: 10px;">';
+                                            text += '<div class="col-12 col-md-4 mb-2" >';
+                                                text += '<input type="text" value="'+value.title+'" class="form-control col-12 m-0" disabled/>';
+                                            text += '</div>';
+                                            text += '<div class="col-7 col-sm-6 col-md-4">';
+                                                text += '<button type="button" class="col-12 btn btn-info list-eval">Faire voter par le chat</button>';
+                                            text += '</div>';
+                                            text += '<div class="col-5 col-sm-6 col-md-4">';
+                                                text += '<button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>';
+                                            text += '</div>';
+                                    text += '</div>';
+                                    $("#list .list-add").before(text);
+                                });
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
+                    }, 1000);
+                    
+                    //Recherche des titres
+                    $("#lyricSearch .btn").click(function(){
+                        if($.trim($("[name='song_name']").val()) == "")
+                            return false;
+                        
+                        var loupe = $(this);
+                        loupe.hide();
+                        $("#lyricSearch .fa-spin").show();
 
-                            var text = '<div class="list-item row" data-id="'+value.id+'">';
-                                text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
-                                text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
-                                text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
-                            text += '</div>';
-                            $("#list .list-add").before(text);
-                        });
-                    })
-                    .fail(function(data){
-                        console.log(data);
+                        $.ajax({
+                            url: "/getTracks",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                song_name : $("[name='song_name']").val()
+                            }
+                        })
+                            .done(function(data){
+                                var text = "<option value=''>--Selectionnez un titre--</option>";
+                                data.forEach(function(element){
+                                    text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
+                                });
+                                
+                                loupe.show();
+                                $("#lyricSearch .fa-spin").hide();
+
+                                $("[name='song_id']").removeClass("d-none");
+                                $("[name='song_id']").html(text);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
                     });
-            }, 1000);
-            
-            //Recherche des titres
-            $("#lyricSearch .btn").click(function(){
-                if($.trim($("[name='song_name']").val()) == "")
-                    return false;
 
-                $.ajax({
-                    url: "/getTracks",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        song_name : $("[name='song_name']").val()
-                    }
-                })
-                    .done(function(data){
-                        console.log(data);
-                        var text = "<option value=''>--Selectionnez un titre--</option>";
-                        data.forEach(function(element){
-                            text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
-                        });
-                        $("[name='song_id']").removeClass("d-none");
-                        $("[name='song_id']").html(text);
-                    })
-                    .fail(function(data){
-                        console.log(data);
+                    //Importation des paroles
+                    $("[name='song_id']").change(function(){
+                        if($.trim($("[name='song_id']").val()) == "")
+                            return false;
+
+                        $.ajax({
+                            url: "/getLyrics",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                song_id : $(this).val()
+                            }
+                        })
+                            .done(function(data){
+                                if(data.lyrics_body!="")
+                                    $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
+                                else
+                                    $("#lyrics_content").html(data.lyrics_copyright);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
                     });
-            });
-
-            //Importation des paroles
-            $("[name='song_id']").change(function(){
-                if($.trim($("[name='song_id']").val()) == "")
-                    return false;
-
-                $.ajax({
-                    url: "/getLyrics",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        song_id : $(this).val()
-                    }
-                })
-                    .done(function(data){
-                        console.log(data);
-                        if(data.lyrics_body!="")
-                            $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
-                        else
-                            $("#lyrics_content").html(data.lyrics_copyright);
-                    })
-                    .fail(function(data){
-                        console.log(data);
-                    });
-            });
-
+                @endif
+            @endauth
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
@@ -634,7 +654,6 @@
                                 .done(function(data){
                                     $("#giveaway_change").val(1);
                                     $('#giveaway_message').val("");
-                                    console.log(data);
                                 })
                                 .fail(function(data){
                                     console.log(data);
