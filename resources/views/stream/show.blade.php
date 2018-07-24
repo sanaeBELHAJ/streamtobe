@@ -177,7 +177,7 @@
                         {{-- Gestion des musiques --}}
 
                     @else {{-- Panel d'action du viewer --}}
-                        <div class="col-12 col-md-8 d-flex justify-content-between">
+                        <div class="col-12 col-md-8 d-flex justify-content-between" style="margin-top: 20px;margin-bottom: 30px;">
                         <div class="row col-12">
                             {{-- Report --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
@@ -193,13 +193,13 @@
                             {{-- Giveaway --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 <input type="hidden" name="streamer_name" value="{{ $streamer->pseudo }}">
-                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" style="margin-top: 0px;margin-bottom: 30px;padding: 16px 27px;color:white!important;" data-toggle="modal"
+                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" style="margin-top: 0px;padding: 16px 27px;color:white!important;" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
                             @include('stream.modal.payment')
 
                             {{-- Following --}}
-                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center"   style="margin-top: 20px;">
+                            <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 @php ($IsCurrentViewer = 0)
                                 @foreach($user->viewers as $viewer)
                                     @if($streamer->stream->id == $viewer->stream_id)
