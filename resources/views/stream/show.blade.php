@@ -124,11 +124,17 @@
                                     <div class="row mb-3">
                                         <div id="list" class="col-12">
                                             <div class="list-item row" style="margin-top: 10px;">
-                                                <input type="text" value="" class="form-control col-4 m-0" placeholder="Nom de la chanson" />
-                                                <button type="button" class="col-4 btn list-eval">Faire voter par le chat</button>
-                                                <button type="button" class="col-4 btn list-rmv">Supprimer</button>
+                                                <div class="col-12 col-md-4 mb-2">
+                                                    <input type="text" value="" class="form-control col-12 m-0" placeholder="Nom de la chanson" />
+                                                </div>
+                                                <div class="col-7 col-sm-6 col-md-4">
+                                                    <button type="button" class="col-12 btn btn-info list-eval"><!--<i class="fas fa-medal"></i>-->Faire voter par le chat</button>
+                                                </div>
+                                                <div class="col-5 col-sm-6 col-md-4">
+                                                    <button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>
+                                                </div>
                                             </div>
-                                            <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
+                                            <button class="list-add btn btn-success mt-3 offset-md-9"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
                                         </div>
                                     </div>
                                 </div>
