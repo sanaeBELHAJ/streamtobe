@@ -19,37 +19,6 @@
             <div class="" role="group" aria-label="...">
                 <ul class="nav nav-tabs row" role="tablist">
 
-                        <li class="nav-item">
-                            <a class="nav-link active text-center" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-center" href="#machaine" role="tab" data-toggle="tab"><i class="fa fa-window-restore"></i>Ses abonnements</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-center" href="#fans" role="tab" data-toggle="tab"><i class="fa fa-heart"></i>Ses fans</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-center" href="#revenus" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i>Revenus </a>
-                        </li>
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-2">
-                            @auth
-                                @php ($IsCurrentViewer = 0)
-
-                                @foreach($streamer->viewers as $viewer)
-                                    @if($streamer->stream->id == $viewer->stream_id)
-                                        <button class="col-sm-12 pull-right right follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
-                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
-                                        <button class="col-sm-12 pull-right right  follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
-                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
-                                        @php ($IsCurrentViewer = 1)
-                                    @endif
-                                @endforeach
-                            @endauth
-                        </div>
-                    </ul>
                     <li class="nav-item">
                         <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i>A propos</a>
                     </li>
@@ -64,20 +33,21 @@
                         <a class="nav-link" href="#revenus" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i>Revenus </a>
                     </li>
                     @endif
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
+                     @Auth
                         @php ($IsCurrentViewer = 0)
                         @foreach(Auth::user()->viewers as $viewer)
                         @if($streamer->stream->id == $viewer->stream_id)
-                        <button style="margin-top:6px;" class="follow_stream w-80 float-right btn btn-sm btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
+                        <button style="margin-top:6px" class="right follow_stream w-80 float-right btn btn-sm btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                 title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
-                        <button style="margin-top:6px;"  class="follow_stream w-80  float-right btn btn-sm btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
+                        <button style="margin-top:6px;"  class="right follow_stream w-80  float-right btn btn-sm btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
                                 data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
                                 title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
                         @php ($IsCurrentViewer = 1)
                         @endif
                         @endforeach
+                    @endif
                     </div>
                 </ul>
 
@@ -93,7 +63,10 @@
                                 @if($streamer->stream->status==0 && $streamer->stream->updated_at)
                                 <p class="col-12">Sa dernière diffusion remonte à <?php echo date('d/m/Y', strtotime($streamer->stream->updated_at)); ?></p>
                                 @endif
-
+                                    <p class="col-12">Nombre de chansons interprétées : {{ count($musics) }}</p> 
+                                    <p class="col-12">Moyenne des notes attribuées par le public : {{ $medium }}%</p> 
+                                    <p class="col-12">Nombre de chansons proposées par le public : {{ count($gifts) }}</p> 
+         
                                 <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
                                 <p class="col-6 position-relative">
                                     <a class="" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
@@ -101,18 +74,6 @@
                                         </i>
                                     </a>
                                 </p>
-                                    <p class="col-12">Nombre de chansons interprétées : {{ count($musics) }}</p>
-                                    <p class="col-12">Moyenne des notes attribuées par le public : {{ $medium }}%</p>
-                                    <p class="col-12">Nombre de chansons proposées par le public : {{ count($gifts) }}</p>
-        
-                                    <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
-                                    <p class="col-6 position-relative">
-                                        <a class="" href="{{ route('stream.show', ['user' => $streamer->pseudo]) }}">
-                                            <i class="fa fa-camera fa-5x">
-                                            </i>
-                                        </a>
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,6 +163,7 @@
                         </div>
                                
                         </div>
+                    @Auth
                          @if(Auth::check() && $streamer->pseudo == Auth::user()->pseudo)
                     <div role="tabpanel" class="tab-pane fade" id="revenus">
                          @if($streamer->pseudo == Auth::user()->pseudo)
@@ -238,7 +200,7 @@
                              @endif
                         </div>
                          @endif
-                        
+                        @endif
                     </div>
                     </div>
 
@@ -268,7 +230,6 @@
             $(".anciennete").each(function(){
                 var date = $(this).data("date");
                 var anciennete = dateDiff(new Date(date), new Date());
-
                 var text = "( ";
                 if(anciennete.month!=0) text+=anciennete.month+"m ";
                 if(anciennete.day!=0)   text+=anciennete.day+"j ";
@@ -281,22 +242,16 @@
         function dateDiff(date1, date2){
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
-
             tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
             diff.sec = tmp % 60;                    // Extraction du nombre de secondes
-
             tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
             diff.min = tmp % 60;                    // Extraction du nombre de minutes
-
             tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
             diff.hour = tmp % 24;                   // Extraction du nombre d'heures
-
             tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
             diff.day = tmp%24;
-
             tmp = Math.floor((tmp-diff.day)/30);    // Nombre de mois restants
             diff.month = tmp%30;
-
             return diff;
         }
     </script>
