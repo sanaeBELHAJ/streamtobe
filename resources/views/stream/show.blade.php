@@ -102,7 +102,7 @@
                             </div>
                         </div>
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;" >
-                                <div class="card-header">Paroles d'une chanson <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
+                                <div class="card-header">Paroles de la chanson recherchée<button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
                                         <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre au dessus de la vidéo.</div>
