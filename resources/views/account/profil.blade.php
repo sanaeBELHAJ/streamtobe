@@ -33,19 +33,21 @@
                         </li>
                         <div class="col-sm-4"></div>
                         <div class="col-sm-2">
-                            @php ($IsCurrentViewer = 0)
+                            @auth
+                                @php ($IsCurrentViewer = 0)
 
-                            @foreach($streamer->viewers as $viewer)
-                                @if($streamer->stream->id == $viewer->stream_id)
-                                    <button class="col-sm-12 pull-right right follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
-                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                            title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
-                                    <button class="col-sm-12 pull-right right  follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
-                                            data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
-                                            title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
-                                    @php ($IsCurrentViewer = 1)
-                                @endif
-                            @endforeach
+                                @foreach($streamer->viewers as $viewer)
+                                    @if($streamer->stream->id == $viewer->stream_id)
+                                        <button class="col-sm-12 pull-right right follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 1) @else d-none @endif"
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Retirer cette chaine de vos favoris" data-value="0" >Se désabonner <i class="fa fa-unlink"></i></button>
+                                        <button class="col-sm-12 pull-right right  follow_stream w-100 float-none btn btn-follow @if($viewer->is_follower == 0) @else d-none @endif"
+                                                data-toggle="tooltip" data-placement="top" data-streamer="{{$streamer->pseudo}}"
+                                                title="Mettre cette chaine dans vos favoris" data-value="1" >S'abonner <i class="fa fa-heart-o"></i></button>
+                                        @php ($IsCurrentViewer = 1)
+                                    @endif
+                                @endforeach
+                            @endauth
                         </div>
                     </ul>
 
