@@ -10,6 +10,10 @@ html, body{
     background: #f3fcf0;
 }
 
+textarea {
+   max-width: 100%!important;
+}
+
 #responsive_slider{
     height: 10%;
 }
@@ -128,8 +132,8 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 1%;
-    top: 23%;
+    right: 0%;
+    top: 16%;
     width: 70px;
     height: 40px;
     transform: translateY(-50%);
