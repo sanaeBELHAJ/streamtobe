@@ -69,7 +69,7 @@
 
             
             <div id="infos" class="container-fluid">
-                <div class=row">
+                <div class="row">
                 @if(Session::has('message'))
                     <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -102,7 +102,7 @@
                                 <div class="card-header">Paroles de la musique <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
-                                        <div class="card card-body" id="lyrics_content"></div>
+                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre ci-dessus.</div>
                                     </div>
                                     <div class="modal-footer mt-4">
                                         <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
@@ -125,7 +125,7 @@
                                         <div id="list" class="col-12 col-md-6">
                                             <div class="list-item row" style="margin-top: 10px;">
                                                 <input type="text" value="" class="form-control col-4" placeholder="Nom de la chanson" />
-                                                <button type="button" class="col-3 btn list-eval">Evaluation</button> &nbsp;&nbsp;
+                                                <button type="button" class="col-3 btn list-eval">Faire voter par le chat</button> &nbsp;&nbsp;
                                                 <button type="button" class="col-3 btn list-rmv">Supprimer</button>
                                             </div>
                                             <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
@@ -432,12 +432,12 @@
                     $.ajax({
                         url: "/addMusic",
                         type: 'POST',
-                        dataType: "JSONG",
+                        dataType: "JSON",
                         data: {
                             title: music
                         }
                     })
-                        .done(function(data){     
+                        .done(function(data){
                             button.parent().attr('data-id', data.id);
                             button.parent().find('input').prop('disabled', true);
                             button.parent().find('.list-eval').prop('disabled', true);
