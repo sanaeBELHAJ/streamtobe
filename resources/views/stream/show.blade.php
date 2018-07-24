@@ -2,20 +2,34 @@
 
 @section('content')
 
-<div class ="container-fluid">
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 pull-right top-2 bottom">
             
             {{-- Boutons d'affichage mobile --}}
-            @auth
+            {{-- @auth
                 <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row mx-auto">
                     <p class="sliderText col-4 text-center font-weight-bold m-0" data-value="1">Discussion</p>
                     <input type="range" min="1" max="2" value="1" class="btn slider col-4" id="myRange">
                     <p class="sliderText col-4 text-center m-0" data-value="2">Informations</p>
                 </div>
-            @endauth
+            @endauth --}}
 
             <div class="container-fluid row mx-auto">
+                @if(Auth::check() && $streamer->id == Auth::user()->id)
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 ">
+                            <div  id="lyricSearch">
+                                <p class="col-lg-12 col-md-6 col-sm-12">
+                                    <input name="song_name" class="form-control d-inline " style="width:90%;" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
+                                    <i class="material-icons btn" style="color:black;font-size:40px;">search</i>
+                                </p>
+                                <p class="col-lg-12 col-md-6 col-sm-12">
+                                    <select name="song_id" class="d-none form-control"></select>
+                                </p>
+                        </div>
+                    </div>
+
+                @endif
                 <div id="player" class="col-12 col-md-8 mt-8">
                         <div class="bodyDiv">
                             <div id="stream-info" @if($streamer->stream->status == 1) hidden="true" @endif>
@@ -54,7 +68,8 @@
             </div>
 
             
-            <div id="infos" class="d-none d-sm-block mt-4">
+            <div id="infos" class="container-fluid">
+                <div class="row">
                 @if(Session::has('message'))
                     <p class="mt-2 alert {{ Session::get('alert-class', 'alert-info') }}" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -68,8 +83,8 @@
                     {{-- Configuration du stream par le propriétaire --}}
                     @if(Auth::check() && $streamer->id == Auth::user()->id)
 
-                        <div id="config_stream" style="text-align: center;">
-                            <div class="form-group col-lg-12 col-sm-12 col-md-12 col-mb-12">
+                        <div id="config_stream" style="text-align: center;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12">
+                            <div class="form-group ">
                                 <label class="switch align-middle m-0">
                                     <input id="setup-new-broadcast" class="update_stream" name="stream_submit" data-config="status" type="checkbox"
                                            @if($streamer->stream->status == 0)
@@ -82,94 +97,93 @@
                                 </label>
                                 Activer / Interrompre la diffusion
                             </div>
-                            <div class="card card-lg">
-                                <div class="card-block">
-                                    <h3 class="h3 mb-5">Configurer mon stream</h3>
-                                    <div class="form-row">
+                        </div>
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;" >
+                                <div class="card-header">Paroles d'une chanson <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
+                                <div class="card-block" id="lyric" style="display: none;">
+                                    <div class="row">
+                                        <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre ci-dessus.</div>
+                                    </div>
+                                    <div class="modal-footer mt-4">
+                                        <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;">
+                                <div class="card-header">Gestion de ma playlist <button class="deskButton" id="deskButtonThree" onclick="showDiv('play', 'deskButtonThree')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
+                                <div class="card-block" id="play" style="display: none;">
+                                    <p class="mb-1">
+                                        Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.
+                                    </p>
+                                    <p class="mb-1">
+                                        Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.
+                                    </p>
+                                    <p class="mb-3">
+                                        Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.
+                                    </p>
+                                    <div class="row mb-3">
+                                        <div id="list" class="col-12">
+                                            <div class="list-item row" style="margin-top: 10px;">
+                                                <div class="col-12 col-md-4 mb-2">
+                                                    <input type="text" value="" class="form-control col-12 m-0" placeholder="Nom de la chanson" />
+                                                </div>
+                                                <div class="col-7 col-sm-6 col-md-4">
+                                                    <button type="button" class="col-12 btn btn-info list-eval"><!--<i class="fas fa-medal"></i>-->Faire voter par le chat</button>
+                                                </div>
+                                                <div class="col-5 col-sm-6 col-md-4">
+                                                    <button type="button" class="col-12 btn btn-danger list-rmv">Supprimer</button>
+                                                </div>
+                                            </div>
+                                            <button class="list-add btn btn-success mt-3 offset-md-9"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="padding: 0;">
+                                <div class="card-header">Configurer mon stream <button class="deskButton" id="deskButtonTwo" onclick="showDiv('conf', 'deskButtonTwo')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
+
+                                <div class="card-block" id="conf">
+                                    <div class="form-row" >
                                         <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
-                                                Type de diffusion : &nbsp;
-                                                <select id="broadcasting-option" class="form-control d-inline w-50">
-                                                    <option>Stream vidéo + audio</option>
-                                                    <option>Stream audio</option>
-                                                </select>
+                                            Type de diffusion : &nbsp;
+                                            <select id="broadcasting-option" class="form-control d-inline col-12 col-md-6">
+                                                <option>Stream vidéo + audio</option>
+                                                <option>Stream audio</option>
+                                            </select>
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Catégorie :
-                                            <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
+                                            <select id="stream_type" class="update_stream form-control d-inline col-12 col-md-6" data-config="type">
                                                 @foreach($themes as $theme)
-                                                <optgroup label="{{$theme->name}}">
-                                                    @foreach($theme->types as $type)
-                                                    <option value="{{$type->name}}" @if($type->name == $streamer->stream->type->name) selected @endif>{{$type->name}}</option>
-                                                    @endforeach
-                                                </optgroup>descriptionAccount
+                                                    <optgroup label="{{$theme->name}}">
+                                                        @foreach($theme->types as $type)
+                                                            <option value="{{$type->name}}" @if($type->name == $streamer->stream->type->name) selected @endif>{{$type->name}}</option>
+                                                        @endforeach
+                                                    </optgroup>descriptionAccount
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Nom de la chaine : &nbsp;
-                                            <input id="stream_title" class="form-control d-inline w-50 update_stream"
-                                                    data-config="title" type="text" placeholder="Titre du stream"
-                                                    value="{{$streamer->stream->title}}">
+                                            <input id="stream_title" class="form-control d-inline col-12 col-md-6 update_stream"
+                                                   data-config="title" type="text" placeholder="Titre du stream"
+                                                   value="{{$streamer->stream->title}}">
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
-                                            Programme de chansons : &nbsp;
-                                            <input id="" class="form-control d-inline w-50 update_stream"
-                                                    data-config="title" type="text" placeholder="Titre du stream"
-                                                    value="{{$streamer->stream->title}}">
+                                            Programme de chanson : &nbsp;
+                                            <input id="" class="form-control d-inline col-12 col-md-6 update_stream"
+                                                   data-config="title" type="text" placeholder="Titre du stream"
+                                                   value="{{$streamer->stream->title}}">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                         {{-- Gestion des musiques --}}
-                        <div class="col-12 mt-4 card card-lg" style="text-align: center;">
-                            <div class="card-block">
-                                <h3 class="h3 mb-3">Gestion de ma playlist</h3>
-                                <p class="mb-1">
-                                    <small>Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.</small>
-                                </p>
-                                <p class="mb-1">
-                                    <small>Une fois réalisé, appuyez sur le bouton Evaluation à côté pour obtenir une note de la part des spectateurs présents dans le chat.</small>
-                                </p>
-                                <p class="mb-3">
-                                    <small>Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.</small>
-                                </p>
-                                <div class="row mb-3">
-                                    <div id="list" class="col-12 col-md-6">
-                                        <div class="list-item row">
-                                            <input type="text" value="" class="form-control col-4" placeholder="Nom de la chanson" />
-                                            <button type="button" class="col-4 btn list-eval">Evaluation</button>
-                                            <button type="button" class="col-4 btn list-rmv">Supprimer</button>
-                                        </div>
-                                        <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-12 mt-4 card card-lg" style="text-align: center;" id="lyricSearch">
-                            <div class="card-block">
-                                <h3 class="h3 mb-3">Rechercher les paroles d'une musique</h3>
-                                <div class="row">
-                                    <p class="col-12 col-md-6">
-                                        <input name="song_name" class="form-control d-inline w-75" value="" placeholder="Nom du titre">
-                                        <i class="material-icons btn" style="color:black;">search</i>
-                                    </p>
-                                    <p class="col-12 col-md-6 mb-3">
-                                        <select name="song_id" class="d-none form-control"></select>
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="card card-body" id="lyrics_content"></div>
-                                </div>
-                                <div class="modal-footer mt-4">
-                                    <small>Information : Le forfait non-commercial ne retourne que 30% des paroles enregistrées.</small>
-                                </div>
-                            </div>
-                        </div>
                     @else {{-- Panel d'action du viewer --}}
-                        <div class="col-12 col-md-8 d-flex justify-content-between">
+                        <div class="col-12 col-md-8 d-flex justify-content-between" style="margin-top: 20px;margin-bottom: 30px;">
                         <div class="row col-12">
                             {{-- Report --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
@@ -185,7 +199,7 @@
                             {{-- Giveaway --}}
                             <p class="col-lg-4 col-sm-12 col-md-4 col-mb-12 text-center">
                                 <input type="hidden" name="streamer_name" value="{{ $streamer->pseudo }}">
-                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" data-toggle="modal"
+                                <button class="btn btn-primary btn-lg btn-rounded m-l-10" style="margin-top: 0px;padding: 16px 27px;color:white!important;" data-toggle="modal"
                                     data-target="#paymentModal">Faire un don <i class="fa fa-dollar"></i></button>
                             </p>
                             @include('stream.modal.payment')
@@ -219,14 +233,16 @@
                 </div>
 
                 {{-- Description du streamer --}}
-                <div style="text-align: center;" class="col-12 mt-4 card card-lg">
-                    <div class="card-block">
-                    <div id="streamer">
-                        <h3 class="h3 mb-5">Description du streamer</h3>
-                        <p>{{$streamer->description}}</p>
+                <div class="row">
+                    <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
+                        <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
+                        <div class="card-block" id="desc">
+                            <div id="streamer">
+                                <p>{{$streamer->description}}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
@@ -311,7 +327,7 @@
             border-radius: 50%;
         }
         #lyrics_content{
-            height: 200px;
+            height: 400px;
             overflow-y: auto;
         }
     </style>
@@ -335,9 +351,26 @@
     @endauth
 
     <script>
+
+
+        function showDiv(name, butt) {
+            var y = document.getElementById(butt);
+            var x = document.getElementById(name);
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                y.innerHTML = "";
+                y.innerHTML = "<i class=\"fa fa-arrow-up fa-2x\"></i>"
+            } else {
+                x.style.display = "none";
+                y.innerHTML = "";
+                y.innerHTML = "<i class=\"fa fa-arrow-down fa-2x\"></i>"
+            }
+        }
+
         $(function(){
+
             //Texte du slider
-            $('.sliderText').click(function(){
+            /*$('.sliderText').click(function(){
                 $('#myRange').val($(this).data('value')).change();
             });
             //Slider en vue responsive
@@ -355,7 +388,8 @@
                     $('#messages').addClass('d-none').removeClass('d-12');
                     $('#infos').addClass('d-12').removeClass('d-none');
                 }
-            });
+            });*/
+
             /* Config stream (owner) */
             function updateStream(){
                 var key = $(this).data('config');
@@ -404,12 +438,12 @@
                     $.ajax({
                         url: "/addMusic",
                         type: 'POST',
-                        dataType: "JSONG",
+                        dataType: "JSON",
                         data: {
                             title: music
                         }
                     })
-                        .done(function(data){     
+                        .done(function(data){
                             button.parent().attr('data-id', data.id);
                             button.parent().find('input').prop('disabled', true);
                             button.parent().find('.list-eval').prop('disabled', true);

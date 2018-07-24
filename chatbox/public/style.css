@@ -7,7 +7,11 @@ html, body{
     font-size: 15px;
     line-height: 1.5;
     color: #848484;
-    background: #fafafa;
+    background: #f3fcf0;
+}
+
+textarea {
+   max-width: 100%!important;
 }
 
 #responsive_slider{
@@ -17,7 +21,7 @@ html, body{
 #zone_chat, #zone_users{
     width: 100%;
     background: #c2c1c240;
-    color: #6e6779;
+    color: #848484;
     height: 70%;
     padding: 5px 5px 0;
     font-size: 12px;
@@ -128,16 +132,13 @@ textarea{
 }
 .send {
     position: absolute;
-    right: 1%;
-    top: 23%;
-    width: 70px;
+    right: 0;
+    top: 0;
     height: 40px;
-    transform: translateY(-50%);
-    background: #1BBC9B;
+    background: #53dd6cde;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    margin-top: 5px;
     color: #fff;
     border: 0 none;
     outline: 0 none;
@@ -170,7 +171,7 @@ textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #1BBC9B; /* Violet background */
+    background: #53dd6cde; /* Violet background */
     cursor: pointer; /* Cursor on hover */
     border-radius: 0.25rem;
 }
@@ -211,7 +212,7 @@ textarea{
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
     border: none;
-    box-shadow: 0 0 6px #1BBC9B; 
+    box-shadow: 0 0 6px #53dd6cde;
 }
 .btn.focus, .btn:focus {
     outline: 0;

@@ -51,7 +51,9 @@ body{
     color: black;
 }
 
-
+.fa-ban, .fa-check{
+  cursor: pointer;
+}
 
 form#formulaire_chat{
     height: 15%;
