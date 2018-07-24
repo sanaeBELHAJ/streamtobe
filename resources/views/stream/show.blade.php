@@ -511,7 +511,7 @@
             }, 1000);
 
             @auth
-                @if($streamer->id != Auth::user()->id)
+                @if($streamer->id == Auth::user()->id)
                     //Récupération des musiques proposées
                     var lastGift = -1;
                     setInterval(function(){
