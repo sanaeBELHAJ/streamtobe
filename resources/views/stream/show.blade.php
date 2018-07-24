@@ -17,8 +17,7 @@
 
             <div class="container-fluid row mx-auto">
                 @if(Auth::check() && $streamer->id == Auth::user()->id)
-                    <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="padding: 0;background-color: #ffedafde;border-radius: 25px;">
-                        <div class="card-block" >
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 ">
                             <div  id="lyricSearch">
                                 <p class="col-lg-12 col-md-6 col-sm-12">
                                     <input name="song_name" class="form-control d-inline " style="width:90%;" value="" placeholder="Entrer le nom d'un titre pour obtenir les paroles en dessous de votre stream !">
@@ -27,7 +26,6 @@
                                 <p class="col-lg-12 col-md-6 col-sm-12">
                                     <select name="song_id" class="d-none form-control"></select>
                                 </p>
-                            </div>
                         </div>
                     </div>
 
@@ -101,7 +99,7 @@
                             </div>
                         </div>
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;" >
-                                <div class="card-header">Paroles de la musique <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down"></i></button></div>
+                                <div class="card-header">Paroles de la musique <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
                                         <div class="card card-body" id="lyrics_content"></div>
@@ -112,7 +110,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;">
-                                <div class="card-header">Gestion de ma playlist <button class="deskButton" id="deskButtonThree" onclick="showDiv('play', 'deskButtonThree')"><i class="fa fa-arrow-down"></i></button></div>
+                                <div class="card-header">Gestion de ma playlist <button class="deskButton" id="deskButtonThree" onclick="showDiv('play', 'deskButtonThree')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="play" style="display: none;">
                                     <p class="mb-1">
                                         Vous pouvez préparer ci-dessous les prochains morceaux que vous souhaitez chanter lors de votre live.
@@ -137,7 +135,7 @@
                             </div>
 
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="padding: 0;">
-                                <div class="card-header">Configurer mon stream <button class="deskButton" id="deskButtonTwo" onclick="showDiv('conf', 'deskButtonTwo')"><i class="fa fa-arrow-up"></i></button></div>
+                                <div class="card-header">Configurer mon stream <button class="deskButton" id="deskButtonTwo" onclick="showDiv('conf', 'deskButtonTwo')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
 
                                 <div class="card-block" id="conf">
                                     <div class="form-row" >
@@ -230,7 +228,7 @@
 
                 {{-- Description du streamer --}}
                 <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
-                    <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up"></i></button></div>
+                    <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
 
                     <div class="card-block" id="desc">
                     <div id="streamer">
@@ -355,11 +353,11 @@
             if (x.style.display === "none") {
                 x.style.display = "block";
                 y.innerHTML = "";
-                y.innerHTML = "<i class=\"fa fa-arrow-up\"></i>"
+                y.innerHTML = "<i class=\"fa fa-arrow-up fa-2x\"></i>"
             } else {
                 x.style.display = "none";
                 y.innerHTML = "";
-                y.innerHTML = "<i class=\"fa fa-arrow-down\"></i>"
+                y.innerHTML = "<i class=\"fa fa-arrow-down fa-2x\"></i>"
             }
         }
 
