@@ -462,8 +462,9 @@
 
                 //Suppression d'une musique
                 $("#list").on("click", ".list-rmv", function(){
-                    var id = $(this).parent().data('id');
-                    $(this).parent().remove();
+                    var list_item = $(this).parent().parent();
+                    var id = list_item.data('id');
+                    list_item.remove();
 
                     if(typeof id !== 'undefined'){
                         $.ajax({
