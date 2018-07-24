@@ -7,13 +7,13 @@
         <div class="col-sm-12 pull-right top-2 bottom">
             
             {{-- Boutons d'affichage mobile --}}
-            @auth
+            {{-- @auth
                 <div id="responsive_slider" class="col-12 d-flex justify-content-around d-sm-none mt-4 mb-5 row mx-auto">
                     <p class="sliderText col-4 text-center font-weight-bold m-0" data-value="1">Discussion</p>
                     <input type="range" min="1" max="2" value="1" class="btn slider col-4" id="myRange">
                     <p class="sliderText col-4 text-center m-0" data-value="2">Informations</p>
                 </div>
-            @endauth
+            @endauth --}}
 
             <div class="container-fluid row mx-auto">
                 @if(Auth::check() && $streamer->id == Auth::user()->id)
@@ -99,7 +99,7 @@
                             </div>
                         </div>
                             <div class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" style="text-align: center;padding: 0;" >
-                                <div class="card-header">Paroles de la musique <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
+                                <div class="card-header">Paroles d'une chanson <button class="deskButton" id="deskButtonOne" onclick="showDiv('lyric', 'deskButtonOne')"><i class="fa fa-arrow-down fa-2x"></i></button></div>
                                 <div class="card-block" id="lyric" style="display: none;">
                                     <div class="row">
                                         <div class="card card-body" id="lyrics_content">Saisissez le nom du titre à rechercher dans la barre ci-dessus.</div>
@@ -122,11 +122,11 @@
                                         Les propositions de chants réalisés par les spectateurs grâce aux dons s'ajouteront automatiquement dans la liste.
                                     </p>
                                     <div class="row mb-3">
-                                        <div id="list" class="col-12 col-md-6">
+                                        <div id="list" class="col-12">
                                             <div class="list-item row" style="margin-top: 10px;">
-                                                <input type="text" value="" class="form-control col-4" placeholder="Nom de la chanson" />
-                                                <button type="button" class="col-3 btn list-eval">Faire voter par le chat</button> &nbsp;&nbsp;
-                                                <button type="button" class="col-3 btn list-rmv">Supprimer</button>
+                                                <input type="text" value="" class="form-control col-4 m-0" placeholder="Nom de la chanson" />
+                                                <button type="button" class="col-4 btn list-eval">Faire voter par le chat</button>
+                                                <button type="button" class="col-4 btn list-rmv">Supprimer</button>
                                             </div>
                                             <button class="list-add btn btn-success mt-3 offset-md-10"><i class="ml-0 fa fa-plus"></i> Ajouter une musique</button>
                                         </div>
@@ -141,14 +141,14 @@
                                     <div class="form-row" >
                                         <div class="experiment form-group col-lg-6 col-sm-12 col-md-12 col-mb-12 ">
                                             Type de diffusion : &nbsp;
-                                            <select id="broadcasting-option" class="form-control d-inline w-50">
+                                            <select id="broadcasting-option" class="form-control d-inline col-12 col-md-6">
                                                 <option>Stream vidéo + audio</option>
                                                 <option>Stream audio</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Catégorie :
-                                            <select id="stream_type" class="update_stream form-control d-inline w-50" data-config="type">
+                                            <select id="stream_type" class="update_stream form-control d-inline col-12 col-md-6" data-config="type">
                                                 @foreach($themes as $theme)
                                                     <optgroup label="{{$theme->name}}">
                                                         @foreach($theme->types as $type)
@@ -160,13 +160,13 @@
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Nom de la chaine : &nbsp;
-                                            <input id="stream_title" class="form-control d-inline w-50 update_stream"
+                                            <input id="stream_title" class="form-control d-inline col-12 col-md-6 update_stream"
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
                                         </div>
                                         <div class="form-group col-lg-6 col-sm-12 col-md-12 col-mb-12">
                                             Programme de chanson : &nbsp;
-                                            <input id="" class="form-control d-inline w-50 update_stream"
+                                            <input id="" class="form-control d-inline col-12 col-md-6 update_stream"
                                                    data-config="title" type="text" placeholder="Titre du stream"
                                                    value="{{$streamer->stream->title}}">
                                         </div>
@@ -227,17 +227,17 @@
                 </div>
 
                 {{-- Description du streamer --}}
-                <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
-                    <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
-
-                    <div class="card-block" id="desc">
-                    <div id="streamer">
-                        <p>{{$streamer->description}}</p>
+                <div class="row">
+                    <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
+                        <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
+                        <div class="card-block" id="desc">
+                            <div id="streamer">
+                                <p>{{$streamer->description}}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
-        </div>
         </div>
     </div>
 </div>
@@ -364,7 +364,7 @@
         $(function(){
 
             //Texte du slider
-            $('.sliderText').click(function(){
+            /*$('.sliderText').click(function(){
                 $('#myRange').val($(this).data('value')).change();
             });
             //Slider en vue responsive
@@ -382,7 +382,7 @@
                     $('#messages').addClass('d-none').removeClass('d-12');
                     $('#infos').addClass('d-12').removeClass('d-none');
                 }
-            });
+            });*/
 
             /* Config stream (owner) */
             function updateStream(){
