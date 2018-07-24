@@ -236,12 +236,14 @@
                 </div>
             </div>
             {{-- Description du streamer --}}
-            <div class="row">
-                <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
-                    <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
-                    <div class="card-block" id="desc">
-                        <div id="streamer">
-                            <p>{{$streamer->description}}</p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div style="text-align: center; padding: 0;" class="col-lg-12 col-sm-12 col-md-12 col-mb-12 card card-lg" >
+                        <div class="card-header">Description du streamer <button class="deskButton" id="deskButtonFour" onclick="showDiv('desc', 'deskButtonFour')"><i class="fa fa-arrow-up fa-2x"></i></button></div>
+                        <div class="card-block" id="desc">
+                            <div id="streamer">
+                                <p>{{$streamer->description}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
