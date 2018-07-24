@@ -61,10 +61,10 @@
                                     @if($streamer->stream->status==0 && $streamer->stream->updated_at)
                                         <p class="col-12">Sa dernière diffusion remonte à <?php echo date('d/m/Y', strtotime($streamer->stream->updated_at)); ?></p>
                                     @endif
-        
-                                    <p>Nombre de chansons interprétées : {{-- $streamer->pseudo --}}</p>
-                                    <p>Moyenne des notes attribuées par le public : {{-- $streamer->pseudo --}}%</p>
-                                    <p>Nombre de chansons proposées par le public : {{-- $streamer->pseudo --}}</p>
+
+                                    <p class="col-12">Nombre de chansons interprétées : {{ count($musics) }}</p>
+                                    <p class="col-12">Moyenne des notes attribuées par le public : {{ $medium }}%</p>
+                                    <p class="col-12">Nombre de chansons proposées par le public : {{ count($gifts) }}</p>
         
                                     <p class="col-6 d-flex align-items-center">Vous pouvez accèder à sa chaine en cliquant directement sur la caméra : </p>
                                     <p class="col-6 position-relative">
