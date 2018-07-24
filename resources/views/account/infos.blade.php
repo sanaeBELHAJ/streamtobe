@@ -1,4 +1,7 @@
 {!! Form::model($user, ['route' => ['home.updateInfos'], 'method' => 'patch', 'class' => '', 'files' => true]) !!}
+<div class="card card-lg">
+
+<div class="card-body">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="pictureAccountInput">
@@ -16,9 +19,8 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
         </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
+<div class="form-row  col-md-6">
+        <div class="form-group col-md-12">
             {!! Form::label('pseudoAccount','Pseudo :') !!}
             {!! Form::text('pseudo',null, ['id' => 'pseudoAccount',
                                             'class' => 'form-control form-control-sm', 
@@ -30,7 +32,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button></small>') !!}
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             {!! Form::label('emailAccount','Adresse email :') !!}
             {!! Form::email('email', $user->email, ['id' => 'emailAccount',
                                         'class' => 'form-control form-control-sm', 
@@ -42,6 +44,8 @@
                                     </button></small>') !!}
         </div>
     </div>
+    </div>
+    
 
 <div class="form-row">
     <div class="form-group col-lg-3 col-sm-12 col-md-6 col-mb-6">
@@ -78,7 +82,6 @@
                                     </button></small>') !!}
         </div>
     </div>
-    <hr>
     <div class="form-row">
         <div class="form-group col-md-6">
             {!! Form::label('pwdAccount','Modifier votre mot de passe :') !!}
@@ -108,7 +111,8 @@
             {!! Form::submit("Enregistrer les modifications", ['class' => 'btn btn-success pull-right']) !!}
         </div>
     </div>
-
+</div>
+</div>
 {!! Form::close() !!}
 
 
@@ -133,4 +137,5 @@
             {!! Form::close() !!}
         </div>
     </div>
+</div>
 </div>

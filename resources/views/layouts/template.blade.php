@@ -29,7 +29,7 @@
         {!! HTML::style('css/style.css') !!}
         {!! HTML::style('css/normalize.css') !!}
         @yield('css')
-        @if(env('APP_ENV') == "production")
+        @if(env('APP_ENV') == "production" && isset($_COOKIE['valid_cookie']))
             <!-- Global site tag (gtag.js) - Google Analytics -->
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65526992-2"></script>
             <script>
@@ -38,18 +38,6 @@
                 gtag('js', new Date());
 
                 gtag('config', 'UA-65526992-2');
-            </script>
-
-            <!-- Hotjar Tracking Code for www.streamtobe.com -->
-            <script>
-                (function(h,o,t,j,a,r){
-                    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                    h._hjSettings={hjid:946123,hjsv:6};
-                    a=o.getElementsByTagName('head')[0];
-                    r=o.createElement('script');r.async=1;
-                    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                    a.appendChild(r);
-                })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
             </script>
         @endif
     </head>
@@ -61,7 +49,7 @@
                 <div class="navbar">
                     <div class="navbar-left">
                         <a class="navbar-toggle"><i class="fa fa-bars"></i></a>
-                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'); ?>/{{setting('site.logo')}})" alt="Streamtobe"></a>
+                        <a href="{{ url('/') }}" style="float:left;margin-right: 25px;padding: 18px 0;"><img class="pictureAccountTemplate" style="background-image:url(<?php echo asset('storage/'); ?>/{{setting('site.logo')}})"></a>
                         <nav class="nav">
                             <ul>
                                 <li class="hidden-xs-down  hidden-sm-down hidden-md-down ">
@@ -195,7 +183,7 @@
 
     <!-- Footer -->
     <footer id="footer">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md-4 text-center mb-2">
                     <div class="input-group">

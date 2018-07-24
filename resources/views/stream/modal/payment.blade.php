@@ -1,6 +1,6 @@
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" 
         aria-labelledby="paymentModalLabel" aria-hidden="true">
-    <div class="modal-dialog w-50" role="document">
+    <div class="modal-dialog col-12 col-md-6" role="document">
         <div class="modal-content">
             <div class="form-group">
                 <div class="modal-header">

@@ -29,7 +29,7 @@
                         </i>
                     </label>
                     <input type="text" id="search_contact" placeholder="Rechercher un utilisateur..." />                    
-                    <i class="mg material-icons text-center" id="refresh_list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Mettre à jour les contacts">refresh</i>
+                    <i class="btn p-0 mg material-icons text-center" id="refresh_list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Mettre à jour les contacts">refresh</i>
 
                 </div>
                 <div id="contacts">
@@ -39,9 +39,15 @@
                 </div>
             </div>
             <div class="content">
-                <div class="contact-profile">
-                    <img src="#" alt="" />
-                    <p>Selectionnez un utilisateur dans la liste à gauche</p>
+                <div class="contact-profile d-flex justify-content-around">
+                    <div class="header_message col">
+                        <img src="#" alt="" />
+                        <p class="vertical-center">Selectionnez un utilisateur dans la liste à gauche</p>
+                    </div>
+                    <div class="ban col-3 d-none text-center vertical-center">
+                        <i class="fas fa-ban d-none"></i>
+                        <i class="fas fa-check d-none"></i>
+                    </div>
                 </div>
                 <div class="messages">
                     <ul>

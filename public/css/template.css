@@ -5,7 +5,7 @@ html, body{
 body{
     display: flex;
     flex-direction: column;
-    background-color: #faf9fa;
+    background-color: #f3fcf0;
     min-height: 100vh;
     position: relative;
     margin: 0;
@@ -90,7 +90,7 @@ header .dropdown-menu{
     color: white;
 }
 .visible{
-    background: rgb(75, 54, 124,.4)!important;
+    background: rgb(75, 54, 124, 4)!important;
 }
 .img-thumbnail{
   height: 250px;
@@ -165,6 +165,10 @@ header .dropdown-menu{
     color: white;
     padding-left: 3px;
 }
+.stream .material-icons {
+    color: black;
+    font-size: 50px;
+}
 .pictureAccount{
     width: 100px;
     display: inline-block;
@@ -189,7 +193,7 @@ header .dropdown-menu{
     cursor: not-allowed;
 }
 .btn-contacter{
-    background: #ffc94d;
+    background: #ffd23f;
    /* border: 1px solid #b19dd8;*/
     color: #6441a4;
     padding: .3rem .3rem;
@@ -321,16 +325,29 @@ header .dropdown-menu{
     color: grey;
 }
 
+.deskButton:focus, .deskButton:active, .deskButton{
+    position:absolute;
+    right: 25px;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
 select.form-control:not([size]):not([multiple]) {
     
      height: calc(1.60rem + 2px); 
 }
 .div-filter{
     font-size: 11px;
-    background: white;
+    background: #ffedafde;
     border: 0.5px solid #dad8de;
     margin: 0;
     padding: 20px;
+    border-radius: 25px;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
@@ -351,12 +368,12 @@ select.form-control:not([size]):not([multiple]) {
     outline: 0;
     font-family: inherit;
     appearance: none;
-    border: 0.5px solid #1BBC9B;
+    border: 0.5px solid #ffd23f ;
     background: #fff;
     color: #433f4a;
     transition: box-shadow .12s ease-in,border .12s ease-in;
     line-height: 1.5;
-    border-radius: .1rem;
+    border-radius: 6px;
     padding: .1rem .3rem;
     line-height: 1.5;
     margin-right: 10px;
@@ -369,11 +386,11 @@ select.form-control:not([size]):not([multiple]) {
     -webkit-box-shadow: inherit;
     box-shadow: inherit;
     border: none;
-    box-shadow: 0 0 6px #1BBC9B; 
+    box-shadow: 0 0 6px #ffd23f;
 }
 .div-viewers{
     background: transparent;
-    border: 1px solid #1BBC9B ;
+    border: 1px solid #ffd23f ;
     color: #6441a4; 
     width: 10%;
 }
@@ -382,7 +399,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 .btn-filter{
     background: transparent;
-    border: 1px solid #1BBC9B;
+    border: 1px solid #53dd6c;
     color: #6441a4;
     border-radius: .1rem;
     padding: .1rem .3rem;
@@ -392,9 +409,9 @@ select.form-control:not([size]):not([multiple]) {
     float: right;        
 }
 .btn-filter:hover{
-    background: #faf9fa;
+    background: #53dd6c;
     color: black;
-    border: 1px solid #1BBC9B ;
+    border: 1px solid #53dd6c ;
     border-radius: .1rem;
 }
 label, select, input {
@@ -484,14 +501,14 @@ footer #support_user textarea{
     appearance: none;
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #1BBC9B; /* Green background */
+    background: #ffd23f; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
 #responsive_slider .slider::-moz-range-thumb {
     width: 50%; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: #4CAF50; /* Green background */
+    background: #ffd23f; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
@@ -505,13 +522,13 @@ footer #support_user textarea{
 }
 
 .form-control:focus{
-    border: 1px solid #1BBC9B  !important;
+    border: 1px solid #ffd23f  !important;
 }
 #header{
-    background: #2D3E50;
+    background: #6e3667;
 }
 .navbar{
-    background: #2D3E50;
+    background: #6e3667;
     color: white;
 }
 #header .nav>ul>li>a, #header .nav>ul>li>a{
@@ -520,41 +537,67 @@ footer #support_user textarea{
 
 
 #footer{
-    background-color: #2D3E50 !important;
+    background-color: #6e3667 !important;
 }
+
 .btn-primary{
-    background-color: #1BBC9B  !important;
-    border: 1px solid #1BBC9B ;
-    color:white!important;
+    background-color: #53dd6cde  !important;
+    border: 1px solid #53dd6cde !important;
+    font-size: 17px;
+    margin-top: 25px;
+    padding: 14px 22px;
+    color:#6d3666db;
 }
+
 .btn-primary:hover{
-    background-color: #2c7a72 !important;
-    border: 1px solid #2c7a72;
+    background-color: #53dd6c !important;
+    border: 1px solid #53dd6c !important;
+    color:#6d3666db!important;
 }
 .btn-primary:active, .btn-primary:focus{
-    background-color: #2c7a72 !important;
-    border: 1px solid #2c7a72;
+    background-color: #53dd6c !important;
+    border: 1px solid #53dd6c!important;
+    color:#6d3666db!important;
+}
+.btn-login{
+    background-color: #ffedafde  !important;
+    border: 1px solid #ffedafde !important;
+    font-size: 17px;
+    margin-top: 25px;
+    padding: 14px 22px;
+    color:#848484;
+}
+.btn-login:hover{
+    background-color: #ffedaf !important;
+    border: 1px solid #ffedaf !important;
+    color:#848484!important;
+}
+.btn-login:active, .btn-login:focus{
+    background-color: #ffedaf !important;
+    border: 1px solid #ffedaf!important;
+    color:#848484!important;
 }
 .card-border{
-   border: 0.5px solid #1BBC9B;
+   border: 0.5px solid #ffd23f;
 }
 .card-header{
-   color: white;
-   background-color: #1BBC9B !important;
+    color: white;
+    font-weight: bold;
+    background-color: #ffd23f !important;
 }
 .navbar-search{
-    background-color: #2D3E50 !important;
+    background-color: #6e3667 !important;
 }
 .pagination .active>a:hover{
-    background-color: #1BBC9B;
+    background-color: #ffd23f;
 }
 .pagination .active>a {
-    background-color: #1BBC9B !important;
-    border-color: #1BBC9B !important;
+    background-color: #ffd23f !important;
+    border-color: #ffd23f !important;
 }
 .pagination .active>a:hover {
-    background-color: #1BBC9B !important;
-    border-color: #1BBC9B !important;
+    background-color: #ffd23f !important;
+    border-color: #ffd23f !important;
     outline-style: none;
     box-shadow: none;
 }
@@ -563,4 +606,195 @@ footer #support_user textarea{
     background-color: #3b5999;
     font-weight: 500;
     border-radius: 30px;
+}
+.btn-stream {
+ -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 250px;
+  height: 70px;
+  cursor: pointer;
+  margin: 0 auto;
+  border: 2px solid rgba(18,20,19,1);
+  -webkit-border-radius: 40px;
+  border-radius: 40px;
+  font-size: 70px;
+  color: rgba(2,2,2,1);
+  text-align: center;
+  padding: 10px;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  letter-spacing: 1px;
+  -webkit-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+  -moz-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+  -o-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+  transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+}
+
+.btn-stream:hover {
+  border: 2px solid rgb(30,205,151);
+  color: rgba(255,255,255,1);
+  background: rgb(30, 205, 151);
+}
+
+.btn-stream:active {
+  border: 2px solid rgba(33,224,163,1);
+  background: rgba(33,224,163,1);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+/*****card profil *******************/
+/* USER PROFILE PAGE */
+.profil .card {
+    margin-top: 20px;
+    padding: 30px;
+    background-color: rgba(214, 224, 226, 0.2);
+    -webkit-border-top-left-radius:5px;
+    -moz-border-top-left-radius:5px;
+    border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-top-right-radius:5px;
+    border-top-right-radius:5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 0px; 
+}
+.profil .card.hovercard {
+    position: relative;
+    padding-top: 0;
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
+}
+.profil .card.hovercard .card-background {
+    height: 130px;
+}
+.profil .card-background img {
+    -webkit-filter: blur(25px);
+    -moz-filter: blur(25px);
+    -o-filter: blur(25px);
+    -ms-filter: blur(25px);
+    filter: blur(25px);
+    margin-left: -100px;
+    margin-top: -200px;
+    min-width: 130%;
+}
+.profil .card.hovercard .useravatar {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+}
+.profil .card.hovercard .useravatar img {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+}
+.profil .card.hovercard .card-info {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+}
+.profil .card.hovercard .card-info .card-title {
+    padding:0 5px;
+    font-size: 20px;
+    line-height: 1;
+    color: #262626;
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.profil .card.hovercard .card-info {
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+.profil .card.hovercard .bottom {
+    padding: 0 20px;
+    margin-bottom: 17px;
+}
+
+.table-filter .star {
+	color: #ccc;
+	text-align: center;
+	display: block;
+}
+.table-filter .star.star-checked {
+	color: #F0AD4E;
+}
+.table-filter .star:hover {
+	color: #ccc;
+}
+.table-filter .star.star-checked:hover {
+	color: #F0AD4E;
+}
+.table-filter .media-photo {
+	width: 35px;
+        margin: 4px;
+}
+.table-filter .media-body {
+    display: block;
+    /* Had to use this style to force the div to expand (wasn't necessary with my bootstrap version 3.3.6) */
+}
+.table-filter .media-meta {
+	font-size: 11px;
+	color: #999;
+}
+.table-filter .media .title {
+	color: #2BBCDE;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: normal;
+	margin: 0;
+}
+.table-filter .media .title span {
+	font-size: .8em;
+	margin-right: 20px;
+}
+.table-filter .media .title span.pagado {
+	color: #5cb85c;
+}
+.table-filter .media .title span.pendiente {
+	color: #f0ad4e;
+}
+.table-filter .media .title span.cancelado {
+	color: #d9534f;
+}
+.table-filter .media .summary {
+	font-size: 14px;
+}
+.table-filter {
+	background-color: #fff;
+	border-bottom: 1px solid #eee;
+}
+.table-filter tbody tr:hover {
+	cursor: pointer;
+	background-color: #eee;
+}
+.table-filter tbody tr td {
+	padding: 10px;
+	vertical-align: middle;
+	border-top-color: #eee;
+}
+.table-filter tbody tr.selected td {
+	background-color: #eee;
+}
+.table-filter tr td:first-child {
+	width: 38px;
+}
+.table-filter tr td:nth-child(2) {
+	width: 35px;
 }

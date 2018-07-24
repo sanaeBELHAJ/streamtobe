@@ -79,6 +79,19 @@ io.sockets.on('connection', function (socket) {
                 socket.friend_avatar = row.avatar;
             });
 
+        await queryDB( //Recherche de ban entre les 2 utilisateurs
+            `SELECT *
+                FROM stb_bans
+                WHERE user_ban = ? AND user_banned = ?
+                LIMIT 1`,
+                [socket.user_id, socket.friend_id])
+            .then(function(row){
+                if(!row || row.length == 0)
+                    socket.ban = 0;
+                else
+                    socket.ban = 1; //Vient de bannir
+            });
+
         var conversations = [];
 
         await queryDB( //Recherche des messages entre les 2 utilisateurs
@@ -93,33 +106,36 @@ io.sockets.on('connection', function (socket) {
                 if(typeof row === 'undefined' || row.length == 0)
                     return new Error('user_missing');
 
-                if(Array.isArray(row)){
-                    row.forEach(function(element){
-                        conversations.push({
-                            message: element.message,
-                            user_exped: (socket.user_id == element.user_exped) ? 'me' : 'friend',
-                            user_receiv: (socket.user_id == element.user_receiv) ? 'me' : 'friend',
-                            created_at: element.created_at
+                if(socket.ban == 0){
+                    if(Array.isArray(row)){
+                        row.forEach(function(element){
+                            conversations.push({
+                                message: element.message,
+                                user_exped: (socket.user_id == element.user_exped) ? 'me' : 'friend',
+                                user_receiv: (socket.user_id == element.user_receiv) ? 'me' : 'friend',
+                                created_at: element.created_at
+                            });
                         });
-                    });
-                }
-                else{
-                    conversations.push({
-                        message: row.message,
-                        user_exped: (socket.user_id == row.user_exped) ? 'me' : 'friend',
-                        user_receiv: (socket.user_id == row.user_receiv) ? 'me' : 'friend',
-                        created_at: row.created_at
-                    });
+                    }
+                    else{
+                        conversations.push({
+                            message: row.message,
+                            user_exped: (socket.user_id == row.user_exped) ? 'me' : 'friend',
+                            user_receiv: (socket.user_id == row.user_receiv) ? 'me' : 'friend',
+                            created_at: row.created_at
+                        });
+                    }
                 }
             });
 
         var infos = {
             friend_pseudo: socket.friend_pseudo,
             friend_avatar: socket.friend_avatar,
+            friend_is_ban: socket.ban,
             user_avatar: socket.user_avatar,
             user_pseudo: socket.user_pseudo,
         };
-
+        console.log(infos);
         var datas = {
             infos: infos,
             conversations: conversations
@@ -165,6 +181,45 @@ io.sockets.on('connection', function (socket) {
         if(socket.user_id)
             checkFriends(socket);
     });
+
+    //Bannissement
+    socket.on('ban', async function(pseudo){
+        socket.friend_banned = null;
+        await queryDB( //Recherche de l'utilisateur contacté
+            `SELECT pseudo, avatar, id
+                FROM users
+                WHERE status > 0
+                AND pseudo = ?`,
+                pseudo)
+            .then(function(row){
+                if(row.id)
+                    socket.friend_banned = row.id;
+            });
+        console.log(socket.friend_banned);
+        if(socket.friend_banned){
+            await queryDB(`INSERT INTO stb_bans (user_ban, user_banned) VALUES (? , ?)`, [socket.user_id, socket.friend_banned]);
+        }
+    });
+
+    //Bannissement
+    socket.on('unban', async function(pseudo){
+        socket.friend_banned = null;
+        await queryDB( //Recherche de l'utilisateur contacté
+            `SELECT pseudo, avatar, id
+                FROM users
+                WHERE status > 0
+                AND pseudo = ?`,
+                pseudo)
+            .then(function(row){
+                if(row.id)
+                    socket.friend_banned = row.id;
+            });
+
+        if(socket.friend_banned){
+            await queryDB(`DELETE FROM stb_bans WHERE user_ban = ? AND user_banned = ?`, [socket.user_id, socket.friend_banned]);
+        }
+    });
+
 
     //Liste des utilisateurs
     async function checkFriends(socket){

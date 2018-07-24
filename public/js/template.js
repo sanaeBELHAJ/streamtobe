@@ -106,7 +106,7 @@ $(function () {
         })
         .done(function(data){
             if(data && data.length>0)
-                $("#header .fa-envelope-open").addClass("text-danger");
+                $("#header .fa-envelope").addClass("text-warning");
         })
         .fail(function(data){
             console.log(data);

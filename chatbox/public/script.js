@@ -86,9 +86,14 @@ socket.on('demod', function() {
 
 //Réception de dons
 socket.on('dons', function(data) {
-    $('#zone_chat').append('<p><em>Don de '+data.amount+data.currency+' a été réalisé par '+data.pseudo+' !</em></p>');
-    if(data.message)
-        $('#zone_chat').append('<p>'+data.message+'</p>');
+    var text = "";
+    text += "<blockquote class='blockquote gift col-10 col-md-6 mx-auto mb-3'>";
+        if(data.message)
+            text += '<p class="mb-0 h4">'+data.message+'</p>';
+        text += '<footer class="blockquote-footer text-right">Un don de '+data.amount+data.currency+' a été réalisé par <cite>'+data.pseudo+'</cite> !</footer>';
+    text += '</div>';
+
+    $('#zone_chat').append(text);
 });
 
 //Arrivée d'un nouvel utilisateur sur le chat
@@ -156,6 +161,68 @@ $('#zone_users').on('click',".modo, .ban, .user", function(){
     var pseudo = $(this).parent().data('pseudo');
     socket.emit('editRank', status, pseudo);
 });
+
+//Nouvelles musiques à voter
+socket.on('eval_song', function(element){
+    var text = "<p class='col-12 col-md-6 vote mb-3' data-song='"+element.id+"'>";
+        text += "<span class='d-block w-100 text-center '> Que pensez-vous de l'interprétation de : "+element.title+" ?</span>";
+        text += "<button class='col-4 btn btn-danger btn_vote bad'><i class='far fa-angry' style='font-size:75%;'></i></button>";
+        text += "<button class='col-4 btn btn-warning btn_vote equal'><i class='far fa-grin-beam-sweat' style='font-size:75%;'></i></button>";
+        text += "<button class='col-4 btn btn-success btn_vote good'><i class='fas fa-smile-beam' style='font-size:75%;'></i></button>";
+    text += "</p>";
+    $('#zone_chat').append(text);
+    $("#zone_chat").animate({ scrollTop: $("#zone_chat")[0].scrollHeight }, 100);
+});
+
+//Vote d'une musique
+$('#zone_chat').on('click',".btn_vote", function(){
+    var p = $(this).parent();
+    var music = p.data('song');
+    var score = -1;
+    if($(this).hasClass('bad'))
+        score = 0;
+    else if($(this).hasClass('equal'))
+        score = 50;
+    else if($(this).hasClass('good'))
+        score = 100;
+    
+    socket.emit('vote', { music: music, score: score});
+
+    p.find('button').remove();
+    p.append("Résultat du chat : ( <span class='result'></span> )");
+    var text = "";
+    text += '<div class="progress">';
+        text += '<div class="progress-bar bg-danger progress-bar-striped" style="width: 0%"></div>';
+        text += '<div class="progress-bar bg-warning progress-bar-striped" style="width: 0%"></div>';
+        text += '<div class="progress-bar bg-success progress-bar-striped" style="width: 0%"></div>';
+    text += '</div>';
+    p.append(text);
+});
+
+//Résultats temps réel
+socket.on('result_song', function(music){
+    $(".vote[data-song='"+music.id+"'] .result").html(music.qtty_votes);
+    var score = (music.qtty_votes) ? parseInt(music.mark)/parseInt(music.qtty_votes) : 0;
+    var width = 0;
+
+    //Bad
+    $(".vote[data-song='"+music.id+"'] .progress .bg-danger").width(score>=33.3 ? "33.3%" : score+"%");
+    
+    //Equal
+    if(score>=33)
+        width = score>=66 ? "33.3%" : (score-33)+"%";
+    else
+        width = 0;
+    $(".vote[data-song='"+music.id+"'] .progress .bg-warning").width(width);
+    
+    //Good
+    if(score>=66)
+        width = score>=99 ? "33.3%" : (score-66)+"%";
+    else
+        width = 0;
+    $(".vote[data-song='"+music.id+"'] .progress .bg-success").width(width);
+});
+
 
 //Recherche et affichage d'un membre parmi la liste de contact disponible
 $("#search_contact").keyup(searchingViewers);

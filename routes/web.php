@@ -61,6 +61,14 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/getStreamViewer', 'ViewerController@getStreamViewer');
         //Bannissement / Modérateur du chatbox
         Route::post('/updateViewer', 'ViewerController@updateViewer');
+        //Ajout Musiques
+        Route::post('/addMusic', 'StreamController@addMusic');
+        //Récupération des notes
+        Route::post('/getMarks', 'StreamController@getMarks');
+        //Récupération des musiques proposées via les dons
+        Route::post('/getMusicGift', 'StreamController@getMusicGift');
+        //Suppression d'une musique en BDD
+        Route::post('/rmvMusic', 'StreamController@rmvMusic');
 
     /* Actions sur le compte */
         Route::get('/home', 'AccountController@index')->name('home.index');    
@@ -104,7 +112,9 @@ Route::get('/support', 'HomeController@support');
 //Vérification de nouveaux messages
 Route::get('/checkMessage', 'HomeController@checkMessage');
 
-
+/* Récupération des paroles d'une chanson */
+Route::post('/getTracks', 'StreamController@getTracks');
+Route::post('/getLyrics', 'StreamController@getLyrics');
 
 /* SI AUCUNE ROUTE N'EST CORRECTE */
 Route::any('{all}', function(){

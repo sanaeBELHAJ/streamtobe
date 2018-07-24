@@ -11,6 +11,7 @@ class Stream extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'id',
         'title',
         'streamer_id',
         'type_id',
