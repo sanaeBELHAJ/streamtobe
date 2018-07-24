@@ -193,7 +193,7 @@
 
     <!-- Footer -->
     <footer id="footer">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md-4 text-center mb-2">
                     <div class="input-group">
