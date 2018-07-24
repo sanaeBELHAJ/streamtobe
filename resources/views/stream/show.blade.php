@@ -507,94 +507,96 @@
                     });
             }, 1000);
 
+            @auth
+                @if($streamer->id != Auth::user()->id)
+                    //Récupération des musiques proposées
+                    var lastGift = -1;
+                    setInterval(function(){
+                        $.ajax({
+                            url: "/getMusicGift",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                lastGift : lastGift
+                            }
+                        })
+                            .done(function(data){
+                                data.forEach(function(value){
+                                    if(value == data[data.length-1])
+                                        lastGift = value.id;
 
-            //Récupération des musiques proposées
-            var lastGift = -1;
-            setInterval(function(){
-                $.ajax({
-                    url: "/getMusicGift",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        lastGift : lastGift
-                    }
-                })
-                    .done(function(data){
-                        data.forEach(function(value){
-                            if(value == data[data.length-1])
-                                lastGift = value.id;
-
-                            var text = '<div class="list-item row" data-id="'+value.id+'">';
-                                text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
-                                text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
-                                text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
-                            text += '</div>';
-                            $("#list .list-add").before(text);
-                        });
-                    })
-                    .fail(function(data){
-                        console.log(data);
-                    });
-            }, 1000);
-            
-            //Recherche des titres
-            $("#lyricSearch .btn").click(function(){
-                if($.trim($("[name='song_name']").val()) == "")
-                    return false;
-                
-                var loupe = $(this);
-                loupe.hide();
-                $("#lyricSearch .fa-spin").show();
-
-                $.ajax({
-                    url: "/getTracks",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        song_name : $("[name='song_name']").val()
-                    }
-                })
-                    .done(function(data){
-                        var text = "<option value=''>--Selectionnez un titre--</option>";
-                        data.forEach(function(element){
-                            text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
-                        });
+                                    var text = '<div class="list-item row" data-id="'+value.id+'">';
+                                        text += '<input type="text" value="'+value.title+'" class="col-4" disabled/>';
+                                        text += '<button type="button" class="col-4 btn list-eval">Evaluation</button>';
+                                        text += '<button type="button" class="col-4 btn list-rmv">Supprimer</button>';
+                                    text += '</div>';
+                                    $("#list .list-add").before(text);
+                                });
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
+                    }, 1000);
+                    
+                    //Recherche des titres
+                    $("#lyricSearch .btn").click(function(){
+                        if($.trim($("[name='song_name']").val()) == "")
+                            return false;
                         
-                        loupe.show();
-                        $("#lyricSearch .fa-spin").hide();
+                        var loupe = $(this);
+                        loupe.hide();
+                        $("#lyricSearch .fa-spin").show();
 
-                        $("[name='song_id']").removeClass("d-none");
-                        $("[name='song_id']").html(text);
-                    })
-                    .fail(function(data){
-                        console.log(data);
+                        $.ajax({
+                            url: "/getTracks",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                song_name : $("[name='song_name']").val()
+                            }
+                        })
+                            .done(function(data){
+                                var text = "<option value=''>--Selectionnez un titre--</option>";
+                                data.forEach(function(element){
+                                    text += "<option value='"+element.track.track_id+"'>"+element.track.track_name+" ( "+element.track.artist_name+" ) </option>";
+                                });
+                                
+                                loupe.show();
+                                $("#lyricSearch .fa-spin").hide();
+
+                                $("[name='song_id']").removeClass("d-none");
+                                $("[name='song_id']").html(text);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
                     });
-            });
 
-            //Importation des paroles
-            $("[name='song_id']").change(function(){
-                if($.trim($("[name='song_id']").val()) == "")
-                    return false;
+                    //Importation des paroles
+                    $("[name='song_id']").change(function(){
+                        if($.trim($("[name='song_id']").val()) == "")
+                            return false;
 
-                $.ajax({
-                    url: "/getLyrics",
-                    type: 'POST',
-                    dataType: "JSON",
-                    data: {
-                        song_id : $(this).val()
-                    }
-                })
-                    .done(function(data){
-                        if(data.lyrics_body!="")
-                            $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
-                        else
-                            $("#lyrics_content").html(data.lyrics_copyright);
-                    })
-                    .fail(function(data){
-                        console.log(data);
+                        $.ajax({
+                            url: "/getLyrics",
+                            type: 'POST',
+                            dataType: "JSON",
+                            data: {
+                                song_id : $(this).val()
+                            }
+                        })
+                            .done(function(data){
+                                if(data.lyrics_body!="")
+                                    $("#lyrics_content").html(decodeURIComponent(data.lyrics_body.replace(/(\r\n|\n\r|\r|\n)/g, "<br>")));
+                                else
+                                    $("#lyrics_content").html(data.lyrics_copyright);
+                            })
+                            .fail(function(data){
+                                console.log(data);
+                            });
                     });
-            });
-
+                @endif
+            @endauth
             /* Paypal Button */
             if($("#paymentModal").length > 0){
                 paypal.Button.render({
